@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.34.1",
   "engines": {
     "node": ">=22"
   },
@@ -25,6 +26,7 @@
   "dependencies": {
     "@takazudo/zfb": "0.1.0-next.96",
     "@takazudo/zfb-runtime": "0.1.0-next.96",
+    "@takazudo/zfb-adapter-cloudflare": "0.1.0-next.96",
     "@takazudo/zfb-md-wasm": "0.1.0-next.96",
     "@takazudo/zudo-doc": "^4.4.6",
     "zod": "^4.3.6",
@@ -47,6 +49,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "pagefind": "^1.4.0",
-    "npm-run-all2": "^7.0.2"
+    "npm-run-all2": "^7.0.2",
+    "wrangler": "4.114.0"
   }
 }
