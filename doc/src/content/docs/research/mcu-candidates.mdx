@@ -17,7 +17,7 @@ The cheapest, smallest option — a 48MHz RISC-V "QingKe V2A" core, 16KB flash, 
 | CH32V003J4M6 | [C5346354](https://jlcpcb.com/partdetail/C5346354) | 15,461 | Extended | SOP-8 | $0.22 |
 | CH32V003F4U6 | [C5299908](https://jlcpcb.com/partdetail/C5299908) | 36,392 | Extended | QFN-20(3x3) | $0.29 |
 
-TSSOP-20 (C5187096) is the pragmatic pick for a first prototype board — hand-solder-friendly pitch, 18 usable I/O vs. SOP-8's 5, giving room for the knob's ADC/quadrature pins, the PWM dim output, and a debug pad without fighting for pins.
+TSSOP-20 (C5187096) is the pragmatic pick for a first prototype board — hand-solder-friendly pitch and 18 usable I/O (per the DB listing) vs. the SOP-8 variant's much tighter pin budget (8 physical pins total, several consumed by power/ground/reset — exact GPIO count needs a datasheet check, not verified here), giving room for the knob's ADC/quadrature pins, the PWM dim output, and a debug pad without fighting for pins.
 
 **Programming/debug interface plan:** CH32V003 uses a WCH-proprietary **single-wire SDI** debug interface (not standard SWD) — only the **WCH-LinkE** programmer (and WCH-LinkW) supports it. Plan: break out a small pad group (SDI pin + 3.3V + GND, e.g. a 3-pin 2.54mm header or pogo-pad footprint) for the WCH-LinkE clip during bring-up; it doesn't need to be a permanently populated connector on a production board.
 

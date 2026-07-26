@@ -56,10 +56,10 @@ Supporting passives (both routes need an inductor + input/output ceramic caps):
 
 Two JLCPCB-verified fixed 3.3V LDO candidates:
 
-| Part | LCSC | Stock | Tier | Package | V_in max | Dropout | I_q | Price (1-9) | Notes |
+| Part | LCSC | Stock | Tier | Package | V_in max | Dropout | I_q | Price (lowest qty tier) | Notes |
 |---|---|---|---|---|---|---|---|---|---|
-| AMS1117-3.3 | [C6186](https://jlcpcb.com/partdetail/C6186) | 2,007,447 | **Basic** | SOT-223 | **15V** | ~1.1-1.3V | ~5 mA | $0.20 | Cheapest, best-stocked, Basic-tier (no Extended fee). **Caveat: 15V absolute max input equals our nominal rail voltage** — any ripple or transient on the PD board's 15V output would exceed the part's rating. Only safe if the architecture pass confirms the 15V rail is tightly regulated with headroom, or adds a small margin resistor/TVS ahead of it. |
-| HT7333-1 | [C5451671](https://jlcpcb.com/partdetail/C5451671) | 10,104 | Extended | SOT-89 | 18V | ~90mV@40mA (very low) | ~2 µA | $0.07 | 3V of headroom over the 15V nominal rail — comfortably absorbs ripple/transients. Much lower quiescent current than AMS1117, which matters if the lamp ever needs a low-power standby state. Slightly lower current capability (250mA) but still >>10x our logic load. |
+| AMS1117-3.3 | [C6186](https://jlcpcb.com/partdetail/C6186) | 2,007,447 | **Basic** | SOT-223 | **15V** | ~1.1-1.3V | ~5 mA | $0.20 (1-49) | Cheapest, best-stocked, Basic-tier (no Extended fee). **Caveat: 15V absolute max input equals our nominal rail voltage** — any ripple or transient on the PD board's 15V output would exceed the part's rating. Only safe if the architecture pass confirms the 15V rail is tightly regulated with headroom, or adds a small margin resistor/TVS ahead of it. |
+| HT7333-1 | [C5451671](https://jlcpcb.com/partdetail/C5451671) | 10,104 | Extended | SOT-89 | 18V | ~90mV@40mA (very low) | ~2 µA | $0.07 (1-99) | 3V of headroom over the 15V nominal rail — comfortably absorbs ripple/transients. Much lower quiescent current than AMS1117, which matters if the lamp ever needs a low-power standby state. Slightly lower current capability (250mA) but still >>10x our logic load. |
 
 **Recommendation for this option:** if an LDO is chosen, prefer **HT7333-1** over AMS1117-3.3 specifically because of the input-voltage margin — the AMS1117's 15V abs-max rating sits exactly at the nominal rail voltage with zero margin, which is a fragile spec to depend on even though it's the cheaper, better-stocked, Basic-tier part.
 

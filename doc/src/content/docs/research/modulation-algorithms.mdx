@@ -45,17 +45,17 @@ The classic approach used in commercial candle-flicker LEDs and countless firmwa
 // Runs at the animation update rate (e.g. 50-100Hz)
 int16_t noise_state = 0;
 
-uint8_t next_flicker_frame(uint8_t base_brightness, uint8_t depth, uint8_t smoothing /*0-255*/) {
+uint8_t next_flicker_frame(uint8_t base_brightness, uint8_t depth, uint8_t responsiveness /*0-255*/) {
     int16_t raw_noise = (int16_t)random_uniform(-128, 127);
-    // one-pole low-pass: state += (raw - state) * alpha
-    noise_state += ((raw_noise - noise_state) * smoothing) >> 8;
+    // one-pole low-pass: state += (raw - state) * alpha; alpha = responsiveness/256
+    noise_state += ((raw_noise - noise_state) * responsiveness) >> 8;
 
     int16_t value = base_brightness + ((noise_state * depth) >> 8);
     return clamp(value, 0, 255);
 }
 ```
 
-`smoothing` controls how "twitchy" (low value) vs. "lazy/breathing" (high value) the flicker feels — this is a natural knob-mapping target (see below). Layering 2-3 of these at different smoothing/depth settings and summing them (as used in more elaborate candle-emulation firmware) adds realism at the cost of a bit more CPU/RAM — worth prototyping both a single-layer and layered version.
+`responsiveness` is the IIR filter's alpha: a *high* value lets the state track the raw random noise almost immediately (twitchy, jittery flicker), while a *low* value heavily filters it into slow, lazy motion ("breathing" rather than "flickering"). If the knob-mapping (see below) wants a "speed" control that behaves the intuitive way — turning it up makes the effect *more* active — map the knob to `responsiveness` directly; if a "smoothness" framing is preferred instead, invert it (`alpha = 255 - knob_value`) before passing it in. Layering 2-3 of these at different responsiveness/depth settings and summing them (as used in more elaborate candle-emulation firmware) adds realism at the cost of a bit more CPU/RAM — worth prototyping both a single-layer and layered version.
 
 ## Modulation approach 2 — Bounded random walk ("slow wave / breathing")
 
@@ -105,7 +105,7 @@ All three approaches write into the same `set_perceptual_brightness()` gamma-cor
 A single knob (rotary encoder per [control-knob](/docs/research/control-knob/)) can only directly control one parameter at a time unless combined with a mode gesture (e.g., short-press-to-cycle if the encoder's push-button variant is used). Candidates, any of which fit the pseudocode above:
 
 - **Base brightness** — the DC level the flicker/wave varies around (`base_brightness` in approach 1, or the `(min_b+max_b)/2` center in approach 2). Most intuitive "lamp knob" behavior for a first-time user.
-- **Speed** — how fast the effect moves (`smoothing` in approach 1 inverted, `step_size`/`wander_chance` in approach 2, `loop_speed_q8` in approach 3). Turns a calm ember into an agitated flame.
+- **Speed** — how fast the effect moves (`responsiveness` in approach 1, `step_size`/`wander_chance` in approach 2, `loop_speed_q8` in approach 3). Turns a calm ember into an agitated flame.
 - **Depth** — how much the brightness swings around its center (`depth` in approach 1, `(max_b - min_b)` in approach 2). Turns a subtle flicker into a dramatic one.
 - **Mode-cycled combination** — if the encoder has an integrated push-button, a short press could cycle which of the above the knob currently adjusts, letting one physical control reach all three parameters at the cost of a small UI-discoverability trade-off (no visual indicator of current mode without an added status LED or similar).
 
