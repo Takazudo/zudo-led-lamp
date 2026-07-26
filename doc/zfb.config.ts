@@ -6,6 +6,8 @@ export default defineConfig(
     themePack: "sumi",
     siteName: "Doc",
     githubUrl: "https://github.com/Takazudo/zudo-led-lamp",
+    // siteUrl host MUST match the wrangler.toml custom-domain route.
+    siteUrl: "https://zudo-led-lamp.takazudomodular.com",
     llmsTxt: true,
     cjkFriendly: true,
     sidebarResizer: true,
@@ -60,5 +62,7 @@ export default defineConfig(
         component: "language-switcher",
       },
     ],
+    // Cloudflare Workers adapter — required for the deploy (dist/_worker.js).
+    adapter: "@takazudo/zfb-adapter-cloudflare",
   }),
 );
