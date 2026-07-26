@@ -1,0 +1,137 @@
+---
+title: Board P — Locked Spec and Net Table
+description: The USB-PD front end as locked for the prototype build — adopted unchanged from the power-section audit, with the downstream connector pin assignment fixed and the ratings decision re-confirmed against Board L's actual load.
+sidebar_position: 20
+---
+
+Board P is **adopted unchanged** from
+[Board P — USB-PD Front End](/docs/power/board-p-front-end/). This page locks it as a
+buildable spec: it restates the net table in the form KiCad capture will consume, fixes
+the `JOUT` pin assignment that Board L must mirror, and re-checks the audit's ratings
+conclusions against Board L's real (much smaller than worst-case) load.
+
+## Role
+
+Negotiate a 15 V / 3 A USB-PD contract, gate it behind a load switch until the contract
+is live, and hand a switched 15 V rail plus two open-drain status flags to Board L. No
+lamp-specific behaviour lives here — it is a generic reusable sink module.
+
+## What this architecture pass changed
+
+**Nothing electrical.** Three things were re-checked and confirmed, and one BOM
+optimisation is recommended but *not* applied here (Board P's own page is the owner of
+that BOM):
+
+1. **Load re-check.** Board P was margined against the 3.0 A contract cap. Board L
+   actually draws **~410 mA** (see [Power budget](./board-l.mdx#power-budget)). Every
+   current-dependent number on Board P — Q1 conduction loss, JOUT contact loading, the
+   XH derate — improves by roughly 7x against the original analysis. No part needs
+   changing.
+2. **Clamp ceiling propagates downstream.** D5 (SMAJ20A) clamps at ≤32.4 V worst case,
+   and Q1 passes that transient straight to Board L when the switch is on. Board L's
+   input-facing parts were selected against 32.4 V, not 15 V — see
+   [the driver input-rating decision](./decisions.mdx#led-driver-ic-driver-input-rating-vs-the-clamp-ceiling).
+3. **The 5 V-only first-power-up rule is a hard bring-up gate**, not advice. It is
+   restated in [Next Steps](./next-steps.mdx#bring-up-sequence).
+
+:::tip[Recommended BOM optimisation, not applied here]
+Board P's `C2` / `C35` are 100 nF 50 V **0805** ([C1711](https://jlcpcb.com/partdetail/C1711)),
+which is **Extended** tier at JLCPCB (¥470 one-time fee). The electrically identical
+0603 part [C14663](https://jlcpcb.com/partdetail/C14663) is **Basic** tier (12.6 M stock)
+and is what Board L uses. Swapping Board P to C14663 removes one Extended line from that
+board's order and shares a reel with Board L. This is a sourcing change to make at KiCad
+time; this page does not edit Board P's own component list.
+:::
+
+## Net-connectivity table
+
+Adopted verbatim from the [power-section audit](/docs/power/board-p-front-end/#net-connectivity-table).
+Reproduced here so the architecture section is self-contained for schematic capture.
+Reference designators are Board P's own.
+
+| Net | Connected pins (Ref.Pin) | Value / note |
+|---|---|---|
+| `VBUS_IN` | `J1.A9 J1.B9 U1.VDD C1.2 C2.2 R14.1 R11.2 Q1.S J3.4 D5.cathode` | Receptacle VBUS — 5 V pre-contract, 15 V post-contract. C1 10 µF, C2 100 nF. D5 cathode |
+| `CC1` | `J1.A5 U1.CC1 R17.1(DNP) R19.2 D6.1(DNP)` | Plain copper connector-to-chip. R19 (0 Ω, fitted) bridges `CC1DB` |
+| `CC2` | `J1.B5 U1.CC2 R18.1(DNP) R20.2 D7.1(DNP)` | Mirror of CC1 |
+| `CC1DB` | `U1.CC1DB R19.1 J3.1` | Dead-battery pin, bridged to CC1 per ST DS12499 §3.5 |
+| `CC2DB` | `U1.CC2DB R20.1 J3.2` | Mirror |
+| `VBUS_VS_DISCH` | `U1.pin18 R14.2` | Pin-18 sense/discharge. R14 470 Ω series — **must not** be a divider |
+| `VBEN` | `U1.pin16 R12.1 J3.8` | Active-low open drain. R12 56 kΩ to the gate node |
+| `Net-(Q1-G)` | `Q1.G R11.1 R12.2 C35.1` | R11 100 kΩ pull-up to `VBUS_IN` (default OFF); C35 100 nF soft-start, τ ≈ 5.6 ms |
+| `VBUS_OUT` | `Q1.D R13.1 JOUT.1 JOUT.2` | Switched 15 V, paired contacts |
+| `Net-(U1-DISCH)` | `U1.DISCH R13.2` | R13 470 Ω system-side discharge |
+| `VREG_2V7` | `U1.VREG_2V7 C30.2 R15.2 R16.2 J3.3` | 2.7 V internal regulator / I2C pull-up rail |
+| `Net-(U1-VREG_1V2)` | `U1.VREG_1V2 C34.1` | 1.2 V digital-core regulator decoupling |
+| `SCL` | `U1.SCL R15.1 J2.1` | NVM programming clock, 4.7 kΩ pull-up |
+| `SDA` | `U1.SDA R16.1 J2.2` | NVM programming data, 4.7 kΩ pull-up |
+| `ATT` | `U1.ATTACH J3.6 JOUT.3` | Cable-attached flag, open drain active-low, no on-board pull-up |
+| `PDOK` | `U1.POWER_OK2 J3.7 JOUT.4` | Live 15 V contract flag, open drain active-low, no on-board pull-up |
+| `GND` | `U1.GND U1.RESET U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 C35.2 R17.2(DNP) R18.2(DNP) J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.RESET` grounded = run. ADDR0/1 grounded → I2C `0x28` |
+| No-connect | `U1.NC U1.POWER_OK3 U1.GPIO U1.A_B_SIDE U1.ALERT J2.4` | Left floating |
+
+## JOUT pin assignment (locked)
+
+Board L's `J2` must mirror this exactly. Both ends are the same part
+([C144397](https://jlcpcb.com/partdetail/C144397)), joined by a 6-way XH harness.
+
+| Pin | Net | Direction (from Board P) | Board L destination |
+|---|---|---|---|
+| 1 | `VBUS_OUT` | out | `F1.1` (PPTC input) |
+| 2 | `VBUS_OUT` | out | `F1.1` — paired contact, same net |
+| 3 | `ATT` | out, open drain | `U3.PA7` via 10 kΩ pull-up to 3V3 |
+| 4 | `PDOK` | out, open drain | `U3.PA5` via 10 kΩ pull-up to 3V3 |
+| 5 | `GND` | — | Board L `GND` |
+| 6 | `GND` | — | Board L `GND` — paired contact |
+
+:::caution[PDOK is informational, not an interlock]
+Board L's 3.3 V rail only exists once Q1 has switched on, which only happens after PDOK
+asserts. So by the time the MCU can read PDOK, it is always already asserted. It is
+useful as a **continuity and harness check** (a PDOK line that reads de-asserted while
+the MCU is running means a broken wire, not a failed contract) and as a hook if a future
+revision powers Board L's logic ahead of the switch. The real gate on LED power is Q1
+itself, in hardware. Do not present PDOK in firmware as if it were protecting anything.
+:::
+
+`ATT` is wired to a GPIO purely because it is free — Board P already routes it to the
+connector, and an input pin costs nothing. Firmware does not act on it in v1.
+
+## Ratings, re-confirmed at Board L's real load
+
+| Part | Limit | At 410 mA / 15 V | Verdict |
+|---|---|---|---|
+| Q1 AO3401A | 30 V VDS abs max, 4.2 A, 50 mΩ @ Vgs −10 V | Conduction loss `0.41² × 0.05` = **8 mW**; Vgs ≈ −9.6 V | Pass with very wide margin at nominal; the transient-only VDS gap against the 32.4 V clamp is unchanged and still accepted |
+| JOUT XH contacts | 3 A/contact | 205 mA per paired contact | Pass, 14x derated margin |
+| U1 STUSB4500 VDD | 28 V abs max, 22 V operating | 15 V | Pass; transient-only gap against 32.4 V unchanged and still accepted |
+| J1 receptacle C283540 | 20 V, 5 A | 15 V, 0.41 A | Pass |
+
+The two residual transient-only gaps (U1 VDD, Q1 VDS) are inherited unchanged from the
+[ratings matrix](/docs/power/ratings-matrix/). This architecture pass does not re-open
+them: they are surge-event-only, they were reasoned through against primary datasheets,
+and nothing about a lower steady-state load changes a clamp-event analysis.
+
+## One number this pass could not resolve
+
+[Lessons Carried From zudo-pd](/docs/power/lessons-from-zudo-pd/#pin-18-network) states
+that R14 (470 Ω from `VBUS_IN` to pin 18) passes "15 V/470 Ω ≈ 32 mA", inside the pin's
+50 mA `IDISUSB` rating. Read as a **continuous** current that would be **0.48 W** — more
+than 7% of the whole lamp's power budget, dissipated in a 0603 resistor rated 100 mW,
+which cannot be right. Read as the **discharge-event** current (pin 18 is high-impedance
+in its sense role and only sinks during discharge) it is ~0 W steady state, and the
+50 mA figure is exactly what an event-current rating looks like.
+
+This pass believes the second reading is correct — `IDISUSB` is named for discharge, and
+a 100 mW resistor in ST's own reference topology would not be specified to run at 4.8x
+its rating. But it could not confirm it from the datasheet text available here. The
+[power budget](./board-l.mdx#power-budget) therefore carries it as a flagged worst case
+(+0.48 W), and [Next Steps](./next-steps.mdx) makes measuring R14's steady-state drop an
+explicit bring-up item. Either way the design fits inside 45 W with large margin, so
+this does not block the build — but do not size R14's package from the optimistic
+reading without measuring it.
+
+## References
+
+- [Board P — USB-PD Front End](/docs/power/board-p-front-end/) — source of this circuit
+- [Worst-Case Ratings Matrix](/docs/power/ratings-matrix/) — per-part margin evidence
+- [Charger Compatibility](/docs/power/charger-compatibility/) — the 15 V-PDO purchase rule
+- [Lessons Carried From zudo-pd](/docs/power/lessons-from-zudo-pd/) — CC topology, NVM trap, CPL rotation

@@ -1,0 +1,185 @@
+---
+title: Next Steps — The KiCad Phase
+description: What happens after this architecture is locked — schematic capture order, the footprint and CPL rotation pipeline, BOM/CPL export, the staged bring-up sequence, and the open questions that need bench answers.
+sidebar_position: 60
+---
+
+The architecture is locked; the next phase is KiCad data, which was explicitly out of
+scope for this epic. This page is the handover: what to build, in what order, with which
+tools, and which gates must pass before the next step is allowed.
+
+## Schematic capture order
+
+Capture Board P first even though it is the already-solved board — it forces the shared
+symbol/footprint library into existence against a circuit whose net table is already
+settled, so Board L's capture is not simultaneously debugging the library.
+
+1. **Board P** — from the [locked net table](./board-p.mdx#net-connectivity-table).
+   Consider the C1711 → [C14663](https://jlcpcb.com/partdetail/C14663) 100 nF swap noted
+   on that page (removes one Extended fee).
+2. **Board L power section** — J2, F1, D10, the input bulk caps, and both converters.
+   Verify the 15 V rail on its own before any load exists downstream of it.
+3. **Board L LED array** — the eight ballast/string blocks. Draw one string as a
+   hierarchical sheet and instantiate it eight times rather than copy-pasting; the
+   [net table](./board-l.mdx#net-connectivity-table-led-array-8-strings-x-3-series) names the nets in exactly
+   that repeating pattern.
+4. **Board L control** — U3, SW1, RT1, the CTRL RC filter, the pad groups.
+
+Run ERC after each stage, not once at the end.
+
+## Layout notes worth having up front
+
+| Concern | Guidance |
+|---|---|
+| `LED_N` is a switching node | It is the common cathode of all eight strings **and** the AL8860's SW pin — a ~440 kHz, ~15 V-swing net that necessarily spans the LED array. This is inherent to the AL8860's high-side-sense topology, not a mistake. Keep the copper as compact as the array geometry allows and do not pour it as a large plane |
+| Ballast on the anode side | R30–R37 sit between `LED_P` and each string's top LED, deliberately, so the eight split nets are on the quiet DC rail |
+| RS1 is a **high-side** sense resistor | It sits between `V15` and `SET`, not in the ground return. Kelvin-connect it and keep the `SET` trace short — this is the node that sets LED current |
+| U2 exposed pad | Tie to the ground pour for heat, but the datasheet is explicit that it must **not** be the electrical ground return path — pins 2 and 3 are |
+| LED thermal pours | The [thermal budget](/docs/research/thermal-budget/) is clear that the ~1 W/site figure assumes a generous via-stitched pour per pad; a token pad does not hit it. At 0.19 W/site there is margin, but do not spend it all on cramped copper |
+| RT1 placement | Physically **inside** the LED array, not near the board edge — it is measuring the array's temperature, and the derate thresholds assume that |
+| SW1 and the board edge | The EC11's bushing has to reach a panel. The enclosure is out of scope, so leave the mounting reference generous and revisit it when the enclosure exists |
+
+## Footprint pipeline
+
+The LCSC parts here mostly have EasyEDA footprints, and pulling them in is faster than
+drawing them — but it is also where the
+[CPL rotation gotcha](/docs/power/lessons-from-zudo-pd/#jlcpcb-cpl-rotation-gotcha) bites.
+
+1. **`easyeda2kicad`** to import symbols and footprints for the LCSC parts, especially
+   the ones with no KiCad-official equivalent (U1 STUSB4500, U2 AL8860, J1 receptacle,
+   SW1 encoder).
+2. **`kicad-jlcpcb-tools`** for the BOM/CPL export rather than KiCad's built-in export —
+   it carries a community-maintained rotation database.
+3. **Add explicit rotation overrides in its Corrections Manager** for every
+   EasyEDA-derived footprint family on these boards, before trusting a single generated
+   CPL. The failure mode zudo-pd hit is a generic rule like `^SOT-23 → -90°` matching an
+   EasyEDA footprint that is *already drawn in JLCPCB's pin-1 convention* and applying a
+   bogus 90° correction. On these boards that pattern threatens at minimum: Q1 (SOT-23),
+   U4 (TSOT-23-6), U2 (MSOP-8-EP), U1 (QFN-24-EP), and U3 (TSSOP-20).
+4. **Check the rendered CPL against the assembly preview by eye**, part by part, for
+   every polarised or oriented device. JLCPCB's own pre-production review caught a QFN
+   rotation problem on zudo-pd's v2 board and **missed** the SOT-23 over-correction on
+   the same order — it is not a safety net.
+
+## BOM and CPL export
+
+Use the `jlcpcb-bom-generate-from-kicad` skill to produce the JLCPCB-format BOM and CPL
+from the KiCad project. Then reconcile against the [Final BOM](./bom.mdx) page: every
+C-number must match, and the DNP lines (Board P's R17/R18 and D6/D7) plus the
+footprint-only pad groups (Board L's J3 and J4) must be **absent** from the assembly BOM,
+not present with zero quantity.
+
+Re-verify stock on the four flagged lines — `C571370`, `C500782`, `C2991196`, `C459674` —
+on the day of ordering, per the [sourcing risks](./bom.mdx#sourcing-risks) table.
+
+## Bring-up sequence
+
+The order here is not a suggestion. Each numbered step is a gate.
+
+### Gate 1 — Board P NVM programming, on a 5 V-only source
+
+:::danger[This gate protects the whole build]
+A fresh, unprogrammed STUSB4500 ships with **PDO3 = 20 V/1.0 A at the highest priority**.
+Plug it into any 20 V-capable PD charger before programming and it will negotiate 20 V
+onto a board margined for a 15 V rail. **First-ever power-up must use a 5 V-only USB-C
+charger** — an ordinary phone charger with no PD profile above 5 V, or a USB-A-to-C
+cable, which supplies 5 V with no CC negotiation at all. The chip's I2C and NVM only need
+5 V VDD.
+:::
+
+Write the NVM via the J2 pogo pads, then **read back and verify**: `SNK_PDO_NUMB = 2`
+(PDO3 removed entirely, not merely deprioritised), PDO2 = 15 V/3 A, and
+`POWER_ONLY_ABOVE_5V = 1`. That last bit has a history of not persisting on the first
+write. Do not proceed until read-back is clean.
+
+### Gate 2 — Board P standalone on a 15 V charger, nothing on JOUT
+
+Probe the J3 debug pads:
+
+| Pad | Expected |
+|---|---|
+| 3 (`VREG_2V7`) | ≈2.7 V regardless of negotiation state — confirms the chip is alive before you judge negotiation |
+| 4 (`VBUS_IN`) | ≈15 V once negotiated |
+| 8 (`VBEN`) | pulled low once negotiation succeeds |
+| JOUT pins 1/2 (`VBUS_OUT`) | 0 V until the contract is live, then tracking `VBUS_IN` |
+
+A chip that negotiates but a switch that never turns on points at the Q1 gate network,
+not the STUSB4500. And do not judge Board P by downstream rails — they can legitimately
+read 0 V while the chip is perfectly healthy.
+
+**Also measure here:** the steady-state voltage across R14. This settles the
+[open question](./board-p.mdx#one-number-this-pass-could-not-resolve) about whether the
+pin-18 network draws ~32 mA continuously (0.48 W in a 100 mW resistor) or only during a
+discharge event. A drop near zero confirms the sense-only reading.
+
+Use a **single-port** PD charger with an explicit **15 V** entry in its PDO list. Every
+multi-port GaN charger in zudo-pd's testing failed; the one that worked was single-port —
+see [Charger Compatibility](/docs/power/charger-compatibility/).
+
+### Gate 3 — Board L power section alone, MCU unprogrammed
+
+Connect Board L. Before anything else, confirm the LED array is **dark**. Then:
+
+| Measurement | Expected |
+|---|---|
+| `V15` at F1's output | ≈15 V, minus a few tens of mV across the PPTC |
+| `V3P3` | 3.30 V ±3% |
+| `CTRL`, with the MCU held in reset | **below 0.2 V** |
+
+That last one is the gate the [safe default-OFF](./board-l.mdx#mcu-knob-and-dimming-path-safe-default-off) analysis
+flagged as not datasheet-provable. If CTRL reads above 0.2 V, reduce R21 and scale R20 by
+the same ratio to preserve the 2.53 V full scale — e.g. 3.3 kΩ / 10 kΩ.
+
+### Gate 4 — LED array at fixed current, no firmware
+
+Drive CTRL from a bench supply at 2.5 V. Confirm:
+
+- Total current into `LED_P` ≈ 500 mA
+- **Per-string current across each of the eight ballast resistors** — this is the
+  measurement the whole ballast analysis exists to validate. The prediction is ±15%
+  around 62.5 mA for a same-reel spread. If any string exceeds ~90 mA, the imbalance is
+  worse than the datasheet's own bound and the ballast value needs raising
+- Switching frequency at `LED_N` ≈ 440 kHz
+- Board temperature after 30 minutes, at RT1 and at the hottest-looking LED
+
+Then sweep CTRL from 0.3 V to 2.5 V and confirm smooth, monotonic dimming with no
+flicker, buzz, or dropout. Any audible noise here is worth chasing before firmware
+exists — it is far harder to attribute once an animation is running.
+
+### Gate 5 — Firmware
+
+Flash over SWD (ST-Link or CMSIS-DAP; OpenOCD or PlatformIO on macOS). Bring up in this
+order: encoder counting → PWM/CTRL mapping → gamma → modulation → thermal derate. Verify
+that the boot behaviour is dark-then-ramp, and that a mid-operation reset drops the lamp
+to dark rather than to full brightness.
+
+## Open questions for the bench
+
+| Question | Why it matters | How to answer |
+|---|---|---|
+| Does Board P's R14 draw continuously? | 0.48 W in a 100 mW resistor if it does | Gate 2 — measure the drop across R14 |
+| Does R21 hold CTRL below 0.2 V? | The pull-down half of the default-OFF guarantee | Gate 3 — measure CTRL with the MCU in reset |
+| Real string-to-string imbalance | Sets whether 33 Ω of ballast is enough | Gate 4 — measure all eight ballast drops |
+| Actual driver efficiency | The budget assumes 92%; component losses suggest ~95%; the research assumed 88% | Gate 4 — input power versus `LED_P` output power |
+| Is 440 kHz switching audible? | Analog dimming should prevent it, but the inductor still switches | Gate 4 — listen in a quiet room, at several brightness levels |
+| Is ~700 lm the right brightness through a diffuser? | The diffuser does not exist yet | Only answerable once the enclosure phase starts |
+| Does the chosen EC11 SKU have a push-button? | Would open up mode-cycling in a future firmware revision | Inspect the received part |
+
+## Risks carried into the KiCad phase
+
+| Risk | Severity | Mitigation |
+|---|---|---|
+| Board P's topology has **never** run on hardware — four PCBA orders failed before it was fixed on paper | High | Gates 1 and 2 exist precisely for this. Budget for a second Board P spin |
+| CPL rotation over-correction on EasyEDA-derived footprints | High — it silently produces a mis-assembled board | Explicit Corrections Manager overrides plus a manual CPL review; do not rely on JLCPCB's pre-production check |
+| Charger incompatibility | Medium | Buy or borrow a single-port PD charger with an explicit 15 V PDO before ordering boards, so a negotiation failure is not ambiguous between "bad board" and "bad charger" |
+| SMAJ20A stock (3,770 units, needed on both boards) | Medium | Order both boards' quantity in one go; do not substitute a different standoff voltage |
+| String imbalance worse than predicted | Medium | Raise the ballast value; costs duty-cycle headroom. Detected at Gate 4, before firmware |
+| The 5% analog dimming floor reads as a visible snap to off | Low | Bias the modulation to stay above the floor, or accept the ember-never-goes-black behaviour |
+| Enclosure thermal behaviour is completely unmodelled | Low for the prototype, real for the finished lamp | Enclosure is out of scope for this epic; the thermal derate hook and RT1 exist so the firmware can respond once it is not |
+
+## References
+
+- [Lessons Carried From zudo-pd](/docs/power/lessons-from-zudo-pd/) — NVM trap, bring-up sequence, CPL rotation, Extended-fee economics
+- [Charger Compatibility](/docs/power/charger-compatibility/) — the 15 V-PDO purchase rule and the tested-charger evidence
+- [Board L](./board-l.mdx) — the design these gates are validating
+- [Final BOM](./bom.mdx) — what to order, and the stock lines to re-check first

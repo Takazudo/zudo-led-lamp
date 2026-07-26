@@ -1,0 +1,350 @@
+---
+title: Decisions — Chosen vs Rejected
+description: Every architecture slot recorded as a decision — what was picked, what was rejected, and the reason, traced back to the power and research pages.
+sidebar_position: 50
+---
+
+One row per slot. "Rejected" here means *considered and not chosen*, not *bad* — most of
+the rejected options are perfectly good parts that lost on one specific axis.
+
+## Board topology
+
+| | |
+|---|---|
+| **Chosen** | Two boards: Board P (USB-PD front end) + Board L (driver, control, LED array) |
+| **Rejected** | Three boards, with the LED array on an aluminum MCPCB daughterboard |
+| **Rejected** | One combined board |
+
+Board P must be separate — it is a reusable switched-15 V sink module and its
+[bring-up sequence](/docs/power/lessons-from-zudo-pd/#standalone-board-p-bring-up-sequence)
+requires testing it completely alone before anything is attached.
+
+The MCPCB daughterboard was rejected on the [thermal budget](/docs/research/thermal-budget/)'s
+own numbers: that page puts the plain-FR-4 ceiling at roughly **1 W per LED site** and
+reserves metal core for the concentrated-COB case (3.6 W in one 13.4 mm package). This
+design runs **0.19 W per site**. A third board would buy nothing thermally and would cost
+a second interconnect carrying the driver's ~440 kHz switching node down a wire harness.
+
+The split boundary is still designed in — the array is a self-contained block on four
+nets (`LED_P`, `LED_N`, `NTC_SENSE`, `GND`) — so the enclosure phase can lift it onto a
+daughterboard later without touching anything else.
+
+## LED
+
+| | |
+|---|---|
+| **Chosen** | `HL-AM-2835H421W-S1-08-HR3` ([C210315](https://jlcpcb.com/partdetail/C210315)), 3000 K, 24 pieces, 8 parallel strings of 3 series, 62.5 mA per string |
+| **Rejected** | CXA1304 COB (C510489 / C510492 / C510494) |
+| **Rejected** | SMD5730 family (C2843887, C210353, C210346) |
+| **Rejected** | Cool-white 2835 (C2843876, C210329) |
+
+**CCT decided it.** This is a fire/candle lamp; 3000 K warm white is the aesthetic
+requirement, and it is the only place a warm bin coincides with real JLCPCB stock
+(399,813 units). Every 5730 candidate is 4000 K or cooler, which reads as daylight, not
+flame.
+
+The COB was rejected twice over: **all three CXA1304 SKUs show zero stock**, and at 3.6 W
+in one package it would force the MCPCB the board split just rejected. The
+stock-available fallback ([C22398559](https://jlcpcb.com/partdetail/C22398559)) has a
+scanned datasheet with no machine-readable Vf or flux data — not something to design a
+thermal budget around.
+
+**3-series, not 4-series.** [Headroom analysis](/docs/research/led-candidates/#voltage-headroom-analysis)
+called 4s "tight". Against this part's datasheet Vf ceiling of 3.2 V, a 4s string is
+12.8 V, putting the buck at **85% duty** — outside the AL8860's recommended 25–75% band.
+3s plus ballast lands at 74%.
+
+## Current sharing between parallel strings
+
+| | |
+|---|---|
+| **Chosen** | Per-string ballast resistors, 33 Ω 1206 ([C2907384](https://jlcpcb.com/partdetail/C2907384)) |
+| **Rejected** | One CC driver per string |
+| **Rejected** | Vf-binned procurement, no ballast |
+
+[led-candidates](/docs/research/led-candidates/#current-sharing-considerations-for-parallel-strings)
+lists exactly these three. One driver per string means **eight** AL8860s and eight
+complete passive sets on a board whose entire output is 5.5 W — absurd. Vf-binned
+procurement is a supply guarantee the JLCPCB catalog cannot make.
+
+Ballast costs **1.03 W (19% of delivered power)** and that is the honest price of the
+choice. What it buys: even at the datasheet's full 2.6–3.2 V Vf spread, the hottest
+string reaches 0.27 W against a 0.288 W package rating — it passes, by construction, with
+no reliance on procurement luck.
+
+33 Ω specifically is a two-sided optimisation: larger ballast improves sharing but pushes
+the duty cycle past the driver's recommended band; smaller ballast does the reverse. 33 Ω
+is the largest value that keeps duty at or under 75% at nominal Vf.
+
+## LED driver IC
+
+| | |
+|---|---|
+| **Chosen** | `AL8860MP-13` ([C500782](https://jlcpcb.com/partdetail/C500782)) |
+| **Rejected** | PT4115 ([C347356](https://jlcpcb.com/partdetail/C347356)) |
+| **Rejected** | TPS92511 ([C114277](https://jlcpcb.com/partdetail/C114277)) |
+
+### Driver input rating vs the clamp ceiling
+
+The [driver research](/docs/research/driver-ics/#rail-constraint-the-tvs-clamp-ceiling)
+required each candidate to clear the SMAJ20A's **~32.4 V** worst-case clamp or justify
+not doing so, and the [ratings matrix](/docs/power/ratings-matrix/) is where that number
+comes from.
+
+| Candidate | VIN operating | VIN absolute max | vs 32.4 V |
+|---|---|---|---|
+| PT4115 | 6–30 V | not confirmable from a primary datasheet in the research pass | **Fails** — 2.4 V below the clamp, with no absolute-max figure to fall back on |
+| **AL8860** | 4.5–**40 V** | **42 V** (DS39014 Rev 5) | **Clears** — +7.6 V operating, +9.6 V absolute |
+| TPS92511 | 4.5–65 V | — | Clears with the widest margin |
+
+PT4115 is **rejected on the clamp ceiling**, not accepted with a justification. The
+research page offered "accept the residual risk" as an option; this pass declines it,
+because unlike Board P's two inherited gaps — where no better part existed — a fully
+clearing alternative costs the same money. Manufacturing a new residual risk when a
+free alternative exists is not a trade worth making.
+
+TPS92511 clears the ceiling by more, but was rejected on two counts: its 500 mA maximum
+sits exactly at this design's operating current with **zero headroom**, and the research
+pass could not confirm its IADJ formula or its full passive count from a primary
+datasheet, so it is not schematic-ready. The AL8860 is characterised end to end.
+
+The AL8860 also brought the decisive control-side property nobody was looking for: a
+CTRL pin with a **guaranteed 5–100% analog dimming range**, which is what made
+flicker-free dimming possible (see below).
+
+## Driver passive set
+
+| Slot | Chosen | Reasoning |
+|---|---|---|
+| Sense resistor RS1 | 200 mΩ 2512 ([C459674](https://jlcpcb.com/partdetail/C459674)) | `I = 0.1/Rs` → exactly 500 mA. 50 mW on a 2 W part |
+| Inductor L1 | 33 µH ([C177245](https://jlcpcb.com/partdetail/C177245)) | ~440 kHz switching, 1.69 µs on-time (above the 500 ns minimum), 2.5 A saturation against 0.6 A peak |
+| Catch diode D11 | SS26 60 V ([C7420363](https://jlcpcb.com/partdetail/C7420363)) | Rejected SS24 (40 V) — it leaves zero margin against the AL8860's own 40 V input ceiling for a negligible price difference, exactly as the [driver research](/docs/research/driver-ics/) argued |
+| Input caps | 10 µF 1206 + 100 nF 0603 | Datasheet asks 10 µF or higher X7R; see the [X5R deviation note](./bom.mdx#extended-part-fee-economics) |
+
+## Logic rail
+
+| | |
+|---|---|
+| **Chosen** | `AP63203WU-7` ([C780769](https://jlcpcb.com/partdetail/C780769)) — 3.3 V fixed synchronous buck |
+| **Rejected** | HT7333-1 LDO ([C5451671](https://jlcpcb.com/partdetail/C5451671)) |
+| **Rejected** | AMS1117-3.3 LDO ([C6186](https://jlcpcb.com/partdetail/C6186)) |
+| **Rejected** | XL7015E1 buck ([C73013](https://jlcpcb.com/partdetail/C73013)) |
+
+This is the one place where this pass **overrides** a research recommendation. The
+[logic-rail page](/docs/research/control-logic-rail/) says an LDO is fine below ~30 mA,
+and the actual budget is ~25 mA, so on dissipation grounds the LDO wins.
+
+The clamp ceiling overrules it. AMS1117's 15 V absolute maximum is violated at the
+*nominal* rail voltage — that part is unusable here regardless of load. HT7333's 18 V
+ceiling is fine at nominal but sits **14.4 V under** the 32.4 V clamp, which would create
+a brand-new residual risk in a design that has been careful to only inherit the two it
+could not avoid.
+
+AP63203's absolute maximum is **35 V DC and 40 V for 400 ms** (DS41326 Rev 3). The clamp
+event is a 10/1000 µs transient, so the 400 ms rating covers it outright. It is the only
+candidate with **zero** residual, and it costs about $0.60 and three extra passives.
+
+XL7015E1 clears the ceiling by even more (80 V), but needs a feedback divider and a
+150 kHz-class inductor whose researched candidate showed only **238** units in stock.
+AP63203 is fixed-output, needs no divider, and its inductor is a 250,000-unit part.
+
+## MCU
+
+| | |
+|---|---|
+| **Chosen** | `STM32G031F8P6` ([C529334](https://jlcpcb.com/partdetail/C529334)), TSSOP-20 |
+| **Rejected** | CH32V003F4P6 ([C5187096](https://jlcpcb.com/partdetail/C5187096)) |
+| **Rejected** | PY32F002AF15P6TU ([C5292059](https://jlcpcb.com/partdetail/C5292059)) |
+| **Rejected** | STM32C011F4P6TR ([C7373263](https://jlcpcb.com/partdetail/C7373263)) |
+
+The [MCU research](/docs/research/mcu-candidates/) frames this as cost versus toolchain
+friction and calls it "a preference call, not a technical blocker". At prototype
+quantity the cost axis is noise: the whole spread is about **$1**, against ¥8,930 of
+Extended-part setup fees. Toolchain friction, by contrast, is paid in hours during
+bring-up.
+
+So the decision is toolchain-first, and STM32 wins that axis by the research's own
+assessment ("best-supported path on macOS by a clear margin" — official vendor tools,
+Homebrew, OpenOCD, and PlatformIO all first-class, no community forks).
+
+CH32V003 is rejected specifically on its **proprietary single-wire SDI** debug interface,
+which only WCH-LinkE programmers speak. A one-vendor-probe dependency is a real cost on a
+board that will be debugged interactively.
+
+G031 over C011 for **64 KB flash versus 16 KB**: it keeps the recorded-flame LUT
+modulation approach reachable without a board respin, for about $0.40. Hardware headroom
+that removes a future respin is cheap at this price.
+
+## Knob
+
+| | |
+|---|---|
+| **Chosen** | `EC11L1525G01` ([C2991196](https://jlcpcb.com/partdetail/C2991196)) — 15-detent rotary encoder |
+| **Rejected** | WH148-family panel potentiometer |
+| **Rejected** | 3296W / 3362P trimmer behind a panel cutout |
+
+Straightforward — the [knob research](/docs/research/control-knob/) found **zero stock
+across every WH148 SKU**, and the well-stocked alternatives are screwdriver trimmers, not
+knobs. The project's JLCPCB-only sourcing constraint is accepted, so the encoder is the
+only real option.
+
+C2991196 over the other two EC11 SKUs simply on price ($1.27 versus $2.26 and $2.76) —
+none is Basic tier and all sit in the same 4,500–5,500 stock band, so there is nothing
+else to separate them.
+
+Consequence accepted: **no absolute position.** The knob's physical angle means nothing
+after a power cycle. Mitigated by booting dark and ramping to 40%, per
+[control-safety's](/docs/research/control-safety/) "pick a sane default on boot".
+
+## Control scheme
+
+### What the knob controls
+
+| | |
+|---|---|
+| **Chosen** | **Base brightness** |
+| **Rejected** | Speed |
+| **Rejected** | Depth |
+| **Rejected** | Mode-cycled combination via a push-button gesture |
+
+Three reasons, in order of weight:
+
+1. **A lamp knob that does not change brightness is a surprise.** Every other mapping
+   requires the user to learn the device.
+2. **Brightness is the parameter with a safety meaning.** Turning it down is also turning
+   down heat, and turning it fully down is off. Speed and depth have no such property,
+   and neither does a mode-cycled knob whose current mode is invisible.
+3. **The mode gesture is not reliably available.** The
+   [knob research](/docs/research/control-knob/) flagged that none of the shortlisted
+   EC11 SKUs was confirmed to have an integrated push-button. Building the primary UI on
+   an unverified mechanical feature would be a poor bet. The parts DB reports 7 solder
+   joints for C2991196, which *hints* at a switch variant, but a hint is not a datasheet.
+
+Speed and depth become firmware constants. They want tuning against the real diffuser
+anyway — which does not exist yet, because the enclosure is out of scope — so freezing
+them in firmware costs nothing now and is a one-line change later.
+
+### Dimming method
+
+| | |
+|---|---|
+| **Chosen** | **Analog dimming** — 20 kHz MCU PWM, RC low-passed to a DC level on CTRL |
+| **Rejected** | Direct PWM on CTRL |
+
+The AL8860 datasheet recommends PWM below **500 Hz** for good dimming resolution. The
+[modulation research](/docs/research/modulation-algorithms/#pwm-carrier-frequency-choice)
+puts the peripheral-vision flicker threshold near **300 Hz**. A 500 Hz carrier clears
+that by 1.7x — thin for a lamp that is deliberately meant to be seen out of the corner of
+the eye, and raising the carrier is exactly what the datasheet says degrades accuracy.
+
+Analog dimming dissolves the conflict: LED current never chops, so there is no flicker
+frequency at all, and no PWM modulation of the inductor to become an audible whine. The
+datasheet's guaranteed **5–100%** analog range (20:1) is ample for a flame effect.
+
+:::note[This is not free]
+Analog dimming cannot reach true zero gracefully — below 5% of I_NOM the AL8860 is
+outside its guaranteed range, so the effect bottoms out at a ~35 lm glow and then steps
+to hard off. For a flame this is arguably right; for a design that needed a smooth fade
+to black it would be the wrong choice. Recorded here so the constraint is not
+rediscovered as a bug.
+:::
+
+The 20 kHz carrier is chosen to sit above the audio band entirely and to give the
+208 Hz RC filter 40 dB of attenuation. It is an MCU-side frequency only — it never
+reaches the driver as a switching signal.
+
+### Modulation algorithm
+
+| | |
+|---|---|
+| **Chosen** | Two layers of one-pole low-pass-filtered noise (slow "breathing" + faster "flicker"), summed |
+| **Rejected** | Single-layer filtered noise |
+| **Rejected** | LUT playback of recorded flame data |
+
+[modulation-algorithms](/docs/research/modulation-algorithms/)
+notes that layering 2–3 filtered-noise generators "adds realism at the cost of a bit more
+CPU/RAM" — on a 64 MHz Cortex-M0+ running a 50 Hz animation loop, that cost is
+unmeasurable, so take the realism. The bounded-random-walk approach's character is folded
+into the slow layer rather than kept as a separate mode.
+
+The LUT approach is rejected because **the dataset does not exist.** It needs a real
+flame's luminance curve extracted from video, which is a separate project. The G031's
+64 KB of flash keeps the door open for it.
+
+### Safe default-OFF
+
+| | |
+|---|---|
+| **Chosen** | 33 kΩ pull-down on CTRL **plus** the 100 nF filter cap doubling as a 150 ms soft-start |
+| **Rejected** | Firmware-only default-off |
+| **Rejected** | MCU internal pull-down alone |
+
+[control-safety](/docs/research/control-safety/) is unambiguous that this must be a
+hardware guarantee. The wrinkle the research could not know — because the driver was not
+picked yet — is that the AL8860's CTRL pin **floats to ON**, so a pull-down is mandatory
+rather than merely prudent.
+
+The datasheet does not publish CTRL's internal bias current, so the pull-down alone is
+not provable. The soft-start capacitor is what makes the guarantee solid: the driver
+physically cannot reach full current for 150 ms, and the MCU takes control within about
+1–2 ms of power-on reset. Two mechanisms, one of which is datasheet-provable. An MCU
+internal pull-down was rejected because it depends on firmware configuring it — which is
+the very window being protected.
+
+## Interconnect
+
+| | |
+|---|---|
+| **Chosen** | JST XH 6-pin ([C144397](https://jlcpcb.com/partdetail/C144397)), power contacts doubled |
+| **Rejected** | JST VH 2-pin ([C160315](https://jlcpcb.com/partdetail/C160315)) plus a signal connector |
+| **Rejected** | Molex KK 2510 ([C2847671](https://jlcpcb.com/partdetail/C2847671)) |
+
+The [interconnect research](/docs/research/led-interconnect/) framed this as XH's
+zero-margin 3 A contact rating versus VH's 10 A headroom. That framing assumed the load
+was the 3 A contract cap. **It is 410 mA.** Each doubled XH contact carries 205 mA — 6.8%
+of nameplate, a **14x** derated margin. The headroom problem VH exists to solve does not
+occur in this design.
+
+XH also wins on pin count: this design needs six conductors (2 power + 2 ground + ATT +
+PDOK), which is exactly one XH housing, versus VH plus a companion signal connector.
+
+Molex KK was never a real alternative — the research page includes it explicitly to show
+the 3 A-per-contact ceiling is a whole-class property, not an XH quirk.
+
+## Protection
+
+| | |
+|---|---|
+| **Chosen** | Second SMAJ20A ([C571370](https://jlcpcb.com/partdetail/C571370)) local to Board L's input |
+| **Chosen** | PPTC, 750 mA hold / 1.5 A trip / 30 V ([C976305](https://jlcpcb.com/partdetail/C976305)) |
+| **Rejected** | Relying solely on Board P's D5 |
+| **Rejected** | No fuse (relying on the PD source's 3 A limit) |
+
+The local TVS costs one BOM line already on the order (D5 is the same part) and clamps
+transients the ~30 cm harness can develop on its own inductance — the whole point of the
+[TVS margin rule](/docs/power/lessons-from-zudo-pd/#tvs-margin-rule) is to clamp close to
+what you are protecting.
+
+The PPTC exists because there is a **7x gap between what the source will deliver and what
+the board needs**: the PD contract allows 3 A, and Board L draws 410 mA. Without a fuse,
+a Board L fault — a shorted LED string, a failed driver — can pull 45 W through a 2.5 mm
+harness before anything intervenes. A 750 mA hold bounds that at under 2x the normal
+draw.
+
+**Residual, stated:** the PPTC's 30 V rating sits **1.4 V (4.7%) below** the 32.4 V clamp
+ceiling during a surge event. That is the same transient-only category as Board P's two
+inherited gaps and roughly a third the size of the smallest of them. Every 1206-class
+PPTC in the catalog with a 750 mA hold tops out at 30 V, so clearing it would mean
+dropping the fuse entirely — a worse trade.
+
+## Summary of accepted residual risks
+
+| Risk | Category | Where |
+|---|---|---|
+| U1 STUSB4500 VDD, 4.4 V over absolute max at full clamp | transient only, inherited | [ratings matrix](/docs/power/ratings-matrix/) |
+| Q1 AO3401A VDS, 2.4 V over absolute max at full clamp | transient only, inherited | [ratings matrix](/docs/power/ratings-matrix/) |
+| F1 PPTC, 1.4 V over its 30 V rating at full clamp | transient only, new | this page, above |
+| Duty cycle 78% at the LED bin's Vf maximum, versus a 75% recommendation | steady state, bounded — 98% is the hard maximum | [Board L](./board-l.mdx#al8860-constant-current-driver) |
+| Worst-case string imbalance puts one LED at 94% of its package rating | steady state, datasheet-bounded | [Board L](./board-l.mdx#led-array-and-the-brightness-number-ballast-and-current-sharing) |
+| R21's ability to hold CTRL low is not datasheet-provable | covered by a second mechanism; verify at bring-up | [Board L](./board-l.mdx#mcu-knob-and-dimming-path-safe-default-off) |
+| The whole Board P topology has never run on hardware | inherited, unavoidable | [Lessons Carried From zudo-pd](/docs/power/lessons-from-zudo-pd/) |
