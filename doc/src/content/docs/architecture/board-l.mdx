@@ -272,7 +272,7 @@ the same ratio to keep the 2.53 V full scale (e.g. 3.3 kΩ / 10 kΩ).
 
 The encoder drives **TIM2 in hardware quadrature-encoder mode** (PA0 = TIM2_CH1,
 PA1 = TIM2_CH2), so edge counting costs no CPU time and the invalid-transition rejection
-in [control-safety](/docs/research/control-safety/#fault-handling-sketch-knob-fault-fallback) is handled in
+in [control-safety](/docs/research/control-safety/#knob-fault-fallback) is handled in
 silicon. Firmware reads the counter each animation frame and clamps it.
 
 | | Value |
@@ -351,7 +351,7 @@ void animation_frame(void)
 ```
 
 The pipeline is `modulation -> thermal derate -> gamma LUT -> CTRL duty`, exactly the
-composition [control-safety](/docs/research/control-safety/#fault-handling-sketch-over-temperature-derating-hook)
+composition [control-safety](/docs/research/control-safety/#over-temperature-derating-hook)
 describes. The 256-byte gamma LUT is trivial against 64 KB of flash.
 
 :::note[The dimming floor is 5%, not zero]
@@ -376,7 +376,7 @@ placed **inside the LED array**, in a 10 kΩ divider to PA4 (ADC_IN4).
 
 The thresholds sit under the LED's own −40…+85 °C operating range with margin. Divider
 current is 165 µA, so NTC self-heating is 0.27 mW against a 100 mW rating — negligible.
-The derate function is [control-safety's](/docs/research/control-safety/#fault-handling-sketch-over-temperature-derating-hook)
+The derate function is [control-safety's](/docs/research/control-safety/#over-temperature-derating-hook)
 unchanged.
 
 ## Net-connectivity table

@@ -3,8 +3,15 @@ title: Cloudflare Hosting & CI Setup
 sidebar_position: 2
 ---
 
-How the `doc/` site is hosted on Cloudflare Workers, and the one step
-still needed from a human to turn on CI deploys.
+How the `doc/` site is hosted on Cloudflare Workers, and the human step
+that turns on CI deploys.
+
+:::tip[Status: fully configured]
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are both set, and the
+pipeline is verified end-to-end — production and PR previews both deploy
+from CI. The manual token steps below are kept as the runbook for rotating
+the token or re-creating it in another repo.
+:::
 
 ## What's already configured
 
@@ -38,11 +45,11 @@ still needed from a human to turn on CI deploys.
 - **`CLOUDFLARE_ACCOUNT_ID`** repo secret is already set (from `wrangler
   whoami` on an authorized local session).
 
-## The one manual step
+## The manual token step (done — kept as a runbook)
 
 CI cannot deploy or produce PR previews until `CLOUDFLARE_API_TOKEN` exists
-as a repo secret — creating and setting that token is intentionally left to
-a human with Cloudflare dashboard access:
+as a repo secret. This has been done; the steps remain here for rotating the
+token, since creating one needs a human with Cloudflare dashboard access:
 
 1. Go to [Cloudflare Dashboard → My Profile → API
    Tokens](https://dash.cloudflare.com/profile/api-tokens) → **Create
