@@ -48,7 +48,7 @@ Everything else — layout, header, sidebar, footer, doc chrome, islands, and th
 
 ### Admonitions
 
-Available in all MDX files without imports, via directive syntax: `:::note`, `:::tip`, `:::info`, `:::warning`, `:::danger`, `:::caution`, `:::details`. Each accepts an optional `{title="..."}` attribute.
+Available in all MDX files without imports, via directive syntax: `:::note`, `:::tip`, `:::info`, `:::warning`, `:::danger`, `:::caution`, `:::details`. Each accepts an optional bracketed title: `:::note[Custom Title]`. (Docusaurus-style `{title="..."}` is NOT supported — MDX parses the braces as a JS expression and the build fails with "title is not defined".)
 
 ### Headings
 
