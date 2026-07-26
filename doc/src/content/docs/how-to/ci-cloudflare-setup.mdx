@@ -47,14 +47,15 @@ a human with Cloudflare dashboard access:
 1. Go to [Cloudflare Dashboard → My Profile → API
    Tokens](https://dash.cloudflare.com/profile/api-tokens) → **Create
    Token**.
-2. Use the **"Edit Cloudflare Workers"** template (grants Workers Scripts
-   Edit + the Workers Routes permission `wrangler deploy` needs to attach
-   the custom domain). No extra zone-level permission should be needed —
-   this repo doesn't run a separate Cloudflare API "cutover" step; the
-   domain attach happens through `wrangler deploy` itself. If a future
-   deploy's custom-domain attach ever fails with a permission error, add
-   **Zone → Workers Routes → Edit** (or DNS Edit) scoped to
-   `takazudomodular.com` to the token and re-run the workflow.
+2. Use the **"Edit Cloudflare Workers"** template. It already grants
+   `Account → Workers Scripts → Edit` and `Zone → Workers Routes → Edit` —
+   the pair `wrangler deploy` needs to both upload the worker and attach the
+   custom domain declared in `wrangler.toml` (no separate Cloudflare API
+   "cutover" step exists in this repo; the domain attach happens through
+   `wrangler deploy` itself). When the token-creation UI asks for **Zone
+   Resources**, make sure it includes `takazudomodular.com` — a token scoped
+   to "All zones from an account" or explicitly excluding that zone will
+   fail the domain attach with a permission error.
 3. Set the secret:
    ```sh
    gh secret set CLOUDFLARE_API_TOKEN --repo Takazudo/zudo-led-lamp

@@ -104,7 +104,11 @@ jobs:
           npx "wrangler@${WRANGLER_VERSION}" versions upload \
             --preview-alias "$ALIAS" \
             2>&1 | tee "$DEPLOY_LOG"
-          DEPLOY_URL=$(grep -oE "https://${ALIAS}-[a-z0-9.-]+\.workers\.dev" "$DEPLOY_LOG" | head -1)
+          # `|| true` is required: under GitHub Actions' default `bash -eo pipefail`,
+          # grep finding no match makes this assignment's pipeline fail, which would
+          # abort the script here (skipping the graceful "no URL yet" handling below)
+          # instead of falling through to it.
+          DEPLOY_URL=$(grep -oE "https://${ALIAS}-[a-z0-9.-]+\.workers\.dev" "$DEPLOY_LOG" | head -1 || true)
           echo "deploy_url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
           if [ -z "$DEPLOY_URL" ]; then
             # Non-fatal: the worker upload can succeed with no printed
