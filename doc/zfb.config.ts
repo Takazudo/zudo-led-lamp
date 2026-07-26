@@ -4,7 +4,7 @@ import { zudoDoc } from "@takazudo/zudo-doc/config";
 export default defineConfig(
   zudoDoc({
     themePack: "sumi",
-    siteName: "Doc",
+    siteName: "zudo-led-lamp",
     githubUrl: "https://github.com/Takazudo/zudo-led-lamp",
     // siteUrl host MUST match the wrangler.toml custom-domain route.
     siteUrl: "https://zudo-led-lamp.takazudomodular.com",
@@ -30,7 +30,9 @@ export default defineConfig(
     ],
     footer: {
       links: [],
-      copyright: "Copyright © 2026 Your Name. Built with zudo-doc.",
+      // The copyright field renders HTML, not markdown — links must be <a> tags.
+      copyright:
+        'Copyright © 2026 <a href="https://x.com/takazudo">Takazudo</a>. Built with zudo-doc. Enjoy synths on <a href="https://takazudomodular.com/">Takazudo Modular</a>.',
     },
     // Header nav holds only top-level categories, 3-6 items, each categoryMatch
     // a single top-level directory under src/content/docs/ (zudo-doc navigation
