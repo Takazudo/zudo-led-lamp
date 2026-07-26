@@ -7,9 +7,9 @@ sidebar_position: 10
 Board P is this lamp's dedicated USB-PD processing board. It negotiates a 15 V/3 A
 USB-PD contract from a USB-C charger, load-switches it, and hands a clean switched
 15 V rail (plus GND and two optional status flags) to whatever board consumes power
-downstream — the LED power stage and/or control board being researched in parallel
-(see the sibling `led-power` and `control` doc sections once those land; the exact
-board split is locked by the prototype-architecture decision, not by this page).
+downstream — the LED power stage and/or control board being researched in parallel as
+separate doc sections. The exact board split is locked by the prototype-architecture
+decision, not by this page.
 
 The circuit below is adapted from the **zudo-pd project**'s "Board A" — a small,
 reusable USB-PD 15 V sink module the zudo-pd project split out specifically so other
