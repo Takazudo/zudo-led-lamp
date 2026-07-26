@@ -1,0 +1,572 @@
+---
+title: Board L — Driver, Control, LED Array
+description: The locked Board L design — 24 warm-white 2835 LEDs in 8 parallel 3-series strings at 500mA, an AL8860 constant-current buck, an AP63203 3.3V rail, an STM32G031 MCU and an EC11 knob, with a complete pin-level net table and worked component math.
+sidebar_position: 30
+---
+
+Board L is everything that is not USB-PD negotiation: the constant-current LED driver,
+the LED array itself, the 3.3 V logic rail, the control MCU, and the knob. It consumes
+the switched 15 V rail from [Board P](./board-p.mdx) and nothing else.
+
+## Block diagram
+
+```mermaid
+flowchart LR
+  J2["J2 B6B-XH-A 6P\n15V x2, GND x2, ATT, PDOK"]
+  F1["F1 PPTC\n750mA hold / 30V"]
+  V15["V15 rail\nD10 SMAJ20A\nC10 C11 10uF"]
+  RS1["RS1 200mR 2512\nhigh-side sense"]
+  U2["U2 AL8860MP-13\nVIN pin 8"]
+  SETN["SET node\nU2 pin 1"]
+  L1["L1 33uH\n2.5A sat"]
+  LEDP["LED_P\narray anode rail"]
+  BAL["R30..R37\n8x 33R 1206 ballast"]
+  STR["8 strings x 3 series\n24x HL-AM-2835H421W\n3000K, 62.5mA each"]
+  LEDN["LED_N = switching node\nU2 SW pins 5,6"]
+  D11["D11 SS26 60V\ncatch diode"]
+  U4["U4 AP63203WU-7\n3.3V sync buck"]
+  V33["V3P3 rail\nC16 C17 22uF"]
+  U3["U3 STM32G031F8P6"]
+  SW1["SW1 EC11 encoder"]
+  RT1["RT1 NTC 10k\nin the LED array"]
+  RCF["R20 10k / R21 33k / C21 100n\nRC low-pass, 0 to 2.53V DC"]
+  CTRL["U2 CTRL pin 4\nanalog dimming"]
+  J3["J3 SWD pads"]
+  J4["J4 UART pads"]
+
+  J2 --> F1
+  F1 --> V15
+  V15 --> RS1
+  V15 --> U2
+  RS1 --> SETN
+  SETN --> L1
+  L1 --> LEDP
+  LEDP --> BAL
+  BAL --> STR
+  STR --> LEDN
+  D11 --- LEDN
+  D11 --- V15
+  V15 --> U4
+  U4 --> V33
+  V33 --> U3
+  SW1 -->|"A/B quadrature\nPA0 / PA1, TIM2"| U3
+  RT1 -->|"PA4 ADC_IN4"| U3
+  J2 -->|"ATT / PDOK"| U3
+  U3 -->|"PA6 TIM3_CH1\n20kHz PWM"| RCF
+  RCF --> CTRL
+  J3 --- U3
+  J4 --- U3
+```
+
+## LED array and the brightness number
+
+The [LED candidates](/docs/research/led-candidates/) page left CCT open. For a
+fire/candle effect the answer is **warm**, and warm is exactly where the JLCPCB stock
+sits: `HL-AM-2835H421W-S1-08-HR3` ([C210315](https://jlcpcb.com/partdetail/C210315)) at
+399,813 units, in the 2800–3100 K bin.
+
+Its manufacturer specification (Honglitronic B-17-A-0596 Rev A/2) gives real optical
+numbers, which the parts DB does not:
+
+| Parameter | Value (at IF = 60 mA) |
+|---|---|
+| Luminous flux, 2800–3100 K bin | **26 lm min, 29 lm typical** |
+| CCT typical | 3000 K |
+| CRI (Ra) | 80 min |
+| Forward voltage | 2.6 V min, 3.2 V max (±0.1 V measurement tolerance) |
+| Viewing angle | 120° |
+| Package rating | 288 mW |
+
+### Arrangement
+
+**8 parallel strings of 3 series LEDs = 24 emitters, 500 mA total, 62.5 mA per string.**
+
+3-series was chosen over 4-series. The [headroom analysis](/docs/research/led-candidates/#voltage-headroom-analysis)
+called 4s "tight"; with this part's datasheet Vf ceiling of 3.2 V a 4s string is 12.8 V,
+which puts the buck at **85% duty** — outside the AL8860's recommended 25–75% duty band
+(DS39014 Rev 5, "Recommended Duty Cycle Range"). 3s plus a ballast resistor lands at
+**74%**, just inside it.
+
+### Brightness
+
+| | Value |
+|---|---|
+| Typical flux | 24 x 29 lm = **~700 lm** |
+| Worst-case bin | 24 x 26 lm = **624 lm** |
+| System efficacy | ~700 lm / 6.16 W = **114 lm/W** |
+
+For scale: a 60 W incandescent bulb is about 800 lm, and a typical decorative table lamp
+is 300–600 lm. ~700 lm through a diffuser is a genuinely bright ambient lamp, and the
+modulation spends most of its time below full scale.
+
+The flux figures are read at the datasheet's 60 mA test point; the design runs 62.5 mA
+(+4%), so the real number is marginally higher. It is quoted at the 60 mA value rather
+than extrapolated.
+
+### Ballast and current sharing
+
+The parallel strings need ballast — [led-candidates](/docs/research/led-candidates/#current-sharing-considerations-for-parallel-strings)
+lists three ways, and per-string resistors are the one that fits: one CC driver per
+string would mean eight AL8860s and eight passive sets, and Vf-binned procurement is not
+something the JLCPCB catalog can guarantee.
+
+**R30–R37 = 33 Ω, 1206** ([C2907384](https://jlcpcb.com/partdetail/C2907384), ±1%):
+
+| Quantity | Value |
+|---|---|
+| Ballast drop at 62.5 mA | 2.06 V |
+| Dissipation per resistor | 129 mW — **52%** of the 1206 part's 250 mW rating |
+| Total ballast loss | 1.03 W (19% of delivered power) |
+| Imbalance, realistic same-reel spread (±0.3 V/string) | **±9 mA, ±15%** |
+| Imbalance, datasheet worst case (±0.9 V/string) | ±27 mA, ±43% |
+| Hottest string at datasheet worst case | 90 mA → 0.27 W vs the **0.288 W** package rating |
+
+(The 0.27 W figure holds Vf at the nominal 3.0 V as a conservative bound. The LED that
+actually draws 90 mA is by definition a low-Vf one, dropping closer to 2.6 V, so its real
+dissipation is nearer 0.23 W — 81% of rating. The conservative number is the one carried
+into the [hot-spot table](#power-budget-dissipation-hot-spots).)
+
+The last row is the check that matters: **even at the datasheet's full Vf spread, no LED
+exceeds its package power rating.** The constant-current driver holds the *total* at
+500 mA, so one string running hot forces the others down rather than compounding — there
+is no runaway path. The 1.03 W of ballast loss is the price paid for that guarantee, and
+it is a deliberate trade against the alternative of eight driver ICs.
+
+Ballast resistors sit on the **anode side** (between `LED_P` and each string's top LED),
+so the eight split nets are on the quiet DC rail and the common `LED_N` node — which is
+the driver's switching node — stays as one compact net.
+
+## AL8860 constant-current driver
+
+`AL8860MP-13` ([C500782](https://jlcpcb.com/partdetail/C500782)), MSOP-8EP.
+
+The AL8860 is a hysteretic buck with **high-side current sensing**: the sense resistor
+sits between `VIN` and `SET`, and the LED string floats above an internal low-side NDMOS
+switch. That topology is the reason `LED_N` (the common cathode) is a switching node.
+
+| Design point | Value | Source |
+|---|---|---|
+| Sense resistor RS1 | **200 mΩ** → `I = 0.1 / Rs` = **500 mA** | DS39014 Rev 5, "LED Current Configuration" |
+| Output voltage | 3 x 3.0 V + 2.06 V ballast = **11.06 V** | — |
+| Duty cycle | 11.06 / 15 = **74%** | inside the recommended 25–75% band |
+| Inductor L1 | **33 µH** | ripple is set internally at ±20% of sense threshold; L sets frequency |
+| Switching frequency | `T = ΔI·L·(1/(Vin−Vout) + 1/(Vout+Vd))` → **~440 kHz** | under the 1 MHz max |
+| Minimum on-time | 1.69 µs | above the 500 ns recommended minimum |
+| RS1 dissipation | 50 mW on a 2 W part | 2.5% |
+| L1 DCR loss | 310 mΩ x 0.25 A² = 78 mW | |
+| D11 conduction | 26% x 0.5 A x ~0.45 V = 59 mW | |
+| Switch conduction | 0.2 Ω x 0.25 A² x 0.74 = 37 mW | |
+| **Estimated efficiency** | **~95%** from component losses; **92% used in the budget** | conservative vs the research page's 88% assumption |
+
+Duty cycle across the LED's full Vf bin:
+
+| Vf per LED | String V | Vout with ballast | Duty | Note |
+|---|---|---|---|---|
+| 2.6 V (bin min) | 7.8 V | 9.86 V | 66% | fine |
+| 3.0 V (nominal) | 9.0 V | 11.06 V | 74% | design point |
+| 3.2 V (bin max) | 9.6 V | 11.66 V | 78% | 3 points above the recommended band — accepted, still far below the 98% max duty |
+
+**Input rating vs the clamp ceiling.** AL8860's recommended VIN maximum is 40 V and its
+absolute maximum is **42 V** (DS39014 Rev 5, "Absolute Maximum Ratings"). Board P's
+SMAJ20A clamps at ≤32.4 V worst case, so the driver clears the ceiling by **7.6 V on the
+operating rating and 9.6 V on the absolute maximum**. This is the reason PT4115 was
+rejected — see [Decisions](./decisions.mdx#led-driver-ic-driver-input-rating-vs-the-clamp-ceiling).
+
+## AP63203 logic rail (not an LDO)
+
+`AP63203WU-7` ([C780769](https://jlcpcb.com/partdetail/C780769)), TSOT-23-6, fixed 3.3 V.
+
+The [logic-rail research](/docs/research/control-logic-rail/) says an LDO is fine below
+~30 mA, and this rail draws ~25 mA worst case. By that rule alone the LDO wins. The
+**clamp ceiling overrides it**:
+
+| Candidate | VIN max | vs 32.4 V clamp |
+|---|---|---|
+| AMS1117-3.3 | 15 V | Violated at the *nominal* rail, let alone a transient — rejected outright |
+| HT7333-1 | 18 V | **14.4 V over** during a clamp event — a new residual gap this design would be creating from scratch |
+| **AP63203WU-7** | 32 V recommended, **35 V DC / 40 V for 400 ms absolute max** (DS41326 Rev 3) | **Clears it** — 2.6 V margin on the DC absolute max, 7.6 V on the 400 ms rating, against a 10/1000 µs event |
+
+Board P's audit accepted two transient-only gaps because the parts in question had no
+better alternative. Board L has one, for about $0.60, so it takes it. Zero new residual
+risk is worth a three-part BOM increase.
+
+Component values from DS41326 Table 2 (AP63203, 3.3 V): L = 3.9 µH, C1 = 10 µF,
+C2 = 2 x 22 µF, C3 = 100 nF. Implemented as **L2 = 4.7 µH**
+([C167874](https://jlcpcb.com/partdetail/C167874), 78 mΩ DCR — the datasheet asks for
+under 100 mΩ, and 2.2–10 µH is its stated acceptable range), C14 = 10 µF, C16/C17 =
+2 x 22 µF, C15 = 100 nF bootstrap. `EN` is left open: the block diagram (DS41326
+Figure 3) shows an internal current source on EN and the pin description states "leave
+open for automatic startup".
+
+## MCU, knob, and dimming path
+
+`STM32G031F8P6` ([C529334](https://jlcpcb.com/partdetail/C529334)), TSSOP-20, 64 KB
+flash / 8 KB SRAM, Cortex-M0+, 12-bit ADC.
+
+`EC11L1525G01` ([C2991196](https://jlcpcb.com/partdetail/C2991196)), 15-detent
+quadrature encoder, panel-mount bushing.
+
+### Analog dimming, not PWM dimming
+
+This is the single most consequential control decision, and the AL8860 datasheet decides
+it. DS39014 Rev 5 states that for PWM on the CTRL pin, "the PWM frequency is recommended
+to be lower than 500 Hz" for high resolution. But the
+[modulation research](/docs/research/modulation-algorithms/#pwm-carrier-frequency-choice)
+sets the flicker-perception floor at ~300 Hz for peripheral vision. A 500 Hz PWM carrier
+clears that by only 1.7x — thin margin for a lamp that is specifically meant to be seen
+out of the corner of the eye. Pushing the carrier up to get flicker margin is exactly
+what the datasheet says costs dimming accuracy.
+
+**Analog dimming escapes the conflict entirely.** A DC level on CTRL scales the LED
+current continuously; the LED current never chops, so there is no flicker frequency to
+argue about and no PWM modulation of the inductor to make audible noise. The datasheet's
+"Recommended Analog Dimming Range" is **5% to 100%**, a 20:1 span.
+
+The DC level is produced by low-pass filtering an MCU PWM output — the "case (b)" the
+modulation research anticipated:
+
+```
+PA6 (TIM3_CH1, 20 kHz PWM, 0-3.3 V)
+   |
+  R20 10k
+   +---- R21 33k ---- GND      (divider: 3.3 V x 33/43 = 2.53 V at 100% duty)
+   |
+  C21 100nF ---- GND           (filter + AL8860 soft-start capacitor)
+   |
+  U2.CTRL
+```
+
+| Quantity | Value |
+|---|---|
+| Full-scale CTRL voltage | 3.3 V x 33/43 = **2.53 V** — just past the 2.5 V clamp point, so 100% duty = 100% of I_NOM |
+| Filter cutoff | R20 ∥ R21 = 7.67 kΩ with 100 nF → **208 Hz** |
+| PWM carrier | **20 kHz** — ~40 dB of attenuation, leaving tens of millivolts of residual ripple on a 2.53 V span, and above the audio band regardless |
+| Animation update rate | **50 Hz** — filter τ is 0.77 ms against 20 ms frames, so no visible lag |
+| Duty at the CTRL off threshold (0.3 V) | 11.9% |
+| Duty at the 5% current floor (0.41 V) | 16.2% |
+| Soft-start from C21 | 100 nF x 1.5 ms/nF = **150 ms** |
+
+### Safe default-OFF
+
+The AL8860's CTRL pin **floats to ON** ("leave floating for normal operation"). That is
+the opposite of what [control-safety](/docs/research/control-safety/) requires, so the
+default-off has to be built deliberately. Two independent mechanisms do it:
+
+1. **R21, 33 kΩ pull-down on CTRL.** With PA6 in its reset high-impedance state, CTRL is
+   tied toward ground rather than allowed to float up.
+2. **C21's 150 ms soft-start.** Even in the worst case where the pull-down fails to hold
+   CTRL below the 0.2 V off threshold, the driver's output cannot reach full current for
+   150 ms. The STM32G031 reaches firmware GPIO configuration in roughly 1–2 ms after
+   power-on reset — two orders of magnitude inside that window. The same protection
+   covers brown-out and watchdog resets.
+
+:::caution[Verify the pull-down at bring-up]
+The AL8860 datasheet does not publish CTRL's internal bias current, so R21's ability to
+hold CTRL below 0.2 V on its own is **not provable from the datasheet** — mechanism 2 is
+what makes this safe, and mechanism 1 is belt-and-braces. First bring-up must measure
+CTRL with the MCU held in reset. If it reads above 0.2 V, reduce R21 and scale R20 by
+the same ratio to keep the 2.53 V full scale (e.g. 3.3 kΩ / 10 kΩ).
+:::
+
+### Knob mapping
+
+The encoder drives **TIM2 in hardware quadrature-encoder mode** (PA0 = TIM2_CH1,
+PA1 = TIM2_CH2), so edge counting costs no CPU time and the invalid-transition rejection
+in [control-safety](/docs/research/control-safety/#knob-fault-fallback) is handled in
+silicon. Firmware reads the counter each animation frame and clamps it.
+
+| | Value |
+|---|---|
+| Counts per detent | 4 (TIM2 x4 quadrature mode) |
+| Firmware scale | 2 brightness steps per count → 8 per detent |
+| Full sweep | 32 detents, **~2.1 turns** from off to full |
+| Clamp | saturated to [0, 255], no wrap |
+| Boot | 0 (dark), then ramp to 40% over 1 s |
+
+The counts-per-detent figure assumes one full quadrature cycle per detent, which is the
+usual EC11 arrangement — the parts DB reports "30/15" for this SKU, consistent with 30
+pulses and 15 detents per revolution. Confirm it on the received part; the firmware scale
+factor is a one-line change if it turns out to be 8 counts per detent instead. The scale
+exists because unscaled counting would need **4.3 turns** to sweep 0–255, which is far too
+much travel for a lamp knob.
+
+An encoder has no absolute position, so the boot ramp exists to tell the user the lamp is
+alive. It happens strictly *after* firmware has taken control of CTRL, so it does not
+weaken the default-off guarantee.
+
+### Modulation algorithm
+
+Two layers of filtered noise ([approach 1](/docs/research/modulation-algorithms/),
+layered as that page suggests) — a slow "breathing" layer and a faster "flicker" layer,
+summed around the knob's base brightness. Approach 3 (recorded-flame LUT) is rejected
+because no such dataset exists for this project; approach 2's bounded random walk is
+folded in as the slow layer's character rather than kept as a separate mode.
+
+```c
+/* ---- fixed constants (tune against the real diffuser, not on the bench) ---- */
+#define FRAME_HZ            50
+#define SLOW_ALPHA          12    /* one-pole IIR alpha, /256 - lazy breathing   */
+#define FAST_ALPHA          64    /* one-pole IIR alpha, /256 - candle flicker   */
+#define SLOW_DEPTH          70    /* /256 of full scale                          */
+#define FAST_DEPTH          38    /* /256 of full scale                          */
+#define GAMMA               2.2f
+
+/* CTRL-window mapping, from the divider + AL8860 thresholds above */
+#define DUTY_FLOOR_Q16      10617 /* 16.2% of 65535 -> CTRL 0.41V -> 5% of I_NOM */
+#define DUTY_FULL_Q16       65535 /* 100%          -> CTRL 2.53V -> 100%          */
+
+static int16_t slow_state, fast_state;
+static uint8_t gamma_lut[256];    /* lut[i] = round(255 * pow(i/255, GAMMA)) */
+
+/* ---- one animation frame, called at FRAME_HZ ---- */
+void animation_frame(void)
+{
+    /* 1. knob -> base brightness, perceptual 0..255 */
+    uint8_t base = knob_count_clamped();          /* TIM2 CNT, saturated 0..255 */
+
+    /* 2. two layers of low-pass-filtered noise */
+    int16_t slow_raw = (int16_t)random_uniform(-128, 127);
+    int16_t fast_raw = (int16_t)random_uniform(-128, 127);
+    slow_state += ((slow_raw - slow_state) * SLOW_ALPHA) >> 8;
+    fast_state += ((fast_raw - fast_state) * FAST_ALPHA) >> 8;
+
+    int16_t modulated = (int16_t)base
+                      + ((slow_state * SLOW_DEPTH) >> 8)
+                      + ((fast_state * FAST_DEPTH) >> 8);
+    uint8_t perceptual = (uint8_t)clamp_i16(modulated, 0, 255);
+
+    /* 3. thermal derate (NTC on PA4) - see apply_thermal_derate() below */
+    perceptual = apply_thermal_derate(perceptual, ntc_temp_c_x10());
+
+    /* 4. hard off, or gamma -> CTRL window */
+    if (perceptual == 0) {
+        pwm_set_duty_q16(0);                      /* CTRL -> 0V, driver off      */
+        return;
+    }
+    uint8_t g = gamma_lut[perceptual];
+    uint32_t duty = DUTY_FLOOR_Q16
+                  + ((uint32_t)g * (DUTY_FULL_Q16 - DUTY_FLOOR_Q16)) / 255u;
+    pwm_set_duty_q16((uint16_t)duty);
+}
+```
+
+The pipeline is `modulation -> thermal derate -> gamma LUT -> CTRL duty`, exactly the
+composition [control-safety](/docs/research/control-safety/#over-temperature-derating-hook)
+describes. The 256-byte gamma LUT is trivial against 64 KB of flash.
+
+:::note[The dimming floor is 5%, not zero]
+Analog dimming below 5% of I_NOM is outside the AL8860's guaranteed range, so the
+effect's minimum is a ~25 mA / ~35 lm glow with a hard step to fully off at perceptual
+zero. For a flame effect this is arguably correct — real embers do not go to black — but
+it means a very slow fade-to-nothing is not achievable without PWM chopping. Worth
+knowing before tuning `SLOW_DEPTH` so far that frames land at perceptual 0 and produce a
+visible on/off snap.
+:::
+
+### Thermal derate
+
+`RT1` is an `NCP18XH103F03RB` 10 kΩ B=3380 K NTC ([C13564](https://jlcpcb.com/partdetail/C13564))
+placed **inside the LED array**, in a 10 kΩ divider to PA4 (ADC_IN4).
+
+| Board temperature | NTC resistance | PA4 voltage | Firmware action |
+|---|---|---|---|
+| 25 °C | 10.0 kΩ | 1.650 V | normal |
+| 65 °C | 2.61 kΩ | 0.683 V | `DERATE_START` — begin linear roll-off |
+| 80 °C | 1.71 kΩ | 0.481 V | `CRITICAL` — hard off |
+
+The thresholds sit under the LED's own −40…+85 °C operating range with margin. Divider
+current is 165 µA, so NTC self-heating is 0.27 mW against a 100 mW rating — negligible.
+The derate function is [control-safety's](/docs/research/control-safety/#over-temperature-derating-hook)
+unchanged.
+
+## Net-connectivity table
+
+Complete pin coverage for every active device. STM32G031F8P6 pin numbers are from ST
+DS12992 Rev 3 Table 12 (TSSOP20 column); AL8860 from Diodes DS39014 Rev 5; AP63203 from
+Diodes DS41326 Rev 3.
+
+### Power input and protection
+
+| Net | Connected pins (Ref.Pin) | Note |
+|---|---|---|
+| `VBUS_L` | `J2.1 J2.2 F1.1` | Both paired power contacts converge on the PPTC |
+| `V15` | `F1.2 D10.cathode C10.1 C11.1 U2.VIN(8) RS1.1 D11.cathode C12.1 C13.1 U4.VIN(3) C14.1` | The board's 15 V rail. D10 = second SMAJ20A local to Board L, clamping cable-inductance transients the harness can develop |
+
+### LED driver (U2, AL8860MP-13, MSOP-8EP)
+
+| Net | Connected pins (Ref.Pin) | Note |
+|---|---|---|
+| `V15` | `U2.VIN(8) RS1.1 C12.1 C13.1 D11.cathode` | C12 10 µF bulk + C13 100 nF HF, both close to pin 8 |
+| `SET` | `U2.SET(1) RS1.2 L1.1` | High-side sense node. RS1 = 200 mΩ between `V15` and `SET`; `I_LED = 0.1/Rs` |
+| `LED_P` | `L1.2 R30.1 R31.1 R32.1 R33.1 R34.1 R35.1 R36.1 R37.1` | Array anode rail after the inductor |
+| `LED_N` | `U2.SW(5) U2.SW(6) D11.anode LED3.K LED6.K LED9.K LED12.K LED15.K LED18.K LED21.K LED24.K` | **Switching node** — common cathode of all 8 strings. Keep this copper compact |
+| `CTRL` | `U2.CTRL(4) R20.2 R21.1 C21.1` | Analog dim input + soft-start cap |
+| `GND` | `U2.GND(2) U2.GND(3) U2.EP C12.2 C13.2` | EP is a thermal pad — tie to the ground pour, do **not** use it as the electrical return path (DS39014 pin description) |
+| No-connect | `U2.NC(7)` | Leave floating |
+
+### LED array (8 strings x 3 series)
+
+Strings are numbered 1–8; LEDs `LED1`–`LED24` in order, so string *n* holds
+`LED(3n−2)`, `LED(3n−1)`, `LED(3n)`.
+
+| Net | Connected pins (Ref.Pin) | Note |
+|---|---|---|
+| `LED_S1_A` | `R30.2 LED1.A` | String 1 anode, after ballast |
+| `LED_S1_M1` | `LED1.K LED2.A` | String 1 internal node |
+| `LED_S1_M2` | `LED2.K LED3.A` | String 1 internal node |
+| `LED_S2_A` | `R31.2 LED4.A` | String 2 — pattern repeats for strings 2..8 |
+| `LED_S2_M1` | `LED4.K LED5.A` | |
+| `LED_S2_M2` | `LED5.K LED6.A` | |
+| `LED_S3_A` … `LED_S8_A` | `R32.2 LED7.A` … `R37.2 LED22.A` | Same pattern; ballast R30+n−1 feeds string n |
+| `LED_Sn_M1`, `LED_Sn_M2` | `LED(3n−2).K LED(3n−1).A`, `LED(3n−1).K LED(3n).A` | Two internal nodes per string |
+| `LED_N` | `LED3.K LED6.K … LED24.K` | All eight string cathodes join the switching node above |
+| `NTC_SENSE` | `RT1.1 R26.2 C24.1 U3.PA4(11)` | NTC top; RT1 physically placed among the emitters |
+| `GND` | `RT1.2 C24.2` | |
+
+### Logic rail (U4, AP63203WU-7, TSOT-23-6)
+
+| Net | Connected pins (Ref.Pin) | Note |
+|---|---|---|
+| `V15` | `U4.VIN(3) C14.1` | C14 = 10 µF input cap |
+| `SW_LOGIC` | `U4.SW(5) C15.1 L2.1` | Switching node, L2 = 4.7 µH |
+| `BST` | `U4.BST(6) C15.2` | C15 = 100 nF bootstrap, SW to BST |
+| `V3P3` | `U4.FB(1) L2.2 C16.1 C17.1 U3.VDD(4) C18.1 C19.1 R22.1 R23.1 R24.1 R25.1 R26.1 J3.4` | Fixed-output part — FB ties directly to the output, no divider (DS41326 §9) |
+| `GND` | `U4.GND(4) C14.2 C16.2 C17.2` | C16/C17 = 2 x 22 µF per DS41326 Table 2 |
+| No-connect | `U4.EN(2)` | Left open for automatic startup — internal current source and 1.18 V threshold per DS41326 Figure 3 |
+
+### MCU (U3, STM32G031F8P6, TSSOP-20), all 20 pins
+
+| Pin | Pin name | Net | Function |
+|---|---|---|---|
+| 1 | PB7 / PB8 | — | Unused, leave floating (configure as analog input in firmware) |
+| 2 | PB9 / PC14-OSC32_IN | — | Unused, no external crystal (HSI16 + PLL to 64 MHz) |
+| 3 | PC15-OSC32_OUT | — | Unused |
+| 4 | VDD / VDDA | `V3P3` | Supply and ADC reference. `C18` 100 nF + `C19` 1 µF adjacent |
+| 5 | VSS / VSSA | `GND` | |
+| 6 | PF2-NRST | `NRST` | `C20` 100 nF to GND, and `J3.3` for the programmer |
+| 7 | PA0 | `ENC_A` | TIM2_CH1 — encoder phase A |
+| 8 | PA1 | `ENC_B` | TIM2_CH2 — encoder phase B |
+| 9 | PA2 | `UART_TX` | USART2_TX → `J4.1` debug pad |
+| 10 | PA3 | `UART_RX` | USART2_RX → `J4.2` debug pad |
+| 11 | PA4 | `NTC_SENSE` | ADC_IN4 — thermistor divider |
+| 12 | PA5 | `PDOK` | GPIO input, 10 kΩ pull-up (`R24`) — informational only |
+| 13 | PA6 | `PWM_DIM` | TIM3_CH1 — 20 kHz PWM into the RC filter |
+| 14 | PA7 | `ATT` | GPIO input, 10 kΩ pull-up (`R25`) — spare |
+| 15 | PB0 / PB1 / PB2 / PA8 | — | Unused |
+| 16 | PA11 [PA9] | — | Unused |
+| 17 | PA12 [PA10] | — | Unused |
+| 18 | PA13 | `SWDIO` | → `J3.1` |
+| 19 | PA14-BOOT0 / PA15 | `SWCLK` | → `J3.2`. Internal pull-down at reset holds BOOT0 low → boots from flash, no external part needed |
+| 20 | PB3 / PB4 / PB5 / PB6 | — | Unused |
+
+:::note[Multiplexed package pins]
+TSSOP-20 bonds several die pads to one package pin (pin 1 = PB7+PB8, pin 2 = PB9+PC14,
+pin 15 = PB0+PB1+PB2+PA8, pin 19 = PA14+PA15, pin 20 = PB3..PB6). This is normal for
+STM32 low-pin-count packages. It matters here only for pin 19: SWCLK (PA14) shares the
+pin with PA15, so PA15 must never be configured as an output in firmware.
+:::
+
+### Control and interface nets
+
+| Net | Connected pins (Ref.Pin) | Note |
+|---|---|---|
+| `PWM_DIM` | `U3.PA6(13) R20.1` | 20 kHz PWM out |
+| `CTRL` | `R20.2 R21.1 C21.1 U2.CTRL(4)` | Filtered DC, 0 to 2.53 V |
+| `ENC_A` | `SW1.A R22.2 C22.1 U3.PA0(7)` | R22 10 kΩ pull-up to `V3P3`, C22 100 nF debounce (τ = 1 ms) |
+| `ENC_B` | `SW1.B R23.2 C23.1 U3.PA1(8)` | R23/C23, mirror of phase A |
+| `PDOK` | `J2.4 R24.2 U3.PA5(12)` | R24 10 kΩ pull-up — Board P drives this open-drain |
+| `ATT` | `J2.3 R25.2 U3.PA7(14)` | R25 10 kΩ pull-up |
+| `NTC_SENSE` | `RT1.1 R26.2 C24.1 U3.PA4(11)` | R26 10 kΩ divider top to `V3P3` |
+| `NRST` | `U3.PF2-NRST(6) C20.1 J3.3` | |
+| `SWDIO` | `U3.PA13(18) J3.1` | |
+| `SWCLK` | `U3.PA14(19) J3.2` | |
+| `UART_TX` | `U3.PA2(9) J4.1` | |
+| `UART_RX` | `U3.PA3(10) J4.2` | |
+
+### Ground
+
+| Net | Connected pins (Ref.Pin) |
+|---|---|
+| `GND` | `J2.5 J2.6 D10.anode C10.2 C11.2 C12.2 C13.2 U2.GND(2) U2.GND(3) U2.EP C14.2 U4.GND(4) C16.2 C17.2 U3.VSS(5) C18.2 C19.2 C20.2 R21.2 C21.2 C22.2 C23.2 C24.2 RT1.2 SW1.C SW1.MP1 SW1.MP2 J3.5 J4.3` |
+
+`SW1.MP1` / `SW1.MP2` are the encoder's mounting lugs. If the fitted EC11 SKU turns out
+to carry a push-button (the parts DB lists 7 solder joints, which is consistent with a
+switch variant — the [knob research](/docs/research/control-knob/) flagged this as
+unverified), its two switch terminals are left unconnected; the design does not use them.
+
+### Connectors and pad groups
+
+| Ref | Part | Pins | Note |
+|---|---|---|---|
+| `J2` | B6B-XH-A(LF)(SN) | 6 | Mirrors Board P's `JOUT` exactly — see [Board P](./board-p.mdx#jout-pin-assignment-locked) |
+| `J3` | 1x5, 2.54 mm | SWDIO, SWCLK, NRST, 3V3, GND | **Footprint only.** Hand-fit a pin strip for bring-up; not in the assembly BOM |
+| `J4` | 1x3, 2.54 mm | TX, RX, GND | Footprint only |
+| `SW1` | EC11L1525G01 | A, C, B + lugs | Panel-mount encoder |
+
+## Power budget
+
+Against the 45 W / 3.0 A PD contract cap.
+
+| Item | Voltage | Current | Power |
+|---|---|---|---|
+| LED array (24 emitters, 8 x 3s) | 9.0 V/string | 500 mA total | **4.50 W** |
+| Ballast resistors (8 x 33 Ω) | 2.06 V | 500 mA | **1.03 W** |
+| AL8860 conversion loss (η = 92% assumed) | — | — | 0.48 W |
+| *LED channel input* | 15 V | 401 mA | *6.01 W* |
+| Logic rail output (3.3 V, 25 mA worst case) | 3.3 V | 25 mA | 0.083 W |
+| AP63203 loss (η ≈ 75% at this light load) | — | — | 0.028 W |
+| *Logic rail input* | 15 V | 7.4 mA | *0.11 W* |
+| F1 PPTC (90 mΩ typical) | — | 409 mA | 0.02 W |
+| **Board L total** | 15 V | **409 mA** | **6.14 W** |
+| Board P — Q1 conduction (50 mΩ) | — | 409 mA | 0.008 W |
+| Board P — U1 quiescent (160 µA) | 15 V | 0.16 mA | 0.002 W |
+| Board P — R11 100 kΩ gate pull-up | 15 V | 0.15 mA | 0.002 W |
+| **System total** | 15 V | **~410 mA** | **~6.16 W** |
+
+| Margin | Value |
+|---|---|
+| Against the 45 W cap | **13.7% used, 7.3x margin** |
+| Against the 3.0 A cap | **13.7% used, 7.3x margin** |
+| Worst case if Board P's R14 draws continuously (see [the open question](./board-p.mdx#one-number-this-pass-could-not-resolve)) | 6.64 W / 443 mA — **14.8% used, 6.8x margin** |
+
+### The binding constraint is thermal, not the contract
+
+The 45 W figure is a ceiling, not a target. Scaling this lamp to use it would mean ~7x
+this dissipation inside a closed 3D-printed enclosure with no forced air — which the
+[thermal budget](/docs/research/thermal-budget/) page's own numbers say plain FR-4 cannot
+shed. **~6 W is the design's real ceiling**, set by board thermals, and the design sits
+at it deliberately.
+
+### Dissipation hot spots
+
+| Site | Count | Each | vs limit |
+|---|---|---|---|
+| LED (nominal) | 24 | 0.19 W | 65% of the 288 mW package rating; ~19% of the ~1 W/site FR-4 guideline |
+| LED (worst-case imbalanced string) | up to 3 | 0.27 W | 94% of the package rating — **the tightest number on the board** |
+| Ballast resistor, 1206 | 8 | 0.129 W | 52% of 250 mW |
+| L1 (33 µH, 310 mΩ) | 1 | 0.078 W | — |
+| D11 SS26 | 1 | 0.059 W | — |
+| RS1 (200 mΩ, 2 W) | 1 | 0.050 W | 2.5% |
+| U2 AL8860 | 1 | ~0.10 W | θJA 56 °C/W → ΔT ≈ 6 °C |
+| U4 AP63203 | 1 | ~0.03 W | θJA 89 °C/W → ΔT ≈ 3 °C |
+
+No site exceeds its rating, and the two ICs barely warm. The worst-case imbalanced LED at
+94% of its package rating is the number to watch: it is derived from the datasheet's full
+2.6–3.2 V Vf spread, which is far wider than a single reel will actually deliver, but it
+is the only bound the datasheet guarantees. If a built board shows visibly uneven strings,
+that is the symptom, and the fix is a larger ballast value at the cost of duty-cycle
+headroom.
+
+## References
+
+- [LED candidates](/docs/research/led-candidates/) — the 2835/5730/COB comparison and the current-sharing analysis
+- [Driver ICs](/docs/research/driver-ics/) — the PT4115 / AL8860 / TPS92511 comparison
+- [Thermal budget](/docs/research/thermal-budget/) — the 1 W/site FR-4 guideline
+- [Logic rail](/docs/research/control-logic-rail/) — the LDO-vs-buck dissipation math
+- [MCU candidates](/docs/research/mcu-candidates/) — CH32V003 / STM32 / PY32 and their toolchains
+- [Knob candidates](/docs/research/control-knob/) — why an encoder, not a potentiometer
+- [Modulation algorithms](/docs/research/modulation-algorithms/) — gamma, flicker thresholds, the three approaches
+- [Safe default-OFF](/docs/research/control-safety/) — the hardware-not-firmware principle
+- Diodes Incorporated DS39014 Rev 5 (AL8860) and DS41326 Rev 3 (AP63200/1/3/5)
+- ST DS12992 Rev 3 (STM32G031x4/x6/x8), Table 12 pin assignment
+- Honglitronic B-17-A-0596 Rev A/2 (HL-AM-2835H421W-S1-08-HR3)

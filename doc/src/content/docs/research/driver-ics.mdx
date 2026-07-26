@@ -1,0 +1,96 @@
+---
+title: Constant-Current Buck LED Driver ICs
+description: CC buck driver candidates with PWM dimming and full passive sets, evaluated against the PD board's transient clamp ceiling. Final pick is an architecture-phase decision.
+sidebar_position: 2
+---
+
+Three constant-current step-down (buck) LED driver ICs, each with a full supporting passive set sourced from the local JLCPCB DB (fetched 2026-07-25; per-part lookup dates noted where they differ from that).
+
+## Rail constraint: the TVS clamp ceiling
+
+Per the Board-P audit (issue #5), the PD board's SMAJ20A input TVS clamps transients to **~32.4V**. The steady-state rail is 15V nominal — the clamp only matters during a fault/surge event, but a driver whose input rating sits below 32.4V is relying on that event never actually reaching its clamp voltage. Each candidate below is checked against this ceiling explicitly, per the source issue's instruction to either clear it or justify a lower bound.
+
+## Candidate 1 — PT4115 (PowTech)
+
+| Spec | Value |
+|---|---|
+| Part | PT4115 (C347356), SOT-89-5 |
+| Input voltage | 6–30V operating |
+| Output current | up to 1.2A |
+| Switching frequency | up to 1MHz |
+| Dimming | DIM pin: PWM (100Hz–~20kHz) or DC analog. `<0.3V` = off, `>2.5V` = full current |
+| Stock (tier) | 113,894, [partdetail](https://jlcpcb.com/partdetail/C347356) (DB date 2026-06-26) |
+
+**Clamp check: fails to clear it.** 30V operating ceiling is *below* the 32.4V transient clamp — a fault event that pushes the clamp to its full 32.4V would exceed PT4115's rated input. Two ways to resolve this, not decided here:
+1. Accept the residual risk on the argument that nominal operation never nears 30V and the clamp event is rare/brief — this research pass could not confirm PT4115's *absolute maximum* rating (as opposed to its recommended *operating* range) from a machine-readable primary datasheet, so this argument is unverified, not confirmed safe.
+2. Switch to the higher-voltage PT4115E variant (50V-rated per PowTech's naming, not confirmed present in the local JLCPCB DB) or to Candidate 2/3 below, both of which clear the clamp with margin.
+
+**Passive set:**
+
+| Role | Formula/target | Candidate part | Spec | Stock | Link |
+|---|---|---|---|---|---|
+| Current-sense resistor | Rsense = 0.1 / Iout(A) | FRM121WFR100TM (C7467250) | 100mΩ, 1W, 1206 → Iout≈1A | 234,535 | [partdetail](https://jlcpcb.com/partdetail/C7467250) |
+| Current-sense resistor (alt) | same formula | RLP25FEER300 (C393077) | 300mΩ, 2W, 2512 → Iout≈333mA | 36,723 | [partdetail](https://jlcpcb.com/partdetail/C393077) |
+| Current-sense resistor (alt) | same formula | RLP25FEER200 (C459674) | 200mΩ, 2W, 2512 → Iout≈500mA | 20,654 | [partdetail](https://jlcpcb.com/partdetail/C459674) |
+| Inductor | ~30–70uH class for a few-hundred-mA target at 1MHz (exact value depends on the LED current locked in by the architecture pass) | FXL0630-330-M (C177245) | 33uH, 2/2.5A, molded, SMD 7×6.6mm | 228,367 | [partdetail](https://jlcpcb.com/partdetail/C177245) |
+| Inductor (alt) | — | YNR6028-470M (C497831) | 47uH, ~1.1A, shielded, SMD 6×6mm | 102,033 | [partdetail](https://jlcpcb.com/partdetail/C497831) |
+| Catch diode (non-synchronous, needs headroom above actual 30V max) | ≥40V, low Vf | SS24 (C7420362) | 40V/2A Schottky, SMA, [Preferred] | 336,102 | [partdetail](https://jlcpcb.com/partdetail/C7420362) |
+| Input cap | ~10uF, rated well above 15V nominal | CS3225X7R106K500NRL (C2918502) | 10uF, 50V, X7R, 1210 | 474,840 | [partdetail](https://jlcpcb.com/partdetail/C2918502) |
+| Output cap (optional, ripple smoothing) | small value, same voltage class | reuse C2918502 or a smaller-value part in the same family | — | — | — |
+
+All passive C-numbers lookup-verified individually; dates 2026-06-24 to 2026-06-27.
+
+## Candidate 2 — AL8860 (Diodes Incorporated)
+
+| Spec | Value |
+|---|---|
+| Part | AL8860MP-13 (C500782), MSOP-8-EP |
+| Input voltage | 4.5–40V |
+| Output current | up to 1.5A |
+| Switching frequency | 1MHz (hysteretic) |
+| Dimming | single ADIM pin: DC voltage or PWM, on/off + brightness combined. Default soft-start 0.1ms (fast — improves low-duty-cycle PWM dimming accuracy). Best dimming accuracy comes from a low PWM frequency relative to the fixed 1MHz switching frequency (datasheet guidance; sub-1kHz to low-kHz PWM recommended for this fixed switching rate) |
+| Stock (tier) | 4,000, [partdetail](https://jlcpcb.com/partdetail/C500782) (DB date 2026-06-27) |
+
+**Clamp check: clears it.** 40V operating ceiling sits 7.6V above the 32.4V transient clamp — comfortable margin without needing a variant swap.
+
+**Passive set:** same current-sense-resistor formula and inductor family as PT4115 above (both manufacturers use the same 0.1/Iout sense convention and a similar 1MHz-class inductor range) — reuse the Candidate 1 table. The one change: the catch diode should be rated above AL8860's 40V ceiling itself (not just above the 32.4V clamp), since a fault could in principle push the switch node toward the IC's own max:
+
+| Role | Candidate part | Spec | Stock | Link |
+|---|---|---|---|---|
+| Catch diode | SS26 (C7420363) | 60V/2A Schottky, SMA, [Preferred] | 282,808 | [partdetail](https://jlcpcb.com/partdetail/C7420363) |
+
+Lookup-verified, DB date 2026-05-23. A 40V-rated diode (SS24, reused from Candidate 1) would work too but leaves zero margin against AL8860's own input ceiling; SS26 buys 20V of margin for negligible cost/size difference.
+
+A smaller-footprint pin-compatible option, AL8860WT-7 (TSOT-25), was found in the DB but currently shows 0 stock — noted for completeness, not selected as the primary candidate.
+
+## Candidate 3 — TPS92511 (Texas Instruments)
+
+| Spec | Value |
+|---|---|
+| Part | TPS92511DDAR (C114277), SO-8-EP |
+| Input voltage | 4.5–65V |
+| Output current | up to 500mA |
+| Switching frequency | up to ~500kHz–2MHz class (500kHz used in TI's own dimming-performance example) |
+| Dimming | DIM pin, PWM. TI's own example: at 500kHz switching, a 6µs minimum DIM pulse width supports a 150Hz dimming frequency with >1000:1 contrast ratio |
+| Stock (tier) | 10,445, [partdetail](https://jlcpcb.com/partdetail/C114277) (DB date 2026-06-23) |
+
+**Clamp check: clears it with the largest margin of the three** — 65V ceiling is 32.6V above the transient clamp, i.e. roughly double it.
+
+Architecturally different from the other two: TI describes it as a **floating-buck** topology with an integrated low-side N-MOSFET (no bootstrap capacitor needed) and sets LED current via an external resistor on an **IADJ** pin through a current-mirror scheme, not a ground-referenced sense resistor. TI's collateral describes the design as needing only "5 external components." This research pass could not pull the exact IADJ resistor formula or confirm whether a discrete catch diode and one or two capacitors round out those 5 parts — that level of detail needs the primary TI datasheet before this candidate goes into a schematic. Reusable placeholders from the input/inductor/cap families above (particularly the 50V-rated MLCC, since actual working voltage never exceeds the 32.4V clamp regardless of the IC's own 65V ceiling) should still apply.
+
+A higher-current sibling, TPS92512HVDGQR (C90641, 4.5–60V, up to 2.5A, MSOP-10-EP, 2MHz, stock 8,670, [partdetail](https://jlcpcb.com/partdetail/C90641), lookup-verified DB date 2026-06-23), is available in the same family if the architecture pass lands on a higher target LED current than PT4115/AL8860 comfortably cover.
+
+## Driver comparison summary
+
+| Driver | Vin range | Clears 32.4V clamp? | Max Iout | Dimming | Passive set confidence |
+|---|---|---|---|---|---|
+| PT4115 | 6–30V | **No** — needs justification or a variant swap | 1.2A | PWM 100Hz–20kHz + analog | Full (verified via multiple secondary sources) |
+| AL8860 | 4.5–40V | Yes, +7.6V margin | 1.5A | Single-pin PWM/analog, fast softstart | Full (verified via primary Diodes Inc. datasheet) |
+| TPS92511 | 4.5–65V | Yes, +32.6V margin | 500mA | PWM, up to >1000:1 contrast at 150Hz | Partial — IADJ formula and exact passive count need primary TI datasheet |
+
+## Questions the architecture pass must answer
+
+- Is the PT4115's 30V ceiling an acceptable risk given the clamp event is rare, or does the transient-safety bar require AL8860/TPS92511/PT4115E instead?
+- What target LED current does the LED-candidate pick actually need — this fixes the exact Rsense value (PT4115/AL8860) or IADJ resistor (TPS92511) and the exact inductor value, both left as a bracketed range here.
+- Does the "one driver per parallel LED string" ballast option (see `led-candidates.mdx`) multiply the driver IC count, and if so does that push toward the cheaper PT4115/AL8860 over the pricier TPS92511?
+- TPS92511's floating-buck topology and IADJ current-setting need primary-datasheet confirmation before this candidate can be schematic-ready — is that research worth doing now, or should TPS92511 be dropped in favor of the two fully-characterized options?
