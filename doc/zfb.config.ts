@@ -4,7 +4,7 @@ import { zudoDoc } from "@takazudo/zudo-doc/config";
 export default defineConfig(
   zudoDoc({
     themePack: "sumi",
-    siteName: "Doc",
+    siteName: "zudo-led-lamp",
     githubUrl: "https://github.com/Takazudo/zudo-led-lamp",
     // siteUrl host MUST match the wrangler.toml custom-domain route.
     siteUrl: "https://zudo-led-lamp.takazudomodular.com",
