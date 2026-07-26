@@ -1,0 +1,105 @@
+# Production deployment workflow for the doc/ site.
+#
+# Triggered on every push to `main` that touches doc/ or this workflow.
+# Builds the zfb static site and deploys it to Cloudflare Workers static
+# assets.
+#
+# The custom domain (zudo-led-lamp.takazudomodular.com) and the workers.dev
+# subdomain are both attached declaratively via doc/wrangler.toml
+# (workers_dev = true, [[routes]] custom_domain = true) — `wrangler deploy`
+# handles both on its own. Verified with a manual first deploy: no separate
+# Cloudflare API "cutover" call was needed, so this workflow does not carry
+# one.
+#
+# Secret gating: the `secrets` context is not available in job-level `if:`
+# expressions, so a readiness step below maps secrets into env and emits a
+# `ready` step output; the deploy steps are gated on that output. Until
+# CLOUDFLARE_API_TOKEN is set (the one manual step — see
+# doc/src/content/docs/how-to/ci-cloudflare-setup.mdx) the deploy is skipped
+# with an explicit notice and the job stays GREEN, never red.
+#
+# Secrets:
+#   CLOUDFLARE_API_TOKEN  — Workers: Edit scope (user sets this manually)
+#   CLOUDFLARE_ACCOUNT_ID — already set via `gh secret set` from `wrangler whoami`
+
+name: Production Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "doc/**"
+      - ".github/workflows/main-deploy.yml"
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+        with:
+          dest: ~/setup-pnpm-${{ github.job }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: doc/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: doc
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        working-directory: doc
+        run: pnpm check
+
+      - name: Build site
+        working-directory: doc
+        run: pnpm build
+
+      - name: Check secret readiness
+        id: readiness
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$CF_TOKEN" ] && [ -n "$CF_ACCOUNT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Deploy skipped — CLOUDFLARE_API_TOKEN is not set yet. See doc/src/content/docs/how-to/ci-cloudflare-setup.mdx."
+          fi
+
+      - name: Write dist/.assetsignore
+        if: steps.readiness.outputs.ready == 'true'
+        working-directory: doc
+        # The adapter already writes this at build time; this defensive
+        # rewrite guarantees the deploy excludes the worker bundle files
+        # even if a future adapter version stops emitting it. Never committed.
+        run: printf '%s\n' '_worker.js' '_zfb_inner.mjs' > dist/.assetsignore
+
+      - name: Deploy to Cloudflare Workers (production)
+        if: steps.readiness.outputs.ready == 'true'
+        working-directory: doc
+        run: |
+          WRANGLER_VERSION=$(node -p "require('./package.json').devDependencies.wrangler")
+          npx "wrangler@${WRANGLER_VERSION}" deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
