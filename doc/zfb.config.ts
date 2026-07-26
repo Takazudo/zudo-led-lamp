@@ -32,11 +32,35 @@ export default defineConfig(
       links: [],
       copyright: "Copyright © 2026 Your Name. Built with zudo-doc.",
     },
+    // Header nav holds only top-level categories, 3-6 items, each categoryMatch
+    // a single top-level directory under src/content/docs/ (zudo-doc navigation
+    // rules). Ordered as the project reads: intro, the locked design, then the
+    // research and ops material behind it.
     headerNav: [
       {
         label: "Getting Started",
         path: "/docs/getting-started",
         categoryMatch: "getting-started",
+      },
+      {
+        label: "Architecture",
+        path: "/docs/architecture",
+        categoryMatch: "architecture",
+      },
+      {
+        label: "Power",
+        path: "/docs/power",
+        categoryMatch: "power",
+      },
+      {
+        label: "Research",
+        path: "/docs/research",
+        categoryMatch: "research",
+      },
+      {
+        label: "How-To",
+        path: "/docs/how-to",
+        categoryMatch: "how-to",
       },
       {
         label: "Claude",
