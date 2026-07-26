@@ -18,7 +18,7 @@ Per the Board-P audit (issue #5), the PD board's SMAJ20A input TVS clamps transi
 | Input voltage | 6–30V operating |
 | Output current | up to 1.2A |
 | Switching frequency | up to 1MHz |
-| Dimming | DIM pin: PWM (100Hz–~20kHz) or DC analog. <0.3V = off, >2.5V = full current |
+| Dimming | DIM pin: PWM (100Hz–~20kHz) or DC analog. `<0.3V` = off, `>2.5V` = full current |
 | Stock (tier) | 113,894, [partdetail](https://jlcpcb.com/partdetail/C347356) (DB date 2026-06-26) |
 
 **Clamp check: fails to clear it.** 30V operating ceiling is *below* the 32.4V transient clamp — a fault event that pushes the clamp to its full 32.4V would exceed PT4115's rated input. Two ways to resolve this, not decided here:
