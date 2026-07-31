@@ -51,24 +51,25 @@ Reference designators are Board P's own.
 
 | Net | Connected pins (Ref.Pin) | Value / note |
 |---|---|---|
-| `VBUS_IN` | `J1.A9 J1.B9 U1.VDD C1.2 C2.2 R14.1 R11.2 Q1.S J3.4 D5.cathode` | Receptacle VBUS — 5 V pre-contract, 15 V post-contract. C1 10 µF, C2 100 nF. D5 cathode |
+| `VBUS_IN` | `J1.A9 J1.B9 U1.VDD C1.2 C2.2 R14.1 R11.2 Q1.S J3.4 D5.cathode C35.2` | Receptacle VBUS — 5 V pre-contract, 15 V post-contract. C1 10 µF, C2 100 nF. D5 cathode. C35's top plate — see the gate-network note below |
 | `CC1` | `J1.A5 U1.CC1 R17.1(DNP) R19.2 D6.1(DNP)` | Plain copper connector-to-chip. R19 (0 Ω, fitted) bridges `CC1DB` |
 | `CC2` | `J1.B5 U1.CC2 R18.1(DNP) R20.2 D7.1(DNP)` | Mirror of CC1 |
 | `CC1DB` | `U1.CC1DB R19.1 J3.1` | Dead-battery pin, bridged to CC1 per ST DS12499 §3.5 |
 | `CC2DB` | `U1.CC2DB R20.1 J3.2` | Mirror |
 | `VBUS_VS_DISCH` | `U1.pin18 R14.2` | Pin-18 sense/discharge. R14 470 Ω series — **must not** be a divider |
-| `VBEN` | `U1.pin16 R12.1 J3.8` | Active-low open drain. R12 56 kΩ to the gate node |
-| `Net-(Q1-G)` | `Q1.G R11.1 R12.2 C35.1` | R11 100 kΩ pull-up to `VBUS_IN` (default OFF); C35 100 nF soft-start, τ ≈ 5.6 ms |
+| `VBEN` | `U1.pin16 R12.1 J3.8` | Active-low open drain. R12 150 kΩ to the gate node |
+| `Net-(Q1-G)` | `Q1.G R11.1 R12.2 C35.1` | R11 100 kΩ pull-up to `VBUS_IN` (default OFF); C35 100 nF **gate–source** soft-start (other plate on `VBUS_IN`, not GND), τ = (R11∥R12)·C35 = 6.0 ms |
 | `VBUS_OUT` | `Q1.D R13.1 JOUT.1 JOUT.2` | Switched 15 V, paired contacts |
 | `Net-(U1-DISCH)` | `U1.DISCH R13.2` | R13 470 Ω system-side discharge |
 | `VREG_2V7` | `U1.VREG_2V7 C30.2 R15.2 R16.2 J3.3` | 2.7 V internal regulator / I2C pull-up rail |
 | `Net-(U1-VREG_1V2)` | `U1.VREG_1V2 C34.1` | 1.2 V digital-core regulator decoupling |
 | `SCL` | `U1.SCL R15.1 J2.1` | NVM programming clock, 4.7 kΩ pull-up |
 | `SDA` | `U1.SDA R16.1 J2.2` | NVM programming data, 4.7 kΩ pull-up |
+| `RESET` | `U1.RESET R21.1 J2.4` | R21 10 kΩ pull-down keeps run state; J2.4 lets the programming jig assert a hardware reset if an NVM write leaves the I2C state wedged |
 | `ATT` | `U1.ATTACH J3.6 JOUT.3` | Cable-attached flag, open drain active-low, no on-board pull-up |
 | `PDOK` | `U1.POWER_OK2 J3.7 JOUT.4` | Live 15 V contract flag, open drain active-low, no on-board pull-up |
-| `GND` | `U1.GND U1.RESET U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 C35.2 R17.2(DNP) R18.2(DNP) J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.RESET` grounded = run. ADDR0/1 grounded → I2C `0x28` |
-| No-connect | `U1.NC U1.POWER_OK3 U1.GPIO U1.A_B_SIDE U1.ALERT J2.4` | Left floating |
+| `GND` | `U1.GND U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 R17.2(DNP) R18.2(DNP) R21.2 J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.RESET` is held low through R21 (run state). ADDR0/1 grounded → I2C `0x28` |
+| No-connect | `U1.NC U1.POWER_OK3 U1.GPIO U1.A_B_SIDE U1.ALERT` | Left floating |
 
 ## JOUT pin assignment (locked)
 
@@ -100,7 +101,7 @@ connector, and an input pin costs nothing. Firmware does not act on it in v1.
 
 | Part | Limit | At 410 mA / 15 V | Verdict |
 |---|---|---|---|
-| Q1 AO3401A | 30 V VDS abs max, 4.2 A, 50 mΩ @ Vgs −10 V | Conduction loss `0.41² × 0.05` = **8 mW**; Vgs ≈ −9.6 V | Pass with very wide margin at nominal; the transient-only VDS gap against the 32.4 V clamp is unchanged and still accepted |
+| Q1 AO3401A | 30 V VDS abs max, ±12 V VGS abs max, 4.2 A, 50 mΩ @ Vgs −4.5 V | Conduction loss `0.41² × 0.05` = **8 mW**; Vgs = −6.0 V (100k/150k divider) | Pass. The divider was re-ratioed from 56 k so that even a 20 V mis-contract gives Vgs = −8.0 V, inside the ±12 V gate rating; the transient-only VDS gap against the 32.4 V clamp is unchanged and still accepted |
 | JOUT XH contacts | 3 A/contact | 205 mA per paired contact | Pass, 14x derated margin |
 | U1 STUSB4500 VDD | 28 V abs max, 22 V operating | 15 V | Pass; transient-only gap against 32.4 V unchanged and still accepted |
 | J1 receptacle C283540 | 20 V, 5 A | 15 V, 0.41 A | Pass |
@@ -109,6 +110,30 @@ The two residual transient-only gaps (U1 VDD, Q1 VDS) are inherited unchanged fr
 [ratings matrix](/docs/power/ratings-matrix/). This architecture pass does not re-open
 them: they are surge-event-only, they were reasoned through against primary datasheets,
 and nothing about a lower steady-state load changes a clamp-event analysis.
+
+## What the design review changed (2026-08-01)
+
+An independent electrical review of the captured schematics confirmed the netlist
+matches this page pin-for-pin, and made three changes to the gate network and
+programming interface, now reflected in the tables above:
+
+1. **C35 moved from gate–GND to gate–source (`VBUS_IN`).** Referenced to ground, the
+   soft-start cap held the gate down while VBUS moved — so Q1 conducted for ~16 ms at
+   every plug-in (before any contract) and turned on hard, un-soft-started, at the
+   5 → 15 V transition. Referenced to the source, V_GS stays at 0 through both events
+   and the τ = 6 ms soft-start happens only when `VBEN` asserts. Standard high-side
+   P-FET practice; the ground-referenced version was a real bug.
+2. **R12 changed 56 kΩ → 150 kΩ.** The old 100k/56k divider put V_GS at −12.8 V in a
+   20 V mis-contract — the exact scenario the NVM trap creates — over the AO3401A's
+   ±12 V absolute maximum. The 100k/150k ratio gives −6.0 V at 15 V (R_DS(on) is
+   already at its 50 mΩ spec by −4.5 V, so conduction loss is unchanged) and −8.0 V
+   at 20 V.
+3. **`U1.RESET` is no longer hard-grounded.** It reaches GND through R21 (10 kΩ, the
+   same C17414 reel Board L uses) and is brought out on the previously unused `J2.4`,
+   so the programming jig can hardware-reset the chip if an NVM write wedges the I2C
+   state — a failure mode the zudo-pd NVM history makes worth one resistor.
+
+The review also resolved this board's open question favourably — see the next section.
 
 ## One number this pass could not resolve
 
@@ -128,6 +153,14 @@ its rating. But it could not confirm it from the datasheet text available here. 
 explicit bring-up item. Either way the design fits inside 45 W with large margin, so
 this does not block the build — but do not size R14's package from the optimistic
 reading without measuring it.
+
+**Resolved (2026-08-01):** the design review pulled ST DS12499 §2.2.12, which states the
+pin "is used to sense VBUS presence, monitor VBUS voltage, and discharge VBUS… A serial
+resistor connected to the pin must be used to limit the discharge current through the
+pin. Maximum discharge current is 50 mA." `IDISUSB` is a discharge-event current, the
+sense role is high-impedance, and ST's own reference schematic uses the same 470 Ω. The
+steady-state reading is ≈0 W, the 0603 package is fine, and the +0.48 W flagged worst
+case can come out of the power budget. The Gate-2 measurement stays as confirmation.
 
 ## References
 

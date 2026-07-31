@@ -118,7 +118,7 @@ problem that only pays for itself if the mechanics actually demand it.
 |---|---|---|
 | Charger → Board P | USB-C receptacle (J1) | CC1, CC2, VBUS, GND |
 | Board P → Board L | JST XH 6-pin harness, 2.5 mm pitch, both ends `B6B-XH-A(LF)(SN)` | 1,2 = switched 15 V (paired); 3 = ATT; 4 = PDOK; 5,6 = GND (paired) |
-| Board P programming | J2 pogo pads 1x4 (I2C NVM), J3 pogo pads 1x8 (debug) | SCL, SDA, GND |
+| Board P programming | J2 pogo pads 1x4 (I2C NVM + reset), J3 pogo pads 1x8 (debug) | SCL, SDA, GND, RESET |
 | Board L programming | J3 pad group 1x5, 2.54 mm (SWD) | SWDIO, SWCLK, NRST, 3V3, GND |
 | Board L debug | J4 pad group 1x3, 2.54 mm (UART) | PA2 TX, PA3 RX, GND |
 | User control | EC11 rotary encoder, panel-mount bushing | A, B, common |

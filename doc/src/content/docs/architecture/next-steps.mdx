@@ -15,8 +15,8 @@ symbol/footprint library into existence against a circuit whose net table is alr
 settled, so Board L's capture is not simultaneously debugging the library.
 
 1. **Board P** — from the [locked net table](./board-p.mdx#net-connectivity-table).
-   Consider the C1711 → [C14663](https://jlcpcb.com/partdetail/C14663) 100 nF swap noted
-   on that page (removes one Extended fee).
+   The C1711 → [C14663](https://jlcpcb.com/partdetail/C14663) 100 nF swap noted on that
+   page was applied at capture (one Extended fee removed).
 2. **Board L power section** — J2, F1, D10, the input bulk caps, and both converters.
    Verify the 15 V rail on its own before any load exists downstream of it.
 3. **Board L LED array** — the eight ballast/string blocks. Draw one string as a
@@ -31,8 +31,9 @@ Run ERC after each stage, not once at the end.
 
 | Concern | Guidance |
 |---|---|
-| `LED_N` is a switching node | It is the common cathode of all eight strings **and** the AL8860's SW pin — a ~440 kHz, ~15 V-swing net that necessarily spans the LED array. This is inherent to the AL8860's high-side-sense topology, not a mistake. Keep the copper as compact as the array geometry allows and do not pour it as a large plane |
-| Ballast on the anode side | R30–R37 sit between `LED_P` and each string's top LED, deliberately, so the eight split nets are on the quiet DC rail |
+| **The whole LED array switches**, not just `LED_N` | `LED_N` (common cathode + SW pins) swings 0 → ~15.5 V at ~440 kHz — and because the string voltage is fixed, `LED_P` and every per-string net swing the same 15.5 V_pp right along with it. Keep **all** array copper compact; pour **no** array net as a large plane, `LED_P` included |
+| D11's loop is the one that matters | The D11–U2–C12/C13 loop is the only high-di/dt commutation loop in the converter. D11's anode must sit immediately at U2 pins 5/6 with C12/C13 closing the loop to pins 2/3. Putting D11 out near the array would turn the whole array into the commutation loop |
+| Ballast on the anode side | R30–R37 sit between `LED_P` and each string's top LED, deliberately, so `LED_N` stays one compact net instead of eight |
 | RS1 is a **high-side** sense resistor | It sits between `V15` and `SET`, not in the ground return. Kelvin-connect it and keep the `SET` trace short — this is the node that sets LED current |
 | U2 exposed pad | Tie to the ground pour for heat, but the datasheet is explicit that it must **not** be the electrical ground return path — pins 2 and 3 are |
 | LED thermal pours | The [thermal budget](/docs/research/thermal-budget/) is clear that the ~1 W/site figure assumes a generous via-stitched pour per pad; a token pad does not hit it. At 0.19 W/site there is margin, but do not spend it all on cramped copper |
@@ -107,6 +108,12 @@ A chip that negotiates but a switch that never turns on points at the Q1 gate ne
 not the STUSB4500. And do not judge Board P by downstream rails — they can legitimately
 read 0 V while the chip is perfectly healthy.
 
+Two things this gate **cannot** measure, so don't chase them: J3 pads 6/7 (`ATT`/`PDOK`)
+float — the pull-ups live on Board L, so with nothing on JOUT these open-drain lines
+read garbage. Probe pad 8 (`VBEN`) instead. And before Gate 3, **ring out the harness
+pin-for-pin**: both ends are the same 6-pin XH housing, and a reverse-crimped harness
+puts 15 V onto Board L's ground with F1 on the wrong side of the fault to help.
+
 **Also measure here:** the steady-state voltage across R14. This settles the
 [open question](./board-p.mdx#one-number-this-pass-could-not-resolve) about whether the
 pin-18 network draws ~32 mA continuously (0.48 W in a 100 mW resistor) or only during a
@@ -142,9 +149,14 @@ Drive CTRL from a bench supply at 2.5 V. Confirm:
 - Switching frequency at `LED_N` ≈ 440 kHz
 - Board temperature after 30 minutes, at RT1 and at the hottest-looking LED
 
-Then sweep CTRL from 0.3 V to 2.5 V and confirm smooth, monotonic dimming with no
-flicker, buzz, or dropout. Any audible noise here is worth chasing before firmware
-exists — it is far harder to attribute once an animation is running.
+Then sweep CTRL from 0.3 V to 2.5 V (drive and measure at **TP1**) and confirm smooth,
+monotonic dimming with no flicker, buzz, or dropout — **with a scope on `LED_N`** (probe
+D11's anode). Record the CTRL level below which the driver enters pulse-skip / burst
+mode: at deep dimming the required on-time falls below the AL8860's 500 ns minimum and
+the converter burst-fires at an unpredictable rate. If that burst rate is under
+~300 Hz at the firmware's intended floor, raise `DUTY_FLOOR_Q16` above the recorded
+point. Any audible noise here is worth chasing before firmware exists — it is far
+harder to attribute once an animation is running.
 
 ### Gate 5 — Firmware
 
@@ -157,8 +169,9 @@ to dark rather than to full brightness.
 
 | Question | Why it matters | How to answer |
 |---|---|---|
-| Does Board P's R14 draw continuously? | 0.48 W in a 100 mW resistor if it does | Gate 2 — measure the drop across R14 |
-| Does R21 hold CTRL below 0.2 V? | The pull-down half of the default-OFF guarantee | Gate 3 — measure CTRL with the MCU in reset |
+| ~~Does Board P's R14 draw continuously?~~ **Resolved: no** | ST DS12499 §2.2.12 names the 50 mA figure as a discharge-event current; the sense role is high-impedance | Gate 2 measurement kept as confirmation only |
+| ~~Does R21 hold CTRL below 0.2 V?~~ **Resolved: yes** | The AL8860 soft-start spec bounds CTRL bias at ≤1.67 µA → ≤55 mV across R21 | Gate 3 measurement (at TP1) kept as confirmation only |
+| Where does pulse-skip start on the dimming sweep? | Burst-firing below the AL8860's minimum on-time is a flicker frequency; sets the real firmware floor | Gate 4 — scope on `LED_N` during the CTRL sweep |
 | Real string-to-string imbalance | Sets whether 33 Ω of ballast is enough | Gate 4 — measure all eight ballast drops |
 | Actual driver efficiency | The budget assumes 92%; component losses suggest ~95%; the research assumed 88% | Gate 4 — input power versus `LED_P` output power |
 | Is 440 kHz switching audible? | Analog dimming should prevent it, but the inductor still switches | Gate 4 — listen in a quiet room, at several brightness levels |

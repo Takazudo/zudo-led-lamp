@@ -2,7 +2,7 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "7b0b79de-0532-4ff3-a366-dd0bc61fa255")
+	(uuid "4c4212dd-7fb7-4814-ad01-982a169641a2")
 	(paper "A2")
 	(lib_symbols
 		(symbol "zudo-led-lamp:B6B-XH-A"
@@ -4177,7 +4177,7 @@
 				)
 				(embedded_fonts no)
 			)
-		(symbol "zudo-led-lamp:FRC1206F33R0TS"
+		(symbol "zudo-led-lamp:0603WAF1000T5E"
 				(exclude_from_sim no)
 				(in_bom yes)
 				(on_board yes)
@@ -4193,7 +4193,7 @@
 						)
 					)
 				)
-				(property "Value" "FRC1206F33R0TS"
+				(property "Value" "0603WAF1000T5E"
 					(at 0 -5.08 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -4203,7 +4203,7 @@
 						)
 					)
 				)
-				(property "Footprint" "zudo-led-lamp:R1206"
+				(property "Footprint" "zudo-led-lamp:R0603"
 					(at 0 -7.62 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -4214,7 +4214,258 @@
 						)
 					)
 				)
-				(property "Datasheet" "https://www.lcsc.com/datasheet/C2907384.pdf"
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_100R-1000-1_C22775.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "100Ω (1000) ±1%"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF1000T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C22775"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF1000T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "zudo-led-lamp:TestPad"
+				(pin_names
+					(offset 1.016)
+				)
+				(exclude_from_sim no)
+				(in_bom no)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "TP"
+					(at 0 3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "TestPad"
+					(at 0 -3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:TestPad_D1.5mm"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "TestPad_0_1"
+					(circle
+						(center 0 0)
+						(radius 0.762)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(symbol "TestPad_1_1"
+					(pin passive line
+						(at -3.81 0 0)
+						(length 3.048)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "zudo-led-lamp:FRC2512F33R0TS"
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "FRC2512F33R0TS"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R2512"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://www.lcsc.com/datasheet/C2934070.pdf"
 					(at 0 -10.16 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -4247,7 +4498,7 @@
 						)
 					)
 				)
-				(property "MPN" "FRC1206F33R0TS"
+				(property "MPN" "FRC2512F33R0TS"
 					(at 0 -15.24 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -4258,7 +4509,7 @@
 						)
 					)
 				)
-				(property "LCSC Part" "C2907384"
+				(property "LCSC Part" "C2934070"
 					(at 0 -17.78 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -4269,7 +4520,18 @@
 						)
 					)
 				)
-				(symbol "FRC1206F33R0TS_0_1"
+				(property "ki_keywords" "Chip Resistor - Surface Mount"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "FRC2512F33R0TS_0_1"
 					(rectangle
 						(start -2.54 1.27)
 						(end 2.54 -1.27)
@@ -4544,7 +4806,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a8f85c0b-7004-4ed7-8949-ab167bdd20a7")
+		(uuid "5c2c8e2c-7c9f-40ed-9707-eacf80000d66")
 		(property "Reference" "J2"
 			(at 50.8 48.26 0)
 			(effects
@@ -4579,26 +4841,26 @@
 			)
 		)
 		(pin "1"
-			(uuid "d3d97467-e3ce-4b55-85fb-664997ff4c46")
+			(uuid "5b6ae0c6-5535-4369-9e86-e09e2fb2b811")
 		)
 		(pin "2"
-			(uuid "e7a19376-72d1-4d04-bdc7-aaa5ad2be877")
+			(uuid "6fdb1a78-8fd9-4492-a932-93425b16ec0f")
 		)
 		(pin "3"
-			(uuid "506ab1bd-e81a-4232-a805-8c81d653ab3c")
+			(uuid "f53a8305-2b18-44bb-b455-5a21d984e9bd")
 		)
 		(pin "4"
-			(uuid "16c2cb0e-0239-4790-b2c9-77607e6395a3")
+			(uuid "04094cb3-857e-47c1-a2f1-9384e125359a")
 		)
 		(pin "5"
-			(uuid "02e33ec4-516e-48c6-b570-ac5643cccaa7")
+			(uuid "e6fe27c1-a55e-464a-9680-49d3c5292340")
 		)
 		(pin "6"
-			(uuid "aee7a715-1a3e-4dbf-93da-a9ce5d2c4c76")
+			(uuid "2c072c1b-2d7e-40b6-8246-794ccd31d9df")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "J2")
 					(unit 1)
 				)
@@ -4613,7 +4875,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0b9310eb-aea2-458e-b195-5bfc4ea91f07")
+		(uuid "a23bfca1-de32-413e-8702-881942ec95a7")
 		(property "Reference" "F1"
 			(at 88.9 45.72 0)
 			(effects
@@ -4648,14 +4910,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2ed403fb-9970-4504-9eea-bfb6eb850886")
+			(uuid "ab31538c-0590-4cbe-9381-11164dd19681")
 		)
 		(pin "2"
-			(uuid "27c89cb1-4ea2-4ed5-8000-140ab306ec40")
+			(uuid "d3cdb296-e3dd-4700-b519-cfd9f1ec4fd1")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "F1")
 					(unit 1)
 				)
@@ -4670,7 +4932,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1fe5f4be-3902-45db-8058-c4e55fa223f2")
+		(uuid "4abdefda-b872-4372-9962-dcc6f72b0945")
 		(property "Reference" "D10"
 			(at 127 45.72 0)
 			(effects
@@ -4705,14 +4967,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "683c3b6e-c44a-4ab0-8773-164919a99c0f")
+			(uuid "13589294-3a58-440c-9d37-3abdd794a7f5")
 		)
 		(pin "2"
-			(uuid "339e899b-5632-410a-949b-3df0481acfda")
+			(uuid "77ba0280-817d-47b2-9183-72f1acfcdad3")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "D10")
 					(unit 1)
 				)
@@ -4727,7 +4989,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6bc0c593-859e-412c-a628-1b6a4c862d44")
+		(uuid "5453c4c9-94bc-40b1-b0c7-da00596ddfdf")
 		(property "Reference" "U2"
 			(at 177.8 40.64 0)
 			(effects
@@ -4762,35 +5024,35 @@
 			)
 		)
 		(pin "1"
-			(uuid "2e48c8f1-4f83-45f4-85aa-8440e215a3b9")
+			(uuid "65ba38ae-a845-40f6-96ff-4ab6cad048a4")
 		)
 		(pin "2"
-			(uuid "8cc62909-7af4-4ecd-97f7-48dc64e28ba7")
+			(uuid "975ac243-74ce-4008-a116-dfa2c9db0912")
 		)
 		(pin "3"
-			(uuid "cc3b5061-5512-46c2-b4f5-d41e7afd1805")
+			(uuid "ff31add1-2484-43fc-8fd4-411e95d08947")
 		)
 		(pin "4"
-			(uuid "918ceb7a-235b-42f4-9b18-f4dc0d453415")
+			(uuid "85fe538b-f92d-4ea9-9a64-6c202e9958b9")
 		)
 		(pin "5"
-			(uuid "2ed58a2f-f5a3-4771-9a52-9774d9805db6")
+			(uuid "1cd832cd-69a4-4733-9b10-6ca433c2a61d")
 		)
 		(pin "6"
-			(uuid "b5a1a15f-3bf0-4fe5-b6c0-02ead9a1755a")
+			(uuid "dd2410d1-f88c-4a6a-9151-07897690125b")
 		)
 		(pin "7"
-			(uuid "42d345ec-27fc-4a1d-b954-a1973757429c")
+			(uuid "f33e0849-6190-4d1e-b67b-335c323a45b7")
 		)
 		(pin "8"
-			(uuid "4d162904-00de-4d1e-bce0-65f790553c32")
+			(uuid "712cc37a-9087-4b7f-81c8-ef2a377bb879")
 		)
 		(pin "9"
-			(uuid "3d9044ee-e192-4b45-afae-709c839d7193")
+			(uuid "76d7397d-6050-449b-930d-7d291f205f95")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "U2")
 					(unit 1)
 				)
@@ -4805,7 +5067,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c3d4deac-be84-4cbd-b2c1-46e9dbb549d5")
+		(uuid "0d225b72-bb4b-4a7a-af12-04405b459d41")
 		(property "Reference" "RS1"
 			(at 228.6 45.72 0)
 			(effects
@@ -4840,14 +5102,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "40206932-ff94-4631-9cc9-1b36b1215f99")
+			(uuid "0eaf6db3-2367-4fdf-b876-492ae658083b")
 		)
 		(pin "2"
-			(uuid "94163c2b-2704-4fb3-9a06-9e106f819df9")
+			(uuid "84a458f0-1151-4b06-99f2-3721db9f0da7")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "RS1")
 					(unit 1)
 				)
@@ -4862,7 +5124,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "fda0625d-ca0c-402d-ace7-94c603d50027")
+		(uuid "98ef6756-decf-4919-82c0-f0ee4045ec90")
 		(property "Reference" "L1"
 			(at 266.7 45.72 0)
 			(effects
@@ -4897,14 +5159,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "9973c34c-95fe-4fa8-800f-6f71172e7b11")
+			(uuid "13fe7db2-1999-415d-8446-c991bce9dd9e")
 		)
 		(pin "2"
-			(uuid "f275281a-7d10-4fbd-8ef6-a239182855d8")
+			(uuid "28905f3e-fcef-4103-ab72-25cc579aaca9")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "L1")
 					(unit 1)
 				)
@@ -4919,7 +5181,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4a58c675-07e8-40fd-b9d5-5eb5758a7d79")
+		(uuid "c95e8862-49b8-4565-94d1-6f547483031b")
 		(property "Reference" "D11"
 			(at 304.8 45.72 0)
 			(effects
@@ -4954,14 +5216,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "f6146b64-6031-4279-9320-c2c3e47984df")
+			(uuid "afc5179b-cfc7-44b9-bb05-8f7ebfa20f43")
 		)
 		(pin "2"
-			(uuid "95bc2d62-705d-43ad-bfab-b07119cfa773")
+			(uuid "704ce102-81b1-4d0f-8dde-facbf18529ac")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "D11")
 					(unit 1)
 				)
@@ -4976,7 +5238,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9368e923-cce3-4e3b-92af-3cc07401bcda")
+		(uuid "7d617dfb-dbb3-4f85-89c9-909e1c810692")
 		(property "Reference" "U4"
 			(at 342.9 43.18 0)
 			(effects
@@ -5011,26 +5273,26 @@
 			)
 		)
 		(pin "1"
-			(uuid "16dd06c1-da9c-4230-a2dd-16bf092db943")
+			(uuid "eeec36c9-8f63-49ca-adfa-237e592c599c")
 		)
 		(pin "2"
-			(uuid "5468624d-2a0c-46d4-9b9e-b3360ada3563")
+			(uuid "ef2d9a4c-975f-4364-8780-9b07d5bb5cb1")
 		)
 		(pin "3"
-			(uuid "9ab4f01b-ba0d-4ecb-8967-7af4a82479c2")
+			(uuid "36e7fbbe-492d-41b3-9585-30ffbbc70e02")
 		)
 		(pin "4"
-			(uuid "e5b342cb-2e1c-41ec-8698-12f28183595e")
+			(uuid "50a80f93-6352-48b3-91a8-ac9228a39404")
 		)
 		(pin "5"
-			(uuid "139055b9-6c64-4bb0-ace2-b65e61ba74e8")
+			(uuid "5bebbd86-9668-42b8-a992-a98dc42a14c0")
 		)
 		(pin "6"
-			(uuid "b9c144f8-43ef-4c61-b155-5cc53cc6984b")
+			(uuid "bf42ae44-01c1-4132-9fc6-313820860926")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "U4")
 					(unit 1)
 				)
@@ -5045,7 +5307,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f0b1c635-5050-48f4-8af7-c8acda081927")
+		(uuid "bd442007-3173-473a-a940-322aa6e54cab")
 		(property "Reference" "L2"
 			(at 381 45.72 0)
 			(effects
@@ -5080,14 +5342,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "88bdca8b-1acf-4c5a-8785-c9dc9afb4126")
+			(uuid "9fdf427e-370d-467e-a835-2a910b3fd33b")
 		)
 		(pin "2"
-			(uuid "0fada59f-2207-4d90-9fcd-f1fa3a5cc15c")
+			(uuid "02a32ae5-9c68-4773-a583-a3218d56107e")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "L2")
 					(unit 1)
 				)
@@ -5102,7 +5364,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4a395567-3064-4955-be12-b3d1998ced7b")
+		(uuid "f769b79b-d451-4a43-a109-f7cfc2a80384")
 		(property "Reference" "U3"
 			(at 76.2 85.09 0)
 			(effects
@@ -5137,68 +5399,68 @@
 			)
 		)
 		(pin "1"
-			(uuid "8e382964-4eaf-44a0-ad14-5c180fe475d1")
+			(uuid "3dd2ea43-9f30-4b82-8e20-aae01a2f0e2e")
 		)
 		(pin "2"
-			(uuid "46ea726b-f7cd-44fa-999a-c206c2972022")
+			(uuid "b2eed63e-fcf7-4c1a-a5f5-8adf86682946")
 		)
 		(pin "3"
-			(uuid "10480391-6306-460a-8d5b-085152056ba8")
+			(uuid "82c62f0f-4fe4-4161-ba86-7d32ea656785")
 		)
 		(pin "4"
-			(uuid "112eac79-9362-4605-890e-8ac8de534444")
+			(uuid "e9bba15e-0026-4428-8080-50715d795079")
 		)
 		(pin "5"
-			(uuid "518b6fea-6f17-4515-9598-ad698a180418")
+			(uuid "84f503cc-6500-418b-813d-df3e86937de1")
 		)
 		(pin "6"
-			(uuid "d94729a7-90e9-43e3-941f-b0849e797a05")
+			(uuid "8cad9780-cb3e-46e1-ba69-9b2277a02ecb")
 		)
 		(pin "7"
-			(uuid "39a1161e-63ad-4bed-8537-822d294a6372")
+			(uuid "afb03307-af1f-4808-8c79-efbfbfc30b29")
 		)
 		(pin "8"
-			(uuid "3b6e4527-c455-4298-a43e-7816f9fd1336")
+			(uuid "d4e63906-f5e3-4143-ae51-3d21b5319988")
 		)
 		(pin "9"
-			(uuid "8450d069-09f9-491b-8744-4043e4b2d9a8")
+			(uuid "cdf48ae2-c936-473e-bf0e-62ac5d44a588")
 		)
 		(pin "10"
-			(uuid "56dad2e9-7a72-419c-a90d-3cdfffc81e84")
+			(uuid "07e77da9-827f-4dc0-8e76-0bbdd021785f")
 		)
 		(pin "11"
-			(uuid "4b04e100-77fd-47fc-8ce0-5c6f93af665f")
+			(uuid "86a90c02-28f3-4c5b-bd81-33aac1a66731")
 		)
 		(pin "12"
-			(uuid "cf3e1b43-8666-464f-bebb-f47f5f1951f5")
+			(uuid "79a48340-25de-4723-bf9a-4a78fb7d1497")
 		)
 		(pin "13"
-			(uuid "470d2885-8551-4c4f-84dd-644ce25c2faa")
+			(uuid "128bc873-87a8-4d4d-8e3b-1cfeeac7a990")
 		)
 		(pin "14"
-			(uuid "e85f9782-0fa7-4cea-9c18-46bf8509b211")
+			(uuid "07c72888-0e93-4f07-bbd9-dcc26ba41892")
 		)
 		(pin "15"
-			(uuid "3ead98d3-cdf1-48c5-a8b6-2bba14963a47")
+			(uuid "22a23942-d001-4308-9c87-a40655e9b733")
 		)
 		(pin "16"
-			(uuid "b360e1e8-af81-4648-9f26-672301d34b44")
+			(uuid "c774b430-4c35-469c-af30-0a4ac71e7023")
 		)
 		(pin "17"
-			(uuid "afe69e8e-002d-4582-bfca-9a6ee0e6fdc8")
+			(uuid "e604f27b-c4d3-4eff-bef9-972d546c81b0")
 		)
 		(pin "18"
-			(uuid "f44fbc70-c56b-434f-816e-4d17eb16eae5")
+			(uuid "ca2180cc-028e-4882-b1b7-66a327c02465")
 		)
 		(pin "19"
-			(uuid "991309a3-2c5d-46bf-95f1-015e8641804c")
+			(uuid "cafd2cdf-fb10-4f85-8b80-1af6738009f7")
 		)
 		(pin "20"
-			(uuid "a8b6f725-8be8-4acd-bce4-f32c40891288")
+			(uuid "358f334a-e0b4-477f-bf1d-c127396d87d4")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "U3")
 					(unit 1)
 				)
@@ -5213,7 +5475,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "89a64932-0997-4123-809f-777d0ea69dc2")
+		(uuid "c65e59b7-3cae-409f-aaa0-7eda06074b4c")
 		(property "Reference" "SW1"
 			(at 165.1 88.9 0)
 			(effects
@@ -5248,29 +5510,29 @@
 			)
 		)
 		(pin "6"
-			(uuid "958efbdd-5820-4f93-9401-883e3fc99da9")
+			(uuid "b59ee48d-44f4-4a44-b58a-f697d93e1a63")
 		)
 		(pin "7"
-			(uuid "7b9da883-b208-4f0c-be45-c0b57d427a67")
+			(uuid "9c43d89b-7583-4c1b-bedf-f1879e201808")
 		)
 		(pin "A"
-			(uuid "eed332e7-70e0-4e49-9127-0c1f571d98de")
+			(uuid "548f210e-6907-4fd8-b4a5-173758fce356")
 		)
 		(pin "B"
-			(uuid "7f796acf-73ae-481c-8be6-5418d29ab1b6")
+			(uuid "a72d0c00-775d-4539-9a1b-e888b7ecc483")
 		)
 		(pin "C"
-			(uuid "d7d32c5a-a6f7-4c83-9e4c-340f9cb3fb4e")
+			(uuid "142a8e03-b3e7-4244-9fd7-0548752120dc")
 		)
 		(pin "D"
-			(uuid "f79c4ee1-e175-4fa7-90f0-af2cb58e8b6d")
+			(uuid "1e99eede-1dc8-4535-ab74-de71c08f1bd5")
 		)
 		(pin "E"
-			(uuid "5bdd8598-865e-4732-808d-aa662761b43c")
+			(uuid "8edb206c-a62e-4ccc-b44b-1a05a6896f60")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "SW1")
 					(unit 1)
 				)
@@ -5285,7 +5547,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp yes)
-		(uuid "7d65dba0-fc88-45b5-9f25-0ddf48c0afc0")
+		(uuid "5ae70646-b3e4-4a7f-87f5-c390feaefcea")
 		(property "Reference" "J3"
 			(at 203.2 91.44 0)
 			(effects
@@ -5320,23 +5582,23 @@
 			)
 		)
 		(pin "1"
-			(uuid "e6e437c8-5908-43a9-b08a-8cde1843f96e")
+			(uuid "0d3b280e-7ab1-4b63-ba99-ea38a353e0ea")
 		)
 		(pin "2"
-			(uuid "2174d43c-70dc-40d1-b555-e6aa1980ed12")
+			(uuid "2f6a3e38-6e74-46b4-8679-6854c431ce50")
 		)
 		(pin "3"
-			(uuid "27a4f53d-3467-4b03-9f52-2f829adcbc18")
+			(uuid "08373512-96f4-42ab-806c-b8b8fd49e4ff")
 		)
 		(pin "4"
-			(uuid "458f0921-c18d-4149-be75-9f26ddf803a2")
+			(uuid "69ddbd77-501d-4380-b346-a158d27eb613")
 		)
 		(pin "5"
-			(uuid "24f36e05-d86a-438a-89ef-5c75dd0e3c51")
+			(uuid "2852c21c-ea78-486a-b9fc-3ec8b508452c")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "J3")
 					(unit 1)
 				)
@@ -5351,7 +5613,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp yes)
-		(uuid "6919662c-ed99-4494-9a76-5ecccb1ba87e")
+		(uuid "565bb544-8450-49b1-8c27-10257c71ad84")
 		(property "Reference" "J4"
 			(at 241.3 91.44 0)
 			(effects
@@ -5379,17 +5641,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "9d832676-0760-4dd7-af89-521ed3738557")
+			(uuid "996dc6f0-8e6c-4af7-b511-a6cdcee8948d")
 		)
 		(pin "2"
-			(uuid "b46aa158-8310-43d8-a576-f7aa75bfa898")
+			(uuid "58592005-ccfa-4db7-a4da-c87981899c9e")
 		)
 		(pin "3"
-			(uuid "ffbf883c-868b-4088-980b-fa9f8c72723e")
+			(uuid "d0a57d75-4ae3-4323-b046-022cc35f003e")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "J4")
 					(unit 1)
 				)
@@ -5404,7 +5666,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a03d9d10-686c-4236-9feb-6049073e0b3a")
+		(uuid "239e4c34-c873-4b6d-bcd9-0eb17c3a9f90")
 		(property "Reference" "RT1"
 			(at 279.4 96.52 0)
 			(effects
@@ -5439,14 +5701,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "0c2a4ea3-4230-4440-a092-233aea2a312f")
+			(uuid "5a73414a-3279-4579-a012-1d0ef0ffa53c")
 		)
 		(pin "2"
-			(uuid "acf24a08-4fb6-43dc-a146-ca0a88adebc5")
+			(uuid "0f59604d-71f5-47e8-a477-3c369419aaaa")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "RT1")
 					(unit 1)
 				)
@@ -5461,7 +5723,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2545b7c5-82c9-40d8-aa58-ee542e14ccf5")
+		(uuid "b3dfd46d-6dc1-4ae3-ab99-117d67aaf254")
 		(property "Reference" "C20"
 			(at 317.5 96.52 0)
 			(effects
@@ -5496,14 +5758,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2ebcb642-5363-41b3-a5a3-7af0fada3b94")
+			(uuid "75b6c43e-a03f-4b0f-aff9-fb0a9b60371e")
 		)
 		(pin "2"
-			(uuid "aee63f4f-162b-4e9b-8382-bc3ebf11e7e8")
+			(uuid "e745d32e-15db-442f-a039-7cbb92d39f92")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C20")
 					(unit 1)
 				)
@@ -5518,7 +5780,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "aefedce1-2814-495c-8c13-3387667df7c1")
+		(uuid "cf7bf33d-63f9-4eac-bbcf-8c27c191036c")
 		(property "Reference" "C24"
 			(at 355.6 96.52 0)
 			(effects
@@ -5553,14 +5815,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "6639ac25-7f90-42e1-b85a-55cf575e2d7a")
+			(uuid "8819fd9d-908c-47d7-ab98-cd94524b6f32")
 		)
 		(pin "2"
-			(uuid "f88aec11-2628-4c18-aaf8-a17c84672e35")
+			(uuid "2952830a-4286-4b01-ac48-b36ddbbaf3e1")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C24")
 					(unit 1)
 				)
@@ -5575,7 +5837,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ababc48b-fe9c-46ac-a5f1-f8d80030b190")
+		(uuid "2af25cc7-1731-4f79-9131-8bf78f77da2a")
 		(property "Reference" "C10"
 			(at 38.1 147.32 0)
 			(effects
@@ -5610,14 +5872,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e1c05059-4c24-4c1b-ad81-a06d858d2247")
+			(uuid "f8155864-128d-4653-9c80-dffcd4cee213")
 		)
 		(pin "2"
-			(uuid "5bf4b12d-0e1e-4597-ac20-e0064960bd7b")
+			(uuid "66633052-5cfa-4a73-8f9f-34b3c198652a")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C10")
 					(unit 1)
 				)
@@ -5632,7 +5894,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4bc56342-403c-4a85-a7b5-fb5569fc7743")
+		(uuid "ce9d2166-e43a-43bd-a3f2-d100afa3e059")
 		(property "Reference" "C11"
 			(at 73.66 147.32 0)
 			(effects
@@ -5667,14 +5929,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ff388a56-a5ed-4bcd-839f-a63a12a1424d")
+			(uuid "4e9bb6f0-4c3e-48ba-b935-58c1c425309f")
 		)
 		(pin "2"
-			(uuid "ca621e86-4fed-4a6c-a71e-9205306067b5")
+			(uuid "57418302-16a3-4a44-aaf2-4a241d86d248")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C11")
 					(unit 1)
 				)
@@ -5689,7 +5951,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d1feb005-99b5-4932-b007-739b1fec2853")
+		(uuid "d121d536-5b46-4631-89f5-5ec23bceeecd")
 		(property "Reference" "C12"
 			(at 109.22 147.32 0)
 			(effects
@@ -5724,14 +5986,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "07bf388d-d8b8-4525-af36-56b51475e2fb")
+			(uuid "94c83b79-64be-4086-92d2-e91bff985b35")
 		)
 		(pin "2"
-			(uuid "348f4179-1afe-4673-96cf-cd79d9c713ce")
+			(uuid "c775209a-0baf-4f72-be9e-7e3b9f9b468e")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C12")
 					(unit 1)
 				)
@@ -5746,7 +6008,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "13384ea2-7d40-4b9f-b150-269d3507d753")
+		(uuid "47e0e5ae-da1a-4d92-a38b-d457ec765197")
 		(property "Reference" "C13"
 			(at 144.78 147.32 0)
 			(effects
@@ -5781,14 +6043,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "3f040310-6ed8-4d56-a27c-6b5d70a87435")
+			(uuid "007ef789-337e-440b-947f-2358c6040e70")
 		)
 		(pin "2"
-			(uuid "65f9d987-776c-4844-b9e7-1302e3bba916")
+			(uuid "9e1ca8d2-1992-44a6-82b9-028417a40260")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C13")
 					(unit 1)
 				)
@@ -5803,7 +6065,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "47504e18-bd6e-4974-a45e-ce58fba399d3")
+		(uuid "4c32a9b8-c6eb-4e01-9e5b-eb5e9fae5a90")
 		(property "Reference" "C14"
 			(at 180.34 147.32 0)
 			(effects
@@ -5838,14 +6100,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "14346dc4-5618-45f2-a086-880ccfe45558")
+			(uuid "7cafb67d-451f-4bde-af55-0eed9c42ec3b")
 		)
 		(pin "2"
-			(uuid "228023f3-0cae-4682-8ecf-d4117d3f3d85")
+			(uuid "490dd71c-9194-401e-995b-e465ff6d6df7")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C14")
 					(unit 1)
 				)
@@ -5860,7 +6122,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3c2d8778-3110-4bb7-8ed0-ec09aa46493b")
+		(uuid "8ac989a5-1cc5-4925-bb4f-5d959aea870d")
 		(property "Reference" "C15"
 			(at 215.9 147.32 0)
 			(effects
@@ -5895,14 +6157,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "833462a7-2cf0-4d15-8a7d-d0fbccc1345c")
+			(uuid "8ea31f7e-08dd-449c-a777-f5c4cf8b62ab")
 		)
 		(pin "2"
-			(uuid "21511415-d0d9-44c5-96b7-976b29c22910")
+			(uuid "c6787b4c-4b2d-42c7-8876-4f6b63dd2748")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C15")
 					(unit 1)
 				)
@@ -5917,7 +6179,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2e1526de-b964-4bb9-a901-07f708574bc3")
+		(uuid "bb9c3372-5dd8-42a3-9bb8-c76ba735e90c")
 		(property "Reference" "C16"
 			(at 251.46 147.32 0)
 			(effects
@@ -5952,14 +6214,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d5e37c7e-963d-4521-a743-222f5bcc7f90")
+			(uuid "f9f2c5be-81c0-4896-9d06-b3f87328c864")
 		)
 		(pin "2"
-			(uuid "2bb889fc-4a80-458f-96f0-d129d537737d")
+			(uuid "0be972df-23e0-4bda-9786-2ed288d2c32b")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C16")
 					(unit 1)
 				)
@@ -5974,7 +6236,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7437a45b-a4ee-43b2-8b80-296d53576b85")
+		(uuid "a5488321-cf42-40e0-a52a-9f75fefdbf2c")
 		(property "Reference" "C17"
 			(at 287.02 147.32 0)
 			(effects
@@ -6009,14 +6271,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "df9d50ca-e13f-4a87-9fdc-06f57f1d8358")
+			(uuid "c94fb1b4-5f06-4601-a19c-ff035126363e")
 		)
 		(pin "2"
-			(uuid "220d9166-46be-4023-bc24-8990bd6a36d4")
+			(uuid "90230b19-0634-4d53-959b-f02e298b8c2e")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C17")
 					(unit 1)
 				)
@@ -6031,7 +6293,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ac6861c0-cb48-44f7-a38d-15d90b1f0295")
+		(uuid "5db0d36e-817f-48fb-ad47-ebe10b381b4d")
 		(property "Reference" "C18"
 			(at 322.58 147.32 0)
 			(effects
@@ -6066,14 +6328,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d2cac140-2e45-4cd3-b724-a235f93b28e3")
+			(uuid "38e7743c-2e4e-4df3-af8d-d7b7b020c52b")
 		)
 		(pin "2"
-			(uuid "531e6e98-1fab-4807-a6ff-c1ce53ee5b45")
+			(uuid "49ecf5c0-00e8-4453-b2a2-7b133f5cae39")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C18")
 					(unit 1)
 				)
@@ -6088,7 +6350,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "49b69998-fe54-4124-81a6-1ccad9f1292e")
+		(uuid "e9b22bc6-a551-426e-8f95-0fde2f627190")
 		(property "Reference" "C19"
 			(at 358.14 147.32 0)
 			(effects
@@ -6123,14 +6385,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "bddcc80c-97be-4267-b35a-3fdbe744d8ac")
+			(uuid "74a7aa4a-175c-4301-9fda-f4cc059b0cb8")
 		)
 		(pin "2"
-			(uuid "223a2a0a-20e9-48fe-84a7-d8f57da821eb")
+			(uuid "377be730-7448-410d-a2b7-ace5b8cc1a98")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C19")
 					(unit 1)
 				)
@@ -6145,7 +6407,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "66aa7c05-b49e-4908-ba47-a31c69182cd3")
+		(uuid "8ae5ced4-93f8-4051-ac07-f062cd8c087a")
 		(property "Reference" "R20"
 			(at 38.1 172.72 0)
 			(effects
@@ -6180,14 +6442,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "c1c4d9ba-759d-4c40-9b4e-027d84bc31ef")
+			(uuid "91adbc5a-e8c0-4720-b5ce-4a80871385b3")
 		)
 		(pin "2"
-			(uuid "fc383c8c-2465-41d7-9eb4-f411eedf3abf")
+			(uuid "e1d753f5-8229-41c2-96d1-35bac8834b4c")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R20")
 					(unit 1)
 				)
@@ -6202,7 +6464,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "140be8da-9fe6-46ad-b1c5-6816a4e280ee")
+		(uuid "a583ede4-b5f9-48bb-aeac-1a15a9629e12")
 		(property "Reference" "R21"
 			(at 73.66 172.72 0)
 			(effects
@@ -6237,14 +6499,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e325a0d8-4cf0-45c8-906a-b06ed0fd4b9e")
+			(uuid "328262ca-fce3-4bd2-a5b7-63368672da08")
 		)
 		(pin "2"
-			(uuid "f32b0a3c-4c37-40bb-837d-7995a000ec67")
+			(uuid "13a01f59-41e1-42be-9306-5781561f5994")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R21")
 					(unit 1)
 				)
@@ -6259,7 +6521,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "facfdd33-8b3f-4f0d-a095-abe7db4d77e7")
+		(uuid "0d793f2b-fce8-457c-a5b9-c943493452e2")
 		(property "Reference" "C21"
 			(at 109.22 172.72 0)
 			(effects
@@ -6294,14 +6556,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "6ef97ac5-f1d9-4602-99df-757777ab3e73")
+			(uuid "a4fefb55-5ad4-4c1a-81fd-cac2bf755d12")
 		)
 		(pin "2"
-			(uuid "7b16ebcf-f072-4004-88e2-a416903f6e5c")
+			(uuid "52d8b759-1824-4a2b-b016-51cc5625a331")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C21")
 					(unit 1)
 				)
@@ -6316,7 +6578,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1225e9bc-f28d-4a44-ba27-9a31b24cf172")
+		(uuid "5f211d6c-b986-471a-8f02-f24edd12599a")
 		(property "Reference" "C22"
 			(at 144.78 172.72 0)
 			(effects
@@ -6351,14 +6613,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "772982c6-605d-458e-913c-922e777feb55")
+			(uuid "d147923c-d936-451f-bb4a-ceef17632f34")
 		)
 		(pin "2"
-			(uuid "bed21ce9-6473-4fcc-85a1-5be287f5e9ee")
+			(uuid "792292b0-beab-4a2f-b59f-ad4e18fefda3")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C22")
 					(unit 1)
 				)
@@ -6373,7 +6635,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a9b0c9e5-62c6-4155-afce-a495ee48313c")
+		(uuid "7d436269-7ae6-4235-b989-1c38c647bbb3")
 		(property "Reference" "C23"
 			(at 180.34 172.72 0)
 			(effects
@@ -6408,14 +6670,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "f7fce4f4-b1b8-40ac-aaad-d3d7c52c21b4")
+			(uuid "51c4cda8-057f-442b-8d15-98b68bad9318")
 		)
 		(pin "2"
-			(uuid "3cf1b7f3-5dde-4f87-a078-888208b3c7fe")
+			(uuid "17c6b4a6-5089-43b1-a3f0-024d6812152b")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "C23")
 					(unit 1)
 				)
@@ -6430,7 +6692,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "61559595-d5e4-480c-a5c1-1660b85a1483")
+		(uuid "b911f4bb-621a-4e3e-919d-9576dbf56917")
 		(property "Reference" "R22"
 			(at 215.9 172.72 0)
 			(effects
@@ -6465,14 +6727,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "3f639dbd-f939-4798-86ad-e3ad1464d380")
+			(uuid "0a894f10-d813-4ff0-b789-317eae95fd41")
 		)
 		(pin "2"
-			(uuid "7a341578-fece-4886-915d-7895a317e7e3")
+			(uuid "69ad8c2b-ad10-47d2-abff-9a1f5d8fb4db")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R22")
 					(unit 1)
 				)
@@ -6487,7 +6749,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "dabd53c8-efd6-4617-a828-cef25fcc022c")
+		(uuid "a71eebdf-0b80-4bae-80fd-2ee9563fc309")
 		(property "Reference" "R23"
 			(at 251.46 172.72 0)
 			(effects
@@ -6522,14 +6784,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "989873f0-94ea-4e0c-ad3e-753467a64f88")
+			(uuid "554d7848-39ab-4f4d-b77e-c5132a938749")
 		)
 		(pin "2"
-			(uuid "4c022cb4-b4c0-43fb-96f2-a11fc3d06dc4")
+			(uuid "0337bcdb-3e70-446f-b415-08498231e596")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R23")
 					(unit 1)
 				)
@@ -6544,7 +6806,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "05af3c1a-8c1c-4d3a-a39b-fdee07714424")
+		(uuid "058de9eb-0ac6-4a1b-8d26-c7ba5e776a76")
 		(property "Reference" "R24"
 			(at 287.02 172.72 0)
 			(effects
@@ -6579,14 +6841,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "4e7ddd9b-f928-41d4-8a42-5ac5dfadb452")
+			(uuid "dd6dfa40-e3e7-4117-8867-fa6458179589")
 		)
 		(pin "2"
-			(uuid "a9980a65-c0ad-41ad-a27a-a1591395d3d1")
+			(uuid "3c251085-df80-45fd-b874-2d228a89b480")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R24")
 					(unit 1)
 				)
@@ -6601,7 +6863,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "462c37fb-9d58-4130-b246-b02bf42add24")
+		(uuid "9ea23dc3-a34b-428c-909a-7a6578af1ccc")
 		(property "Reference" "R25"
 			(at 322.58 172.72 0)
 			(effects
@@ -6636,14 +6898,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "6fcd433e-6e06-4663-9c0f-02f17fa5937f")
+			(uuid "63dfe79a-bb53-46cf-9b8c-01347ca5138f")
 		)
 		(pin "2"
-			(uuid "d8fc2561-8fac-4084-817d-369b432ba45e")
+			(uuid "74fe63ec-2a6d-4112-bc65-859f89c7565b")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R25")
 					(unit 1)
 				)
@@ -6658,7 +6920,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2c02acaa-b268-4eae-b1b4-5f849e7acda8")
+		(uuid "4b647c5d-45a6-4753-b6bd-57510e4de823")
 		(property "Reference" "R26"
 			(at 358.14 172.72 0)
 			(effects
@@ -6693,14 +6955,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "66ac0bda-bb8b-4e80-94bc-b8f8e83e8bff")
+			(uuid "3acdb261-f525-414c-99cc-f686de6d6a7f")
 		)
 		(pin "2"
-			(uuid "904030b0-69bd-4524-9134-9e4d70f8d070")
+			(uuid "eb805f8c-d9e4-43ec-913f-227405a2bd61")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R26")
 					(unit 1)
 				)
@@ -6708,27 +6970,188 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:0603WAF1000T5E")
+		(at 393.7 177.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "aaac4b8a-0d01-413f-bad5-88cddaf0e7a5")
+		(property "Reference" "R27"
+			(at 393.7 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "100R"
+			(at 393.7 182.88 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 393.7 177.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 393.7 177.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22775"
+			(at 393.7 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "66ad9a14-1794-4c35-9d41-5be957042051")
+		)
+		(pin "2"
+			(uuid "cee9eec0-ae5d-4004-8582-f52ed9876e7a")
+		)
+		(instances
+			(project "board-l"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
+					(reference "R27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF1000T5E")
+		(at 429.26 177.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d3366390-8c0e-419d-adf3-a2160bbe9cff")
+		(property "Reference" "R28"
+			(at 429.26 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "100R"
+			(at 429.26 182.88 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 429.26 177.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 429.26 177.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22775"
+			(at 429.26 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "987dd25b-0b87-4292-bfdf-ea8582b8b66f")
+		)
+		(pin "2"
+			(uuid "960d1a5e-faac-47f9-b69b-efdaed06fe34")
+		)
+		(instances
+			(project "board-l"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
+					(reference "R28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:TestPad")
+		(at 393.7 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b0dd46d0-217b-478b-9aeb-8982eae57d70")
+		(property "Reference" "TP1"
+			(at 393.7 147.32 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "CTRL test pad"
+			(at 393.7 157.48 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:TestPad_D1.5mm"
+			(at 393.7 152.4 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 393.7 152.4 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "910ad9b1-968d-4071-8ca0-d426cef361bb")
+		)
+		(instances
+			(project "board-l"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
+					(reference "TP1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 38.1 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ff87d824-b934-4738-9db3-5fb79a171970")
+		(uuid "4112877b-0257-433c-86cc-a4ee8d184d02")
 		(property "Reference" "R30"
 			(at 38.1 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 38.1 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 38.1 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -6742,7 +7165,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 38.1 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -6750,14 +7173,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "15363854-b7a9-4845-9622-421ca35794c0")
+			(uuid "0c87ed51-abbc-4805-8335-13c51440b9d2")
 		)
 		(pin "2"
-			(uuid "dbc2e959-2938-4151-82d2-e9151fb871ec")
+			(uuid "9aad0c2b-8502-434b-b284-653b49bf492a")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R30")
 					(unit 1)
 				)
@@ -6772,7 +7195,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0c80ca6c-24b7-412b-b1b7-743f1e5c70af")
+		(uuid "329608bb-b6e7-4411-bcdf-59c5c8e16a27")
 		(property "Reference" "LED1"
 			(at 38.1 224.79 0)
 			(effects
@@ -6807,14 +7230,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "5aac7b9f-92a6-404b-990b-f72a813abc75")
+			(uuid "f1f44229-95f1-40f4-90c7-8a6e5d71896c")
 		)
 		(pin "2"
-			(uuid "a012b04e-957a-4b7b-a1f7-1c90deeeefe9")
+			(uuid "43d82c61-0ec8-452d-aeee-e0721ae77a87")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED1")
 					(unit 1)
 				)
@@ -6829,7 +7252,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5464c36c-e2e9-44db-bad5-0f73beabdd0c")
+		(uuid "edaa9bdf-2132-4e9a-b1bf-9a3d7d7f1fe5")
 		(property "Reference" "LED2"
 			(at 38.1 250.19 0)
 			(effects
@@ -6864,14 +7287,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a8aea822-480b-41dc-8793-cc201cbcb346")
+			(uuid "ae04b0d2-325d-48d2-aa97-caaf04acb221")
 		)
 		(pin "2"
-			(uuid "0379325b-867a-4a85-bcbd-0bce3d77ee4d")
+			(uuid "70e9bd1b-2bc7-4915-90b4-26cfac2acef0")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED2")
 					(unit 1)
 				)
@@ -6886,7 +7309,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2efc8491-3076-4d27-afcf-554d70fe9b17")
+		(uuid "2344aab6-9d5d-477c-a0c4-142b2ec2ec1c")
 		(property "Reference" "LED3"
 			(at 38.1 275.59 0)
 			(effects
@@ -6921,14 +7344,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e9ce160d-7edf-4fb4-a09b-b096ab080f91")
+			(uuid "e2a9074e-71c4-4841-94dd-8eb88c13ef01")
 		)
 		(pin "2"
-			(uuid "f7181423-afa9-4d87-ad14-9c14960247c4")
+			(uuid "7b420bd8-c62e-4618-833b-2a6f18653fc0")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED3")
 					(unit 1)
 				)
@@ -6936,27 +7359,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 73.66 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "62a04250-61e7-49a0-aa69-18559196d8f0")
+		(uuid "e141a495-dd2e-4b44-8910-c672b6129a64")
 		(property "Reference" "R31"
 			(at 73.66 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 73.66 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 73.66 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -6970,7 +7393,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 73.66 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -6978,14 +7401,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2b6d10c5-43b0-4ebe-aee6-83feb06ce615")
+			(uuid "2cb3fcc6-cc36-4b32-ad2a-2318b2d5ef5d")
 		)
 		(pin "2"
-			(uuid "12ad27c8-a8d3-4248-993d-cec85af620df")
+			(uuid "129e1124-fe01-4d3a-a0e7-a3b07d003c96")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R31")
 					(unit 1)
 				)
@@ -7000,7 +7423,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3ecf4e7d-2e3b-4733-ba34-8e493377cffb")
+		(uuid "3d1bcabd-b551-4567-a536-0aab5a457758")
 		(property "Reference" "LED4"
 			(at 73.66 224.79 0)
 			(effects
@@ -7035,14 +7458,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "dbfeaa43-1239-41ff-86b1-6cb09a1335f8")
+			(uuid "bd317f38-4406-400c-ad0e-7eb050dd3c7e")
 		)
 		(pin "2"
-			(uuid "292b75ef-1fe5-4a8d-a9a8-89e88347e467")
+			(uuid "af1cf4b7-0fad-40c6-be13-bc107ddc0702")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED4")
 					(unit 1)
 				)
@@ -7057,7 +7480,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c1dac41a-c890-4f66-bbd3-3421808e328d")
+		(uuid "21e5d0e5-3a0a-4097-8f2d-5fd80d1f04f5")
 		(property "Reference" "LED5"
 			(at 73.66 250.19 0)
 			(effects
@@ -7092,14 +7515,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "bcd37b35-1490-41ed-8792-d8257865eb97")
+			(uuid "1ffd39a4-abbf-4bf6-800e-910d339f7596")
 		)
 		(pin "2"
-			(uuid "34e91410-b5a8-4dea-beec-ab103c0e7c28")
+			(uuid "484ccf98-0583-42e2-807b-a21c82bbb2c3")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED5")
 					(unit 1)
 				)
@@ -7114,7 +7537,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0dc3ed1a-0178-4a4b-9e8f-b27dcda8a9c3")
+		(uuid "99d1c2de-4b5e-4b8b-b8b2-c59ed9c2b169")
 		(property "Reference" "LED6"
 			(at 73.66 275.59 0)
 			(effects
@@ -7149,14 +7572,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "07756d3e-a76d-471f-a5d1-ed40abfdb9d5")
+			(uuid "7046b941-84e3-4a36-b4f8-ab7ee7eda922")
 		)
 		(pin "2"
-			(uuid "8ece2eed-40c2-48b9-b4b4-f516b50deb72")
+			(uuid "ad62cb10-e1a9-448e-a0bc-a025ea3c2f04")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED6")
 					(unit 1)
 				)
@@ -7164,27 +7587,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 109.22 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "df8bf246-c8eb-4997-96d6-d18624de9cd8")
+		(uuid "f779cb34-4900-4cae-8950-72a41af1c733")
 		(property "Reference" "R32"
 			(at 109.22 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 109.22 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 109.22 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7198,7 +7621,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 109.22 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7206,14 +7629,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d16b04ca-e9c6-41a5-90e5-bc93a252f3b4")
+			(uuid "7be13deb-056f-47ca-9b0c-97a9e16a3995")
 		)
 		(pin "2"
-			(uuid "3bcbe0bc-b550-46a6-a34b-e5706a2ea212")
+			(uuid "a8f3c032-ed26-4af0-8d2f-d6dc39dc6ba6")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R32")
 					(unit 1)
 				)
@@ -7228,7 +7651,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b51c45a4-12c6-4294-b3ba-535da1bbf321")
+		(uuid "57ea8d5b-a3b2-4943-96d0-8b8d40d13ac4")
 		(property "Reference" "LED7"
 			(at 109.22 224.79 0)
 			(effects
@@ -7263,14 +7686,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "deb9c308-035c-470f-aef5-d9599c05f7b3")
+			(uuid "cef09005-2f20-44a8-923e-ace30325071b")
 		)
 		(pin "2"
-			(uuid "e02eab82-77de-4da1-bf7c-fc2d4b7eca81")
+			(uuid "4565f0f4-d274-4d82-bb52-edcaf72d7f64")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED7")
 					(unit 1)
 				)
@@ -7285,7 +7708,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5a999841-cd6a-47e9-afae-25794dc51acb")
+		(uuid "6f1594f4-dcf8-44bf-ae14-381cbc728c64")
 		(property "Reference" "LED8"
 			(at 109.22 250.19 0)
 			(effects
@@ -7320,14 +7743,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "62faa760-19ea-403a-a8f4-33de4a5f9848")
+			(uuid "3d519e1e-32f9-4989-a2af-948e76e6097d")
 		)
 		(pin "2"
-			(uuid "59b3e4fe-3b85-491b-91e7-4f971c673cf5")
+			(uuid "d3ba6580-9ae7-4569-ac89-144ffec8f20b")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED8")
 					(unit 1)
 				)
@@ -7342,7 +7765,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5b7eadfc-ee06-4031-959e-04b71d1b60a9")
+		(uuid "8ba54500-2dae-4bfa-b29f-c4779280ec1e")
 		(property "Reference" "LED9"
 			(at 109.22 275.59 0)
 			(effects
@@ -7377,14 +7800,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "8f0fb42f-6239-42d3-9cdd-3fc0a5b1ecef")
+			(uuid "d23dcec5-b058-44b8-b93c-1f380abf185f")
 		)
 		(pin "2"
-			(uuid "db361d28-5668-423e-bee7-298949205ba9")
+			(uuid "b1d80a0b-fbf4-4cf7-965c-ab49fef3bb96")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED9")
 					(unit 1)
 				)
@@ -7392,27 +7815,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 144.78 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a79cb2a0-33cd-4c33-a7c4-18f9f80f2249")
+		(uuid "fd975cf8-94f3-434c-aba2-066264a75df7")
 		(property "Reference" "R33"
 			(at 144.78 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 144.78 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 144.78 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7426,7 +7849,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 144.78 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7434,14 +7857,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "f50ae6e2-8b64-4464-b634-8a8f2909a428")
+			(uuid "0068688a-84d1-4697-984c-905e0656f2d3")
 		)
 		(pin "2"
-			(uuid "dd547c00-596f-4363-81bb-08393900c0b8")
+			(uuid "62680a7b-61a8-47d0-b209-c785538d07dd")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R33")
 					(unit 1)
 				)
@@ -7456,7 +7879,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a62185b1-67d2-44a5-973f-40ad28f53474")
+		(uuid "a421804d-bf25-459a-a11e-bb64180da55a")
 		(property "Reference" "LED10"
 			(at 144.78 224.79 0)
 			(effects
@@ -7491,14 +7914,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d24ec381-c7e1-4706-8e6b-d6a8a4291dd4")
+			(uuid "ae8fd7bb-0c7e-4cc1-9670-84f932e8d4b6")
 		)
 		(pin "2"
-			(uuid "cc7ffa2a-bf52-4183-a6c3-0f77db7f38b6")
+			(uuid "a6378077-89fc-4ff0-9bcb-5f1cc75351d0")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED10")
 					(unit 1)
 				)
@@ -7513,7 +7936,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "cd5e0b3e-e027-48ab-b44e-0dc75608868f")
+		(uuid "d28df026-4bdd-4445-b2d1-b1f0d51a23dc")
 		(property "Reference" "LED11"
 			(at 144.78 250.19 0)
 			(effects
@@ -7548,14 +7971,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "88916a16-e0c5-4e0d-8d81-f27beebac54a")
+			(uuid "2502f47c-d3f5-4258-ad89-30fcc9d370b0")
 		)
 		(pin "2"
-			(uuid "72525552-c625-40d7-9e3a-b67706f40a11")
+			(uuid "c94cb7a3-75fb-429d-86e3-38068b190ff4")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED11")
 					(unit 1)
 				)
@@ -7570,7 +7993,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "bc826214-6a50-4f33-b911-fbbe3d32d812")
+		(uuid "d9ea754f-df6f-4374-97a2-08d3eda5573c")
 		(property "Reference" "LED12"
 			(at 144.78 275.59 0)
 			(effects
@@ -7605,14 +8028,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "57258214-7f56-4a44-a792-ed8278387765")
+			(uuid "bee62ba8-63a6-43b6-8857-0405875ed388")
 		)
 		(pin "2"
-			(uuid "443860e7-a040-4be8-b252-cc6d87628b53")
+			(uuid "153259e4-793c-4001-9ddd-dc55b6d26ccd")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED12")
 					(unit 1)
 				)
@@ -7620,27 +8043,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 180.34 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ad8e6ffa-11f1-404b-a650-f83ff431e5e2")
+		(uuid "1bb5dc6c-5995-4d7b-9a6e-e321423b3bdc")
 		(property "Reference" "R34"
 			(at 180.34 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 180.34 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 180.34 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7654,7 +8077,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 180.34 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7662,14 +8085,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "13da858b-e6df-41f9-9c6a-0e7a9f764b92")
+			(uuid "e605eaf4-3cea-4027-87d9-64a6a5214612")
 		)
 		(pin "2"
-			(uuid "d1254faf-e52c-4033-b3bf-581b0386e300")
+			(uuid "867cce8c-b536-412d-ae83-9a454775ab3d")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R34")
 					(unit 1)
 				)
@@ -7684,7 +8107,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "77388c88-7685-4376-8d38-b1521b46cdb7")
+		(uuid "e1590b8b-a3af-4922-9dbe-165505f735a5")
 		(property "Reference" "LED13"
 			(at 180.34 224.79 0)
 			(effects
@@ -7719,14 +8142,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "0779ac95-7a4c-4eb5-8d56-066a02c0afdf")
+			(uuid "5fc1df43-de02-4355-819c-9555369d1857")
 		)
 		(pin "2"
-			(uuid "6889f516-eb0b-426d-8b4e-90034eb2ddbd")
+			(uuid "7e8e41c7-e261-4760-87e8-ab92186eeae0")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED13")
 					(unit 1)
 				)
@@ -7741,7 +8164,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "106d7928-2582-4571-939f-0083e9e08c5a")
+		(uuid "6ed16193-029a-4c70-871c-a0e83c6e88ad")
 		(property "Reference" "LED14"
 			(at 180.34 250.19 0)
 			(effects
@@ -7776,14 +8199,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a958cb21-32ba-4304-b3e8-2d31adaa6b8f")
+			(uuid "3d42b2cd-637e-477f-8ba3-26efd1949284")
 		)
 		(pin "2"
-			(uuid "41dfb87b-66d3-42a3-97ff-2b95300dc747")
+			(uuid "a1423738-14dd-4bb4-9896-434b9b00b43e")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED14")
 					(unit 1)
 				)
@@ -7798,7 +8221,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "75add2e7-f635-4424-b2e5-db3b7085e0e4")
+		(uuid "7c378bb2-ac2e-4661-ae74-8ad5885bbc16")
 		(property "Reference" "LED15"
 			(at 180.34 275.59 0)
 			(effects
@@ -7833,14 +8256,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ed5255d4-1652-4f93-af92-2db7bf2b3171")
+			(uuid "2713ac60-c84c-433c-9a9b-554e6c6a1e35")
 		)
 		(pin "2"
-			(uuid "2ebb282e-cd34-4056-a85d-78260f95aea4")
+			(uuid "1e58d667-260a-43ac-9c49-93afca6b791b")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED15")
 					(unit 1)
 				)
@@ -7848,27 +8271,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 215.9 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "8c23b23b-6182-4353-8b80-7c007de1ff14")
+		(uuid "d315baa7-1eaf-4864-83c5-0ca0c6328cbe")
 		(property "Reference" "R35"
 			(at 215.9 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 215.9 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 215.9 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7882,7 +8305,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 215.9 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7890,14 +8313,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "819b71df-ae26-48b9-a940-51635020a89e")
+			(uuid "dd8e0fc5-42ca-4608-abba-6780de7f172c")
 		)
 		(pin "2"
-			(uuid "93f8ac8c-1ec5-42f1-8b28-18fa290503fe")
+			(uuid "d5e147d5-9cbf-463a-a53c-153b5d4916cb")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R35")
 					(unit 1)
 				)
@@ -7912,7 +8335,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6d44a08c-79b4-4c1b-aa7f-7e8bf04a271f")
+		(uuid "f9f84bf1-d1b0-4065-a298-dc1c9ae5514e")
 		(property "Reference" "LED16"
 			(at 215.9 224.79 0)
 			(effects
@@ -7947,14 +8370,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "8712437f-3151-4e89-aa3f-9a7a56d8bce7")
+			(uuid "bda44198-aa1f-43c9-bc51-e611aec33568")
 		)
 		(pin "2"
-			(uuid "1964c30e-fded-489c-a886-5bd967408e3c")
+			(uuid "b11c299d-7547-4b3a-8f9f-878a162ded07")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED16")
 					(unit 1)
 				)
@@ -7969,7 +8392,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f69e8dcc-c735-4ed5-aafa-ea52fe055960")
+		(uuid "4832dc62-2f1c-4a53-9699-53a6916e1433")
 		(property "Reference" "LED17"
 			(at 215.9 250.19 0)
 			(effects
@@ -8004,14 +8427,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "1b9205a1-b5f7-40fd-9d69-c4e5fd32fdad")
+			(uuid "3f1bdd87-3780-4b25-8b4b-40c9905dc5b3")
 		)
 		(pin "2"
-			(uuid "7affaec1-6dac-40ba-8917-a7e8412726aa")
+			(uuid "a5c5db70-1d48-4332-acc8-fc26f71783ad")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED17")
 					(unit 1)
 				)
@@ -8026,7 +8449,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3d616b3d-b9f7-410a-a25e-87ef7836ac94")
+		(uuid "a56db36e-c329-4ba4-93c1-e0b6104da3a0")
 		(property "Reference" "LED18"
 			(at 215.9 275.59 0)
 			(effects
@@ -8061,14 +8484,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "dc1fd84e-28b3-4f11-927a-3022fb8e3cb6")
+			(uuid "aa4fa8b7-93f2-4c16-9bc8-dda3a8423fee")
 		)
 		(pin "2"
-			(uuid "a86c636d-5781-4b3d-a76d-41acf4354cb6")
+			(uuid "f7b86bfb-7d9a-439b-b184-4676747d4566")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED18")
 					(unit 1)
 				)
@@ -8076,27 +8499,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 251.46 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "bbc48d2a-4f6b-4cce-bb23-8232c6786845")
+		(uuid "bbde1637-3eaa-4d46-bac7-7101f70832ff")
 		(property "Reference" "R36"
 			(at 251.46 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 251.46 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 251.46 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -8110,7 +8533,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 251.46 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -8118,14 +8541,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e8c807fe-e3df-42ff-a478-f30d04f01aac")
+			(uuid "04662e5c-e8cc-40ff-9155-493e5c150209")
 		)
 		(pin "2"
-			(uuid "05c53a5b-a695-4351-b530-fb5c8af6ce48")
+			(uuid "6914fd59-1844-4f3b-85e7-655a67995c35")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R36")
 					(unit 1)
 				)
@@ -8140,7 +8563,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f1f5a47c-d168-47a2-abdc-634d4fd14114")
+		(uuid "2e98fcb8-59f8-48f1-9518-e3b71f6d7366")
 		(property "Reference" "LED19"
 			(at 251.46 224.79 0)
 			(effects
@@ -8175,14 +8598,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "b6950557-c653-402e-bdd6-854bb003d912")
+			(uuid "5723a1f0-e2c1-4e5b-8af4-1cfa42e0265e")
 		)
 		(pin "2"
-			(uuid "6bec6e2b-3b92-4f0b-a50b-c29bc89a1c08")
+			(uuid "4a543edf-61d3-4291-b539-379be5314475")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED19")
 					(unit 1)
 				)
@@ -8197,7 +8620,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "423db63c-33f9-45cd-b42f-fd93f54ddc67")
+		(uuid "312cf357-22c5-42a6-a0a6-433ee3202557")
 		(property "Reference" "LED20"
 			(at 251.46 250.19 0)
 			(effects
@@ -8232,14 +8655,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "bab0c732-80f2-41e7-a90d-e5659cdb2f5c")
+			(uuid "3bded7a7-61d8-4b64-ac4e-8453840a6a0f")
 		)
 		(pin "2"
-			(uuid "9e82f83b-e329-46b0-9f6f-88723379dd6f")
+			(uuid "9d6d4f56-2b68-4f2b-aaa5-089e076b48e4")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED20")
 					(unit 1)
 				)
@@ -8254,7 +8677,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5f76b289-9d3e-4f14-a645-e0f1c8ec0968")
+		(uuid "134ef951-f3e6-4f36-a18c-6726f11d90d4")
 		(property "Reference" "LED21"
 			(at 251.46 275.59 0)
 			(effects
@@ -8289,14 +8712,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "5d3799d5-18d3-4b4a-ad51-0714d1fee33e")
+			(uuid "cfcdd57f-f116-42c3-86b5-e942cd04a23a")
 		)
 		(pin "2"
-			(uuid "7ba93a22-3523-499b-8f1f-247157c38f8a")
+			(uuid "e65eb35c-f6d8-439b-a167-6c4aa9f48f34")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED21")
 					(unit 1)
 				)
@@ -8304,27 +8727,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:FRC1206F33R0TS")
+		(lib_id "zudo-led-lamp:FRC2512F33R0TS")
 		(at 287.02 203.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3a079658-9f2d-4d27-aada-cd6d3653fc89")
+		(uuid "ce5462f5-3cd2-4aa8-a1f5-7def9a9f34a5")
 		(property "Reference" "R37"
 			(at 287.02 198.12 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "33R 1%"
+		(property "Value" "33R 1% 1W"
 			(at 287.02 208.28 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R1206"
+		(property "Footprint" "zudo-led-lamp:R2512"
 			(at 287.02 203.2 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -8338,7 +8761,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2907384"
+		(property "LCSC" "C2934070"
 			(at 287.02 210.82 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -8346,14 +8769,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ec409f4d-5ba7-4d53-996c-4ef710ee0623")
+			(uuid "f8673a98-68be-4256-95b4-983981c712d6")
 		)
 		(pin "2"
-			(uuid "62795f16-d993-41f2-a2fd-728205ed5403")
+			(uuid "a1c75655-6eaa-47f8-89e5-82d78e23c6ae")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "R37")
 					(unit 1)
 				)
@@ -8368,7 +8791,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "55176480-0e34-47b2-b43a-cf79e13cfe25")
+		(uuid "04e30a7d-4d96-48c9-8483-52f5d19c491c")
 		(property "Reference" "LED22"
 			(at 287.02 224.79 0)
 			(effects
@@ -8403,14 +8826,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "0078b3fe-eb73-46cb-8799-2d83afe91440")
+			(uuid "24fa89f0-a5f4-41e2-9e37-1158771555de")
 		)
 		(pin "2"
-			(uuid "34d263df-f914-49af-aca2-4bac589296ca")
+			(uuid "431f1454-3534-4183-b6a3-72fc49e7f603")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED22")
 					(unit 1)
 				)
@@ -8425,7 +8848,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6bc74da3-a31b-4f3c-9453-c1bbb6f4161a")
+		(uuid "661f7933-ed52-43be-9c4c-f4722f8105b0")
 		(property "Reference" "LED23"
 			(at 287.02 250.19 0)
 			(effects
@@ -8460,14 +8883,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a8f9307e-0d1c-48eb-9292-8819da605267")
+			(uuid "7b8c0554-7c76-4aec-ad8e-c3cac4568d26")
 		)
 		(pin "2"
-			(uuid "b8458fcb-47ea-46b4-98cb-24c51e3be72e")
+			(uuid "e536a09b-daa9-460b-87e7-21e87d623da5")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED23")
 					(unit 1)
 				)
@@ -8482,7 +8905,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b7ff40f3-4d4d-4418-a72f-e51e045c603a")
+		(uuid "ba2cd62f-22a6-4f0d-919f-7173f18ab772")
 		(property "Reference" "LED24"
 			(at 287.02 275.59 0)
 			(effects
@@ -8517,14 +8940,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "170dbe59-84e5-4339-a4bd-b7a256fed1eb")
+			(uuid "c3f024f0-80d7-4a29-ac1a-2bfcfb8d1e9f")
 		)
 		(pin "2"
-			(uuid "6a9585a6-b2bd-4147-831e-4a2afde7eb8f")
+			(uuid "2c55ae84-a2d0-4cf0-9fc1-7315a0ea46f3")
 		)
 		(instances
 			(project "board-l"
-				(path "/7b0b79de-0532-4ff3-a366-dd0bc61fa255"
+				(path "/4c4212dd-7fb7-4814-ad01-982a169641a2"
 					(reference "LED24")
 					(unit 1)
 				)
@@ -8538,7 +8961,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "cb261d9f-9a32-4561-bccd-561d9c2acc24")
+		(uuid "46527617-9cca-462a-8603-5522c31ea9fb")
 	)
 	(global_label "VBUS_L"
 		(shape passive)
@@ -8547,7 +8970,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "1dc2c731-1185-4b7f-86f0-63977f6b09aa")
+		(uuid "e8afc0cc-d8a8-43f8-9734-00e571abc4f4")
 	)
 	(global_label "VBUS_L"
 		(shape passive)
@@ -8556,7 +8979,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "6dd5a692-d6b3-454f-b8a6-a68d26d2cc01")
+		(uuid "ed915ccb-ad8c-4e59-ad9c-a6ad96931060")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8565,7 +8988,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "29ac0a6d-0dca-47dd-97e6-111190daff8e")
+		(uuid "63c7560f-be20-4571-8b04-bea1d0263d6c")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8574,7 +8997,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "c42c709a-0242-496c-b59c-4d8589b48e8c")
+		(uuid "c5647151-b6a8-49aa-9343-79c14dc13c9b")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8583,7 +9006,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "d41db028-42fc-425d-b22a-b87cae5bc217")
+		(uuid "fccbe1e7-666a-4caa-acb8-dcb2d2d49d87")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8592,7 +9015,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "9daa7b0e-ef60-4c3f-8c21-0a10462bc8e0")
+		(uuid "a402671f-145c-4a8c-9952-848bbd2f7a8c")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8601,7 +9024,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "491713c8-5ee4-4585-8534-57633c649796")
+		(uuid "4a632fd5-5f09-4e95-b744-535cfffda354")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8610,7 +9033,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b3a043cd-6184-4873-a960-d1b174bf2acf")
+		(uuid "97c3b18c-cd39-4eac-b722-886d0061c390")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8619,7 +9042,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "7af1bdfa-6387-4de5-a537-c0be27c9f348")
+		(uuid "6ff0c319-dc29-4470-b929-4d7bcfe7ab7d")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8628,7 +9051,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "8eecfaf4-bd1a-44ec-a6a2-46cbad3494af")
+		(uuid "7ad42054-9c47-475d-8f77-8dc9cd3317c1")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8637,7 +9060,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "3794b772-0933-490e-9f17-a4ebf71deda4")
+		(uuid "a341a269-d77c-4fb2-b5c3-59f9bd858687")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8646,7 +9069,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "cf8a6286-d5b6-4a10-a65c-ff29a39d8ae0")
+		(uuid "1e2f612f-258b-4c84-9357-181fcbd8e4d6")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -8655,7 +9078,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "cf253f83-4732-4877-bc01-c69c2a8be3f3")
+		(uuid "49fdd0e9-343c-4886-a53f-40a15416b007")
 	)
 	(global_label "SET"
 		(shape passive)
@@ -8664,7 +9087,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "1855729e-ecd1-47a8-ab45-0d3e9b3573a7")
+		(uuid "2041b045-2b7e-47b8-9dd6-38c744816976")
 	)
 	(global_label "SET"
 		(shape passive)
@@ -8673,7 +9096,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "c7b8cc43-1779-47aa-a5e7-54bc30137f59")
+		(uuid "7d569280-37e6-47b0-825d-fd9f86f16dc7")
 	)
 	(global_label "SET"
 		(shape passive)
@@ -8682,7 +9105,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "6cc6bfad-2e4d-4393-8839-52263618d3e3")
+		(uuid "9b0f90a6-3c89-4640-ba8e-1483d89e8dc2")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8691,7 +9114,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "e4fc301b-a973-4779-ab75-703f0c499e48")
+		(uuid "6e8739d5-61ae-40ef-a0f1-6c4a147da373")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8700,7 +9123,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "c8fde466-d80d-4b47-bdca-e602277f0850")
+		(uuid "15f3ae16-76a0-42e0-8796-3cf2b69b6cb9")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8709,7 +9132,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "3c8ee1e5-20f8-4e32-a7e7-b5fb2f201a43")
+		(uuid "0711325c-181d-461c-996b-0994b4b044a9")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8718,7 +9141,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "faa56093-1f0b-4cee-bc16-ef9907f8ae20")
+		(uuid "1ef2440a-f8c9-4b22-a1ef-dd41e0fe7776")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8727,7 +9150,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "e1a3bff3-cd05-4107-9c42-bbabe54479b3")
+		(uuid "96bcef79-a109-4fbf-af27-ad09e6ddf2b8")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8736,7 +9159,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ca0b695b-b529-48ef-b803-8925fa9f39e2")
+		(uuid "bbdcef9e-7eb3-4139-a083-293915e887da")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8745,7 +9168,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "2010e4ff-4e53-422d-b7ce-04fa372e7917")
+		(uuid "f1f9f823-0ee7-4d64-a7ce-e470c0a55cfd")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8754,7 +9177,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "1f5fd2f3-19cb-4764-9d9d-2f61e36b7fec")
+		(uuid "04b9389a-42ce-46d4-bec9-d0574c84188a")
 	)
 	(global_label "LED_P"
 		(shape passive)
@@ -8763,7 +9186,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ff92a3b9-537a-4371-ae58-b393270fdfbf")
+		(uuid "9cad7002-ba5a-4a8d-970c-65b70e602cc6")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8772,7 +9195,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "1b496e16-0f47-43ca-96e6-c59537e847bf")
+		(uuid "8865153d-0186-48b6-ad52-bfbb53298106")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8781,7 +9204,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "31b3eb01-bd28-4ea2-8a51-99029e6cb110")
+		(uuid "83db8da7-ee86-482e-85ee-13ca88865122")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8790,7 +9213,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "2062dd1f-6283-4dbc-b996-38e8e126cb25")
+		(uuid "fa3b0964-a02f-4140-822e-d6852976674f")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8799,7 +9222,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b5e98308-76ac-48b7-b0ee-d391c15f178a")
+		(uuid "35ea6576-5a0d-4733-9edb-89a2d7ef4557")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8808,7 +9231,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "abc06c18-f75f-419c-8e41-f5445649aacc")
+		(uuid "059cdd1c-297a-45f8-a3c3-6021be124a3f")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8817,7 +9240,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "998181d5-f191-4397-a30e-2bb6a82dfbbd")
+		(uuid "141967a1-392e-403f-ad0a-b5cc506ce80a")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8826,7 +9249,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "d2e06447-a0ab-4815-b25b-0e460e7f5100")
+		(uuid "0013f974-0286-4a1c-9edf-7f778e08b95b")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8835,7 +9258,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "7c50a105-6b9d-4559-b398-b410d48a9d6b")
+		(uuid "ccc96da1-8e1b-4786-99c7-40c399a3c366")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8844,7 +9267,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b993ecbe-3268-44aa-9d7f-5fc63d6faf62")
+		(uuid "dc7741bc-a97f-4d57-a087-471a134d2ee3")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8853,7 +9276,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "df353eda-7a52-4c16-be81-b19bd24d7a5a")
+		(uuid "1c4c26dc-e090-4d23-a1e7-8b981e989594")
 	)
 	(global_label "LED_N"
 		(shape passive)
@@ -8862,7 +9285,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "3af62f8d-b16e-4f98-87bd-a83a7542ea93")
+		(uuid "84951b09-2ba0-426c-814d-df1dde75dbc1")
 	)
 	(global_label "CTRL"
 		(shape passive)
@@ -8871,7 +9294,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "005d1408-4b07-4d36-b0d9-d3285de29402")
+		(uuid "0cb352d5-cc24-48a5-a0fc-e25f28b59c42")
 	)
 	(global_label "CTRL"
 		(shape passive)
@@ -8880,7 +9303,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "44fa9f49-0393-47cf-93b3-32d873927e56")
+		(uuid "917d4f98-b023-49e4-b4af-35065569c5ed")
 	)
 	(global_label "CTRL"
 		(shape passive)
@@ -8889,7 +9312,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "5550a223-08c7-437c-8562-e50d6816970c")
+		(uuid "61afb83d-4416-402b-8bdb-c3dbcc3822f1")
 	)
 	(global_label "CTRL"
 		(shape passive)
@@ -8898,7 +9321,16 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "6933578e-9ebb-419e-9c4d-d0a80c591f45")
+		(uuid "159e49d0-fcd8-45e1-b489-eb0264fce121")
+	)
+	(global_label "CTRL"
+		(shape passive)
+		(at 389.89 152.4 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "9371ca8e-4c06-47b8-8f6a-b99fe720f040")
 	)
 	(global_label "PWM_DIM"
 		(shape passive)
@@ -8907,7 +9339,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "b7efd6b8-a711-4314-8a27-bd36d6c36a96")
+		(uuid "6538621c-983d-4fd7-9a56-24dca943a618")
 	)
 	(global_label "PWM_DIM"
 		(shape passive)
@@ -8916,7 +9348,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "5bf12cc0-b248-4198-a5c1-4aa1ed93ddf2")
+		(uuid "08b91c0f-8e60-46ad-a84a-359232bb958c")
 	)
 	(global_label "SW_LOGIC"
 		(shape passive)
@@ -8925,7 +9357,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "699e1da6-3cae-49f3-b207-1d37072a162f")
+		(uuid "23d62c0d-fa72-457e-b965-481f62729b28")
 	)
 	(global_label "SW_LOGIC"
 		(shape passive)
@@ -8934,7 +9366,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "2293c49b-8b4f-44e8-a321-1d5c441d83dc")
+		(uuid "4647c5a4-7cc3-4c4b-bbf4-8a0481876c54")
 	)
 	(global_label "SW_LOGIC"
 		(shape passive)
@@ -8943,7 +9375,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b6b89ef4-fe30-4e48-8107-0bd573654884")
+		(uuid "71b17fd8-f2b3-4fb0-be85-09d8644691fb")
 	)
 	(global_label "BST"
 		(shape passive)
@@ -8952,7 +9384,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "c4a03c58-6904-4bd2-bc50-0efc230b432c")
+		(uuid "af892bde-8844-43de-bf2c-4d9ba099e2ce")
 	)
 	(global_label "BST"
 		(shape passive)
@@ -8961,7 +9393,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f5fa0ac2-002f-490b-84d1-99c624a9215f")
+		(uuid "8cbce125-a153-43f9-bfe2-c8e8f6b3a550")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -8970,7 +9402,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ebc7a7e1-93f0-467d-8911-d0233f45a381")
+		(uuid "c1dabd34-b042-4459-90a1-67588813978b")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -8979,7 +9411,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "cd3c2715-5f48-4f06-80b7-61895f053ba6")
+		(uuid "86438d15-17d2-4816-a9ac-c3087c043b56")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -8988,7 +9420,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f8052d14-2788-475b-92b8-b8ff9b149e97")
+		(uuid "5120e858-ee2f-4511-84e1-b302868b04db")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -8997,7 +9429,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "facae2ee-8527-4b9b-a516-ec73b424d3ad")
+		(uuid "ce86c0fe-2230-4d0d-854b-ad67d06593b0")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9006,7 +9438,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "4d0da27f-e71d-42bf-a342-43698b3c5a7a")
+		(uuid "ca93685b-78fa-457e-b9fc-2a21af4bb689")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9015,7 +9447,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "66870f9c-70bb-4faa-a102-32080ff085e9")
+		(uuid "f781eb2f-aec4-4f83-a445-ab5155461a9a")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9024,7 +9456,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "96d58aa3-52bc-4938-9f3c-563c31d17423")
+		(uuid "2142fe2d-d482-47c7-ad6d-e21ad9bd2229")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9033,7 +9465,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "82bf0e88-6d23-4f53-a071-0459593b254a")
+		(uuid "a9b912d5-e237-49ca-a8da-e5642e27133b")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9042,7 +9474,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f47d1c31-42b0-4d90-85c9-224ce14f91b3")
+		(uuid "a72f1f6f-fea8-4f8c-9b85-d5aa43f525c3")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9051,7 +9483,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "66213fdc-7953-4bd4-95c4-6f666a85a75a")
+		(uuid "1a4f55d1-427e-4b22-8977-ab4720f801fa")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9060,7 +9492,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "7c622a4b-b3be-48cc-ac80-6a05bf217353")
+		(uuid "090de1c0-669d-498d-88b1-e0932ed44f74")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9069,7 +9501,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "104dbcf6-8062-416b-a382-b03e9df249f9")
+		(uuid "e872a98f-0eb7-4c7d-9501-5340677d8aa6")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9078,16 +9510,34 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "bd424a90-32ec-403b-b46e-47424f32a8f9")
+		(uuid "0890e560-9523-42ab-8a5a-078913b5a577")
 	)
-	(global_label "ENC_A"
+	(global_label "ENC_A_SW"
 		(shape passive)
 		(at 162.56 109.22 270)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "cbead1f1-b4e6-4b32-91a2-155693860949")
+		(uuid "f182e03f-43ef-4fee-833b-5c491a768c7e")
+	)
+	(global_label "ENC_A_SW"
+		(shape passive)
+		(at 388.62 177.8 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "88234aba-0575-488b-a6d3-3e4e545fc9e3")
+	)
+	(global_label "ENC_A"
+		(shape passive)
+		(at 398.78 177.8 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "45bd7d15-87fe-4315-8807-a05b07dbc9c6")
 	)
 	(global_label "ENC_A"
 		(shape passive)
@@ -9096,7 +9546,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "6a2a33e3-e76a-4a26-81a5-4815dadeab78")
+		(uuid "1c598921-e96a-4b88-a20c-d06a31c26ab4")
 	)
 	(global_label "ENC_A"
 		(shape passive)
@@ -9105,7 +9555,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "8edae253-82fb-48e9-b81d-94ae95b0d1ba")
+		(uuid "9e413f0c-22aa-4642-ad57-e0f3c2abc402")
 	)
 	(global_label "ENC_A"
 		(shape passive)
@@ -9114,16 +9564,34 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "db702faf-cc34-45be-894f-ee7db384e0bf")
+		(uuid "934fce59-45af-407f-b046-e4162d5eeaf6")
 	)
-	(global_label "ENC_B"
+	(global_label "ENC_B_SW"
 		(shape passive)
 		(at 167.64 109.22 270)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "eafdd8d3-5553-4468-b020-d25b70dbbd6e")
+		(uuid "fe7b3eec-5af3-4dc9-a136-06d6690dcee3")
+	)
+	(global_label "ENC_B_SW"
+		(shape passive)
+		(at 424.18 177.8 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "e205a1fe-72ce-40b0-8a8e-e0069b1d4dce")
+	)
+	(global_label "ENC_B"
+		(shape passive)
+		(at 434.34 177.8 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "45760d60-8133-49fb-a624-b065edb5edbf")
 	)
 	(global_label "ENC_B"
 		(shape passive)
@@ -9132,7 +9600,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "8bd28ed9-d648-42e4-8f7e-ec01002b9748")
+		(uuid "5897d993-e2c3-4fc1-a43b-72d85b322376")
 	)
 	(global_label "ENC_B"
 		(shape passive)
@@ -9141,7 +9609,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "e981bf36-a753-4111-9249-34f1d864d37e")
+		(uuid "a1e8177e-449b-4694-b6fe-f40d2380166a")
 	)
 	(global_label "ENC_B"
 		(shape passive)
@@ -9150,7 +9618,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "2e93de78-7bf1-47ce-9893-169a80bc9e62")
+		(uuid "e2ad3ca7-acd7-43f4-96a9-746212dd36b4")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -9159,7 +9627,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "49104f71-1f76-4175-b61e-9da5d48ad73e")
+		(uuid "395e4e6e-ced1-41e4-952a-bdf3a87b1ea8")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -9168,7 +9636,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "7fdb310a-1a2b-4202-af36-74d1ba61c1b7")
+		(uuid "d3a0250d-0190-4179-9fd0-7a36a2bde218")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -9177,7 +9645,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "c70d93ac-d337-40f2-87f0-7f8b4376fb6c")
+		(uuid "d7612537-d962-4275-817d-702a88d07c29")
 	)
 	(global_label "ATT"
 		(shape passive)
@@ -9186,7 +9654,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "5b23f2d7-fa96-43dd-8bd1-c6f51dd70e0f")
+		(uuid "026aaf1d-88f8-4d6e-9db2-de2ac2b3c637")
 	)
 	(global_label "ATT"
 		(shape passive)
@@ -9195,7 +9663,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "6656f155-cb48-4c14-a275-8bb15e6876af")
+		(uuid "45efa7df-d864-43e9-91ef-16ef1d0a98ed")
 	)
 	(global_label "ATT"
 		(shape passive)
@@ -9204,7 +9672,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "b5291b10-2733-46e1-af8c-edab78119147")
+		(uuid "b34a009b-8e50-4ad0-9811-c1baa44e2762")
 	)
 	(global_label "NTC_SENSE"
 		(shape passive)
@@ -9213,7 +9681,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "24c2437f-90b5-4748-b7dd-83317598b3ba")
+		(uuid "25fa96cf-d1cf-4b96-8315-90b521d3a3e1")
 	)
 	(global_label "NTC_SENSE"
 		(shape passive)
@@ -9222,7 +9690,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "6fa3ec3b-c8a9-4558-a5b4-0ae34dc3e1c3")
+		(uuid "93ad44b9-f9ca-47a8-935e-1d6d69cc4b45")
 	)
 	(global_label "NTC_SENSE"
 		(shape passive)
@@ -9231,7 +9699,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "bc72c3cd-85c2-48d4-bda0-8b736d2f0d27")
+		(uuid "8e44f51e-8e48-405c-b1d6-c5aab856756a")
 	)
 	(global_label "NTC_SENSE"
 		(shape passive)
@@ -9240,7 +9708,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "510c9f50-2d0d-4ba8-a1fe-aa7236ed22ef")
+		(uuid "bfeee61f-9701-4472-b675-efa72390ed52")
 	)
 	(global_label "NRST"
 		(shape passive)
@@ -9249,7 +9717,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "91205dcc-3693-4b37-9346-55d0c5a1e0e1")
+		(uuid "ef654426-a902-46dc-ae60-68ee328023fa")
 	)
 	(global_label "NRST"
 		(shape passive)
@@ -9258,7 +9726,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "c2f70c6c-335e-478d-abde-e8311f1eb33c")
+		(uuid "33f1b6fa-d856-46d2-b518-8cef22e879b6")
 	)
 	(global_label "NRST"
 		(shape passive)
@@ -9267,7 +9735,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "6d8fb445-4637-45a5-8c12-94421a724164")
+		(uuid "16b38447-0e6a-40ac-bbea-673bb24a629e")
 	)
 	(global_label "SWDIO"
 		(shape passive)
@@ -9276,7 +9744,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "55defcfd-dee0-4d34-b206-c8085e997852")
+		(uuid "3e331043-4ebc-4d94-969c-5ee55bf00537")
 	)
 	(global_label "SWDIO"
 		(shape passive)
@@ -9285,7 +9753,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "5e2ddee0-d4bb-4089-bf6a-947b9846c61e")
+		(uuid "a2d85cdf-286c-4577-8440-ea12c58f23a3")
 	)
 	(global_label "SWCLK"
 		(shape passive)
@@ -9294,7 +9762,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "b676119f-fcfa-4d56-99ca-668399334dce")
+		(uuid "f1ad8763-4d5b-45e4-9bf0-ded16f8c7aa1")
 	)
 	(global_label "SWCLK"
 		(shape passive)
@@ -9303,7 +9771,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f1fe5273-c256-41c1-9966-9779821e60a7")
+		(uuid "b841a5a3-dd9e-4007-add7-e4585d94d1fd")
 	)
 	(global_label "UART_TX"
 		(shape passive)
@@ -9312,7 +9780,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "1dc8bf24-fc39-4e0d-a533-c6cea302b50b")
+		(uuid "51877db5-1243-41b8-9ed5-3e7e98cc8068")
 	)
 	(global_label "UART_TX"
 		(shape passive)
@@ -9321,7 +9789,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f1194bb1-5328-4874-9af5-365189b264ce")
+		(uuid "7630c06e-d371-4ad3-9a96-e4399543610e")
 	)
 	(global_label "UART_RX"
 		(shape passive)
@@ -9330,7 +9798,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "7f76021e-6242-4641-97aa-34336c49b26d")
+		(uuid "845c12af-834f-4f3c-b1ff-4a34fab6a0d0")
 	)
 	(global_label "UART_RX"
 		(shape passive)
@@ -9339,7 +9807,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "1d4eefb0-012b-423c-b4f4-7e962367fa0a")
+		(uuid "381a8b9f-325c-438c-9dd3-9173f3c128ae")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9348,7 +9816,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "1a5c60a6-2f2e-4b42-8ba2-aacf69db91bc")
+		(uuid "6b84c6d1-7b81-4521-89c5-6ec1cf14eaee")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9357,7 +9825,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "20897cf8-7087-4b02-b64c-6781107186d0")
+		(uuid "5327b6eb-97a3-4f54-959d-9024f2bf995c")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9366,7 +9834,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ad57eda0-2017-4dfd-88b7-c59306b0a1f4")
+		(uuid "54aa43d0-b991-47c1-aa5f-c771a6d9e8f0")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9375,7 +9843,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "4270a63e-d9be-4127-b133-0f60ee332969")
+		(uuid "38477365-33c2-4140-a516-7eaabf54b7a4")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9384,7 +9852,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "e3020530-4185-4aec-ae8c-36bdb2fc6f91")
+		(uuid "54356266-4726-4a23-8efb-b36d1af7e6c6")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9393,7 +9861,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "9b7148e9-ee95-4f8e-b027-6eb07972851d")
+		(uuid "acb9fe71-5683-4bd9-9a79-9e462e7f157c")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9402,7 +9870,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "61426a1b-28cc-4ead-a495-4712fb814026")
+		(uuid "b5df476a-41b4-47a5-ad17-a0d77a9ffa6f")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9411,7 +9879,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "85b70f83-6290-4fc4-a3e7-2d618e8178c4")
+		(uuid "298d67e4-a5a9-4ef5-8499-74d8e94b68db")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9420,7 +9888,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "6d8e2cb8-6ca2-46a0-8575-7b0345836fd9")
+		(uuid "d498dc6b-878f-4b0e-8bba-3aac2bd3f64c")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9429,7 +9897,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ab62d10e-83ef-4520-92c5-c71256eee67c")
+		(uuid "03738c9e-196e-4769-8a46-3e6588340900")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9438,7 +9906,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f7379d81-4d8f-4995-bbd9-2486a68ff6ed")
+		(uuid "5838d121-615d-4a70-bc91-4f75233f4c7b")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9447,7 +9915,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "90eac934-2ba2-4d3d-a935-edce1154d861")
+		(uuid "b2edeb6a-a148-4538-b12d-870498cead36")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9456,7 +9924,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "12a65118-94a3-4703-a461-1385c3946967")
+		(uuid "3c34477d-374c-4b6b-996c-7307db047f28")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9465,7 +9933,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "4cf48b3e-d845-403a-81c6-224a83c75bdb")
+		(uuid "b15c5173-ee02-4efd-a233-aa8df2d90187")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9474,7 +9942,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b644cdb6-04ca-4815-9c28-385f33431c15")
+		(uuid "a623b15e-b0f8-443a-a20e-2b9b4702af32")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9483,7 +9951,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "82faba20-4542-45e7-a999-c0c98fa9c759")
+		(uuid "fe99bbe6-1bf4-4a31-8871-12339c15a375")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9492,7 +9960,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "0b178eb1-2f04-40ca-b8bb-4d45c81807c6")
+		(uuid "db64e27b-652d-4951-b960-c87a2fe491a8")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9501,7 +9969,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f8774454-9c79-4e08-aacd-69c4f4e76dfd")
+		(uuid "4716e811-47f1-4885-ad96-cc1326247ed8")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9510,7 +9978,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "5c218977-0924-4a61-8c9c-25f2f2d77539")
+		(uuid "9db5322c-007b-4ec5-886e-63d352671407")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9519,7 +9987,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "94d5003a-92e9-462b-b44c-9cd75abd404e")
+		(uuid "a45a9ffb-d75e-4204-ab21-9e0178eb27d3")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9528,7 +9996,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "7acc7db9-e5ef-44ab-96a8-ccd8a988ab7f")
+		(uuid "e9561ec3-028b-4ce9-9f0a-69602e39bac5")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9537,7 +10005,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "dd740dd0-dd9f-4d46-b404-326558cf3536")
+		(uuid "e082b297-52df-400c-9366-98cbc4e959fd")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9546,7 +10014,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "bb88fc35-66e5-4593-9df9-4ff932c11ea1")
+		(uuid "3381879b-0c82-462d-89ce-0da26d8aef33")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9555,7 +10023,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "1fdba369-c50b-4d55-ac73-1b0a1f762f6b")
+		(uuid "cc1473c2-2620-4a3c-bdb5-bddc52adeb54")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9564,7 +10032,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "81f71014-3028-41dd-af36-15691906156d")
+		(uuid "fa420c2f-ba75-48e6-bce9-caa9778964a2")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9573,7 +10041,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "2d6f58af-5f8f-451d-b41d-01ae578769ee")
+		(uuid "cf2f308f-a599-4973-8423-47c7b49ba8a9")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9582,7 +10050,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "a74e1e92-985a-45df-9ee0-bd0b561a867b")
+		(uuid "d51f4469-4056-424b-a006-b28cdd6af393")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9591,7 +10059,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "72f020b9-3226-4914-bb7c-9f3b13610e6d")
+		(uuid "a7342ee7-b458-4ead-8bba-b9f8d8ef928c")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -9600,7 +10068,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "609b7354-c451-420a-bbde-cb2d2b97926c")
+		(uuid "939aa7b9-f4ee-4c63-8a2d-891c8ed3f33d")
 	)
 	(global_label "LED_S1_A"
 		(shape passive)
@@ -9609,7 +10077,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "5b9c0ad7-8bc7-4444-b188-2652a000da3e")
+		(uuid "b6da8e9a-a2f3-47d1-9247-4091da3a011c")
 	)
 	(global_label "LED_S1_A"
 		(shape passive)
@@ -9618,7 +10086,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "bd6e509e-cfc4-48bd-aa91-26f90c3b9010")
+		(uuid "419f13c3-d912-4111-b681-39a523c64064")
 	)
 	(global_label "LED_S1_M1"
 		(shape passive)
@@ -9627,7 +10095,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "c0c28c8e-70bf-4040-8507-b81bc67bfcb3")
+		(uuid "d0eaf429-1d6e-4195-9d48-11d7ace25e6d")
 	)
 	(global_label "LED_S1_M1"
 		(shape passive)
@@ -9636,7 +10104,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "0bdfe2e6-a3ac-4323-89b9-988372a7a101")
+		(uuid "321a470a-b768-4812-90e7-b563918f8487")
 	)
 	(global_label "LED_S1_M2"
 		(shape passive)
@@ -9645,7 +10113,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "27731890-8a6f-4dae-8311-833503fe8bac")
+		(uuid "735ea823-48d0-4173-a729-b4a2567717da")
 	)
 	(global_label "LED_S1_M2"
 		(shape passive)
@@ -9654,7 +10122,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "18e3bfec-f27e-47de-832e-3a7b78abadc0")
+		(uuid "c74c4ec6-2474-4ecb-9345-e29322ea0d32")
 	)
 	(global_label "LED_S2_A"
 		(shape passive)
@@ -9663,7 +10131,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "9c808ffe-7229-47c2-bf88-903dc7720f06")
+		(uuid "4ada2347-9d56-47dc-bd87-7a7bc703b494")
 	)
 	(global_label "LED_S2_A"
 		(shape passive)
@@ -9672,7 +10140,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "10400946-7156-4031-b792-1a31512b9650")
+		(uuid "295aeb04-6dec-4cbc-aa9a-d8c4d8496564")
 	)
 	(global_label "LED_S2_M1"
 		(shape passive)
@@ -9681,7 +10149,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "76e8ecff-a4b5-4e8b-8fb0-2487af94fad0")
+		(uuid "e9ddd7b7-f156-4c79-9a61-fe10ac995243")
 	)
 	(global_label "LED_S2_M1"
 		(shape passive)
@@ -9690,7 +10158,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "b7cd0437-8598-489e-baf7-cba25cb75032")
+		(uuid "253bc62d-d0a2-4338-9fb6-ec9c35431774")
 	)
 	(global_label "LED_S2_M2"
 		(shape passive)
@@ -9699,7 +10167,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "8eeff5d1-5255-4586-b0c7-2eee130ec7b8")
+		(uuid "0939c5e9-65ee-43c3-b048-86c55d930a34")
 	)
 	(global_label "LED_S2_M2"
 		(shape passive)
@@ -9708,7 +10176,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "15897d79-b12f-418e-9164-1fccd19dc4be")
+		(uuid "09614220-e8b4-41a8-a2c1-4d7f7671d46d")
 	)
 	(global_label "LED_S3_A"
 		(shape passive)
@@ -9717,7 +10185,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ba616e66-66fb-4715-bf1a-b4332567c91a")
+		(uuid "52f196bf-0003-44e4-8f8b-5ca9c07a8f68")
 	)
 	(global_label "LED_S3_A"
 		(shape passive)
@@ -9726,7 +10194,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "1dc84610-eb02-40fc-bec5-85b14fbc09ae")
+		(uuid "8ceb3dbf-3faa-4957-8822-b48c70ab8062")
 	)
 	(global_label "LED_S3_M1"
 		(shape passive)
@@ -9735,7 +10203,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f6fcd2aa-f40c-4101-8374-38651aff9418")
+		(uuid "da739d56-0fae-43a9-b2b6-f083ed542d27")
 	)
 	(global_label "LED_S3_M1"
 		(shape passive)
@@ -9744,7 +10212,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "8889b69b-1e0e-4ac0-941e-7b670cd09963")
+		(uuid "218cf279-9c99-4874-aeaf-9ddbce2fe13c")
 	)
 	(global_label "LED_S3_M2"
 		(shape passive)
@@ -9753,7 +10221,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "94c300d8-2d48-49bd-9d33-46e216f58915")
+		(uuid "403fa34c-4c84-49e6-9b05-5610db442f51")
 	)
 	(global_label "LED_S3_M2"
 		(shape passive)
@@ -9762,7 +10230,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "4269a0d5-fc5e-4372-b60d-cc9591cb2685")
+		(uuid "09bb85a9-e8d9-4c83-ba5c-277ba8a3c25c")
 	)
 	(global_label "LED_S4_A"
 		(shape passive)
@@ -9771,7 +10239,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "3678252d-aaef-43f2-bdf7-267fdb36949b")
+		(uuid "b07a3294-b5f5-4ded-b1e4-2f3d90aec57b")
 	)
 	(global_label "LED_S4_A"
 		(shape passive)
@@ -9780,7 +10248,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f8f2445c-7897-42f5-a5f1-ddbc0ac2a09f")
+		(uuid "4688f853-bcf0-4cf9-9f0d-836b3896a090")
 	)
 	(global_label "LED_S4_M1"
 		(shape passive)
@@ -9789,7 +10257,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "e7fc6671-9fbb-4e68-bcaf-1ce05beed06f")
+		(uuid "018d407b-e659-4cf5-aa96-768a1603354b")
 	)
 	(global_label "LED_S4_M1"
 		(shape passive)
@@ -9798,7 +10266,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "da160fd9-b983-4ed7-bebf-d1b7c447c803")
+		(uuid "c5cb5dab-50dd-4911-a559-e0818b10a12b")
 	)
 	(global_label "LED_S4_M2"
 		(shape passive)
@@ -9807,7 +10275,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b6afa74c-ba63-48fa-8fd1-69b78cdab174")
+		(uuid "b652b035-eb54-4035-9da3-0ea021214956")
 	)
 	(global_label "LED_S4_M2"
 		(shape passive)
@@ -9816,7 +10284,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "d4659d22-dfa5-4aaf-855c-9535cf439e78")
+		(uuid "8b56b27e-4f83-4e5f-84f3-d6a3400bb6a8")
 	)
 	(global_label "LED_S5_A"
 		(shape passive)
@@ -9825,7 +10293,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f6043056-3a88-4ac8-aabf-c139149cb03a")
+		(uuid "d3737a0f-0a82-4e3a-b9de-087aaf67eeb7")
 	)
 	(global_label "LED_S5_A"
 		(shape passive)
@@ -9834,7 +10302,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "24d0eb7d-9474-4cfc-a67d-04af6c6845b6")
+		(uuid "c9657c26-f9e8-41b4-897d-67312a0c97a7")
 	)
 	(global_label "LED_S5_M1"
 		(shape passive)
@@ -9843,7 +10311,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "8e13bbb8-d920-4d72-9d24-98344749e26f")
+		(uuid "05ea87ed-74ad-441a-a9a2-ce7365235782")
 	)
 	(global_label "LED_S5_M1"
 		(shape passive)
@@ -9852,7 +10320,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "56fd0581-4021-42bd-b4a0-f0e07b6db6fa")
+		(uuid "1866c842-1317-4010-8d92-2feddb60ef9b")
 	)
 	(global_label "LED_S5_M2"
 		(shape passive)
@@ -9861,7 +10329,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "d5ce5617-99f5-4cbf-ac3e-4dd788bc95fc")
+		(uuid "650f13da-088f-4613-8e61-c499d5347a2f")
 	)
 	(global_label "LED_S5_M2"
 		(shape passive)
@@ -9870,7 +10338,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "1294c3c0-dadc-4c47-89be-5c8cb0dbea20")
+		(uuid "8e2703f8-aa58-43ec-ba09-e785fc6a2b6a")
 	)
 	(global_label "LED_S6_A"
 		(shape passive)
@@ -9879,7 +10347,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "75f1a865-a37d-428b-a89c-656539dd1940")
+		(uuid "7a2c61c2-6873-45fc-bc2f-7bbe2aa9bbc6")
 	)
 	(global_label "LED_S6_A"
 		(shape passive)
@@ -9888,7 +10356,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "7eb58ee3-0214-444d-b16c-dd03804d0cd6")
+		(uuid "7d600f39-df12-4be3-84ca-6dd1dbf7d45a")
 	)
 	(global_label "LED_S6_M1"
 		(shape passive)
@@ -9897,7 +10365,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "d1b510e3-c044-4b3f-bc5b-ed73ae06fa3f")
+		(uuid "c730630d-7e37-4a42-b4d9-ce8498ff6957")
 	)
 	(global_label "LED_S6_M1"
 		(shape passive)
@@ -9906,7 +10374,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "8b4537fb-c650-441b-8ba3-1f2e8874700a")
+		(uuid "88476b74-e664-4bd3-a0ea-001964e4dbee")
 	)
 	(global_label "LED_S6_M2"
 		(shape passive)
@@ -9915,7 +10383,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "0fdfe374-5dc2-436c-93d4-21c1d0273984")
+		(uuid "4c3e36ce-56a2-4b99-a682-c63b6b4eab52")
 	)
 	(global_label "LED_S6_M2"
 		(shape passive)
@@ -9924,7 +10392,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "8cef72b0-635c-4e6f-bd10-1b02982983f5")
+		(uuid "624ea0ff-dc1e-4bdf-a732-d52a7fd3df07")
 	)
 	(global_label "LED_S7_A"
 		(shape passive)
@@ -9933,7 +10401,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "161e7ae3-807d-4e86-ae6a-f885751e3e3a")
+		(uuid "5d7d757d-fa5d-4cda-afef-256eb5d2b166")
 	)
 	(global_label "LED_S7_A"
 		(shape passive)
@@ -9942,7 +10410,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ac3c62bf-3803-4e3b-b4b1-5e9d067e3385")
+		(uuid "64bcbdd1-91b4-4d03-8baa-42f29e85fffc")
 	)
 	(global_label "LED_S7_M1"
 		(shape passive)
@@ -9951,7 +10419,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "aafa1a7c-ab03-4d98-af65-765380573822")
+		(uuid "d40c7ddb-7741-417c-8bb5-8cb5ed7ec31e")
 	)
 	(global_label "LED_S7_M1"
 		(shape passive)
@@ -9960,7 +10428,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "793d9096-78e8-4470-8498-143f20ba2700")
+		(uuid "19143096-5c85-497e-9c81-216ed1c5adf2")
 	)
 	(global_label "LED_S7_M2"
 		(shape passive)
@@ -9969,7 +10437,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "e5c44834-51ca-4e99-b2db-3789ced596cb")
+		(uuid "7636acd0-8c7c-4d55-9664-fba71704762d")
 	)
 	(global_label "LED_S7_M2"
 		(shape passive)
@@ -9978,7 +10446,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "d664c828-5785-423c-b3e2-8d5337d01e11")
+		(uuid "48f88ada-df08-4f6a-9e1c-59a5594a8065")
 	)
 	(global_label "LED_S8_A"
 		(shape passive)
@@ -9987,7 +10455,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "11944590-9981-4a08-917c-3007274df08c")
+		(uuid "9f017cc6-8bbd-4c89-bac1-747a134c5c9f")
 	)
 	(global_label "LED_S8_A"
 		(shape passive)
@@ -9996,7 +10464,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "326dfc0e-32be-4a20-a0f5-384c7d500629")
+		(uuid "f78ad7df-03ab-4264-bf6b-bad3906be808")
 	)
 	(global_label "LED_S8_M1"
 		(shape passive)
@@ -10005,7 +10473,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "61c30da9-bd01-4786-ae96-52096262f2c1")
+		(uuid "c3aa6c7f-f3c6-46e8-9e2e-a9a0df481d91")
 	)
 	(global_label "LED_S8_M1"
 		(shape passive)
@@ -10014,7 +10482,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "069fcedf-92da-413c-acff-299fa9389299")
+		(uuid "0dd262a5-3d30-429b-a6d7-140d3f393373")
 	)
 	(global_label "LED_S8_M2"
 		(shape passive)
@@ -10023,7 +10491,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "53daacb8-15db-4ed8-a841-5013f4e5b86c")
+		(uuid "42f51ba3-1054-4abb-aff5-3169a20fc623")
 	)
 	(global_label "LED_S8_M2"
 		(shape passive)
@@ -10032,51 +10500,51 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "58166bb3-d01c-42c5-a77f-c2157020e4a0")
+		(uuid "dcb1330e-4dea-426e-a816-d778f0cb988d")
 	)
 	(no_connect
 		(at 187.96 50.8)
-		(uuid "32389d72-ce46-462f-a9e0-0d7a0b20fc8e")
+		(uuid "8f95246b-67c5-4056-b994-26cbecae640f")
 	)
 	(no_connect
 		(at 334.01 50.8)
-		(uuid "25859d62-cff2-4804-94a6-820e489dd717")
+		(uuid "b1377d99-ce25-4832-a5e9-211b899073c8")
 	)
 	(no_connect
 		(at 44.45 90.17)
-		(uuid "30f8c435-aab6-426b-aa3b-b3d33278385d")
+		(uuid "f5350196-31bc-4654-b21c-8848e17bed6d")
 	)
 	(no_connect
 		(at 44.45 92.71)
-		(uuid "95aaed29-899c-4f29-82f8-5e0716778437")
+		(uuid "4753eb83-432e-4a24-96a7-c2d2b18f0625")
 	)
 	(no_connect
 		(at 44.45 95.25)
-		(uuid "e4f82879-bac3-48ea-ba3a-467e7d8f1273")
+		(uuid "1e935007-3f2d-4485-a8a5-6ec9de84c81e")
 	)
 	(no_connect
 		(at 107.95 102.87)
-		(uuid "20403ee2-6a2f-4822-9038-a24cf6982528")
+		(uuid "e7ff8eed-9a8b-49f1-9c19-9e0b0da20238")
 	)
 	(no_connect
 		(at 107.95 100.33)
-		(uuid "88eb7220-0fcb-4f8f-a658-a0b362035f19")
+		(uuid "d4b7a1ee-7e49-4a24-9e9d-32c82a0aadbb")
 	)
 	(no_connect
 		(at 107.95 97.79)
-		(uuid "463e4edf-9f79-4267-8478-2c62766016ec")
+		(uuid "48ac3a0a-3ab8-4f60-acca-66c9bdd4fbff")
 	)
 	(no_connect
 		(at 107.95 90.17)
-		(uuid "000dc138-1cd3-4247-9a89-4bdcb698fc0c")
+		(uuid "7f07a877-074a-4472-89a1-0f7eee874e6a")
 	)
 	(no_connect
 		(at 162.56 93.98)
-		(uuid "46987cfb-5495-49d3-bcd2-0cf013740f8d")
+		(uuid "1f4ac31b-b4f0-407a-8324-dc008d7a466a")
 	)
 	(no_connect
 		(at 167.64 93.98)
-		(uuid "6b2f613c-b0f2-4bb1-997d-d684f40c71cf")
+		(uuid "c76965bc-fbd8-4096-8636-f48ceecd1421")
 	)
 	(sheet_instances
 		(path "/"

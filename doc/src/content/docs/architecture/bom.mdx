@@ -27,13 +27,14 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | J1 | 1 | TYPE-C-31-M-17 | [C283540](https://jlcpcb.com/partdetail/C283540) | 6P SMD right-angle | Extended | 33,876 | USB-C PD input, 20 V/5 A rated |
 | D5 | 1 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) | SMA | Extended | 3,770 | VBUS TVS, 20 V standoff |
 | C1 | 1 | CL31A106KBHNNNE 10 µF 50 V | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | **Basic** | 1,877,266 | VDD bulk |
-| C2, C35 | 2 | CL21B104KBCNNNC 100 nF 50 V | [C1711](https://jlcpcb.com/partdetail/C1711) | 0805 | Extended | 17,509 | VDD HF decouple, gate soft-start |
+| C2, C35 | 2 | CC0603KRX7R9BB104 100 nF 50 V | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | **Basic** | 12,618,106 | VDD HF decouple, gate–source soft-start. The C1711 → C14663 swap recommended on the [Board P page](./board-p.mdx) was applied at KiCad capture — one Extended line removed, reel shared with Board L |
 | C30, C34 | 2 | CL10A105KB8NNNC 1 µF 50 V | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | **Basic** | 5,979,916 | VREG decoupling |
 | R11 | 1 | 100 kΩ ±1% | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | **Basic** | 7,990,119 | Gate pull-up (default OFF) |
-| R12 | 1 | 56 kΩ ±1% | [C23206](https://jlcpcb.com/partdetail/C23206) | 0603 | **Basic** | 219,781 | Gate series |
+| R12 | 1 | 150 kΩ ±1% | [C22807](https://jlcpcb.com/partdetail/C22807) | 0603 | **Basic** | 414,154 | Gate series — re-ratioed from 56 kΩ by the design review to keep V_GS inside ±12 V at a 20 V mis-contract |
 | R13, R14 | 2 | 470 Ω ±1% | [C23179](https://jlcpcb.com/partdetail/C23179) | 0603 | **Basic** | 1,899,614 | DISCH + pin-18 series |
 | R15, R16 | 2 | 4.7 kΩ ±1% | [C23162](https://jlcpcb.com/partdetail/C23162) | 0603 | **Basic** | 7,433,362 | I2C pull-ups |
 | R19, R20 | 2 | 0 Ω | [C21189](https://jlcpcb.com/partdetail/C21189) | 0603 | **Basic** | 6,153,233 | CC1DB/CC2DB bridges |
+| R21 | 1 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | RESET pull-down (run state); shares Board L's reel. Added by the design review with the J2.4 reset line |
 | JOUT | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Downstream interface |
 | J2, J3 | — | Pogo pads 1x4 / 1x8 | — | Bare copper | — | — | NVM I2C + debug, no part |
 
@@ -56,8 +57,9 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | L1 | 1 | FXL0630-330-M 33 µH | [C177245](https://jlcpcb.com/partdetail/C177245) | SMD 7x6.6 mm | Extended | 228,367 | LED buck inductor, 2.5 A sat, 310 mΩ |
 | L2 | 1 | FNR4030S4R7MT 4.7 µH | [C167874](https://jlcpcb.com/partdetail/C167874) | SMD 4x4 mm | Extended | 252,195 | Logic buck inductor, shielded, 78 mΩ |
 | RS1 | 1 | RLP25FEER200 200 mΩ ±1% 2 W | [C459674](https://jlcpcb.com/partdetail/C459674) | 2512 | Extended | **20,654** | High-side sense → 500 mA |
-| R30–R37 | 8 | 33 Ω ±1% 250 mW | [C2907384](https://jlcpcb.com/partdetail/C2907384) | 1206 | Extended | 235,141 | Per-string ballast |
+| R30–R37 | 8 | 33 Ω ±1% 1 W | [C2934070](https://jlcpcb.com/partdetail/C2934070) | 2512 | Extended | 85,468 | Per-string ballast — upsized from a 250 mW 1206 by the design review (the 1206 exceeded its rating at the worst-case 90 mA string) |
 | R20, R22–R26 | 6 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | CTRL filter series, encoder/PDOK/ATT pull-ups, NTC divider |
+| R27, R28 | 2 | 100 Ω ±1% | [C22775](https://jlcpcb.com/partdetail/C22775) | 0603 | **Basic** | 7,325,193 | Encoder phase series — limits C22/C23 discharge through the EC11 contacts. Added by the design review |
 | R21 | 1 | 33 kΩ ±1% | [C4216](https://jlcpcb.com/partdetail/C4216) | 0603 | **Basic** | 696,981 | CTRL pull-down + divider (default-OFF) |
 | C10, C11, C12, C14 | 4 | CL31A106KBHNNNE 10 µF 50 V | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | **Basic** | 1,877,266 | Input bulk + both buck input caps |
 | C13, C15, C18, C20–C24 | 8 | CC0603KRX7R9BB104 100 nF 50 V | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | **Basic** | 12,618,106 | HF decouple, BST, NRST, CTRL filter, encoder debounce, NTC filter |
@@ -97,20 +99,21 @@ separate PCBA jobs, which they must be.
 
 | | Board P | Board L |
 |---|---|---|
-| Unique fitted part numbers | 13 | 20 |
-| of which **Basic** | 7 | 6 |
+| Unique fitted part numbers | 14 | 21 |
+| of which **Basic** | 9 | 7 |
 | of which **Preferred** | 0 | 1 |
-| of which **Extended** | **6** | **13** |
+| of which **Extended** | **5** | **13** |
 
-Board P Extended lines: `C2678061`, `C347476`, `C283540`, `C571370`, `C1711`, `C144397`.
+Board P Extended lines: `C2678061`, `C347476`, `C283540`, `C571370`, `C144397` — one
+fewer than the original plan, because the C1711 → C14663 100 nF swap was applied.
 
 Board L Extended lines: `C500782`, `C529334`, `C780769`, `C571370`, `C177245`,
-`C167874`, `C459674`, `C2907384`, `C13564`, `C976305`, `C144397`, `C2991196`, `C210315`.
+`C167874`, `C459674`, `C2934070`, `C13564`, `C976305`, `C144397`, `C2991196`, `C210315`.
 
 | | Value |
 |---|---|
-| Extended lines charged | 6 + 13 = **19** |
-| Setup fee total | 19 x ¥470 ≈ **¥8,930** (roughly **$57**) |
+| Extended lines charged | 5 + 13 = **18** |
+| Setup fee total | 18 x ¥470 ≈ **¥8,460** (roughly **$54**) |
 | Component cost, both boards, single-unit quantity | roughly **$8** |
 
 **The setup fees are about seven times the parts cost.** That is the shape of every
@@ -127,10 +130,10 @@ Two reductions were already taken:
   a reel with Board P. The trade is X5R instead of the X7R the AL8860 datasheet asks for
   — X5R is rated to +85 °C, which covers this lamp's envelope, but if a build shows input
   ripple problems, C2918502 is the datasheet-strict swap.
-- **Board L's 100 nF caps use [C14663](https://jlcpcb.com/partdetail/C14663) (0603, Basic)
-  rather than Board P's [C1711](https://jlcpcb.com/partdetail/C1711) (0805, Extended).**
-  Swapping Board P to the same part would remove a seventh Extended line there — see the
-  note on the [Board P page](./board-p.mdx#what-this-architecture-pass-changed).
+- **Both boards' 100 nF caps now share [C14663](https://jlcpcb.com/partdetail/C14663)
+  (0603, Basic).** Board P originally specified [C1711](https://jlcpcb.com/partdetail/C1711)
+  (0805, Extended); the swap was applied at KiCad capture and is already counted in the
+  arithmetic above.
 
 Two more are available if the budget matters:
 
@@ -147,6 +150,6 @@ Two more are available if the budget matters:
 | Aluminum MCPCB / heatsink | 0.19 W per LED site is well inside the plain-FR-4 regime — see [board split](./overview.mdx#board-split) |
 | Status LED | Would add current to the logic rail for information the lamp itself already conveys |
 | Crystal oscillator | HSI16 + PLL at 64 MHz is far more accurate than anything this design's timing needs |
-| BOOT0 strapping resistor | PA14's internal pull-down at reset already selects flash boot (ST DS12992 note 5) |
+| BOOT0 strapping resistor | The factory-default option bit `nBOOT_SEL = 1` makes the G0 boot from flash and ignore the BOOT0 pin entirely (the pin is only consulted if `nBOOT_SEL` is cleared) — so no strap is needed, but flipping `nBOOT_SEL` in firmware would change that |
 | External Rd on CC lines | Deliberately DNP — the single most consequential rule from [zudo-pd's diagnosis](/docs/power/lessons-from-zudo-pd/#cc-topology-rules) |
 | SWD/UART connectors | Footprint only; hand-fit for bring-up |

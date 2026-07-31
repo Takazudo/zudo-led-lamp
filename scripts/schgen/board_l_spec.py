@@ -56,10 +56,13 @@ COMPONENTS = {
     'R24':  (*_R10K, False, (287.02, 177.8)),
     'R25':  (*_R10K, False, (322.58, 177.8)),
     'R26':  (*_R10K, False, (358.14, 177.8)),
+    'R27':  ('0603WAF1000T5E', '100R', 'C22775', 'zudo-led-lamp:R0603', False, (393.7, 177.8)),
+    'R28':  ('0603WAF1000T5E', '100R', 'C22775', 'zudo-led-lamp:R0603', False, (429.26, 177.8)),
+    'TP1':  ('TestPad', 'CTRL test pad', '', 'zudo-led-lamp:TestPad_D1.5mm', False, (393.7, 152.4)),
 }
 
 # ballast row + LED array: string n (1..8) = R(29+n) + LED(3n-2), LED(3n-1), LED(3n)
-_BALLAST = ('FRC1206F33R0TS', '33R 1%', 'C2907384', 'zudo-led-lamp:R1206')
+_BALLAST = ('FRC2512F33R0TS', '33R 1% 1W', 'C2934070', 'zudo-led-lamp:R2512')
 _LED = ('HL-AM-2835H421W-S1-08-HR3', '2835 3000K CRI80', 'C210315', 'zudo-led-lamp:LED-SMD_L3.3-W2.8-RD')
 for _n in range(1, 9):
     _x = 38.1 + 35.56 * (_n - 1)
@@ -80,14 +83,16 @@ NETS = {
     'SET':       ['U2.1', 'RS1.2', 'L1.1'],
     'LED_P':     ['L1.2'] + [f'R{29 + n}.1' for n in range(1, 9)],
     'LED_N':     ['U2.5', 'U2.6', 'D11.1'] + [f'LED{3 * n}.1' for n in range(1, 9)],
-    'CTRL':      ['U2.4', 'R20.2', 'R21.1', 'C21.1'],
+    'CTRL':      ['U2.4', 'R20.2', 'R21.1', 'C21.1', 'TP1.1'],
     'PWM_DIM':   ['U3.13', 'R20.1'],
     'SW_LOGIC':  ['U4.5', 'C15.1', 'L2.1'],
     'BST':       ['U4.6', 'C15.2'],
     'V3P3':      ['U4.1', 'L2.2', 'C16.1', 'C17.1', 'U3.4', 'C18.1', 'C19.1',
                   'R22.1', 'R23.1', 'R24.1', 'R25.1', 'R26.1', 'J3.4'],
-    'ENC_A':     ['SW1.A', 'R22.2', 'C22.1', 'U3.7'],
-    'ENC_B':     ['SW1.B', 'R23.2', 'C23.1', 'U3.8'],
+    'ENC_A_SW':  ['SW1.A', 'R27.1'],
+    'ENC_A':     ['R27.2', 'R22.2', 'C22.1', 'U3.7'],
+    'ENC_B_SW':  ['SW1.B', 'R28.1'],
+    'ENC_B':     ['R28.2', 'R23.2', 'C23.1', 'U3.8'],
     'PDOK':      ['J2.4', 'R24.2', 'U3.12'],
     'ATT':       ['J2.3', 'R25.2', 'U3.14'],
     'NTC_SENSE': ['RT1.1', 'R26.2', 'C24.1', 'U3.11'],

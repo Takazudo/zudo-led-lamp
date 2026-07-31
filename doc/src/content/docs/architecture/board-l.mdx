@@ -110,12 +110,18 @@ lists three ways, and per-string resistors are the one that fits: one CC driver 
 string would mean eight AL8860s and eight passive sets, and Vf-binned procurement is not
 something the JLCPCB catalog can guarantee.
 
-**R30–R37 = 33 Ω, 1206** ([C2907384](https://jlcpcb.com/partdetail/C2907384), ±1%):
+**R30–R37 = 33 Ω, 2512, 1 W** ([C2934070](https://jlcpcb.com/partdetail/C2934070), ±1%):
+
+The design review moved this line from a 250 mW 1206
+([C2907384](https://jlcpcb.com/partdetail/C2907384)) to a 1 W 2512. Resistor dissipation
+goes as I², so at the datasheet-worst-case 90 mA string the 1206 sat at **107% of its
+rating** (0.267 W) — over-rated at exactly the imbalance bound this page accepts below.
+The 2512 runs at 27% there, and its larger copper helps spread the array's heat.
 
 | Quantity | Value |
 |---|---|
 | Ballast drop at 62.5 mA | 2.06 V |
-| Dissipation per resistor | 129 mW — **52%** of the 1206 part's 250 mW rating |
+| Dissipation per resistor | 129 mW — **13%** of the 2512 part's 1 W rating (was 52% of the old 1206's 250 mW) |
 | Total ballast loss | 1.03 W (19% of delivered power) |
 | Imbalance, realistic same-reel spread (±0.3 V/string) | **±9 mA, ±15%** |
 | Imbalance, datasheet worst case (±0.9 V/string) | ±27 mA, ±43% |
@@ -132,9 +138,13 @@ exceeds its package power rating.** The constant-current driver holds the *total
 is no runaway path. The 1.03 W of ballast loss is the price paid for that guarantee, and
 it is a deliberate trade against the alternative of eight driver ICs.
 
-Ballast resistors sit on the **anode side** (between `LED_P` and each string's top LED),
-so the eight split nets are on the quiet DC rail and the common `LED_N` node — which is
-the driver's switching node — stays as one compact net.
+Ballast resistors sit on the **anode side** (between `LED_P` and each string's top LED)
+so that the common `LED_N` node — the driver's switching node — stays as one compact
+net instead of eight. Note the review's correction to the original rationale: `LED_P`
+is **not** a quiet DC rail. The string voltage is essentially fixed, so when `LED_N`
+swings 0 → ~15.5 V, `LED_P` swings ~11 → ~26.6 V right along with it — every net in
+the LED array is a switching node. The anode-side placement still wins (one compact
+`LED_N` beats eight), but no LED-array net may be poured as a large plane.
 
 ## AL8860 constant-current driver
 
@@ -148,7 +158,7 @@ switch. That topology is the reason `LED_N` (the common cathode) is a switching 
 |---|---|---|
 | Sense resistor RS1 | **200 mΩ** → `I = 0.1 / Rs` = **500 mA** | DS39014 Rev 5, "LED Current Configuration" |
 | Output voltage | 3 x 3.0 V + 2.06 V ballast = **11.06 V** | — |
-| Duty cycle | 11.06 / 15 = **74%** | inside the recommended 25–75% band |
+| Duty cycle | **~77%** by the datasheet's own equations (which include the diode and resistive drops; the naive 11.06/15 = 74% understates it) — 2 points above the recommended 25–75% band, far below the 98% max | DS39014 Rev 5, "Inductor Selection" |
 | Inductor L1 | **33 µH** | ripple is set internally at ±20% of sense threshold; L sets frequency |
 | Switching frequency | `T = ΔI·L·(1/(Vin−Vout) + 1/(Vout+Vd))` → **~440 kHz** | under the 1 MHz max |
 | Minimum on-time | 1.69 µs | above the 500 ns recommended minimum |
@@ -160,11 +170,17 @@ switch. That topology is the reason `LED_N` (the common cathode) is a switching 
 
 Duty cycle across the LED's full Vf bin:
 
-| Vf per LED | String V | Vout with ballast | Duty | Note |
+| Vf per LED | String V | Vout with ballast | Duty (datasheet eqns) | Note |
 |---|---|---|---|---|
-| 2.6 V (bin min) | 7.8 V | 9.86 V | 66% | fine |
-| 3.0 V (nominal) | 9.0 V | 11.06 V | 74% | design point |
-| 3.2 V (bin max) | 9.6 V | 11.66 V | 78% | 3 points above the recommended band — accepted, still far below the 98% max duty |
+| 2.6 V (bin min) | 7.8 V | 9.86 V | 69% | inside the band |
+| 3.0 V (nominal) | 9.0 V | 11.06 V | 77% | design point — 2 points above the recommended 25–75% band |
+| 3.2 V (bin max) | 9.6 V | 11.66 V | 81% | accepted, still far below the 98% max duty |
+
+The review corrected these duty figures (the original 66/74/78% used `Vout/Vin` without
+the diode and resistive terms). The honest statement of the 3s-vs-4s choice is: 3s sits
+*slightly above* the recommended band across most of the Vf bin; 4s at ~88% would sit
+far above it. 3s is still the right call. If bench accuracy suffers, 22 Ω ballast pulls
+nominal duty to ~72% at the cost of ~40% worse current sharing.
 
 **Input rating vs the clamp ceiling.** AL8860's recommended VIN maximum is 40 V and its
 absolute maximum is **42 V** (DS39014 Rev 5, "Absolute Maximum Ratings"). Board P's
@@ -260,12 +276,12 @@ default-off has to be built deliberately. Two independent mechanisms do it:
    power-on reset — two orders of magnitude inside that window. The same protection
    covers brown-out and watchdog resets.
 
-:::caution[Verify the pull-down at bring-up]
-The AL8860 datasheet does not publish CTRL's internal bias current, so R21's ability to
-hold CTRL below 0.2 V on its own is **not provable from the datasheet** — mechanism 2 is
-what makes this safe, and mechanism 1 is belt-and-braces. First bring-up must measure
-CTRL with the MCU held in reset. If it reads above 0.2 V, reduce R21 and scale R20 by
-the same ratio to keep the 2.53 V full scale (e.g. 3.3 kΩ / 10 kΩ).
+:::note[Pull-down bounded by the datasheet after all — verify anyway]
+The design review showed R21 *is* provable from the datasheet: the soft-start spec
+(1.5 ms/nF to charge CTRL) bounds the internal bias current at ≤1.67 µA, which into
+33 kΩ is **≤55 mV** — at least 3.6x below the 0.2 V off threshold, with PA6 Hi-Z at
+reset. Mechanism 1 stands on its own; mechanism 2 remains the independent backstop.
+Gate 3 still measures CTRL with the MCU held in reset as confirmation (probe TP1).
 :::
 
 ### Knob mapping
@@ -354,6 +370,17 @@ The pipeline is `modulation -> thermal derate -> gamma LUT -> CTRL duty`, exactl
 composition [control-safety](/docs/research/control-safety/#over-temperature-derating-hook)
 describes. The 256-byte gamma LUT is trivial against 64 KB of flash.
 
+:::caution[Pulse-skip near the bottom of the analog range]
+The "no flicker by construction" claim holds where the converter runs continuously. The
+AL8860's ripple is set at 40% of the programmed current, so as CTRL dims, the required
+on-time shrinks — at the 5% floor it computes to ~45 ns, far below the 500 ns
+recommended minimum, and the datasheet's own "Pulse Skip Mode" waveform is what happens
+instead: burst-firing at an unpredictable rate that *is* a flicker frequency. This is
+inside the manufacturer's sanctioned 5–100% analog range, but Gate 4 must sweep CTRL
+while watching `LED_N` on a scope and record where pulse-skip starts; if the burst rate
+lands under ~300 Hz, raise the firmware's `DUTY_FLOOR_Q16` above that point.
+:::
+
 :::note[The dimming floor is 5%, not zero]
 Analog dimming below 5% of I_NOM is outside the AL8860's guaranteed range, so the
 effect's minimum is a ~25 mA / ~35 lm glow with a hard step to fully off at perceptual
@@ -400,7 +427,7 @@ Diodes DS41326 Rev 3.
 | `SET` | `U2.SET(1) RS1.2 L1.1` | High-side sense node. RS1 = 200 mΩ between `V15` and `SET`; `I_LED = 0.1/Rs` |
 | `LED_P` | `L1.2 R30.1 R31.1 R32.1 R33.1 R34.1 R35.1 R36.1 R37.1` | Array anode rail after the inductor |
 | `LED_N` | `U2.SW(5) U2.SW(6) D11.anode LED3.K LED6.K LED9.K LED12.K LED15.K LED18.K LED21.K LED24.K` | **Switching node** — common cathode of all 8 strings. Keep this copper compact |
-| `CTRL` | `U2.CTRL(4) R20.2 R21.1 C21.1` | Analog dim input + soft-start cap |
+| `CTRL` | `U2.CTRL(4) R20.2 R21.1 C21.1 TP1.1` | Analog dim input + soft-start cap. TP1 is a bare test pad — Gates 3 and 4 both require probing this node |
 | `GND` | `U2.GND(2) U2.GND(3) U2.EP C12.2 C13.2` | EP is a thermal pad — tie to the ground pour, do **not** use it as the electrical return path (DS39014 pin description) |
 | No-connect | `U2.NC(7)` | Leave floating |
 
@@ -471,9 +498,11 @@ pin with PA15, so PA15 must never be configured as an output in firmware.
 | Net | Connected pins (Ref.Pin) | Note |
 |---|---|---|
 | `PWM_DIM` | `U3.PA6(13) R20.1` | 20 kHz PWM out |
-| `CTRL` | `R20.2 R21.1 C21.1 U2.CTRL(4)` | Filtered DC, 0 to 2.53 V |
-| `ENC_A` | `SW1.A R22.2 C22.1 U3.PA0(7)` | R22 10 kΩ pull-up to `V3P3`, C22 100 nF debounce (τ = 1 ms) |
-| `ENC_B` | `SW1.B R23.2 C23.1 U3.PA1(8)` | R23/C23, mirror of phase A |
+| `CTRL` | `R20.2 R21.1 C21.1 U2.CTRL(4) TP1.1` | Filtered DC, 0 to 2.53 V |
+| `ENC_A_SW` | `SW1.A R27.1` | Switch-side node of phase A |
+| `ENC_A` | `R27.2 R22.2 C22.1 U3.PA0(7)` | R27 100 Ω limits C22's discharge through the contact; R22 10 kΩ pull-up to `V3P3`, C22 100 nF debounce (τ = 1 ms) |
+| `ENC_B_SW` | `SW1.B R28.1` | Switch-side node of phase B |
+| `ENC_B` | `R28.2 R23.2 C23.1 U3.PA1(8)` | R28/R23/C23, mirror of phase A |
 | `PDOK` | `J2.4 R24.2 U3.PA5(12)` | R24 10 kΩ pull-up — Board P drives this open-drain |
 | `ATT` | `J2.3 R25.2 U3.PA7(14)` | R25 10 kΩ pull-up |
 | `NTC_SENSE` | `RT1.1 R26.2 C24.1 U3.PA4(11)` | R26 10 kΩ divider top to `V3P3` |
@@ -502,6 +531,27 @@ unverified), its two switch terminals are left unconnected; the design does not 
 | `J3` | 1x5, 2.54 mm | SWDIO, SWCLK, NRST, 3V3, GND | **Footprint only.** Hand-fit a pin strip for bring-up; not in the assembly BOM |
 | `J4` | 1x3, 2.54 mm | TX, RX, GND | Footprint only |
 | `SW1` | EC11L1525G01 | A, C, B + lugs | Panel-mount encoder |
+
+## What the design review changed (2026-08-01)
+
+An independent electrical review confirmed the captured netlist matches this page
+pin-for-pin (including all 24 LED polarities and all four IC pinouts against their
+datasheets) and made these changes, reflected above:
+
+1. **Ballast R30–R37: 1206 250 mW → 2512 1 W** (C2934070). The old part exceeded its
+   rating at the design's own worst-case string current.
+2. **R27/R28 100 Ω added in series with the encoder phases.** C22/C23 otherwise
+   discharge into the EC11 contacts on every closure — a contact-erosion fix that
+   costs one Basic line.
+3. **TP1 test pad added on `CTRL`.** Gates 3 and 4 both mandate measuring this node;
+   it previously had nothing to probe.
+4. **Duty-cycle figures corrected** (77% nominal, not 74%) and the **pulse-skip
+   flicker risk at deep dimming** documented with a Gate-4 check.
+5. **`LED_P` acknowledged as a switching node** — the whole LED array switches, and
+   the layout guidance now says so.
+6. An **open-string cascade** note: the driver holds *total* current, so each open
+   string raises the survivors' share (1 open → 71 mA/string, 3 opens → 100 mA, past
+   the LED package rating). One open is tolerable; more is a slow cascade.
 
 ## Power budget
 
@@ -543,7 +593,7 @@ at it deliberately.
 |---|---|---|---|
 | LED (nominal) | 24 | 0.19 W | 65% of the 288 mW package rating; ~19% of the ~1 W/site FR-4 guideline |
 | LED (worst-case imbalanced string) | up to 3 | 0.27 W | 94% of the package rating — **the tightest number on the board** |
-| Ballast resistor, 1206 | 8 | 0.129 W | 52% of 250 mW |
+| Ballast resistor, 2512 1 W | 8 | 0.129 W | 13% nominal; 27% at the worst-case 90 mA string |
 | L1 (33 µH, 310 mΩ) | 1 | 0.078 W | — |
 | D11 SS26 | 1 | 0.059 W | — |
 | RS1 (200 mΩ, 2 W) | 1 | 0.050 W | 2.5% |
