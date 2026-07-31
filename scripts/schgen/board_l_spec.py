@@ -8,7 +8,7 @@ EC11 symbol pins: A/B/C terminals, D/E push-button terminals (unused), 6/7 mount
 
 PROJECT_NAME = 'board-l'
 OUT = 'boards/board-l/board-l.kicad_sch'
-PAPER = 'A3'
+PAPER = 'A2'  # 68 parts + title block did not fit A3 without collisions
 
 _C100N = ('CC0603KRX7R9BB104', '100nF/50V', 'C14663', 'zudo-led-lamp:C0603')
 _C10U = ('CL31A106KBHNNNE', '10uF/50V', 'C13585', 'zudo-led-lamp:C1206')
@@ -62,11 +62,16 @@ COMPONENTS = {
 _BALLAST = ('FRC1206F33R0TS', '33R 1%', 'C2907384', 'zudo-led-lamp:R1206')
 _LED = ('HL-AM-2835H421W-S1-08-HR3', '2835 3000K CRI80', 'C210315', 'zudo-led-lamp:LED-SMD_L3.3-W2.8-RD')
 for _n in range(1, 9):
-    _x = 50.8 + 40.64 * (_n - 1)
+    _x = 38.1 + 35.56 * (_n - 1)
     COMPONENTS[f'R{29 + _n}'] = (*_BALLAST, False, (_x, 203.2))
     COMPONENTS[f'LED{3 * _n - 2}'] = (*_LED, False, (_x, 228.6))
     COMPONENTS[f'LED{3 * _n - 1}'] = (*_LED, False, (_x, 254))
     COMPONENTS[f'LED{3 * _n}'] = (*_LED, False, (_x, 279.4))
+
+# EC11: keep the value text clear of the vertical A/C/B labels below the body
+LABEL_OVERRIDES = {
+    'SW1': {'Value': (165.1 + 17.78, 101.6 + 2.54)},
+}
 
 NETS = {
     'VBUS_L':    ['J2.1', 'J2.2', 'F1.1'],

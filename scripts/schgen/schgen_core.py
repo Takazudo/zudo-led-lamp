@@ -144,7 +144,22 @@ def generate(spec):
     parts.extend(embedded)
     parts.append('\t)')
 
+    label_overrides = getattr(spec, 'LABEL_OVERRIDES', {})
     for ref, (symname, value, lcsc, fp, dnp, (X, Y)) in spec.COMPONENTS.items():
+        pins = pin_cache[symname]
+        pys = [py for _num, _pn, _px, py, _ang, _len in pins]
+        has_horizontal_pins = any(ang in (0.0, 180.0) for *_x, ang, _l in pins)
+        if has_horizontal_pins:
+            # pins on left/right: reference above the body, value below
+            ref_pos = (X, Y - max(pys) - 5.08)
+            val_pos = (X, Y - min(pys) + 5.08)
+        else:
+            # single row of vertical pins (body hangs below): text right and below
+            ref_pos = (X + 12.7, Y - 2.54)
+            val_pos = (X, Y + 7.62)
+        ov = label_overrides.get(ref, {})
+        ref_pos = ov.get('Reference', ref_pos)
+        val_pos = ov.get('Value', val_pos)
         body = []
         body.append('\t(symbol')
         body.append(f'\t\t(lib_id "zudo-led-lamp:{symname}")')
@@ -156,8 +171,8 @@ def generate(spec):
         body.append(f'\t\t(dnp {"yes" if dnp else "no"})')
         body.append(f'\t\t(uuid "{new_uuid()}")')
         props = [
-            ('Reference', ref, X + 2.54, Y - 5.08, False),
-            ('Value', value, X + 2.54, Y + 5.08, False),
+            ('Reference', ref, ref_pos[0], ref_pos[1], False),
+            ('Value', value, val_pos[0], val_pos[1], False),
             ('Footprint', fp, X, Y, True),
             ('Datasheet', '', X, Y, True),
         ]

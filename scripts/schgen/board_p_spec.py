@@ -57,3 +57,8 @@ NETS = {
 }
 
 NO_CONNECT = ['U1.3', 'U1.14', 'U1.15', 'U1.17', 'U1.19', 'J2.4']
+
+# Q1's vertical VBUS_OUT/VBUS_IN labels run through the default text spots
+LABEL_OVERRIDES = {
+    'Q1': {'Reference': (241.3 + 15.24, 50.8 - 7.62), 'Value': (241.3 + 15.24, 50.8 + 7.62)},
+}
