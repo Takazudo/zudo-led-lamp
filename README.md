@@ -7,4 +7,6 @@ Docs: https://zudo-led-lamp.takazudomodular.com/
 ## Repo layout
 
 - `doc/` — zudo-doc documentation site (source of truth for specs, notes, and build logs)
-- Circuit design lives in the docs until the KiCAD phase.
+- `boards/board-p/` — KiCad project: USB-PD front end board
+- `boards/board-l/` — KiCad project: driver + control + LED array board
+- `symbols/`, `footprints/` — shared KiCad symbol/footprint/3D libraries for both boards (see `footprints/CLAUDE.md`)

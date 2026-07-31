@@ -6,8 +6,9 @@ This project uses [easyeda2kicad.py](https://github.com/uPesy/easyeda2kicad.py) 
 
 - **Footprints (master / source of truth)**: `footprints/kicad/*.kicad_mod`
 - **Footprints (KiCad library resolution path)**: `footprints/kicad/zudo-led-lamp.pretty/*.kicad_mod`
+- **3D models**: `footprints/kicad/zudo-led-lamp.3dshapes/*.{step,wrl}` — footprints reference the `.wrl` via `${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/`
 - **Symbols**: `symbols/zudo-led-lamp.kicad_sym` (single file containing all project symbols)
-- **Library registration**: project-local `sym-lib-table` / `fp-lib-table` at the repo root, library nickname `zudo-led-lamp`, paths via `${KIPRJMOD}`
+- **KiCad projects**: `boards/board-p/` and `boards/board-l/` — one project per board (they are separate PCBA orders). Each has its own `sym-lib-table` / `fp-lib-table` registering library nickname `zudo-led-lamp` via `${KIPRJMOD}/../../...` paths into the shared root `symbols/` and `footprints/` dirs. Both projects MUST sit at the same depth (`boards/<name>/`) or the relative library and 3D paths break.
 
 ## Dual-location sync rule
 
@@ -41,4 +42,4 @@ EasyEDA-derived footprints are already drawn in JLCPCB's pin-1 convention. When 
 
 ## Downloaded inventory (initial batch, all 32 BOM lines)
 
-All fitted + DNP + footprint-only parts from both boards were downloaded 2026-08-01, including J3's suggested pin header (C492404). 3D models were NOT downloaded (add `--3d` if wanted later).
+All fitted + DNP + footprint-only parts from both boards were downloaded 2026-08-01, including J3's suggested pin header (C492404). 3D models (`--3d`, both `.step` and `.wrl`) were downloaded for all parts; every footprint's model reference was verified to resolve.

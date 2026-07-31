@@ -24,7 +24,7 @@
 	(fp_line (start 2.10 1.30) (end -2.10 1.30) (layer F.CrtYd) (width 0.05))
 	(fp_poly (pts (xy -2.624988 1.439901) (xy -2.624988 0.962406) (xy -3.082188 0.962406) (xy -3.082188 1.439901) (xy -2.624988 1.439901)) (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS"))
 	(fp_poly (pts (xy -2.624988 -1.439901) (xy -2.624988 -0.962406) (xy -3.082188 -0.962406) (xy -3.082188 -1.439901) (xy -2.624988 -1.439901)) (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS"))
-	(model "/private/tmp/claude-501/-Users-takazudo-repos-circuits-zudo-led-lamp/3f4aa9dc-cba3-4c0e-964a-951636364319/scratchpad/e2k/zudo-led-lamp.3dshapes/SMA_L4.2-W2.6-LS5.3-RD.wrl"
+	(model "${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/SMA_L4.2-W2.6-LS5.3-RD.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 0))

@@ -33,7 +33,7 @@
 	(fp_line (start 1.45 -0.80) (end 1.45 0.80) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 1.45 0.80) (end -1.45 0.80) (layer F.CrtYd) (width 0.05))
 	(fp_poly (pts (xy -1.341476 0.299999) (xy -0.858520 0.299999) (xy -1.341476 0.299999)) (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS"))
-	(model "/private/tmp/claude-501/-Users-takazudo-repos-circuits-zudo-led-lamp/3f4aa9dc-cba3-4c0e-964a-951636364319/scratchpad/e2k/zudo-led-lamp.3dshapes/TSOT-26_L2.9-W1.6-P0.95-LS2.8-BL.wrl"
+	(model "${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/TSOT-26_L2.9-W1.6-P0.95-LS2.8-BL.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 0))

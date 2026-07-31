@@ -31,7 +31,7 @@
 	(fp_line (start -5.85 -6.17) (end 5.85 -6.17) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 5.85 -6.17) (end 5.85 5.83) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 5.85 5.83) (end -5.85 5.83) (layer F.CrtYd) (width 0.05))
-	(model "/private/tmp/claude-501/-Users-takazudo-repos-circuits-zudo-led-lamp/3f4aa9dc-cba3-4c0e-964a-951636364319/scratchpad/e2k/zudo-led-lamp.3dshapes/SW-TH_ALPS_EC11L1525G01.wrl"
+	(model "${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/SW-TH_ALPS_EC11L1525G01.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 0))

@@ -23,7 +23,7 @@
 	(fp_line (start -3.50 -3.30) (end 3.50 -3.30) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 3.50 -3.30) (end 3.50 3.30) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 3.50 3.30) (end -3.50 3.30) (layer F.CrtYd) (width 0.05))
-	(model "/private/tmp/claude-501/-Users-takazudo-repos-circuits-zudo-led-lamp/3f4aa9dc-cba3-4c0e-964a-951636364319/scratchpad/e2k/zudo-led-lamp.3dshapes/IND-SMD_L7.0-W6.6-H2.8_FXL0630.wrl"
+	(model "${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/IND-SMD_L7.0-W6.6-H2.8_FXL0630.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 0))
