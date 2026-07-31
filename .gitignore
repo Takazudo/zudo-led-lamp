@@ -1,2 +1,14 @@
 worktrees/
 .DS_Store
+
+# VSCode Local History
+.history/
+
+# KiCad transient files
+*.kicad_prl
+*-backups/
+fp-info-cache
+*.lck
+~*.lck
+#auto_saved_files#
+_autosave-*
