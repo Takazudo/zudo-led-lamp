@@ -2,9 +2,4078 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid 9effc783-a6e4-4d49-9770-34119e826894)
-	(paper "A4")
-	(lib_symbols)
+	(uuid "b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb")
+	(paper "A3")
+	(lib_symbols
+		(symbol "zudo-led-lamp:TYPE-C-31-M-17"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "USB"
+		      (id 0)
+		      (at 0 10.16 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "TYPE-C-31-M-17"
+		      (id 1)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:USB-C-SMD_10P-P1.00-L6.8-W8.9"
+		      (id 2)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Others_Korean-Hroparts-Elec-TYPE-C-31-M-17_C283540.html"
+		      (id 3)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "韩国韩荣"
+		      (id 4)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "TYPE-C-31-M-17"
+		      (id 5)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C283540"
+		      (id 6)
+		      (at 0 -25.40 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "USB Connectors"
+		      (id 8)
+		      (at 0 -27.94 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "TYPE-C-31-M-17_0_1"
+		      (rectangle
+		        (start -5.08 10.16)
+		        (end 5.08 -10.16)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (circle
+		        (center 3.81 8.89)
+		        (radius 0.38)
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at 7.62 5.08 180)
+		        (length 2.54)
+		        (name "B12" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 7.62 2.54 180)
+		        (length 2.54)
+		        (name "B9" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 7.62 -0.00 180)
+		        (length 2.54)
+		        (name "A5" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 7.62 -2.54 180)
+		        (length 2.54)
+		        (name "B5" (effects (font (size 1.27 1.27))))
+		        (number "4" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 7.62 -5.08 180)
+		        (length 2.54)
+		        (name "A9" (effects (font (size 1.27 1.27))))
+		        (number "5" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 7.62 -7.62 180)
+		        (length 2.54)
+		        (name "A12" (effects (font (size 1.27 1.27))))
+		        (number "6" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -7.62 5.08 0)
+		        (length 2.54)
+		        (name "0" (effects (font (size 1.27 1.27))))
+		        (number "0" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -7.62 2.54 0)
+		        (length 2.54)
+		        (name "0" (effects (font (size 1.27 1.27))))
+		        (number "0" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -7.62 -0.00 0)
+		        (length 2.54)
+		        (name "0" (effects (font (size 1.27 1.27))))
+		        (number "0" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -7.62 -2.54 0)
+		        (length 2.54)
+		        (name "0" (effects (font (size 1.27 1.27))))
+		        (number "0" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:STUSB4500QTR"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "U"
+		      (id 0)
+		      (at 0 22.86 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "STUSB4500QTR"
+		      (id 1)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:QFN-24_L4.0-W4.0-P0.50-BL-EP2.8"
+		      (id 2)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://www.lcsc.com/datasheet/C2678061.pdf"
+		      (id 3)
+		      (at 0 -25.40 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "ST(意法半导体)"
+		      (id 4)
+		      (at 0 -27.94 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "STUSB4500QTR"
+		      (id 5)
+		      (at 0 -30.48 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C2678061"
+		      (id 6)
+		      (at 0 -33.02 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Interface - Controllers"
+		      (id 8)
+		      (at 0 -35.56 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "STUSB4500QTR_0_1"
+		      (rectangle
+		        (start -17.78 15.24)
+		        (end 17.78 -17.78)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (circle
+		        (center -16.51 13.97)
+		        (radius 0.38)
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at -20.32 12.70 0)
+		        (length 2.54)
+		        (name "CC1DB" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 10.16 0)
+		        (length 2.54)
+		        (name "CC1" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 7.62 0)
+		        (length 2.54)
+		        (name "NC" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 5.08 0)
+		        (length 2.54)
+		        (name "CC2" (effects (font (size 1.27 1.27))))
+		        (number "4" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 2.54 0)
+		        (length 2.54)
+		        (name "CC2DB" (effects (font (size 1.27 1.27))))
+		        (number "5" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -0.00 0)
+		        (length 2.54)
+		        (name "RESET" (effects (font (size 1.27 1.27))))
+		        (number "6" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -2.54 0)
+		        (length 2.54)
+		        (name "SCL" (effects (font (size 1.27 1.27))))
+		        (number "7" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -5.08 0)
+		        (length 2.54)
+		        (name "SDA" (effects (font (size 1.27 1.27))))
+		        (number "8" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -7.62 0)
+		        (length 2.54)
+		        (name "DISCH" (effects (font (size 1.27 1.27))))
+		        (number "9" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -10.16 0)
+		        (length 2.54)
+		        (name "GND" (effects (font (size 1.27 1.27))))
+		        (number "10" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -12.70 0)
+		        (length 2.54)
+		        (name "ATTACH" (effects (font (size 1.27 1.27))))
+		        (number "11" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -20.32 -15.24 0)
+		        (length 2.54)
+		        (name "ADDR0" (effects (font (size 1.27 1.27))))
+		        (number "12" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -15.24 180)
+		        (length 2.54)
+		        (name "ADDR1" (effects (font (size 1.27 1.27))))
+		        (number "13" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -12.70 180)
+		        (length 2.54)
+		        (name "POWER_OK3" (effects (font (size 1.27 1.27))))
+		        (number "14" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -10.16 180)
+		        (length 2.54)
+		        (name "GPIO" (effects (font (size 1.27 1.27))))
+		        (number "15" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -7.62 180)
+		        (length 2.54)
+		        (name "VBUS_EN_SNK" (effects (font (size 1.27 1.27))))
+		        (number "16" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -5.08 180)
+		        (length 2.54)
+		        (name "A_B_SIDE" (effects (font (size 1.27 1.27))))
+		        (number "17" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -2.54 180)
+		        (length 2.54)
+		        (name "VBUS_VS_DISCH" (effects (font (size 1.27 1.27))))
+		        (number "18" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 -0.00 180)
+		        (length 2.54)
+		        (name "ALERT" (effects (font (size 1.27 1.27))))
+		        (number "19" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 2.54 180)
+		        (length 2.54)
+		        (name "POWER_OK2" (effects (font (size 1.27 1.27))))
+		        (number "20" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 5.08 180)
+		        (length 2.54)
+		        (name "VREG_1V2" (effects (font (size 1.27 1.27))))
+		        (number "21" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 7.62 180)
+		        (length 2.54)
+		        (name "VSYS" (effects (font (size 1.27 1.27))))
+		        (number "22" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 10.16 180)
+		        (length 2.54)
+		        (name "VREG_2V7" (effects (font (size 1.27 1.27))))
+		        (number "23" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 20.32 12.70 180)
+		        (length 2.54)
+		        (name "VDD" (effects (font (size 1.27 1.27))))
+		        (number "24" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 0.00 17.78 270)
+		        (length 2.54)
+		        (name "EP" (effects (font (size 1.27 1.27))))
+		        (number "25" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:AO3401A_C347476"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "Q"
+		      (id 0)
+		      (at 0 10.16 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "AO3401A_C347476"
+		      (id 1)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR"
+		      (id 2)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Others_Youtai-Semiconductor-Co-Ltd-AO3401A-4-1A_C347476.html"
+		      (id 3)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UMW(友台半导体)"
+		      (id 4)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "AO3401A"
+		      (id 5)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C347476"
+		      (id 6)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "MOSFETs"
+		      (id 8)
+		      (at 0 -25.40 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "AO3401A_C347476_0_1"
+		      (polyline
+		        (pts
+		          (xy 1.27 -2.54) (xy 3.81 -2.54) (xy 3.81 -0.51)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 1.27 1.78) (xy 1.27 2.54) (xy 3.81 2.54) (xy 3.81 0.76)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 1.27 1.78) (xy -1.27 1.78)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -0.00) (xy 1.27 -0.00) (xy 1.27 -2.54)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 1.27 -1.78) (xy -1.27 -1.78)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.78 2.29) (xy -1.78 -2.29)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 1.27) (xy -1.27 2.29)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -0.51) (xy -1.27 0.51)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -2.29) (xy -1.27 -1.27)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 4.57 -0.51) (xy 4.32 -0.51) (xy 3.30 -0.51) (xy 3.05 -0.51)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 1.27 -0.00) (xy -0.25 0.51) (xy -0.25 -0.51) (xy 1.27 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (polyline
+		        (pts
+		          (xy 3.81 -0.51) (xy 4.57 0.76) (xy 3.05 0.76) (xy 3.81 -0.51)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 1.27 5.08 270)
+		        (length 2.54)
+		        (name "D" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -3.81 -0.00 0)
+		        (length 2.54)
+		        (name "G" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 1.27 -5.08 90)
+		        (length 2.54)
+		        (name "S" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:SMAJ20A_C571370"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "D"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "SMAJ20A_C571370"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:SMA_L4.2-W2.6-LS5.3-RD"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/TVS_High-Diode-SMAJ20A_C571370.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "High Diode(海德)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "SMAJ20A"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C571370"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "TVS"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "SMAJ20A_C571370_0_1"
+		      (polyline
+		        (pts
+		          (xy 1.27 1.52) (xy -1.27 -0.00) (xy 1.27 -1.78) (xy 1.27 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 1.52) (xy -1.27 -1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 1.52) (xy -1.78 2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -1.52) (xy -0.76 -2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 3.81)
+		        (name "A" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 3.81)
+		        (name "C" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:PESD24VS1UB,115"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "D"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "PESD24VS1UB,115"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:SOD-523_L1.2-W0.8-LS1.6-RD"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Diodes-ESD_NXP_PESD24VS1UB_PESD24VS1UB_C85382.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "Nexperia(安世)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "PESD24VS1UB,115"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C85382"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "ESD Protection Devices"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "PESD24VS1UB,115_0_1"
+		      (polyline
+		        (pts
+		          (xy 1.27 1.52) (xy -1.27 -0.00) (xy 1.27 -1.78) (xy 1.27 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 1.78) (xy -0.76 2.29)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -1.78) (xy -1.78 -2.29)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -1.78) (xy -1.27 1.78)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 3.81)
+		        (name "A" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 3.81)
+		        (name "C" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:CL31A106KBHNNNE"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "C"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "CL31A106KBHNNNE"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:C1206"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL31A106KBHNNNE_10uF-106-10-50V_C13585.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "SAMSUNG(三星)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "CL31A106KBHNNNE"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C13585"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "10uF (106) ±10% 50V"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "CL31A106KBHNNNE_0_1"
+		      (polyline
+		        (pts
+		          (xy -0.51 2.03) (xy -0.51 -2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.51 2.03) (xy 0.51 -2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -1.27 -0.00) (xy -0.51 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.51 -0.00) (xy 1.27 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at -3.81 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 3.81 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:CC0603KRX7R9BB104"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "C"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "CC0603KRX7R9BB104"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:C0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_100nF-104-10-50V_C14663.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "YAGEO(国巨)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "CC0603KRX7R9BB104"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C14663"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "100nF (104) ±10% 50V"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "CC0603KRX7R9BB104_0_1"
+		      (polyline
+		        (pts
+		          (xy -0.51 -2.03) (xy -0.51 2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 2.54 -0.00) (xy 0.51 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.51 2.03) (xy 0.51 -2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -0.51 -0.00) (xy -2.54 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:CL10A105KB8NNNC"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "C"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "CL10A105KB8NNNC"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:C0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL10A105KB8NNNC_1uF-105-10-50V_C15849.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "SAMSUNG(三星)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "CL10A105KB8NNNC"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C15849"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "1uF (105) ±10% 50V"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "CL10A105KB8NNNC_0_1"
+		      (polyline
+		        (pts
+		          (xy -0.51 -0.00) (xy -2.54 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.51 2.03) (xy 0.51 -2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 2.54 -0.00) (xy 0.51 -0.00)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -0.51 -2.03) (xy -0.51 2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:0603WAF1003T5E"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "R"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "0603WAF1003T5E"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:R0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_100KR-1003-1_C25803.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UNI-ROYAL(厚声)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "0603WAF1003T5E"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C25803"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Resistors"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "100KΩ (1003) ±1%"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "0603WAF1003T5E_0_1"
+		      (rectangle
+		        (start -2.54 1.02)
+		        (end 2.54 -1.02)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:0603WAF5602T5E"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "R"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "0603WAF5602T5E"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:R0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_56KR-5602-1_C23206.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UNI-ROYAL(厚声)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "0603WAF5602T5E"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C23206"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Resistors"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "56KΩ (5602) ±1%"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "0603WAF5602T5E_0_1"
+		      (rectangle
+		        (start -2.54 1.02)
+		        (end 2.54 -1.02)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:0603WAF4700T5E"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "R"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "0603WAF4700T5E"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:R0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_470R-4700-1_C23179.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UNI-ROYAL(厚声)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "0603WAF4700T5E"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C23179"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Resistors"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "470Ω (4700) ±1%"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "0603WAF4700T5E_0_1"
+		      (rectangle
+		        (start -2.54 1.02)
+		        (end 2.54 -1.02)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:0603WAF4701T5E"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "R"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "0603WAF4701T5E"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:R0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_4-7KR-4701-1_C23162.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UNI-ROYAL(厚声)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "0603WAF4701T5E"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C23162"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Resistors"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "4.7KΩ (4701) ±1%"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "0603WAF4701T5E_0_1"
+		      (rectangle
+		        (start -2.54 1.02)
+		        (end 2.54 -1.02)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:0603WAF5101T5E"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "R"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "0603WAF5101T5E"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:R0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_5-1KR-5101-1_C23186.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UNI-ROYAL(厚声)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "0603WAF5101T5E"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C23186"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Resistors"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "0603WAF5101T5E_0_1"
+		      (rectangle
+		        (start -2.54 1.02)
+		        (end 2.54 -1.02)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:0603WAF0000T5E"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "R"
+		      (id 0)
+		      (at 0 5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "0603WAF0000T5E"
+		      (id 1)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:R0603"
+		      (id 2)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_0R-0R0-1_C21189.html"
+		      (id 3)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "UNI-ROYAL(厚声)"
+		      (id 4)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "0603WAF0000T5E"
+		      (id 5)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C21189"
+		      (id 6)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Resistors"
+		      (id 8)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_description"
+		      "0Ω (0R0) ±1%"
+		      (id 9)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "0603WAF0000T5E_0_1"
+		      (rectangle
+		        (start -2.54 1.02)
+		        (end 2.54 -1.02)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at 5.08 -0.00 180)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -5.08 -0.00 0)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:B6B-XH-A"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "U"
+		      (id 0)
+		      (at 0 10.16 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "B6B-XH-A"
+		      (id 1)
+		      (at 0 0.00 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN"
+		      (id 2)
+		      (at 0 -2.54 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://lcsc.com/product-detail/XH-Connectors_JST-Sales-America_B6B-XH-A-LF-SN_JST-Sales-America-B6B-XH-A-LF-SN_C144397.html"
+		      (id 3)
+		      (at 0 -5.08 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "JST"
+		      (id 4)
+		      (at 0 -7.62 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "B6B-XH-A(LF)(SN)"
+		      (id 5)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C144397"
+		      (id 6)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Wire To Board / Wire To Wire Connector"
+		      (id 8)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "B6B-XH-A_0_1"
+		      (rectangle
+		        (start -8.89 -0.00)
+		        (end 8.89 -5.08)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (pin passive line
+		        (at -6.35 5.08 270)
+		        (length 5.08)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -3.81 5.08 270)
+		        (length 5.08)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at -1.27 5.08 270)
+		        (length 5.08)
+		        (name "3" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 1.27 5.08 270)
+		        (length 5.08)
+		        (name "4" (effects (font (size 1.27 1.27))))
+		        (number "4" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 3.81 5.08 270)
+		        (length 5.08)
+		        (name "5" (effects (font (size 1.27 1.27))))
+		        (number "5" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 6.35 5.08 270)
+		        (length 5.08)
+		        (name "6" (effects (font (size 1.27 1.27))))
+		        (number "6" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:Conn_1x04"
+		    (pin_names (offset 1.016))
+		    (exclude_from_sim no)
+		    (in_bom yes)
+		    (on_board yes)
+		    (property "Reference" "J" (at 0 11.43 0) (effects (font (size 1.27 1.27))))
+		    (property "Value" "Conn_1x04" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
+		    (property "Footprint" "zudo-led-lamp:PogoPad_1x04_P2.54mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		    (symbol "Conn_1x04_0_1"
+		      (rectangle (start -2.54 10.16) (end 2.54 -2.54)
+		        (stroke (width 0.254) (type default))
+		        (fill (type background))
+		      )
+		    )
+		    (symbol "Conn_1x04_1_1"
+		      (pin passive line (at -7.62 7.62 0) (length 5.08)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 5.08 0) (length 5.08)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 2.54 0) (length 5.08)
+		        (name "3" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 0 0) (length 5.08)
+		        (name "4" (effects (font (size 1.27 1.27))))
+		        (number "4" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+		(symbol "zudo-led-lamp:Conn_1x08"
+		    (pin_names (offset 1.016))
+		    (exclude_from_sim no)
+		    (in_bom yes)
+		    (on_board yes)
+		    (property "Reference" "J" (at 0 21.59 0) (effects (font (size 1.27 1.27))))
+		    (property "Value" "Conn_1x08" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
+		    (property "Footprint" "zudo-led-lamp:PogoPad_1x08_P2.54mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		    (symbol "Conn_1x08_0_1"
+		      (rectangle (start -2.54 20.32) (end 2.54 -2.54)
+		        (stroke (width 0.254) (type default))
+		        (fill (type background))
+		      )
+		    )
+		    (symbol "Conn_1x08_1_1"
+		      (pin passive line (at -7.62 17.78 0) (length 5.08)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 15.24 0) (length 5.08)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 12.7 0) (length 5.08)
+		        (name "3" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 10.16 0) (length 5.08)
+		        (name "4" (effects (font (size 1.27 1.27))))
+		        (number "4" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 7.62 0) (length 5.08)
+		        (name "5" (effects (font (size 1.27 1.27))))
+		        (number "5" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 5.08 0) (length 5.08)
+		        (name "6" (effects (font (size 1.27 1.27))))
+		        (number "6" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 2.54 0) (length 5.08)
+		        (name "7" (effects (font (size 1.27 1.27))))
+		        (number "7" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line (at -7.62 0 0) (length 5.08)
+		        (name "8" (effects (font (size 1.27 1.27))))
+		        (number "8" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:TYPE-C-31-M-17")
+		(at 63.5 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "31877051-9228-4cd4-8ecf-b96a46ff7745")
+		(property "Reference" "J1"
+			(at 66.04 83.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "TYPE-C-31-M-17"
+			(at 66.04 93.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:USB-C-SMD_10P-P1.00-L6.8-W8.9"
+			(at 63.5 88.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 88.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C283540"
+			(at 63.5 96.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5f339146-548c-4c10-9166-505c1bcd561f")
+		)
+		(pin "2"
+			(uuid "bf3d7b56-6d7a-49ab-9dcb-4400f664c99c")
+		)
+		(pin "3"
+			(uuid "d5711909-120a-4855-a3cc-845124249ba1")
+		)
+		(pin "4"
+			(uuid "a7bee1ff-2bff-44b7-b6cf-74fa7822ad84")
+		)
+		(pin "5"
+			(uuid "04936cd0-9e8f-4d9f-8708-7ebc4ddd0043")
+		)
+		(pin "6"
+			(uuid "793f71bb-e450-42cc-87ec-d08f08a54fc8")
+		)
+		(pin "0"
+			(uuid "50e2ef79-76d7-4ffa-8442-3af30a9410d0")
+		)
+		(pin "0"
+			(uuid "f7cb3607-4897-46ca-a0dc-38c8d0a3e60c")
+		)
+		(pin "0"
+			(uuid "7e78a09f-926d-43eb-a51e-5363eff7c5c9")
+		)
+		(pin "0"
+			(uuid "b8c3212a-ead1-4b45-831a-fec31d087dae")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:STUSB4500QTR")
+		(at 152.4 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cd90ad06-eb78-4415-aa33-4952abf8987b")
+		(property "Reference" "U1"
+			(at 154.94 83.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "STUSB4500QTR"
+			(at 154.94 93.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:QFN-24_L4.0-W4.0-P0.50-BL-EP2.8"
+			(at 152.4 88.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 88.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2678061"
+			(at 152.4 96.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "89e1e30d-d924-4910-a911-e1fdcb3874c6")
+		)
+		(pin "2"
+			(uuid "6ea0a95f-22d7-49c0-98d6-085920b87fa7")
+		)
+		(pin "3"
+			(uuid "ce573036-3874-4c2f-a73b-fe28abe5716a")
+		)
+		(pin "4"
+			(uuid "275e6b5b-891f-4046-9ad2-dbd72402ebe3")
+		)
+		(pin "5"
+			(uuid "13ac9b61-a2c4-4e5a-b7e6-76ca2ef892cb")
+		)
+		(pin "6"
+			(uuid "82661acb-3b40-49fb-b9f3-ab7cf9ef9d58")
+		)
+		(pin "7"
+			(uuid "b1f9a996-dab2-4b74-bcbf-6066ff8aa51c")
+		)
+		(pin "8"
+			(uuid "c078fd65-cc38-4b1d-83dd-3dc2c6761293")
+		)
+		(pin "9"
+			(uuid "304bef8e-8ce6-4c97-ac0b-781db4418f13")
+		)
+		(pin "10"
+			(uuid "2c012617-9829-434b-aaae-155e6b3f7765")
+		)
+		(pin "11"
+			(uuid "0720afe0-b9be-44ec-b93f-97910207950d")
+		)
+		(pin "12"
+			(uuid "b263056a-4241-4cec-8cfc-39f8f5d9ea6d")
+		)
+		(pin "13"
+			(uuid "89e217a4-d5e4-4163-a1d0-f56d7ae8f074")
+		)
+		(pin "14"
+			(uuid "3b79bb91-fe9e-4e09-ae37-39e0965339b4")
+		)
+		(pin "15"
+			(uuid "7c8f4280-9996-4259-a5d2-e8b34e8a4966")
+		)
+		(pin "16"
+			(uuid "27e7cbd0-468b-403f-aa62-afbda2c10d19")
+		)
+		(pin "17"
+			(uuid "ee878c92-e19a-4a7e-af2b-12ad4bdac77e")
+		)
+		(pin "18"
+			(uuid "3ce191f5-e949-4313-9e63-e1c5e5949aee")
+		)
+		(pin "19"
+			(uuid "3d1a37f1-4878-42f2-b795-0bdbfdf3adc7")
+		)
+		(pin "20"
+			(uuid "0a14b232-f012-4be0-878c-5067ff2ab27d")
+		)
+		(pin "21"
+			(uuid "9acb5d5a-f99c-4a81-90dc-74f8235bbb7b")
+		)
+		(pin "22"
+			(uuid "5ba4f980-ee18-4b7a-8a51-27483b9d2129")
+		)
+		(pin "23"
+			(uuid "e6585b65-e3f2-4f9a-b76d-67fb5e8ce724")
+		)
+		(pin "24"
+			(uuid "80ef3a50-bf99-4b06-bf63-f83ee97c6162")
+		)
+		(pin "25"
+			(uuid "516756c9-05c9-4b76-a3eb-bf34011a074c")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:AO3401A_C347476")
+		(at 241.3 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "aba40496-e38d-44fd-9144-8815ac27ec89")
+		(property "Reference" "Q1"
+			(at 243.84 45.72 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "AO3401A"
+			(at 243.84 55.88 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR"
+			(at 241.3 50.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 241.3 50.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C347476"
+			(at 241.3 58.42 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "62a3d120-4ab2-41a2-a9bd-00594278d962")
+		)
+		(pin "1"
+			(uuid "b8c221e4-371a-402b-89a2-3986dbc69ecb")
+		)
+		(pin "2"
+			(uuid "d5c0893a-9677-472b-829d-1cc1ba8f25a0")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:SMAJ20A_C571370")
+		(at 203.2 38.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5c126a24-0c13-481b-8f42-ce6323713357")
+		(property "Reference" "D5"
+			(at 205.74 33.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "SMAJ20A"
+			(at 205.74 43.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:SMA_L4.2-W2.6-LS5.3-RD"
+			(at 203.2 38.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 203.2 38.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C571370"
+			(at 203.2 45.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "373bf5fa-3e83-49a0-b4b6-5188f29930e4")
+		)
+		(pin "1"
+			(uuid "56866388-24ec-4953-88c4-1a75c750f01e")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "D5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:PESD24VS1UB,115")
+		(at 228.6 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "4172ec51-45a3-4cf1-9c4a-632c33a8dc46")
+		(property "Reference" "D6"
+			(at 231.14 160.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "PESD24VS1UB"
+			(at 231.14 170.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:SOD-523_L1.2-W0.8-LS1.6-RD"
+			(at 228.6 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 228.6 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C85382"
+			(at 228.6 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "DNP" "DNP"
+			(at 228.6 175.26 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fe2d674c-1c51-4502-ac41-8e8d169db00a")
+		)
+		(pin "1"
+			(uuid "ce5dc88a-3a61-4b84-9909-bc98806806e9")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "D6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:PESD24VS1UB,115")
+		(at 190.5 215.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "b56332c2-4bc6-4135-9189-5b50338b27d7")
+		(property "Reference" "D7"
+			(at 193.04 210.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "PESD24VS1UB"
+			(at 193.04 220.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:SOD-523_L1.2-W0.8-LS1.6-RD"
+			(at 190.5 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 190.5 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C85382"
+			(at 190.5 223.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "DNP" "DNP"
+			(at 190.5 226.06 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b34fcaac-af68-46a9-bdee-bb5f6a2cbaf7")
+		)
+		(pin "1"
+			(uuid "f33dd291-8641-4668-9ccf-7fb86aa27c87")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "D7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:CL31A106KBHNNNE")
+		(at 38.1 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1b462120-9c40-46f9-9847-b6ada044d47f")
+		(property "Reference" "C1"
+			(at 40.64 160.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "10uF/50V"
+			(at 40.64 170.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:C1206"
+			(at 38.1 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C13585"
+			(at 38.1 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bb380dcc-6b76-48ee-9a82-088f60903f90")
+		)
+		(pin "2"
+			(uuid "f9e6687b-9568-4dc3-9ec2-7ea283ecd16c")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:CC0603KRX7R9BB104")
+		(at 76.2 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ad980f48-55cd-4264-957c-349d3ff4b9db")
+		(property "Reference" "C2"
+			(at 78.74 160.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "100nF/50V"
+			(at 78.74 170.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:C0603"
+			(at 76.2 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 76.2 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "655e7997-a6b2-406c-ac88-10e07dffb235")
+		)
+		(pin "2"
+			(uuid "25a997f8-5301-497d-a328-a0139bc4eead")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:CL10A105KB8NNNC")
+		(at 114.3 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3c19b8c4-78ad-40b7-a07a-8d439165e47e")
+		(property "Reference" "C30"
+			(at 116.84 160.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "1uF/50V"
+			(at 116.84 170.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:C0603"
+			(at 114.3 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.3 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 114.3 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "17abdfbb-fc45-4140-ab46-4980b6efa874")
+		)
+		(pin "1"
+			(uuid "a2c7d969-1310-4cc1-8ca4-5c56fcb357c2")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "C30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:CL10A105KB8NNNC")
+		(at 152.4 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5d39839c-1ca9-4e81-bb27-805548c9ed47")
+		(property "Reference" "C34"
+			(at 154.94 160.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "1uF/50V"
+			(at 154.94 170.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:C0603"
+			(at 152.4 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 152.4 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e0e2240f-5b79-4818-90f3-99ce32f277ae")
+		)
+		(pin "1"
+			(uuid "d3757657-db3e-4db9-a202-7475ef4e75a2")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "C34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:CC0603KRX7R9BB104")
+		(at 190.5 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "628e36c7-35fe-4ff6-9041-af686b812823")
+		(property "Reference" "C35"
+			(at 193.04 160.02 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "100nF/50V"
+			(at 193.04 170.18 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:C0603"
+			(at 190.5 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 190.5 165.1 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 190.5 172.72 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "eae99aa0-9749-4185-9e33-4bd7a5ce3bea")
+		)
+		(pin "2"
+			(uuid "f06aa6cb-9552-4399-8265-bfd4cf43b376")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "C35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF1003T5E")
+		(at 38.1 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3b0bb676-d293-4c9e-9c3e-f4718bf86558")
+		(property "Reference" "R11"
+			(at 40.64 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "100k"
+			(at 40.64 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 38.1 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C25803"
+			(at 38.1 198.12 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f0ab4564-71d3-46a3-9e04-e70e69609f71")
+		)
+		(pin "1"
+			(uuid "da3e4b16-d176-4b5a-a056-5677732a0926")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF5602T5E")
+		(at 76.2 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ee724de0-0272-4487-ba92-a1c65bdf5b74")
+		(property "Reference" "R12"
+			(at 78.74 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "56k"
+			(at 78.74 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 76.2 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23206"
+			(at 76.2 198.12 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "a3a1da40-58cc-471f-bcc1-bb23a8a41900")
+		)
+		(pin "1"
+			(uuid "36a5cd83-a6d3-4e15-be4b-77aee31c2669")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF4700T5E")
+		(at 114.3 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "45efac91-e91b-4278-869f-c849f1ecc75c")
+		(property "Reference" "R13"
+			(at 116.84 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "470R"
+			(at 116.84 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 114.3 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.3 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 114.3 198.12 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b607b41d-9d98-4e8b-9a6b-4a06ab7ec599")
+		)
+		(pin "1"
+			(uuid "b4c87cea-d92f-4ce0-a068-9fb216c69e06")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF4700T5E")
+		(at 152.4 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e3fc3210-7330-4057-9a0a-2016e27961a3")
+		(property "Reference" "R14"
+			(at 154.94 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "470R"
+			(at 154.94 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 152.4 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 152.4 198.12 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0dbaf028-7475-4f31-b45f-e9d2e64b6b2c")
+		)
+		(pin "1"
+			(uuid "aeef5f7f-7dbc-4fd1-82e7-2a585bbf415e")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF4701T5E")
+		(at 190.5 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1e9c117b-278d-478b-b25c-94d66b4a7127")
+		(property "Reference" "R15"
+			(at 193.04 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "4.7k"
+			(at 193.04 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 190.5 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 190.5 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23162"
+			(at 190.5 198.12 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "35d0b16f-6203-49de-b5ad-9ccc11524f2e")
+		)
+		(pin "1"
+			(uuid "929dc3ef-e173-49d5-b56a-fb0d6ffa7c4b")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF4701T5E")
+		(at 228.6 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a5d2f95e-96e5-4422-9934-d3ed1bb9c88e")
+		(property "Reference" "R16"
+			(at 231.14 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "4.7k"
+			(at 231.14 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 228.6 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 228.6 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23162"
+			(at 228.6 198.12 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2d795e30-c40b-4453-a9ce-a9c757e3b325")
+		)
+		(pin "1"
+			(uuid "a479cbb0-c2a5-4d58-aeac-9a1e99074e9c")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF5101T5E")
+		(at 38.1 215.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "253cd08f-592a-49f5-9350-998344b0fae3")
+		(property "Reference" "R17"
+			(at 40.64 210.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "5.1k"
+			(at 40.64 220.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 38.1 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23186"
+			(at 38.1 223.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "DNP" "DNP"
+			(at 38.1 226.06 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "82edb60b-1a28-4839-ab9e-745e4a853064")
+		)
+		(pin "1"
+			(uuid "ea9ef69f-fa31-49e7-9f0c-4beccf173fe5")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF5101T5E")
+		(at 76.2 215.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "8a1d1d58-7c58-4ccf-8cb5-532e4bee7528")
+		(property "Reference" "R18"
+			(at 78.74 210.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "5.1k"
+			(at 78.74 220.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 76.2 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23186"
+			(at 76.2 223.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "DNP" "DNP"
+			(at 76.2 226.06 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c05e94c1-a495-468d-b66f-23f044706bd3")
+		)
+		(pin "1"
+			(uuid "c9e0683b-8053-47c4-b941-bb3e38ca5195")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF0000T5E")
+		(at 114.3 215.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1fe16982-001a-4b98-a22f-1d164bb67c58")
+		(property "Reference" "R19"
+			(at 116.84 210.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "0R"
+			(at 116.84 220.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 114.3 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.3 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C21189"
+			(at 114.3 223.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "141caaa3-ee2a-4261-9c80-5608d7dcca94")
+		)
+		(pin "1"
+			(uuid "59a3180d-e48f-40b4-b4c4-dea29ba5c2bb")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:0603WAF0000T5E")
+		(at 152.4 215.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8b5e76c5-de19-48a3-9ee5-f0243e512616")
+		(property "Reference" "R20"
+			(at 154.94 210.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "0R"
+			(at 154.94 220.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:R0603"
+			(at 152.4 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 215.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C21189"
+			(at 152.4 223.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d9c955aa-85b8-46e3-ad16-d68d6797851b")
+		)
+		(pin "1"
+			(uuid "ac4da13a-9ee6-4b27-92b3-0cb17164480f")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "R20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:B6B-XH-A")
+		(at 317.5 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ebaee6d8-902c-4595-869a-0e1c6e231174")
+		(property "Reference" "JOUT1"
+			(at 320.04 83.82 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "B6B-XH-A(LF)(SN)"
+			(at 320.04 93.98 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN"
+			(at 317.5 88.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 317.5 88.9 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C144397"
+			(at 317.5 96.52 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a9041fe3-0dc7-4b61-8ee2-065e8383d822")
+		)
+		(pin "2"
+			(uuid "0acdc8b5-3cf5-417c-ba30-e621f31041f2")
+		)
+		(pin "3"
+			(uuid "f80f99f1-12f3-4fc9-98f8-968b9cfb3bfa")
+		)
+		(pin "4"
+			(uuid "ae4d3a23-ed98-44b2-b31f-cac1d9ae271d")
+		)
+		(pin "5"
+			(uuid "14ec903d-bbb4-4487-9e26-d9fb9e60b320")
+		)
+		(pin "6"
+			(uuid "bc20983d-d5ef-40d1-b4cb-9c3ee2d9074a")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "JOUT1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:Conn_1x04")
+		(at 317.5 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7eb09154-b18b-4f0b-a4f7-dac08275a0f8")
+		(property "Reference" "J2"
+			(at 320.04 134.62 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "PogoPad_1x4_NVM_I2C"
+			(at 320.04 144.78 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:PogoPad_1x04_P2.54mm"
+			(at 317.5 139.7 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 317.5 139.7 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "15e8d2a0-a328-40f1-8dbd-7b49bea24b27")
+		)
+		(pin "2"
+			(uuid "d632dca1-6fd2-4b7b-a240-5da70f0d6dbb")
+		)
+		(pin "3"
+			(uuid "3d6474cd-ee2e-4d85-b849-65e8fcf30f55")
+		)
+		(pin "4"
+			(uuid "0ed9bb78-fafa-4a6a-b5f1-9db1a4777b30")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zudo-led-lamp:Conn_1x08")
+		(at 317.5 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ea469171-ae46-4880-8465-7432a893bd40")
+		(property "Reference" "J3"
+			(at 320.04 185.42 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" "PogoPad_1x8_Debug"
+			(at 320.04 195.58 0)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" "zudo-led-lamp:PogoPad_1x08_P2.54mm"
+			(at 317.5 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 317.5 190.5 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7e00ccf9-167a-4cc5-838a-59be6d1af896")
+		)
+		(pin "2"
+			(uuid "63ca2470-e98e-45ce-9a49-fd1a13e6ca3b")
+		)
+		(pin "3"
+			(uuid "8078404f-967c-4cc1-ad4b-b58ddae8dd97")
+		)
+		(pin "4"
+			(uuid "58e00242-b840-4d20-b54a-e1769bf33fe7")
+		)
+		(pin "5"
+			(uuid "2eed2a23-56b9-4b26-a6b8-c92dcf7c14ec")
+		)
+		(pin "6"
+			(uuid "782b49af-896b-474e-92fc-4c213af8294d")
+		)
+		(pin "7"
+			(uuid "1d35d373-418b-407d-9e8a-7932fe10b04b")
+		)
+		(pin "8"
+			(uuid "9e466a4f-2fcc-4227-973b-1ea2f18740d0")
+		)
+		(instances
+			(project "board-p"
+				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 71.12 86.36 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "f537ccea-d21e-44d2-b1c5-d40052deb80d")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 71.12 93.98 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "d094d585-f6de-4264-9888-69a4ad328d33")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 172.72 76.2 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "cb2e4bb6-d501-4ebf-a508-8519acd7e03f")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 41.91 165.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "ea92bd40-a6d5-4775-a67a-7f2ea841c5e7")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 81.28 165.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "2b7505a1-0985-48b3-8227-ecd71a4be930")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 147.32 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "3c4bd4be-990f-4e38-bd17-8a3e8d6bda3f")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 43.18 190.5 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "ab0cb510-47e8-4451-87c0-cd8ca84027a8")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 242.57 55.88 270)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "b0df53c8-dc99-41b3-981d-5cdacf761fe1")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 309.88 180.34 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "a8a43579-3e77-4f8c-b0b5-517ec09cd93f")
+	)
+	(global_label "VBUS_IN"
+		(shape passive)
+		(at 198.12 38.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "fac6daad-f1d6-4977-b237-4e5e948c3541")
+	)
+	(global_label "CC1"
+		(shape passive)
+		(at 71.12 88.9 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "99ca1da0-c3a6-4254-bd11-06ca701600fe")
+	)
+	(global_label "CC1"
+		(shape passive)
+		(at 132.08 78.74 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "be3283a4-288c-4768-a523-341a20180ea9")
+	)
+	(global_label "CC1"
+		(shape passive)
+		(at 33.02 215.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "23987f6d-0d06-4a3b-91f0-024e3ad1b2b1")
+	)
+	(global_label "CC1"
+		(shape passive)
+		(at 119.38 215.9 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "d0397984-b535-470e-9b11-b56d2e625224")
+	)
+	(global_label "CC1"
+		(shape passive)
+		(at 223.52 165.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "ea5acc7b-ce5a-49f9-9179-085bc02bebcc")
+	)
+	(global_label "CC2"
+		(shape passive)
+		(at 71.12 91.44 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "5d78a646-6058-4e19-b0a4-02d4f2694076")
+	)
+	(global_label "CC2"
+		(shape passive)
+		(at 132.08 83.82 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "be497018-b278-46ae-9b89-737b5e2c17e3")
+	)
+	(global_label "CC2"
+		(shape passive)
+		(at 71.12 215.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "b19953fd-fcf8-4520-b93a-7a480af95fac")
+	)
+	(global_label "CC2"
+		(shape passive)
+		(at 157.48 215.9 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "52123bb4-3902-4287-ad82-0d7a7ecd72ee")
+	)
+	(global_label "CC2"
+		(shape passive)
+		(at 185.42 215.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "89368153-17af-46ea-b865-0795feeca57e")
+	)
+	(global_label "CC1DB"
+		(shape passive)
+		(at 132.08 76.2 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "0b6361c5-df51-4ee5-b182-d349eceb5ffc")
+	)
+	(global_label "CC1DB"
+		(shape passive)
+		(at 109.22 215.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "a2765004-9d0b-48d3-995e-901e0d89e7dd")
+	)
+	(global_label "CC1DB"
+		(shape passive)
+		(at 309.88 172.72 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "174cbf43-d14e-4d1c-944f-536cb71d1e63")
+	)
+	(global_label "CC2DB"
+		(shape passive)
+		(at 132.08 86.36 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "ef7553f2-f288-4058-8ecb-704ed00fd577")
+	)
+	(global_label "CC2DB"
+		(shape passive)
+		(at 147.32 215.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "0d68ba53-516a-448b-b5b4-406c8597b757")
+	)
+	(global_label "CC2DB"
+		(shape passive)
+		(at 309.88 175.26 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "35eec4f7-da5d-49aa-9a34-7f3ffda44668")
+	)
+	(global_label "VBUS_VS_DISCH"
+		(shape passive)
+		(at 172.72 91.44 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "b77242ba-1525-4d71-a039-6bed101c001c")
+	)
+	(global_label "VBUS_VS_DISCH"
+		(shape passive)
+		(at 157.48 190.5 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "624cc25a-a6a6-4b84-85d0-5752e67af399")
+	)
+	(global_label "VBEN"
+		(shape passive)
+		(at 172.72 96.52 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "9b6f0c8c-59da-4a4e-bded-59e7f8cd826d")
+	)
+	(global_label "VBEN"
+		(shape passive)
+		(at 71.12 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "731fc9f5-38f3-4b02-beef-89b6de6f9029")
+	)
+	(global_label "VBEN"
+		(shape passive)
+		(at 309.88 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "de2f5f1a-32fa-49d2-8ba5-e6a741084609")
+	)
+	(global_label "Q1_G"
+		(shape passive)
+		(at 237.49 50.8 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "55e70e1f-1e19-40af-8d0b-405c6d774e30")
+	)
+	(global_label "Q1_G"
+		(shape passive)
+		(at 33.02 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "4bc53bbf-4fca-4e4e-bde0-95a06200ea98")
+	)
+	(global_label "Q1_G"
+		(shape passive)
+		(at 81.28 190.5 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "3bfce111-61f1-46a6-a4aa-4c288a87db70")
+	)
+	(global_label "Q1_G"
+		(shape passive)
+		(at 185.42 165.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "f60e5ab4-d5a3-47f1-b943-b636972b4e1b")
+	)
+	(global_label "VBUS_OUT"
+		(shape passive)
+		(at 242.57 45.72 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "c06e436b-6622-4450-a0be-ec6023405b04")
+	)
+	(global_label "VBUS_OUT"
+		(shape passive)
+		(at 109.22 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "7dca1164-52cc-4dd9-bbe2-335582599dc3")
+	)
+	(global_label "VBUS_OUT"
+		(shape passive)
+		(at 311.15 83.82 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "fc720d1c-ece5-45e7-8a5a-9baa7810575d")
+	)
+	(global_label "VBUS_OUT"
+		(shape passive)
+		(at 313.69 83.82 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "802a3ef0-3493-49b6-9df4-d20c3f9e2da3")
+	)
+	(global_label "DISCH"
+		(shape passive)
+		(at 132.08 96.52 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "ce297125-2cd7-4cad-80fc-c39874cd041b")
+	)
+	(global_label "DISCH"
+		(shape passive)
+		(at 119.38 190.5 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "685c2c19-f11c-4fbd-8860-f78dc0bed327")
+	)
+	(global_label "VREG_2V7"
+		(shape passive)
+		(at 172.72 78.74 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "99fc52b5-e354-45f4-bc2b-dcdeabad53d9")
+	)
+	(global_label "VREG_2V7"
+		(shape passive)
+		(at 119.38 165.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "10676577-50b8-409f-a5ba-199c53312ee9")
+	)
+	(global_label "VREG_2V7"
+		(shape passive)
+		(at 195.58 190.5 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "51008436-e1e0-4783-bcb4-2a0b7420c8e7")
+	)
+	(global_label "VREG_2V7"
+		(shape passive)
+		(at 233.68 190.5 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "bd6152f7-2783-43d1-8bc4-0c214100ff00")
+	)
+	(global_label "VREG_2V7"
+		(shape passive)
+		(at 309.88 177.8 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "4b4b139c-a56e-45c1-b976-94f0529defbd")
+	)
+	(global_label "VREG_1V2"
+		(shape passive)
+		(at 172.72 83.82 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "53df3c10-c2fd-44ce-9b36-7350d95f5b9f")
+	)
+	(global_label "VREG_1V2"
+		(shape passive)
+		(at 147.32 165.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "336ef353-188b-4427-ba6c-075b34aa4cea")
+	)
+	(global_label "SCL"
+		(shape passive)
+		(at 132.08 91.44 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "b4bbe67d-a0bd-406b-82e9-c787453e1688")
+	)
+	(global_label "SCL"
+		(shape passive)
+		(at 185.42 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "33a9281e-1f08-4cd7-a88e-7f2fc15dd203")
+	)
+	(global_label "SCL"
+		(shape passive)
+		(at 309.88 132.08 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "11df6833-b1fa-493a-81d7-3c0023075779")
+	)
+	(global_label "SDA"
+		(shape passive)
+		(at 132.08 93.98 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "7c1756be-c06c-46b2-90d3-619b104f3bc3")
+	)
+	(global_label "SDA"
+		(shape passive)
+		(at 223.52 190.5 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "4b5c5d29-8b8a-43d5-9b9a-0efc57a5d342")
+	)
+	(global_label "SDA"
+		(shape passive)
+		(at 309.88 134.62 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "ad688719-0efe-463b-a8ff-1f4d20515413")
+	)
+	(global_label "ATT"
+		(shape passive)
+		(at 132.08 101.6 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "f48c58e4-cf43-4792-ad5e-865e42f5b180")
+	)
+	(global_label "ATT"
+		(shape passive)
+		(at 309.88 185.42 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "bad9ce7c-7441-4025-b54d-1afb6bc99979")
+	)
+	(global_label "ATT"
+		(shape passive)
+		(at 316.23 83.82 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "2ff81b43-7010-4a62-98be-2790aefbb935")
+	)
+	(global_label "PDOK"
+		(shape passive)
+		(at 172.72 86.36 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "fad89cfe-b0f1-495a-8e9f-b31c5d8c18eb")
+	)
+	(global_label "PDOK"
+		(shape passive)
+		(at 309.88 187.96 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "3e1b691c-a849-473d-8ea6-f2381f14682b")
+	)
+	(global_label "PDOK"
+		(shape passive)
+		(at 318.77 83.82 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "3be3dd35-abbd-475c-addb-8189e830c19b")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 132.08 99.06 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "0830f877-4ba5-45f4-bb4d-41d39677ab79")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 132.08 88.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "0220f15d-5c55-4854-b3f6-711eeae137a2")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 132.08 104.14 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "7cb4fadd-5101-462a-b434-f9cf72303837")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 172.72 104.14 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "ea874e8b-6dba-48f1-9465-5b98a1222890")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 172.72 81.28 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "9625f37b-b163-492b-b7b9-dfdbba7cc145")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 152.4 71.12 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "ed5f4ec7-bf62-491a-821f-f52eb389d7ea")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 71.12 83.82 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "55e9f93d-ca4a-4040-a890-d43084c626d4")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 71.12 96.52 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "ed27bfd3-c92f-40f5-a714-68c8216e2484")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 55.88 83.82 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "df44d952-e2d4-4f25-a49a-7a576f637973")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 55.88 86.36 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "c0df737c-556e-46ee-a5ae-0a390049babf")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 55.88 88.9 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "36123e2d-5e59-4f32-b7cf-3b6445cee222")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 55.88 91.44 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "a323417d-4915-415b-9ec9-51a3ec5a4fdf")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 34.29 165.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "d4c669dd-a688-45da-bcbc-de5c6ce7c9b2")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 71.12 165.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "8289fc32-a701-4b0c-aeb7-2901272d22b5")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 109.22 165.1 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "cad7310c-ccf3-43e3-a98a-f880aac1c5f8")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 157.48 165.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "bff23736-fa05-439a-89df-9f342e65f121")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 195.58 165.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "ee2c9c91-6ba4-4746-ab64-1b48a00fc044")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 43.18 215.9 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "18a24e3b-c08d-4182-9a67-19f03b7cbe04")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 81.28 215.9 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "7a54a9e3-d062-448e-b482-f3cb3c9330da")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 309.88 137.16 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "8b6a9cdc-574d-4d3c-93dc-c803774a3d99")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 309.88 182.88 180)
+		(effects
+			(font (size 1.27 1.27))
+			(justify right)
+		)
+		(uuid "24205321-4ef0-4d69-80e8-5ca8a1af7ac3")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 208.28 38.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "536e5769-431d-455e-86e0-12ea5557b9b4")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 233.68 165.1 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "29b757fe-4f66-4522-b74f-ada55572d27c")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 195.58 215.9 0)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "e6ec8ceb-b291-4bf9-8ac9-2b712c63af7b")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 321.31 83.82 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "f4958377-608b-4e01-8b44-9345a88bc738")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 323.85 83.82 90)
+		(effects
+			(font (size 1.27 1.27))
+			(justify left)
+		)
+		(uuid "063d6b95-bb05-4973-8a68-6d8614185a75")
+	)
+	(no_connect
+		(at 132.08 81.28)
+		(uuid "bdac9d25-277b-4b87-b665-ba4996b02b9a")
+	)
+	(no_connect
+		(at 172.72 101.6)
+		(uuid "2e8faab6-9be6-4eb0-8ba2-8b35d7cc3361")
+	)
+	(no_connect
+		(at 172.72 99.06)
+		(uuid "8fd130ef-2537-4d4b-80fa-ed2aaf6237ad")
+	)
+	(no_connect
+		(at 172.72 93.98)
+		(uuid "4034316b-1b2f-4e6a-87b5-a133a9e12d55")
+	)
+	(no_connect
+		(at 172.72 88.9)
+		(uuid "3a8a9d55-9ac8-4e16-9628-cc71d3649e61")
+	)
+	(no_connect
+		(at 309.88 139.7)
+		(uuid "5c345230-1fa2-49d4-b58e-1bd8b09d97b8")
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")
