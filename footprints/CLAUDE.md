@@ -34,7 +34,15 @@ Notes learned during the initial bulk download (2026-08-01):
 
 ## Hand-created footprints
 
-Parts with no LCSC/EasyEDA source (bare pads, pogo/test pads, silkscreen art) are drawn by hand in the same S-expression format, saved to BOTH locations like downloaded ones. Board P's J2/J3 pogo pad arrays and Board L's J4 UART pads fall in this category — zudo-pd's `PogoPad_1x04_P2.54mm` / `PogoPad_1x08_P2.54mm` are the reference style.
+Parts with no LCSC/EasyEDA source (bare pads, pogo/test pads, silkscreen art) are drawn by hand in the same S-expression format, saved to BOTH locations like downloaded ones.
+
+Current inventory:
+
+- `PogoPad_1x04_P2.54mm` — Board P J2, NVM I2C programming (SCL/SDA/GND/NC silkscreen)
+- `PogoPad_1x08_P2.54mm` — Board P J3, STUSB4500 debug pads
+- `PogoPad_1x03_P2.54mm` — Board L J4, UART debug (TX/RX/GND silkscreen)
+
+The 1x04/1x08 are proven pad arrays for an edge-clamp programming clip (place at the PCB edge, silkscreen line marks the edge side); the 1x03 follows the same style. Matching schematic symbols `Conn_1x03/1x04/1x08` live in `symbols/zudo-led-lamp.kicad_sym`.
 
 ## Rotation warning (CPL export)
 

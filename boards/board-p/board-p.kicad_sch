@@ -2,1765 +2,3681 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb")
+	(uuid "2f50887c-fd80-4f71-a2f8-d8c1a887c3bf")
 	(paper "A3")
 	(lib_symbols
 		(symbol "zudo-led-lamp:TYPE-C-31-M-17"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "USB"
-		      (id 0)
-		      (at 0 10.16 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "TYPE-C-31-M-17"
-		      (id 1)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:USB-C-SMD_10P-P1.00-L6.8-W8.9"
-		      (id 2)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Others_Korean-Hroparts-Elec-TYPE-C-31-M-17_C283540.html"
-		      (id 3)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "韩国韩荣"
-		      (id 4)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "TYPE-C-31-M-17"
-		      (id 5)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C283540"
-		      (id 6)
-		      (at 0 -25.40 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "USB Connectors"
-		      (id 8)
-		      (at 0 -27.94 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "TYPE-C-31-M-17_0_1"
-		      (rectangle
-		        (start -5.08 10.16)
-		        (end 5.08 -10.16)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (circle
-		        (center 3.81 8.89)
-		        (radius 0.38)
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at 7.62 5.08 180)
-		        (length 2.54)
-		        (name "B12" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 7.62 2.54 180)
-		        (length 2.54)
-		        (name "B9" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 7.62 -0.00 180)
-		        (length 2.54)
-		        (name "A5" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 7.62 -2.54 180)
-		        (length 2.54)
-		        (name "B5" (effects (font (size 1.27 1.27))))
-		        (number "4" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 7.62 -5.08 180)
-		        (length 2.54)
-		        (name "A9" (effects (font (size 1.27 1.27))))
-		        (number "5" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 7.62 -7.62 180)
-		        (length 2.54)
-		        (name "A12" (effects (font (size 1.27 1.27))))
-		        (number "6" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -7.62 5.08 0)
-		        (length 2.54)
-		        (name "0" (effects (font (size 1.27 1.27))))
-		        (number "0" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -7.62 2.54 0)
-		        (length 2.54)
-		        (name "0" (effects (font (size 1.27 1.27))))
-		        (number "0" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -7.62 -0.00 0)
-		        (length 2.54)
-		        (name "0" (effects (font (size 1.27 1.27))))
-		        (number "0" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -7.62 -2.54 0)
-		        (length 2.54)
-		        (name "0" (effects (font (size 1.27 1.27))))
-		        (number "0" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "USB"
+					(at 0 10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "TYPE-C-31-M-17"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:USB-C-SMD_10P-P1.00-L6.8-W8.9"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Others_Korean-Hroparts-Elec-TYPE-C-31-M-17_C283540.html"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "韩国韩荣"
+					(at 0 -20.32 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "TYPE-C-31-M-17"
+					(at 0 -22.86 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C283540"
+					(at 0 -25.4 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "USB Connectors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "TYPE-C-31-M-17_0_1"
+					(rectangle
+						(start -5.08 10.16)
+						(end 5.08 -10.16)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(circle
+						(center 3.81 8.89)
+						(radius 0.38)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -7.62 5.08 0)
+						(length 2.54)
+						(name "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 2.54 0)
+						(length 2.54)
+						(name "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 0 0)
+						(length 2.54)
+						(name "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 -2.54 0)
+						(length 2.54)
+						(name "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 7.62 5.08 180)
+						(length 2.54)
+						(name "B12"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 7.62 2.54 180)
+						(length 2.54)
+						(name "B9"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 7.62 0 180)
+						(length 2.54)
+						(name "A5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 7.62 -2.54 180)
+						(length 2.54)
+						(name "B5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 7.62 -5.08 180)
+						(length 2.54)
+						(name "A9"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 7.62 -7.62 180)
+						(length 2.54)
+						(name "A12"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:STUSB4500QTR"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "U"
-		      (id 0)
-		      (at 0 22.86 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "STUSB4500QTR"
-		      (id 1)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:QFN-24_L4.0-W4.0-P0.50-BL-EP2.8"
-		      (id 2)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://www.lcsc.com/datasheet/C2678061.pdf"
-		      (id 3)
-		      (at 0 -25.40 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "ST(意法半导体)"
-		      (id 4)
-		      (at 0 -27.94 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "STUSB4500QTR"
-		      (id 5)
-		      (at 0 -30.48 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C2678061"
-		      (id 6)
-		      (at 0 -33.02 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Interface - Controllers"
-		      (id 8)
-		      (at 0 -35.56 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "STUSB4500QTR_0_1"
-		      (rectangle
-		        (start -17.78 15.24)
-		        (end 17.78 -17.78)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (circle
-		        (center -16.51 13.97)
-		        (radius 0.38)
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at -20.32 12.70 0)
-		        (length 2.54)
-		        (name "CC1DB" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 10.16 0)
-		        (length 2.54)
-		        (name "CC1" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 7.62 0)
-		        (length 2.54)
-		        (name "NC" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 5.08 0)
-		        (length 2.54)
-		        (name "CC2" (effects (font (size 1.27 1.27))))
-		        (number "4" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 2.54 0)
-		        (length 2.54)
-		        (name "CC2DB" (effects (font (size 1.27 1.27))))
-		        (number "5" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -0.00 0)
-		        (length 2.54)
-		        (name "RESET" (effects (font (size 1.27 1.27))))
-		        (number "6" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -2.54 0)
-		        (length 2.54)
-		        (name "SCL" (effects (font (size 1.27 1.27))))
-		        (number "7" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -5.08 0)
-		        (length 2.54)
-		        (name "SDA" (effects (font (size 1.27 1.27))))
-		        (number "8" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -7.62 0)
-		        (length 2.54)
-		        (name "DISCH" (effects (font (size 1.27 1.27))))
-		        (number "9" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -10.16 0)
-		        (length 2.54)
-		        (name "GND" (effects (font (size 1.27 1.27))))
-		        (number "10" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -12.70 0)
-		        (length 2.54)
-		        (name "ATTACH" (effects (font (size 1.27 1.27))))
-		        (number "11" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -20.32 -15.24 0)
-		        (length 2.54)
-		        (name "ADDR0" (effects (font (size 1.27 1.27))))
-		        (number "12" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -15.24 180)
-		        (length 2.54)
-		        (name "ADDR1" (effects (font (size 1.27 1.27))))
-		        (number "13" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -12.70 180)
-		        (length 2.54)
-		        (name "POWER_OK3" (effects (font (size 1.27 1.27))))
-		        (number "14" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -10.16 180)
-		        (length 2.54)
-		        (name "GPIO" (effects (font (size 1.27 1.27))))
-		        (number "15" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -7.62 180)
-		        (length 2.54)
-		        (name "VBUS_EN_SNK" (effects (font (size 1.27 1.27))))
-		        (number "16" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -5.08 180)
-		        (length 2.54)
-		        (name "A_B_SIDE" (effects (font (size 1.27 1.27))))
-		        (number "17" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -2.54 180)
-		        (length 2.54)
-		        (name "VBUS_VS_DISCH" (effects (font (size 1.27 1.27))))
-		        (number "18" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 -0.00 180)
-		        (length 2.54)
-		        (name "ALERT" (effects (font (size 1.27 1.27))))
-		        (number "19" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 2.54 180)
-		        (length 2.54)
-		        (name "POWER_OK2" (effects (font (size 1.27 1.27))))
-		        (number "20" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 5.08 180)
-		        (length 2.54)
-		        (name "VREG_1V2" (effects (font (size 1.27 1.27))))
-		        (number "21" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 7.62 180)
-		        (length 2.54)
-		        (name "VSYS" (effects (font (size 1.27 1.27))))
-		        (number "22" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 10.16 180)
-		        (length 2.54)
-		        (name "VREG_2V7" (effects (font (size 1.27 1.27))))
-		        (number "23" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 20.32 12.70 180)
-		        (length 2.54)
-		        (name "VDD" (effects (font (size 1.27 1.27))))
-		        (number "24" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 0.00 17.78 270)
-		        (length 2.54)
-		        (name "EP" (effects (font (size 1.27 1.27))))
-		        (number "25" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "U"
+					(at 0 22.86 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "STUSB4500QTR"
+					(at 0 -20.32 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:QFN-24_L4.0-W4.0-P0.50-BL-EP2.8"
+					(at 0 -22.86 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://www.lcsc.com/datasheet/C2678061.pdf"
+					(at 0 -25.4 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "ST(意法半导体)"
+					(at 0 -27.94 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "STUSB4500QTR"
+					(at 0 -30.48 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C2678061"
+					(at 0 -33.02 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Interface - Controllers"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "STUSB4500QTR_0_1"
+					(rectangle
+						(start -17.78 15.24)
+						(end 17.78 -17.78)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(circle
+						(center -16.51 13.97)
+						(radius 0.38)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -20.32 12.7 0)
+						(length 2.54)
+						(name "CC1DB"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 10.16 0)
+						(length 2.54)
+						(name "CC1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 7.62 0)
+						(length 2.54)
+						(name "NC"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 5.08 0)
+						(length 2.54)
+						(name "CC2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 2.54 0)
+						(length 2.54)
+						(name "CC2DB"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 0 0)
+						(length 2.54)
+						(name "RESET"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 -2.54 0)
+						(length 2.54)
+						(name "SCL"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "7"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 -5.08 0)
+						(length 2.54)
+						(name "SDA"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "8"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 -7.62 0)
+						(length 2.54)
+						(name "DISCH"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "9"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 -10.16 0)
+						(length 2.54)
+						(name "GND"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "10"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 -12.7 0)
+						(length 2.54)
+						(name "ATTACH"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "11"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -20.32 -15.24 0)
+						(length 2.54)
+						(name "ADDR0"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "12"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 -15.24 180)
+						(length 2.54)
+						(name "ADDR1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "13"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 -12.7 180)
+						(length 2.54)
+						(name "POWER_OK3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "14"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 -10.16 180)
+						(length 2.54)
+						(name "GPIO"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "15"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 -7.62 180)
+						(length 2.54)
+						(name "VBUS_EN_SNK"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "16"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 -5.08 180)
+						(length 2.54)
+						(name "A_B_SIDE"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "17"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 -2.54 180)
+						(length 2.54)
+						(name "VBUS_VS_DISCH"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "18"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 0 180)
+						(length 2.54)
+						(name "ALERT"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "19"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 2.54 180)
+						(length 2.54)
+						(name "POWER_OK2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "20"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 5.08 180)
+						(length 2.54)
+						(name "VREG_1V2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "21"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 7.62 180)
+						(length 2.54)
+						(name "VSYS"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "22"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 10.16 180)
+						(length 2.54)
+						(name "VREG_2V7"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "23"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 20.32 12.7 180)
+						(length 2.54)
+						(name "VDD"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "24"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 0 17.78 270)
+						(length 2.54)
+						(name "EP"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "25"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:AO3401A_C347476"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "Q"
-		      (id 0)
-		      (at 0 10.16 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "AO3401A_C347476"
-		      (id 1)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR"
-		      (id 2)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Others_Youtai-Semiconductor-Co-Ltd-AO3401A-4-1A_C347476.html"
-		      (id 3)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UMW(友台半导体)"
-		      (id 4)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "AO3401A"
-		      (id 5)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C347476"
-		      (id 6)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "MOSFETs"
-		      (id 8)
-		      (at 0 -25.40 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "AO3401A_C347476_0_1"
-		      (polyline
-		        (pts
-		          (xy 1.27 -2.54) (xy 3.81 -2.54) (xy 3.81 -0.51)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 1.27 1.78) (xy 1.27 2.54) (xy 3.81 2.54) (xy 3.81 0.76)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 1.27 1.78) (xy -1.27 1.78)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -0.00) (xy 1.27 -0.00) (xy 1.27 -2.54)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 1.27 -1.78) (xy -1.27 -1.78)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.78 2.29) (xy -1.78 -2.29)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 1.27) (xy -1.27 2.29)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -0.51) (xy -1.27 0.51)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -2.29) (xy -1.27 -1.27)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 4.57 -0.51) (xy 4.32 -0.51) (xy 3.30 -0.51) (xy 3.05 -0.51)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 1.27 -0.00) (xy -0.25 0.51) (xy -0.25 -0.51) (xy 1.27 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (polyline
-		        (pts
-		          (xy 3.81 -0.51) (xy 4.57 0.76) (xy 3.05 0.76) (xy 3.81 -0.51)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 1.27 5.08 270)
-		        (length 2.54)
-		        (name "D" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -3.81 -0.00 0)
-		        (length 2.54)
-		        (name "G" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 1.27 -5.08 90)
-		        (length 2.54)
-		        (name "S" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "Q"
+					(at 0 10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "AO3401A_C347476"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Others_Youtai-Semiconductor-Co-Ltd-AO3401A-4-1A_C347476.html"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UMW(友台半导体)"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "AO3401A"
+					(at 0 -20.32 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C347476"
+					(at 0 -22.86 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "MOSFETs"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "AO3401A_C347476_0_1"
+					(polyline
+						(pts
+							(xy -1.78 2.29) (xy -1.78 -2.29)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 1.27) (xy -1.27 2.29)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 0) (xy 1.27 0) (xy 1.27 -2.54)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 -0.51) (xy -1.27 0.51)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 -2.29) (xy -1.27 -1.27)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 1.78) (xy -1.27 1.78)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 1.78) (xy 1.27 2.54) (xy 3.81 2.54) (xy 3.81 0.76)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 0) (xy -0.25 0.51) (xy -0.25 -0.51) (xy 1.27 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 -1.78) (xy -1.27 -1.78)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 -2.54) (xy 3.81 -2.54) (xy 3.81 -0.51)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 3.81 -0.51) (xy 4.57 0.76) (xy 3.05 0.76) (xy 3.81 -0.51)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(polyline
+						(pts
+							(xy 4.57 -0.51) (xy 4.32 -0.51) (xy 3.3 -0.51) (xy 3.05 -0.51)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -3.81 0 0)
+						(length 2.54)
+						(name "G"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 1.27 -5.08 90)
+						(length 2.54)
+						(name "S"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 1.27 5.08 270)
+						(length 2.54)
+						(name "D"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:SMAJ20A_C571370"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "D"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "SMAJ20A_C571370"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:SMA_L4.2-W2.6-LS5.3-RD"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/TVS_High-Diode-SMAJ20A_C571370.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "High Diode(海德)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "SMAJ20A"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C571370"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "TVS"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "SMAJ20A_C571370_0_1"
-		      (polyline
-		        (pts
-		          (xy 1.27 1.52) (xy -1.27 -0.00) (xy 1.27 -1.78) (xy 1.27 1.52)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 1.52) (xy -1.27 -1.52)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 1.52) (xy -1.78 2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -1.52) (xy -0.76 -2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 3.81)
-		        (name "A" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 3.81)
-		        (name "C" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "D"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "SMAJ20A_C571370"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:SMA_L4.2-W2.6-LS5.3-RD"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/TVS_High-Diode-SMAJ20A_C571370.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "High Diode(海德)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "SMAJ20A"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C571370"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "TVS"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "SMAJ20A_C571370_0_1"
+					(polyline
+						(pts
+							(xy -1.27 1.52) (xy -1.78 2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 1.52) (xy -1.27 -1.52)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 -1.52) (xy -0.76 -2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 1.52) (xy -1.27 0) (xy 1.27 -1.78) (xy 1.27 1.52)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 3.81)
+						(name "C"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 3.81)
+						(name "A"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:PESD24VS1UB,115"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "D"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "PESD24VS1UB,115"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:SOD-523_L1.2-W0.8-LS1.6-RD"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Diodes-ESD_NXP_PESD24VS1UB_PESD24VS1UB_C85382.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "Nexperia(安世)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "PESD24VS1UB,115"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C85382"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "ESD Protection Devices"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "PESD24VS1UB,115_0_1"
-		      (polyline
-		        (pts
-		          (xy 1.27 1.52) (xy -1.27 -0.00) (xy 1.27 -1.78) (xy 1.27 1.52)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 1.78) (xy -0.76 2.29)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -1.78) (xy -1.78 -2.29)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -1.78) (xy -1.27 1.78)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 3.81)
-		        (name "A" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 3.81)
-		        (name "C" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "D"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "PESD24VS1UB,115"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:SOD-523_L1.2-W0.8-LS1.6-RD"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Diodes-ESD_NXP_PESD24VS1UB_PESD24VS1UB_C85382.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "Nexperia(安世)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "PESD24VS1UB,115"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C85382"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "ESD Protection Devices"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "PESD24VS1UB,115_0_1"
+					(polyline
+						(pts
+							(xy -1.27 1.78) (xy -0.76 2.29)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 -1.78) (xy -1.78 -2.29)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 -1.78) (xy -1.27 1.78)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 1.52) (xy -1.27 0) (xy 1.27 -1.78) (xy 1.27 1.52)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 3.81)
+						(name "C"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 3.81)
+						(name "A"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:CL31A106KBHNNNE"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "C"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "CL31A106KBHNNNE"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:C1206"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL31A106KBHNNNE_10uF-106-10-50V_C13585.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "SAMSUNG(三星)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "CL31A106KBHNNNE"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C13585"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "10uF (106) ±10% 50V"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "CL31A106KBHNNNE_0_1"
-		      (polyline
-		        (pts
-		          (xy -0.51 2.03) (xy -0.51 -2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 0.51 2.03) (xy 0.51 -2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -1.27 -0.00) (xy -0.51 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 0.51 -0.00) (xy 1.27 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at -3.81 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 3.81 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "C"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "CL31A106KBHNNNE"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:C1206"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL31A106KBHNNNE_10uF-106-10-50V_C13585.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "10uF (106) ±10% 50V"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "SAMSUNG(三星)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "CL31A106KBHNNNE"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C13585"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "CL31A106KBHNNNE_0_1"
+					(polyline
+						(pts
+							(xy -1.27 0) (xy -0.51 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -0.51 2.03) (xy -0.51 -2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 0.51 2.03) (xy 0.51 -2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 0.51 0) (xy 1.27 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -3.81 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 3.81 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:CC0603KRX7R9BB104"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "C"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "CC0603KRX7R9BB104"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:C0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_100nF-104-10-50V_C14663.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "YAGEO(国巨)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "CC0603KRX7R9BB104"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C14663"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "100nF (104) ±10% 50V"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "CC0603KRX7R9BB104_0_1"
-		      (polyline
-		        (pts
-		          (xy -0.51 -2.03) (xy -0.51 2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 2.54 -0.00) (xy 0.51 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 0.51 2.03) (xy 0.51 -2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -0.51 -0.00) (xy -2.54 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "C"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "CC0603KRX7R9BB104"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:C0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_100nF-104-10-50V_C14663.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "100nF (104) ±10% 50V"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "YAGEO(国巨)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "CC0603KRX7R9BB104"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C14663"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "CC0603KRX7R9BB104_0_1"
+					(polyline
+						(pts
+							(xy -0.51 0) (xy -2.54 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -0.51 -2.03) (xy -0.51 2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 0.51 2.03) (xy 0.51 -2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 2.54 0) (xy 0.51 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:CL10A105KB8NNNC"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "C"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "CL10A105KB8NNNC"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:C0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL10A105KB8NNNC_1uF-105-10-50V_C15849.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "SAMSUNG(三星)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "CL10A105KB8NNNC"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C15849"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "1uF (105) ±10% 50V"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "CL10A105KB8NNNC_0_1"
-		      (polyline
-		        (pts
-		          (xy -0.51 -0.00) (xy -2.54 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 0.51 2.03) (xy 0.51 -2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy 2.54 -0.00) (xy 0.51 -0.00)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (polyline
-		        (pts
-		          (xy -0.51 -2.03) (xy -0.51 2.03)
-		        )
-		        (stroke (width 0) (type default))
-		        (fill (type none))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "C"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "CL10A105KB8NNNC"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:C0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL10A105KB8NNNC_1uF-105-10-50V_C15849.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "1uF (105) ±10% 50V"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "SAMSUNG(三星)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "CL10A105KB8NNNC"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C15849"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "CL10A105KB8NNNC_0_1"
+					(polyline
+						(pts
+							(xy -0.51 0) (xy -2.54 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -0.51 -2.03) (xy -0.51 2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 0.51 2.03) (xy 0.51 -2.03)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 2.54 0) (xy 0.51 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:0603WAF1003T5E"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "R"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "0603WAF1003T5E"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:R0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_100KR-1003-1_C25803.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UNI-ROYAL(厚声)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "0603WAF1003T5E"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C25803"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Resistors"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "100KΩ (1003) ±1%"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "0603WAF1003T5E_0_1"
-		      (rectangle
-		        (start -2.54 1.02)
-		        (end 2.54 -1.02)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "0603WAF1003T5E"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_100KR-1003-1_C25803.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "100KΩ (1003) ±1%"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF1003T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C25803"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF1003T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:0603WAF5602T5E"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "R"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "0603WAF5602T5E"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:R0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_56KR-5602-1_C23206.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UNI-ROYAL(厚声)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "0603WAF5602T5E"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C23206"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Resistors"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "56KΩ (5602) ±1%"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "0603WAF5602T5E_0_1"
-		      (rectangle
-		        (start -2.54 1.02)
-		        (end 2.54 -1.02)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "0603WAF5602T5E"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_56KR-5602-1_C23206.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "56KΩ (5602) ±1%"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF5602T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C23206"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF5602T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:0603WAF4700T5E"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "R"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "0603WAF4700T5E"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:R0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_470R-4700-1_C23179.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UNI-ROYAL(厚声)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "0603WAF4700T5E"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C23179"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Resistors"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "470Ω (4700) ±1%"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "0603WAF4700T5E_0_1"
-		      (rectangle
-		        (start -2.54 1.02)
-		        (end 2.54 -1.02)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "0603WAF4700T5E"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_470R-4700-1_C23179.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "470Ω (4700) ±1%"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF4700T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C23179"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF4700T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:0603WAF4701T5E"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "R"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "0603WAF4701T5E"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:R0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_4-7KR-4701-1_C23162.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UNI-ROYAL(厚声)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "0603WAF4701T5E"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C23162"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Resistors"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "4.7KΩ (4701) ±1%"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "0603WAF4701T5E_0_1"
-		      (rectangle
-		        (start -2.54 1.02)
-		        (end 2.54 -1.02)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "0603WAF4701T5E"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_4-7KR-4701-1_C23162.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "4.7KΩ (4701) ±1%"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF4701T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C23162"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF4701T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:0603WAF5101T5E"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "R"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "0603WAF5101T5E"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:R0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_5-1KR-5101-1_C23186.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UNI-ROYAL(厚声)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "0603WAF5101T5E"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C23186"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Resistors"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "0603WAF5101T5E_0_1"
-		      (rectangle
-		        (start -2.54 1.02)
-		        (end 2.54 -1.02)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "0603WAF5101T5E"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_5-1KR-5101-1_C23186.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF5101T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C23186"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF5101T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:0603WAF0000T5E"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "R"
-		      (id 0)
-		      (at 0 5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "0603WAF0000T5E"
-		      (id 1)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:R0603"
-		      (id 2)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_0R-0R0-1_C21189.html"
-		      (id 3)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "UNI-ROYAL(厚声)"
-		      (id 4)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "0603WAF0000T5E"
-		      (id 5)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C21189"
-		      (id 6)
-		      (at 0 -17.78 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Resistors"
-		      (id 8)
-		      (at 0 -20.32 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_description"
-		      "0Ω (0R0) ±1%"
-		      (id 9)
-		      (at 0 -22.86 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "0603WAF0000T5E_0_1"
-		      (rectangle
-		        (start -2.54 1.02)
-		        (end 2.54 -1.02)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at 5.08 -0.00 180)
-		        (length 2.54)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -5.08 -0.00 0)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "R"
+					(at 0 5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "0603WAF0000T5E"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:R0603"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_0R-0R0-1_C21189.html"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "0Ω (0R0) ±1%"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "UNI-ROYAL(厚声)"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "0603WAF0000T5E"
+					(at 0 -15.24 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C21189"
+					(at 0 -17.78 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Resistors"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "0603WAF0000T5E_0_1"
+					(rectangle
+						(start -2.54 1.02)
+						(end 2.54 -1.02)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -5.08 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 5.08 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:B6B-XH-A"
-		    (in_bom yes)
-		    (on_board yes)
-		    (property
-		      "Reference"
-		      "U"
-		      (id 0)
-		      (at 0 10.16 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Value"
-		      "B6B-XH-A"
-		      (id 1)
-		      (at 0 0.00 0)
-		      (effects (font (size 1.27 1.27) ) )
-		    )
-		    (property
-		      "Footprint"
-		      "zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN"
-		      (id 2)
-		      (at 0 -2.54 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://lcsc.com/product-detail/XH-Connectors_JST-Sales-America_B6B-XH-A-LF-SN_JST-Sales-America-B6B-XH-A-LF-SN_C144397.html"
-		      (id 3)
-		      (at 0 -5.08 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Manufacturer"
-		      "JST"
-		      (id 4)
-		      (at 0 -7.62 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "MPN"
-		      "B6B-XH-A(LF)(SN)"
-		      (id 5)
-		      (at 0 -10.16 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "LCSC Part"
-		      "C144397"
-		      (id 6)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "ki_keywords"
-		      "Wire To Board / Wire To Wire Connector"
-		      (id 8)
-		      (at 0 -15.24 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (symbol "B6B-XH-A_0_1"
-		      (rectangle
-		        (start -8.89 -0.00)
-		        (end 8.89 -5.08)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (pin passive line
-		        (at -6.35 5.08 270)
-		        (length 5.08)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -3.81 5.08 270)
-		        (length 5.08)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at -1.27 5.08 270)
-		        (length 5.08)
-		        (name "3" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 1.27 5.08 270)
-		        (length 5.08)
-		        (name "4" (effects (font (size 1.27 1.27))))
-		        (number "4" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 3.81 5.08 270)
-		        (length 5.08)
-		        (name "5" (effects (font (size 1.27 1.27))))
-		        (number "5" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line
-		        (at 6.35 5.08 270)
-		        (length 5.08)
-		        (name "6" (effects (font (size 1.27 1.27))))
-		        (number "6" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "U"
+					(at 0 10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "B6B-XH-A"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN"
+					(at 0 -2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://lcsc.com/product-detail/XH-Connectors_JST-Sales-America_B6B-XH-A-LF-SN_JST-Sales-America-B6B-XH-A-LF-SN_C144397.html"
+					(at 0 -5.08 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Manufacturer" "JST"
+					(at 0 -7.62 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "MPN" "B6B-XH-A(LF)(SN)"
+					(at 0 -10.16 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "LCSC Part" "C144397"
+					(at 0 -12.7 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "Wire To Board / Wire To Wire Connector"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "B6B-XH-A_0_1"
+					(rectangle
+						(start -8.89 0)
+						(end 8.89 -5.08)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+					(pin passive line
+						(at -6.35 5.08 270)
+						(length 5.08)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -3.81 5.08 270)
+						(length 5.08)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -1.27 5.08 270)
+						(length 5.08)
+						(name "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 1.27 5.08 270)
+						(length 5.08)
+						(name "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 3.81 5.08 270)
+						(length 5.08)
+						(name "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 6.35 5.08 270)
+						(length 5.08)
+						(name "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:Conn_1x04"
-		    (pin_names (offset 1.016))
-		    (exclude_from_sim no)
-		    (in_bom yes)
-		    (on_board yes)
-		    (property "Reference" "J" (at 0 11.43 0) (effects (font (size 1.27 1.27))))
-		    (property "Value" "Conn_1x04" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
-		    (property "Footprint" "zudo-led-lamp:PogoPad_1x04_P2.54mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		    (symbol "Conn_1x04_0_1"
-		      (rectangle (start -2.54 10.16) (end 2.54 -2.54)
-		        (stroke (width 0.254) (type default))
-		        (fill (type background))
-		      )
-		    )
-		    (symbol "Conn_1x04_1_1"
-		      (pin passive line (at -7.62 7.62 0) (length 5.08)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 5.08 0) (length 5.08)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 2.54 0) (length 5.08)
-		        (name "3" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 0 0) (length 5.08)
-		        (name "4" (effects (font (size 1.27 1.27))))
-		        (number "4" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(pin_names
+					(offset 1.016)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "J"
+					(at 0 11.43 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "Conn_1x04"
+					(at 0 -3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:PogoPad_1x04_P2.54mm"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "Conn_1x04_0_1"
+					(rectangle
+						(start -2.54 10.16)
+						(end 2.54 -2.54)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+				)
+				(symbol "Conn_1x04_1_1"
+					(pin passive line
+						(at -7.62 7.62 0)
+						(length 5.08)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 5.08 0)
+						(length 5.08)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 2.54 0)
+						(length 5.08)
+						(name "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 0 0)
+						(length 5.08)
+						(name "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "zudo-led-lamp:Conn_1x08"
-		    (pin_names (offset 1.016))
-		    (exclude_from_sim no)
-		    (in_bom yes)
-		    (on_board yes)
-		    (property "Reference" "J" (at 0 21.59 0) (effects (font (size 1.27 1.27))))
-		    (property "Value" "Conn_1x08" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
-		    (property "Footprint" "zudo-led-lamp:PogoPad_1x08_P2.54mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		    (symbol "Conn_1x08_0_1"
-		      (rectangle (start -2.54 20.32) (end 2.54 -2.54)
-		        (stroke (width 0.254) (type default))
-		        (fill (type background))
-		      )
-		    )
-		    (symbol "Conn_1x08_1_1"
-		      (pin passive line (at -7.62 17.78 0) (length 5.08)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 15.24 0) (length 5.08)
-		        (name "2" (effects (font (size 1.27 1.27))))
-		        (number "2" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 12.7 0) (length 5.08)
-		        (name "3" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 10.16 0) (length 5.08)
-		        (name "4" (effects (font (size 1.27 1.27))))
-		        (number "4" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 7.62 0) (length 5.08)
-		        (name "5" (effects (font (size 1.27 1.27))))
-		        (number "5" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 5.08 0) (length 5.08)
-		        (name "6" (effects (font (size 1.27 1.27))))
-		        (number "6" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 2.54 0) (length 5.08)
-		        (name "7" (effects (font (size 1.27 1.27))))
-		        (number "7" (effects (font (size 1.27 1.27))))
-		      )
-		      (pin passive line (at -7.62 0 0) (length 5.08)
-		        (name "8" (effects (font (size 1.27 1.27))))
-		        (number "8" (effects (font (size 1.27 1.27))))
-		      )
-		    )
-		  )
+				(pin_names
+					(offset 1.016)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "J"
+					(at 0 21.59 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "Conn_1x08"
+					(at 0 -3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "zudo-led-lamp:PogoPad_1x08_P2.54mm"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "Conn_1x08_0_1"
+					(rectangle
+						(start -2.54 20.32)
+						(end 2.54 -2.54)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+				)
+				(symbol "Conn_1x08_1_1"
+					(pin passive line
+						(at -7.62 17.78 0)
+						(length 5.08)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 15.24 0)
+						(length 5.08)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 12.7 0)
+						(length 5.08)
+						(name "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 10.16 0)
+						(length 5.08)
+						(name "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 7.62 0)
+						(length 5.08)
+						(name "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 5.08 0)
+						(length 5.08)
+						(name "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 2.54 0)
+						(length 5.08)
+						(name "7"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "7"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -7.62 0 0)
+						(length 5.08)
+						(name "8"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "8"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 	)
 	(symbol
 		(lib_id "zudo-led-lamp:TYPE-C-31-M-17")
@@ -1770,7 +3686,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "31877051-9228-4cd4-8ecf-b96a46ff7745")
+		(uuid "d120b621-fb3d-48d7-a40c-255b7803466d")
 		(property "Reference" "J1"
 			(at 66.04 83.82 0)
 			(effects
@@ -1804,39 +3720,39 @@
 				(hide yes)
 			)
 		)
+		(pin "0"
+			(uuid "b8e45db5-3b24-449b-a0cf-a0d0285f8b31")
+		)
+		(pin "0"
+			(uuid "c47226c4-8406-4558-b789-f30a55f418cd")
+		)
+		(pin "0"
+			(uuid "7b3e9e76-3e7d-4bd4-ae92-01672ad1c414")
+		)
+		(pin "0"
+			(uuid "adb7672d-0aef-4c28-9e55-26c728abd749")
+		)
 		(pin "1"
-			(uuid "5f339146-548c-4c10-9166-505c1bcd561f")
+			(uuid "2eda9025-4999-4d35-b2c1-50b735280800")
 		)
 		(pin "2"
-			(uuid "bf3d7b56-6d7a-49ab-9dcb-4400f664c99c")
+			(uuid "52ee7071-3bf0-42bb-892e-c119b25abc32")
 		)
 		(pin "3"
-			(uuid "d5711909-120a-4855-a3cc-845124249ba1")
+			(uuid "ea2ad251-2609-4052-8f46-5fea6e6921c8")
 		)
 		(pin "4"
-			(uuid "a7bee1ff-2bff-44b7-b6cf-74fa7822ad84")
+			(uuid "112ecf7e-b33a-4251-b174-ea38b3911ea7")
 		)
 		(pin "5"
-			(uuid "04936cd0-9e8f-4d9f-8708-7ebc4ddd0043")
+			(uuid "5520add6-b0d0-40a1-a6d7-546a50158a31")
 		)
 		(pin "6"
-			(uuid "793f71bb-e450-42cc-87ec-d08f08a54fc8")
-		)
-		(pin "0"
-			(uuid "50e2ef79-76d7-4ffa-8442-3af30a9410d0")
-		)
-		(pin "0"
-			(uuid "f7cb3607-4897-46ca-a0dc-38c8d0a3e60c")
-		)
-		(pin "0"
-			(uuid "7e78a09f-926d-43eb-a51e-5363eff7c5c9")
-		)
-		(pin "0"
-			(uuid "b8c3212a-ead1-4b45-831a-fec31d087dae")
+			(uuid "16e37039-af96-4eb1-a2c0-4d5bd3149021")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "J1")
 					(unit 1)
 				)
@@ -1851,7 +3767,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "cd90ad06-eb78-4415-aa33-4952abf8987b")
+		(uuid "fcef4a38-dda3-4f8b-9e78-43e7b16076d2")
 		(property "Reference" "U1"
 			(at 154.94 83.82 0)
 			(effects
@@ -1886,83 +3802,83 @@
 			)
 		)
 		(pin "1"
-			(uuid "89e1e30d-d924-4910-a911-e1fdcb3874c6")
+			(uuid "8a8e2896-9dff-4627-a9c3-7542ee74f855")
 		)
 		(pin "2"
-			(uuid "6ea0a95f-22d7-49c0-98d6-085920b87fa7")
+			(uuid "c8710f33-1daa-44d2-8e50-f62b9f239b7c")
 		)
 		(pin "3"
-			(uuid "ce573036-3874-4c2f-a73b-fe28abe5716a")
+			(uuid "a75ca28f-0260-4aaf-9d09-9a35ff7ce217")
 		)
 		(pin "4"
-			(uuid "275e6b5b-891f-4046-9ad2-dbd72402ebe3")
+			(uuid "9264590d-ccb5-463e-ba9f-4ad7a013c805")
 		)
 		(pin "5"
-			(uuid "13ac9b61-a2c4-4e5a-b7e6-76ca2ef892cb")
+			(uuid "98af4bc5-3d8a-48ca-a733-f264f515b9f9")
 		)
 		(pin "6"
-			(uuid "82661acb-3b40-49fb-b9f3-ab7cf9ef9d58")
+			(uuid "2c3fefae-4c8e-49da-930f-fd98cb53fa77")
 		)
 		(pin "7"
-			(uuid "b1f9a996-dab2-4b74-bcbf-6066ff8aa51c")
+			(uuid "0aaf1a4e-b1e6-4380-8496-1c47d39ca244")
 		)
 		(pin "8"
-			(uuid "c078fd65-cc38-4b1d-83dd-3dc2c6761293")
+			(uuid "5634ec83-ff71-416e-8573-fb811fe592cb")
 		)
 		(pin "9"
-			(uuid "304bef8e-8ce6-4c97-ac0b-781db4418f13")
+			(uuid "88664f4e-e3ac-4e65-9f20-7b9a4c1a3dd5")
 		)
 		(pin "10"
-			(uuid "2c012617-9829-434b-aaae-155e6b3f7765")
+			(uuid "6a7fdd32-902b-4a8d-8556-1ad6a71956d7")
 		)
 		(pin "11"
-			(uuid "0720afe0-b9be-44ec-b93f-97910207950d")
+			(uuid "42edd979-383a-4c01-beba-a5fbcb8ca593")
 		)
 		(pin "12"
-			(uuid "b263056a-4241-4cec-8cfc-39f8f5d9ea6d")
+			(uuid "b451cbbb-d6ec-46c2-91d7-7f05c5bd95d1")
 		)
 		(pin "13"
-			(uuid "89e217a4-d5e4-4163-a1d0-f56d7ae8f074")
+			(uuid "615a4d70-99ca-4f9d-868f-4b8fae9f484f")
 		)
 		(pin "14"
-			(uuid "3b79bb91-fe9e-4e09-ae37-39e0965339b4")
+			(uuid "05cca4a3-fee8-4b36-a2a0-17f2459cf81a")
 		)
 		(pin "15"
-			(uuid "7c8f4280-9996-4259-a5d2-e8b34e8a4966")
+			(uuid "6c6fda5b-9041-4881-9ad2-506bf4d29202")
 		)
 		(pin "16"
-			(uuid "27e7cbd0-468b-403f-aa62-afbda2c10d19")
+			(uuid "948fe351-42a6-494a-8162-fa30698e0300")
 		)
 		(pin "17"
-			(uuid "ee878c92-e19a-4a7e-af2b-12ad4bdac77e")
+			(uuid "2c342f75-f23b-4b7e-811f-1b15a4cf3af2")
 		)
 		(pin "18"
-			(uuid "3ce191f5-e949-4313-9e63-e1c5e5949aee")
+			(uuid "a21a9083-8937-4b3b-92ea-0f8263e9a3d8")
 		)
 		(pin "19"
-			(uuid "3d1a37f1-4878-42f2-b795-0bdbfdf3adc7")
+			(uuid "86e7b40e-9e52-4838-9bff-331b87d9b83e")
 		)
 		(pin "20"
-			(uuid "0a14b232-f012-4be0-878c-5067ff2ab27d")
+			(uuid "db008ee9-5bcc-4e03-bd31-2c06846b84cc")
 		)
 		(pin "21"
-			(uuid "9acb5d5a-f99c-4a81-90dc-74f8235bbb7b")
+			(uuid "5e71dd05-96c9-4cff-839a-ec34ce5f616c")
 		)
 		(pin "22"
-			(uuid "5ba4f980-ee18-4b7a-8a51-27483b9d2129")
+			(uuid "f94bd1d2-5478-4e33-9e8d-6d7ed34d8af1")
 		)
 		(pin "23"
-			(uuid "e6585b65-e3f2-4f9a-b76d-67fb5e8ce724")
+			(uuid "bdbafddb-227b-47c0-bd6d-f57a17d1e7f1")
 		)
 		(pin "24"
-			(uuid "80ef3a50-bf99-4b06-bf63-f83ee97c6162")
+			(uuid "7b8542d6-9b3f-475f-a14d-5b759d0e9729")
 		)
 		(pin "25"
-			(uuid "516756c9-05c9-4b76-a3eb-bf34011a074c")
+			(uuid "a5bff074-1649-45a4-8679-cf7a58f9ee25")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "U1")
 					(unit 1)
 				)
@@ -1977,7 +3893,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "aba40496-e38d-44fd-9144-8815ac27ec89")
+		(uuid "52cd5c67-3e69-4915-8bda-8593c2d82a54")
 		(property "Reference" "Q1"
 			(at 243.84 45.72 0)
 			(effects
@@ -2011,18 +3927,18 @@
 				(hide yes)
 			)
 		)
-		(pin "3"
-			(uuid "62a3d120-4ab2-41a2-a9bd-00594278d962")
-		)
 		(pin "1"
-			(uuid "b8c221e4-371a-402b-89a2-3986dbc69ecb")
+			(uuid "faab770f-d064-4e06-8d53-54a90bfdac18")
 		)
 		(pin "2"
-			(uuid "d5c0893a-9677-472b-829d-1cc1ba8f25a0")
+			(uuid "a3a8a179-a1ac-4e0b-a1fb-4d4efe462e18")
+		)
+		(pin "3"
+			(uuid "f322d760-1c3a-466b-a053-91651850ff68")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "Q1")
 					(unit 1)
 				)
@@ -2037,7 +3953,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5c126a24-0c13-481b-8f42-ce6323713357")
+		(uuid "5b0f7721-5b9b-4750-8905-870a8437de98")
 		(property "Reference" "D5"
 			(at 205.74 33.02 0)
 			(effects
@@ -2071,15 +3987,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "373bf5fa-3e83-49a0-b4b6-5188f29930e4")
-		)
 		(pin "1"
-			(uuid "56866388-24ec-4953-88c4-1a75c750f01e")
+			(uuid "68811ebb-7ac5-49bc-ab8f-73949f839f66")
+		)
+		(pin "2"
+			(uuid "5b822029-9c4d-4da0-89b3-eae78edefc54")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "D5")
 					(unit 1)
 				)
@@ -2094,7 +4010,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp yes)
-		(uuid "4172ec51-45a3-4cf1-9c4a-632c33a8dc46")
+		(uuid "d88fc64f-a918-4d15-b17a-418aa8609fe2")
 		(property "Reference" "D6"
 			(at 231.14 160.02 0)
 			(effects
@@ -2128,22 +4044,15 @@
 				(hide yes)
 			)
 		)
-		(property "DNP" "DNP"
-			(at 228.6 175.26 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
+		(pin "1"
+			(uuid "0601b084-3432-4ecd-b69b-c186f1e33c39")
 		)
 		(pin "2"
-			(uuid "fe2d674c-1c51-4502-ac41-8e8d169db00a")
-		)
-		(pin "1"
-			(uuid "ce5dc88a-3a61-4b84-9909-bc98806806e9")
+			(uuid "de79c0a9-126b-4050-ad16-373378bc369c")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "D6")
 					(unit 1)
 				)
@@ -2158,7 +4067,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp yes)
-		(uuid "b56332c2-4bc6-4135-9189-5b50338b27d7")
+		(uuid "6c7a0764-07ed-4557-b5b9-90a980856e47")
 		(property "Reference" "D7"
 			(at 193.04 210.82 0)
 			(effects
@@ -2192,22 +4101,15 @@
 				(hide yes)
 			)
 		)
-		(property "DNP" "DNP"
-			(at 190.5 226.06 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
+		(pin "1"
+			(uuid "ded06071-c7fa-43d4-9e8f-b58e12bb15ef")
 		)
 		(pin "2"
-			(uuid "b34fcaac-af68-46a9-bdee-bb5f6a2cbaf7")
-		)
-		(pin "1"
-			(uuid "f33dd291-8641-4668-9ccf-7fb86aa27c87")
+			(uuid "ff1131bc-864b-4613-a9a0-2dd4194bfac2")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "D7")
 					(unit 1)
 				)
@@ -2222,7 +4124,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1b462120-9c40-46f9-9847-b6ada044d47f")
+		(uuid "681d76c7-a3fb-4481-9660-73b76d9003a3")
 		(property "Reference" "C1"
 			(at 40.64 160.02 0)
 			(effects
@@ -2257,14 +4159,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "bb380dcc-6b76-48ee-9a82-088f60903f90")
+			(uuid "12ffdbd2-8c1e-4e8e-b271-bcfef0dd838c")
 		)
 		(pin "2"
-			(uuid "f9e6687b-9568-4dc3-9ec2-7ea283ecd16c")
+			(uuid "26b8a7fe-a50d-48b3-8d68-7a54b6a879a5")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "C1")
 					(unit 1)
 				)
@@ -2279,7 +4181,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ad980f48-55cd-4264-957c-349d3ff4b9db")
+		(uuid "e832a87c-1865-4ba3-a4d7-623bc644ffba")
 		(property "Reference" "C2"
 			(at 78.74 160.02 0)
 			(effects
@@ -2314,14 +4216,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "655e7997-a6b2-406c-ac88-10e07dffb235")
+			(uuid "5865a3df-54c8-4f61-9568-571dcd8b15c6")
 		)
 		(pin "2"
-			(uuid "25a997f8-5301-497d-a328-a0139bc4eead")
+			(uuid "6bcab377-6bf0-4cb4-b984-ead8260f969f")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "C2")
 					(unit 1)
 				)
@@ -2336,7 +4238,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3c19b8c4-78ad-40b7-a07a-8d439165e47e")
+		(uuid "f05521ce-8a70-4fb3-8be6-4f174da51d20")
 		(property "Reference" "C30"
 			(at 116.84 160.02 0)
 			(effects
@@ -2370,15 +4272,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "17abdfbb-fc45-4140-ab46-4980b6efa874")
-		)
 		(pin "1"
-			(uuid "a2c7d969-1310-4cc1-8ca4-5c56fcb357c2")
+			(uuid "9ddcc8c6-d981-4746-91c9-f90cecd2ddd3")
+		)
+		(pin "2"
+			(uuid "3af47051-334e-416d-bf19-66cf3340573c")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "C30")
 					(unit 1)
 				)
@@ -2393,7 +4295,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5d39839c-1ca9-4e81-bb27-805548c9ed47")
+		(uuid "5a71117c-76b8-48b6-ad55-3b46b8649b7e")
 		(property "Reference" "C34"
 			(at 154.94 160.02 0)
 			(effects
@@ -2427,15 +4329,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "e0e2240f-5b79-4818-90f3-99ce32f277ae")
-		)
 		(pin "1"
-			(uuid "d3757657-db3e-4db9-a202-7475ef4e75a2")
+			(uuid "e99e9575-fa78-4a68-9746-f8ed0ae8220f")
+		)
+		(pin "2"
+			(uuid "f4cd9d6b-f49b-4195-9d2c-0cc250a1fcf7")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "C34")
 					(unit 1)
 				)
@@ -2450,7 +4352,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "628e36c7-35fe-4ff6-9041-af686b812823")
+		(uuid "15ab46b3-880c-4c11-9c63-290226487bc3")
 		(property "Reference" "C35"
 			(at 193.04 160.02 0)
 			(effects
@@ -2485,14 +4387,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "eae99aa0-9749-4185-9e33-4bd7a5ce3bea")
+			(uuid "5342f2e3-935b-4ab9-aec5-3045b7735395")
 		)
 		(pin "2"
-			(uuid "f06aa6cb-9552-4399-8265-bfd4cf43b376")
+			(uuid "f486b323-2a23-436f-9fa0-a36a0b999b65")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "C35")
 					(unit 1)
 				)
@@ -2507,7 +4409,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3b0bb676-d293-4c9e-9c3e-f4718bf86558")
+		(uuid "d654b2ee-0a2a-493b-8969-1ad860f30570")
 		(property "Reference" "R11"
 			(at 40.64 185.42 0)
 			(effects
@@ -2541,15 +4443,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "f0ab4564-71d3-46a3-9e04-e70e69609f71")
-		)
 		(pin "1"
-			(uuid "da3e4b16-d176-4b5a-a056-5677732a0926")
+			(uuid "fdbb1e96-eef7-4113-9b91-7d8e423d3215")
+		)
+		(pin "2"
+			(uuid "eb91dd22-2f83-4693-862f-c2017cd84200")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R11")
 					(unit 1)
 				)
@@ -2564,7 +4466,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ee724de0-0272-4487-ba92-a1c65bdf5b74")
+		(uuid "c2803565-7767-4cef-8ba6-8992938dcf04")
 		(property "Reference" "R12"
 			(at 78.74 185.42 0)
 			(effects
@@ -2598,15 +4500,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "a3a1da40-58cc-471f-bcc1-bb23a8a41900")
-		)
 		(pin "1"
-			(uuid "36a5cd83-a6d3-4e15-be4b-77aee31c2669")
+			(uuid "02a4c04b-0b91-48dc-8ae4-b21e1cec946d")
+		)
+		(pin "2"
+			(uuid "cfefb79c-6e86-46ef-a44b-94c9ad7fc64a")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R12")
 					(unit 1)
 				)
@@ -2621,7 +4523,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "45efac91-e91b-4278-869f-c849f1ecc75c")
+		(uuid "d3831000-2c43-4243-a737-b1f42e836ced")
 		(property "Reference" "R13"
 			(at 116.84 185.42 0)
 			(effects
@@ -2655,15 +4557,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "b607b41d-9d98-4e8b-9a6b-4a06ab7ec599")
-		)
 		(pin "1"
-			(uuid "b4c87cea-d92f-4ce0-a068-9fb216c69e06")
+			(uuid "23ee945e-9411-4f1d-be2f-500ec14354f2")
+		)
+		(pin "2"
+			(uuid "00150c4a-36c2-4cf8-a7e5-e489e5b4aa0a")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R13")
 					(unit 1)
 				)
@@ -2678,7 +4580,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e3fc3210-7330-4057-9a0a-2016e27961a3")
+		(uuid "ec25fd09-f85a-4aec-98a7-38d7190d40cd")
 		(property "Reference" "R14"
 			(at 154.94 185.42 0)
 			(effects
@@ -2712,15 +4614,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "0dbaf028-7475-4f31-b45f-e9d2e64b6b2c")
-		)
 		(pin "1"
-			(uuid "aeef5f7f-7dbc-4fd1-82e7-2a585bbf415e")
+			(uuid "c0c91ca6-ec27-4a93-b0a0-2c7bcd600621")
+		)
+		(pin "2"
+			(uuid "2bdc0f8c-f032-46f3-84f2-8bc673114ccb")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R14")
 					(unit 1)
 				)
@@ -2735,7 +4637,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1e9c117b-278d-478b-b25c-94d66b4a7127")
+		(uuid "a1cd9857-7b45-42de-870a-bd320755346c")
 		(property "Reference" "R15"
 			(at 193.04 185.42 0)
 			(effects
@@ -2769,15 +4671,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "35d0b16f-6203-49de-b5ad-9ccc11524f2e")
-		)
 		(pin "1"
-			(uuid "929dc3ef-e173-49d5-b56a-fb0d6ffa7c4b")
+			(uuid "53d9241f-35dd-415d-9bb3-ebad3c28fee8")
+		)
+		(pin "2"
+			(uuid "ee1a3319-f2a6-4a6a-ad32-046587e4cdda")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R15")
 					(unit 1)
 				)
@@ -2792,7 +4694,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a5d2f95e-96e5-4422-9934-d3ed1bb9c88e")
+		(uuid "c96e7414-7e39-4e1d-aef8-591097370674")
 		(property "Reference" "R16"
 			(at 231.14 185.42 0)
 			(effects
@@ -2826,15 +4728,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "2d795e30-c40b-4453-a9ce-a9c757e3b325")
-		)
 		(pin "1"
-			(uuid "a479cbb0-c2a5-4d58-aeac-9a1e99074e9c")
+			(uuid "2050bcfa-09cb-4637-a1d4-9dbadc300af6")
+		)
+		(pin "2"
+			(uuid "9ef709ad-ca12-4c6e-9c68-b3d68f8deac3")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R16")
 					(unit 1)
 				)
@@ -2849,7 +4751,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp yes)
-		(uuid "253cd08f-592a-49f5-9350-998344b0fae3")
+		(uuid "7a8f39ed-0101-4c6c-ae96-451b4dd3ec13")
 		(property "Reference" "R17"
 			(at 40.64 210.82 0)
 			(effects
@@ -2883,22 +4785,15 @@
 				(hide yes)
 			)
 		)
-		(property "DNP" "DNP"
-			(at 38.1 226.06 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
+		(pin "1"
+			(uuid "2864b5bf-efb4-43a2-a449-053bc7f4de9a")
 		)
 		(pin "2"
-			(uuid "82edb60b-1a28-4839-ab9e-745e4a853064")
-		)
-		(pin "1"
-			(uuid "ea9ef69f-fa31-49e7-9f0c-4beccf173fe5")
+			(uuid "bb01a87f-dcc0-462f-952d-b236a296abbb")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R17")
 					(unit 1)
 				)
@@ -2913,7 +4808,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp yes)
-		(uuid "8a1d1d58-7c58-4ccf-8cb5-532e4bee7528")
+		(uuid "2fac35a1-7037-4fb5-9c47-f81377dc3eec")
 		(property "Reference" "R18"
 			(at 78.74 210.82 0)
 			(effects
@@ -2947,22 +4842,15 @@
 				(hide yes)
 			)
 		)
-		(property "DNP" "DNP"
-			(at 76.2 226.06 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
+		(pin "1"
+			(uuid "2af81d01-698d-480b-9f24-565a4410fe61")
 		)
 		(pin "2"
-			(uuid "c05e94c1-a495-468d-b66f-23f044706bd3")
-		)
-		(pin "1"
-			(uuid "c9e0683b-8053-47c4-b941-bb3e38ca5195")
+			(uuid "4078c5ff-9799-450a-8a83-a480b997c5d4")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R18")
 					(unit 1)
 				)
@@ -2977,7 +4865,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1fe16982-001a-4b98-a22f-1d164bb67c58")
+		(uuid "d637cd0a-329a-4c8c-b273-af41c71fd06b")
 		(property "Reference" "R19"
 			(at 116.84 210.82 0)
 			(effects
@@ -3011,15 +4899,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "141caaa3-ee2a-4261-9c80-5608d7dcca94")
-		)
 		(pin "1"
-			(uuid "59a3180d-e48f-40b4-b4c4-dea29ba5c2bb")
+			(uuid "958cdcdc-5d13-4380-9f77-a4b90e7d63ad")
+		)
+		(pin "2"
+			(uuid "bfcf84ae-0808-43f6-be74-b35e60749ad5")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R19")
 					(unit 1)
 				)
@@ -3034,7 +4922,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "8b5e76c5-de19-48a3-9ee5-f0243e512616")
+		(uuid "95bdb3b1-48c9-41f5-a8bd-e87ed724ab84")
 		(property "Reference" "R20"
 			(at 154.94 210.82 0)
 			(effects
@@ -3068,15 +4956,15 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "d9c955aa-85b8-46e3-ad16-d68d6797851b")
-		)
 		(pin "1"
-			(uuid "ac4da13a-9ee6-4b27-92b3-0cb17164480f")
+			(uuid "85cdedd1-2d12-4905-81b4-e836ce0ded3d")
+		)
+		(pin "2"
+			(uuid "91acbd8d-8543-4aea-b0b1-84198f4ea940")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "R20")
 					(unit 1)
 				)
@@ -3091,7 +4979,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ebaee6d8-902c-4595-869a-0e1c6e231174")
+		(uuid "bc3141de-f16a-43e8-9986-6a7e23662b96")
 		(property "Reference" "JOUT1"
 			(at 320.04 83.82 0)
 			(effects
@@ -3126,26 +5014,26 @@
 			)
 		)
 		(pin "1"
-			(uuid "a9041fe3-0dc7-4b61-8ee2-065e8383d822")
+			(uuid "d73a6ec8-abf8-49c2-b64b-722c0a2e97a8")
 		)
 		(pin "2"
-			(uuid "0acdc8b5-3cf5-417c-ba30-e621f31041f2")
+			(uuid "334da49b-436c-4d28-9b20-ef11eef244b9")
 		)
 		(pin "3"
-			(uuid "f80f99f1-12f3-4fc9-98f8-968b9cfb3bfa")
+			(uuid "bfa41f13-d348-4db1-8a04-4db152d03984")
 		)
 		(pin "4"
-			(uuid "ae4d3a23-ed98-44b2-b31f-cac1d9ae271d")
+			(uuid "ea5b9e4e-c64b-4fe2-a59d-33b290cfed6d")
 		)
 		(pin "5"
-			(uuid "14ec903d-bbb4-4487-9e26-d9fb9e60b320")
+			(uuid "097015bd-8b8a-4e4c-bebe-6fd3293e9661")
 		)
 		(pin "6"
-			(uuid "bc20983d-d5ef-40d1-b4cb-9c3ee2d9074a")
+			(uuid "1346d167-132c-4052-a8b3-433250f6e65d")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "JOUT1")
 					(unit 1)
 				)
@@ -3160,7 +5048,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7eb09154-b18b-4f0b-a4f7-dac08275a0f8")
+		(uuid "4e5b2d2e-6313-4d16-9788-3bff1c867b7f")
 		(property "Reference" "J2"
 			(at 320.04 134.62 0)
 			(effects
@@ -3188,20 +5076,20 @@
 			)
 		)
 		(pin "1"
-			(uuid "15e8d2a0-a328-40f1-8dbd-7b49bea24b27")
+			(uuid "957f277a-c538-4fc0-84aa-cde42912efbe")
 		)
 		(pin "2"
-			(uuid "d632dca1-6fd2-4b7b-a240-5da70f0d6dbb")
+			(uuid "0f046347-80e7-41a9-b2aa-8fdd7aee10d1")
 		)
 		(pin "3"
-			(uuid "3d6474cd-ee2e-4d85-b849-65e8fcf30f55")
+			(uuid "7d878273-279b-4b2e-90a9-fd833bc9b3a6")
 		)
 		(pin "4"
-			(uuid "0ed9bb78-fafa-4a6a-b5f1-9db1a4777b30")
+			(uuid "9e32cacc-7c22-43e0-9dc6-0cbb7bb7056c")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "J2")
 					(unit 1)
 				)
@@ -3216,7 +5104,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ea469171-ae46-4880-8465-7432a893bd40")
+		(uuid "3ce10b3e-5140-47d8-be1e-c3364f058e72")
 		(property "Reference" "J3"
 			(at 320.04 185.42 0)
 			(effects
@@ -3244,32 +5132,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "7e00ccf9-167a-4cc5-838a-59be6d1af896")
+			(uuid "43686207-116f-4b37-a143-ae4d356b24bc")
 		)
 		(pin "2"
-			(uuid "63ca2470-e98e-45ce-9a49-fd1a13e6ca3b")
+			(uuid "fea731b0-eabf-416c-b9d7-fd61c4a96cc5")
 		)
 		(pin "3"
-			(uuid "8078404f-967c-4cc1-ad4b-b58ddae8dd97")
+			(uuid "559da5a6-6609-4fc6-aaed-b53d1331f701")
 		)
 		(pin "4"
-			(uuid "58e00242-b840-4d20-b54a-e1769bf33fe7")
+			(uuid "9549163f-93b4-42e5-abf1-a81537a0b971")
 		)
 		(pin "5"
-			(uuid "2eed2a23-56b9-4b26-a6b8-c92dcf7c14ec")
+			(uuid "d2c3d34f-2989-4ff8-9fff-6ae9c4dc05b9")
 		)
 		(pin "6"
-			(uuid "782b49af-896b-474e-92fc-4c213af8294d")
+			(uuid "fb596bab-ed6c-4e49-b07d-904a4165b49f")
 		)
 		(pin "7"
-			(uuid "1d35d373-418b-407d-9e8a-7932fe10b04b")
+			(uuid "32598605-aa9e-472f-8d85-318af2b1823b")
 		)
 		(pin "8"
-			(uuid "9e466a4f-2fcc-4227-973b-1ea2f18740d0")
+			(uuid "927163cc-7844-41c3-b489-f7a63e9b0712")
 		)
 		(instances
 			(project "board-p"
-				(path "/b2dc3f53-49f5-4fb9-8f78-98d4bdbdbabb"
+				(path "/2f50887c-fd80-4f71-a2f8-d8c1a887c3bf"
 					(reference "J3")
 					(unit 1)
 				)
@@ -3283,7 +5171,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f537ccea-d21e-44d2-b1c5-d40052deb80d")
+		(uuid "50985dd5-8445-4213-b2a1-2a3640b9b0a1")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3292,7 +5180,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "d094d585-f6de-4264-9888-69a4ad328d33")
+		(uuid "dd9f486b-567d-4c0c-bc62-fdee28ec6c79")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3301,7 +5189,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "cb2e4bb6-d501-4ebf-a508-8519acd7e03f")
+		(uuid "c55c624a-87ce-4183-977d-14996df341af")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3310,7 +5198,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ea92bd40-a6d5-4775-a67a-7f2ea841c5e7")
+		(uuid "44dfea97-234b-4229-8ed3-9e6d239013fd")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3319,7 +5207,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "2b7505a1-0985-48b3-8227-ecd71a4be930")
+		(uuid "584dc460-a611-410b-ac49-ad876451f42d")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3328,7 +5216,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "3c4bd4be-990f-4e38-bd17-8a3e8d6bda3f")
+		(uuid "fc0cc562-3883-4a47-b539-e8394c252c7b")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3337,7 +5225,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ab0cb510-47e8-4451-87c0-cd8ca84027a8")
+		(uuid "13a4b66f-7825-4000-9d36-713c7cd945b6")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3346,7 +5234,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b0df53c8-dc99-41b3-981d-5cdacf761fe1")
+		(uuid "1050d897-1ae0-4acb-ab5c-9272b8e2b42f")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3355,7 +5243,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "a8a43579-3e77-4f8c-b0b5-517ec09cd93f")
+		(uuid "290a849b-3201-452f-a640-60de337436ed")
 	)
 	(global_label "VBUS_IN"
 		(shape passive)
@@ -3364,7 +5252,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "fac6daad-f1d6-4977-b237-4e5e948c3541")
+		(uuid "c6fa52b1-c6dd-46cd-848d-ceecfbe3b0ce")
 	)
 	(global_label "CC1"
 		(shape passive)
@@ -3373,7 +5261,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "99ca1da0-c3a6-4254-bd11-06ca701600fe")
+		(uuid "b4503218-6938-490a-94bb-fd19f94e5c04")
 	)
 	(global_label "CC1"
 		(shape passive)
@@ -3382,7 +5270,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "be3283a4-288c-4768-a523-341a20180ea9")
+		(uuid "078e1df9-6cd9-4019-a629-d2a6a177221a")
 	)
 	(global_label "CC1"
 		(shape passive)
@@ -3391,7 +5279,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "23987f6d-0d06-4a3b-91f0-024e3ad1b2b1")
+		(uuid "b415e0d9-6f1d-4d56-9cdb-013244b98ba9")
 	)
 	(global_label "CC1"
 		(shape passive)
@@ -3400,7 +5288,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "d0397984-b535-470e-9b11-b56d2e625224")
+		(uuid "951c08db-cb51-4308-9b17-d7533d7ed141")
 	)
 	(global_label "CC1"
 		(shape passive)
@@ -3409,7 +5297,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ea5acc7b-ce5a-49f9-9179-085bc02bebcc")
+		(uuid "7cde9074-59c5-4c8b-a08b-12d84451ccbd")
 	)
 	(global_label "CC2"
 		(shape passive)
@@ -3418,7 +5306,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "5d78a646-6058-4e19-b0a4-02d4f2694076")
+		(uuid "18da6d11-ba95-4a46-a632-23cb5158194d")
 	)
 	(global_label "CC2"
 		(shape passive)
@@ -3427,7 +5315,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "be497018-b278-46ae-9b89-737b5e2c17e3")
+		(uuid "3a7a33c7-9749-440a-98fd-e2f30be1bf9b")
 	)
 	(global_label "CC2"
 		(shape passive)
@@ -3436,7 +5324,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b19953fd-fcf8-4520-b93a-7a480af95fac")
+		(uuid "0f6a81c4-0209-451a-a16a-a70ce1e0ea03")
 	)
 	(global_label "CC2"
 		(shape passive)
@@ -3445,7 +5333,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "52123bb4-3902-4287-ad82-0d7a7ecd72ee")
+		(uuid "1c9ac4f7-15e0-4e4b-adf0-d1bd52a19e1c")
 	)
 	(global_label "CC2"
 		(shape passive)
@@ -3454,7 +5342,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "89368153-17af-46ea-b865-0795feeca57e")
+		(uuid "6c7b78e2-1511-49e2-a2c0-af0abd887f47")
 	)
 	(global_label "CC1DB"
 		(shape passive)
@@ -3463,7 +5351,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "0b6361c5-df51-4ee5-b182-d349eceb5ffc")
+		(uuid "36f88ef0-2c9d-4210-8945-fba1ab5bddf1")
 	)
 	(global_label "CC1DB"
 		(shape passive)
@@ -3472,7 +5360,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "a2765004-9d0b-48d3-995e-901e0d89e7dd")
+		(uuid "e3fca752-c831-48e4-898a-83ce63848e5e")
 	)
 	(global_label "CC1DB"
 		(shape passive)
@@ -3481,7 +5369,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "174cbf43-d14e-4d1c-944f-536cb71d1e63")
+		(uuid "0626fd48-15e2-475b-9992-01a22dde30a7")
 	)
 	(global_label "CC2DB"
 		(shape passive)
@@ -3490,7 +5378,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ef7553f2-f288-4058-8ecb-704ed00fd577")
+		(uuid "9e6f1415-cec0-4503-9301-a26282b39cdd")
 	)
 	(global_label "CC2DB"
 		(shape passive)
@@ -3499,7 +5387,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "0d68ba53-516a-448b-b5b4-406c8597b757")
+		(uuid "e58e6aa8-7ee4-4184-be6d-1c5b31142603")
 	)
 	(global_label "CC2DB"
 		(shape passive)
@@ -3508,7 +5396,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "35eec4f7-da5d-49aa-9a34-7f3ffda44668")
+		(uuid "fdba02d8-8cec-4913-8bbf-e8e6800ba75f")
 	)
 	(global_label "VBUS_VS_DISCH"
 		(shape passive)
@@ -3517,7 +5405,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "b77242ba-1525-4d71-a039-6bed101c001c")
+		(uuid "1e153b15-ad12-41bc-afac-50ffc6f1be04")
 	)
 	(global_label "VBUS_VS_DISCH"
 		(shape passive)
@@ -3526,7 +5414,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "624cc25a-a6a6-4b84-85d0-5752e67af399")
+		(uuid "0a01f522-5689-4fa9-9457-35c9cc7d7162")
 	)
 	(global_label "VBEN"
 		(shape passive)
@@ -3535,7 +5423,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "9b6f0c8c-59da-4a4e-bded-59e7f8cd826d")
+		(uuid "7ab6cb96-f553-4f8b-a680-fc2b0f6725fa")
 	)
 	(global_label "VBEN"
 		(shape passive)
@@ -3544,7 +5432,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "731fc9f5-38f3-4b02-beef-89b6de6f9029")
+		(uuid "c4c7105a-66c9-4998-81b8-ed2d25e7d511")
 	)
 	(global_label "VBEN"
 		(shape passive)
@@ -3553,7 +5441,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "de2f5f1a-32fa-49d2-8ba5-e6a741084609")
+		(uuid "1ac7dc10-6f1a-449e-80c2-4a5952df9e84")
 	)
 	(global_label "Q1_G"
 		(shape passive)
@@ -3562,7 +5450,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "55e70e1f-1e19-40af-8d0b-405c6d774e30")
+		(uuid "6b7177f9-f193-4ac5-9274-7b167a6a878e")
 	)
 	(global_label "Q1_G"
 		(shape passive)
@@ -3571,7 +5459,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "4bc53bbf-4fca-4e4e-bde0-95a06200ea98")
+		(uuid "f5673909-a4d6-46f6-8130-e2756b38ad43")
 	)
 	(global_label "Q1_G"
 		(shape passive)
@@ -3580,7 +5468,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "3bfce111-61f1-46a6-a4aa-4c288a87db70")
+		(uuid "b665a7fe-b427-41bc-9093-cc0a369ad465")
 	)
 	(global_label "Q1_G"
 		(shape passive)
@@ -3589,7 +5477,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f60e5ab4-d5a3-47f1-b943-b636972b4e1b")
+		(uuid "aa22e9b0-69bb-4273-aded-9cd14358c604")
 	)
 	(global_label "VBUS_OUT"
 		(shape passive)
@@ -3598,7 +5486,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "c06e436b-6622-4450-a0be-ec6023405b04")
+		(uuid "4ed305d1-263e-49a2-8239-9314661898f4")
 	)
 	(global_label "VBUS_OUT"
 		(shape passive)
@@ -3607,7 +5495,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "7dca1164-52cc-4dd9-bbe2-335582599dc3")
+		(uuid "b469aecf-fe37-43bc-abc5-314f01fc27e9")
 	)
 	(global_label "VBUS_OUT"
 		(shape passive)
@@ -3616,7 +5504,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "fc720d1c-ece5-45e7-8a5a-9baa7810575d")
+		(uuid "07ecad08-8e22-48a4-82f3-b2a2f22e6dd1")
 	)
 	(global_label "VBUS_OUT"
 		(shape passive)
@@ -3625,7 +5513,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "802a3ef0-3493-49b6-9df4-d20c3f9e2da3")
+		(uuid "6b8e1392-410e-4b6c-9e3d-9b2e72d5cd3b")
 	)
 	(global_label "DISCH"
 		(shape passive)
@@ -3634,7 +5522,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ce297125-2cd7-4cad-80fc-c39874cd041b")
+		(uuid "60c2f57d-62db-4fa1-8374-4b05f1674fa0")
 	)
 	(global_label "DISCH"
 		(shape passive)
@@ -3643,7 +5531,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "685c2c19-f11c-4fbd-8860-f78dc0bed327")
+		(uuid "6350116e-a57c-4d79-ae04-6199a8053fa8")
 	)
 	(global_label "VREG_2V7"
 		(shape passive)
@@ -3652,7 +5540,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "99fc52b5-e354-45f4-bc2b-dcdeabad53d9")
+		(uuid "0599c991-2ee9-4bae-9eee-479523c6186d")
 	)
 	(global_label "VREG_2V7"
 		(shape passive)
@@ -3661,7 +5549,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "10676577-50b8-409f-a5ba-199c53312ee9")
+		(uuid "df7775f0-8394-4a1d-8cad-587cf61e0109")
 	)
 	(global_label "VREG_2V7"
 		(shape passive)
@@ -3670,7 +5558,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "51008436-e1e0-4783-bcb4-2a0b7420c8e7")
+		(uuid "7ec7d552-c4d7-4a5b-bf80-67cfd29eb972")
 	)
 	(global_label "VREG_2V7"
 		(shape passive)
@@ -3679,7 +5567,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "bd6152f7-2783-43d1-8bc4-0c214100ff00")
+		(uuid "2b6c1c3f-4f09-43d3-a605-f843278abd1d")
 	)
 	(global_label "VREG_2V7"
 		(shape passive)
@@ -3688,7 +5576,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "4b4b139c-a56e-45c1-b976-94f0529defbd")
+		(uuid "abd4d948-f097-4d43-8f05-5428cc0d90e5")
 	)
 	(global_label "VREG_1V2"
 		(shape passive)
@@ -3697,7 +5585,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "53df3c10-c2fd-44ce-9b36-7350d95f5b9f")
+		(uuid "df23a427-bbdd-4109-ba9e-7a18d009d274")
 	)
 	(global_label "VREG_1V2"
 		(shape passive)
@@ -3706,7 +5594,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "336ef353-188b-4427-ba6c-075b34aa4cea")
+		(uuid "78013935-0f86-4d31-8d2e-f4d466f4bea5")
 	)
 	(global_label "SCL"
 		(shape passive)
@@ -3715,7 +5603,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "b4bbe67d-a0bd-406b-82e9-c787453e1688")
+		(uuid "9725a71c-fbc0-45cd-9262-6bae4fdfa0bb")
 	)
 	(global_label "SCL"
 		(shape passive)
@@ -3724,7 +5612,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "33a9281e-1f08-4cd7-a88e-7f2fc15dd203")
+		(uuid "020120f9-d544-43f3-aa3d-d2578009adc2")
 	)
 	(global_label "SCL"
 		(shape passive)
@@ -3733,7 +5621,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "11df6833-b1fa-493a-81d7-3c0023075779")
+		(uuid "083456b2-fa56-45af-ba9e-e3930ec7ecea")
 	)
 	(global_label "SDA"
 		(shape passive)
@@ -3742,7 +5630,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "7c1756be-c06c-46b2-90d3-619b104f3bc3")
+		(uuid "0a960bce-aa91-4e6f-a887-c0227bdcf520")
 	)
 	(global_label "SDA"
 		(shape passive)
@@ -3751,7 +5639,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "4b5c5d29-8b8a-43d5-9b9a-0efc57a5d342")
+		(uuid "03fb9a07-dbf0-4ba5-bfa2-6b000d062471")
 	)
 	(global_label "SDA"
 		(shape passive)
@@ -3760,7 +5648,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ad688719-0efe-463b-a8ff-1f4d20515413")
+		(uuid "4bf5ff76-3014-45d6-b143-64d88efd0cca")
 	)
 	(global_label "ATT"
 		(shape passive)
@@ -3769,7 +5657,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f48c58e4-cf43-4792-ad5e-865e42f5b180")
+		(uuid "cc29abae-7a6f-458b-ba96-e021724f6518")
 	)
 	(global_label "ATT"
 		(shape passive)
@@ -3778,7 +5666,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "bad9ce7c-7441-4025-b54d-1afb6bc99979")
+		(uuid "02db94d6-ad7f-4582-8aa3-9c5a355e2217")
 	)
 	(global_label "ATT"
 		(shape passive)
@@ -3787,7 +5675,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "2ff81b43-7010-4a62-98be-2790aefbb935")
+		(uuid "bee17422-b9a1-43df-824a-65570f7453f0")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -3796,7 +5684,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "fad89cfe-b0f1-495a-8e9f-b31c5d8c18eb")
+		(uuid "cdc12e02-3212-4b94-a198-aa45b46a4e6b")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -3805,7 +5693,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "3e1b691c-a849-473d-8ea6-f2381f14682b")
+		(uuid "8b15929b-85c2-4f25-8521-156e080e6239")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -3814,7 +5702,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "3be3dd35-abbd-475c-addb-8189e830c19b")
+		(uuid "3d3ef518-52ff-4f28-ae40-11e68c6513f4")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3823,7 +5711,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "0830f877-4ba5-45f4-bb4d-41d39677ab79")
+		(uuid "94eb12b6-4445-4fa7-951a-a1da161248bf")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3832,7 +5720,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "0220f15d-5c55-4854-b3f6-711eeae137a2")
+		(uuid "f66b5341-34ad-4cc5-aa36-b1f69f066ca1")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3841,7 +5729,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "7cb4fadd-5101-462a-b434-f9cf72303837")
+		(uuid "bd73b17a-b5ea-4bc3-83a3-ce67f52a4021")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3850,7 +5738,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ea874e8b-6dba-48f1-9465-5b98a1222890")
+		(uuid "7f5a38e9-7830-4bd3-b22a-69bc81e7b02a")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3859,7 +5747,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "9625f37b-b163-492b-b7b9-dfdbba7cc145")
+		(uuid "204aabc7-6224-44d0-9337-e8761e01c1bb")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3868,7 +5756,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ed5f4ec7-bf62-491a-821f-f52eb389d7ea")
+		(uuid "4f999a80-b936-4b32-8ac0-de3d0bf05a96")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3877,7 +5765,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "55e9f93d-ca4a-4040-a890-d43084c626d4")
+		(uuid "9c619144-3ae1-4011-8098-b4265e57f956")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3886,7 +5774,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ed27bfd3-c92f-40f5-a714-68c8216e2484")
+		(uuid "e6ef9722-660a-4ef6-a12b-236574faf364")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3895,7 +5783,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "df44d952-e2d4-4f25-a49a-7a576f637973")
+		(uuid "1a958fe4-9268-4d6e-a261-599ad1d37f7b")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3904,7 +5792,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "c0df737c-556e-46ee-a5ae-0a390049babf")
+		(uuid "f75ebe50-5347-49d2-8dd9-87ad5ffc02c1")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3913,7 +5801,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "36123e2d-5e59-4f32-b7cf-3b6445cee222")
+		(uuid "a9b233a3-6dc2-4ac9-818c-8aa0150f1934")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3922,7 +5810,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "a323417d-4915-415b-9ec9-51a3ec5a4fdf")
+		(uuid "0341cd00-0435-43c5-82b5-3f88a7828e11")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3931,7 +5819,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "d4c669dd-a688-45da-bcbc-de5c6ce7c9b2")
+		(uuid "23939377-d9cd-4be1-9050-428dca6ef99a")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3940,7 +5828,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "8289fc32-a701-4b0c-aeb7-2901272d22b5")
+		(uuid "12518c36-a0b3-41bf-a707-54dbb5301b85")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3949,7 +5837,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "cad7310c-ccf3-43e3-a98a-f880aac1c5f8")
+		(uuid "f25e8021-dc28-40eb-b526-a70a494dcce7")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3958,7 +5846,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "bff23736-fa05-439a-89df-9f342e65f121")
+		(uuid "9e7ae75a-c1f1-44d5-aa83-59478644dc9d")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3967,7 +5855,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ee2c9c91-6ba4-4746-ab64-1b48a00fc044")
+		(uuid "f0b3dfbe-f711-4405-8404-938b571e2898")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3976,7 +5864,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "18a24e3b-c08d-4182-9a67-19f03b7cbe04")
+		(uuid "4792d3f1-c328-4bf0-879d-81b86fb7c953")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3985,7 +5873,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "7a54a9e3-d062-448e-b482-f3cb3c9330da")
+		(uuid "f39f6428-aeee-42ec-9cde-4b47b9835cb9")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -3994,7 +5882,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "8b6a9cdc-574d-4d3c-93dc-c803774a3d99")
+		(uuid "05d2c468-c69a-439c-bc8d-73578d4fc5e4")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -4003,7 +5891,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "24205321-4ef0-4d69-80e8-5ca8a1af7ac3")
+		(uuid "741af69f-250d-4748-988f-5a1f4e07997f")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -4012,7 +5900,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "536e5769-431d-455e-86e0-12ea5557b9b4")
+		(uuid "cb5b2ef7-2d55-4e6e-b59f-be20a80ac401")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -4021,7 +5909,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "29b757fe-4f66-4522-b74f-ada55572d27c")
+		(uuid "8b25c2a6-2fa9-4772-9282-34f5a92ff356")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -4030,7 +5918,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "e6ec8ceb-b291-4bf9-8ac9-2b712c63af7b")
+		(uuid "8c9ae525-14ad-4bd8-8802-b1452f623cb7")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -4039,7 +5927,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "f4958377-608b-4e01-8b44-9345a88bc738")
+		(uuid "e1018322-dafe-4a2c-82bf-0de45f3343d8")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -4048,31 +5936,31 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "063d6b95-bb05-4973-8a68-6d8614185a75")
+		(uuid "974cf2ee-ce72-44be-b696-6d8359ad4fe4")
 	)
 	(no_connect
 		(at 132.08 81.28)
-		(uuid "bdac9d25-277b-4b87-b665-ba4996b02b9a")
+		(uuid "683cf2fd-cc93-47e1-97af-bfaed18458e2")
 	)
 	(no_connect
 		(at 172.72 101.6)
-		(uuid "2e8faab6-9be6-4eb0-8ba2-8b35d7cc3361")
+		(uuid "53ed0a44-9629-4792-af98-b9ca12e7ca28")
 	)
 	(no_connect
 		(at 172.72 99.06)
-		(uuid "8fd130ef-2537-4d4b-80fa-ed2aaf6237ad")
+		(uuid "5ab475fb-497b-443f-b816-e39f7174a1d8")
 	)
 	(no_connect
 		(at 172.72 93.98)
-		(uuid "4034316b-1b2f-4e6a-87b5-a133a9e12d55")
+		(uuid "411c4f05-a45f-4716-97e6-517d06a2797c")
 	)
 	(no_connect
 		(at 172.72 88.9)
-		(uuid "3a8a9d55-9ac8-4e16-9628-cc71d3649e61")
+		(uuid "ddd2fd0a-daa2-40e7-b7ab-a21df2f72ce7")
 	)
 	(no_connect
 		(at 309.88 139.7)
-		(uuid "5c345230-1fa2-49d4-b58e-1bd8b09d97b8")
+		(uuid "5c3f846a-90c5-478f-98ae-9f110557fc42")
 	)
 	(sheet_instances
 		(path "/"
