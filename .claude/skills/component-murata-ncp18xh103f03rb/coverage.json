@@ -38,9 +38,13 @@
       "record_id": "rec-c13564",
       "domain": "installed-dissipation-factor-and-self-heating",
       "status": "OPEN",
-      "reason": "catalog nominal context does not guarantee installed thermal coupling",
-      "fact_ids": [],
-      "blocking_fact_ids": []
+      "reason": "a nominal Typical Dissipation Constant value now exists in the older catalog mirror (fact-c13564-dissipation) but it is UNSOURCED/unverified nominal context and does not guarantee installed thermal coupling on this PCB",
+      "fact_ids": [
+        "fact-c13564-dissipation"
+      ],
+      "blocking_fact_ids": [
+        "fact-c13564-dissipation"
+      ]
     },
     {
       "coverage_id": "cov-c13564-time",

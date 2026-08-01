@@ -26,7 +26,8 @@
         "fact-c13564-package",
         "fact-c13564-lifecycle",
         "fact-c13564-topology",
-        "fact-c13564-curve-caveat"
+        "fact-c13564-curve-caveat",
+        "fact-c13564-dissipation"
       ],
       "interaction_ids": [
         "int-c13564-divider",
