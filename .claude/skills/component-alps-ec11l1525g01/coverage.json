@@ -1,0 +1,7 @@
+{"schema_version":1,"coverage":[
+{"coverage_id":"cov-c2991196-spec","record_id":"rec-c2991196","domain":"phase-detent-switch-mechanical-and-process-context","status":"COVERED","reason":"facts retain exact mirror-spec locators, lower-authority UNSOURCED status, and project pin topology"},
+{"coverage_id":"cov-c2991196-lifecycle","record_id":"rec-c2991196","domain":"current-lifecycle-and-approved-replacement","status":"OPEN","reason":"fact-c2991196-lifecycle: current manufacturer page unavailable"},
+{"coverage_id":"cov-c2991196-fw","record_id":"rec-c2991196","domain":"firmware-debounce-and-ui-direction","status":"OPEN","reason":"contact timing does not establish firmware debounce or user-facing direction"},
+{"coverage_id":"cov-c2991196-load","record_id":"rec-c2991196","domain":"installed-panel-knob-load-and-life","status":"OPEN","reason":"fact-c2991196-mechanical and fact-c2991196-life require installed mechanical validation"},
+{"coverage_id":"cov-c2991196-switch","record_id":"rec-c2991196","domain":"installed-switch-and-bench-state","status":"OPEN","reason":"fact-c2991196-topology leaves D/E unused and provides no bench result"}
+]}
