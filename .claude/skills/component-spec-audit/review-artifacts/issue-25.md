@@ -24,6 +24,7 @@ Scope: central component-spec validator/fixtures, circuit-spec integration skill
 - Applied after final audit: required the zero SHA sentinel for every `SOURCE UNAVAILABLE` source and added a strictly structured distributor-identity-only lane that cannot support electrical/thermal claims, calculations, PASS or BLOCKER.
 - Applied after final audit: confirmed C283540, C571370 and C210315 static orderable bindings through distributor identity evidence. C210315 live HTML hashes varied across retries, so its retained bytes remain locked but deterministic selective refresh is explicitly disabled; incoming reel/label/CCT acceptance remains OPEN.
 - Applied after final audit: online refresh now uses a process-unique temporary directory; a nested concurrent-refresh regression test prevents one validator process from deleting another process's target directory.
+- Applied after final independent audit: the allowlisted Board P prose no longer treats 32.4 V as installed-waveform proof, and Board P plus its ratings matrix now distinguish manufacturer-primary, manufacturer-mirror, and catalog authority in their introductory claims. The out-of-allowlist LED-driver research correction is isolated in follow-up #36 rather than expanding issue #25's ownership.
 
 ## Verification
 

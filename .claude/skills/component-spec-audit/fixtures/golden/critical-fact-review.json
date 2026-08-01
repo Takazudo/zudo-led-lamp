@@ -22,7 +22,7 @@
     {
       "reviewer": "issue-25 manager source-recovery review",
       "review_log": "review-artifacts/issue-25.md",
-      "review_log_sha256": "eff10d2a47ad25de43aa040673dca7b9c12e231cff4b7ee076b30fd010d17617",
+      "review_log_sha256": "6cfc7d38d3355e9f81b743e2610e32809e5c20af84184d0a5c327ee71b91ac10",
       "review_ids": ["review-high-diode-smaj20a-clamp", "review-stusb-vdd-absolute-max"]
     }
   ],

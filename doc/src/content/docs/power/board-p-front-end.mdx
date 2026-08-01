@@ -1,6 +1,6 @@
 ---
 title: Board P — USB-PD Front End
-description: The USB-PD 15V/3A sink front end for this lamp — adapted from the zudo-pd project's reusable Board A core (STUSB4500 + USB-C receptacle + load switch + NVM/debug pads), audited against primary datasheets rather than copied verbatim.
+description: The USB-PD 15V/3A sink front end for this lamp — a reusable STUSB4500, USB-C receptacle, load-switch, and NVM/debug core audited against cited evidence with source authority and open trust gaps explicit.
 sidebar_position: 10
 ---
 
@@ -14,9 +14,10 @@ decision, not by this page.
 The circuit below is adapted from the **zudo-pd project**'s "Board A" — a small,
 reusable USB-PD 15 V sink module the zudo-pd project split out specifically so other
 projects could reuse it. This page is an **audit**, not a copy-paste: every LCSC part
-number was re-verified against the local JLCPCB parts database, and every rating claim
-was re-checked against the actual manufacturer datasheet rather than trusted from
-zudo-pd's prose. One part failed that check — see
+number was re-verified against the local JLCPCB parts database, and rating claims were
+checked against the cited manufacturer, manufacturer-mirror, or catalog evidence.
+Evidence authority is explicit; mirror/catalog records do not receive primary-source
+trust. One part failed the rating check — see
 [Worst-Case Ratings Matrix](./ratings-matrix.mdx) for the USB-C receptacle swap this
 audit made.
 

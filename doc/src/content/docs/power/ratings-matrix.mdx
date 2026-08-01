@@ -4,9 +4,10 @@ description: Conditioned Board P ratings audit against 15 V operation and the ex
 sidebar_position: 20
 ---
 
-This page validates every fitted [Board P](./board-p-front-end.mdx) part against two
-reference points, per primary manufacturer datasheets rather than any project's own
-prose claims about those parts:
+This page screens every fitted [Board P](./board-p-front-end.mdx) part against two
+reference points using the cited evidence. Manufacturer-primary evidence is used where
+available; manufacturer mirrors and catalog records retain their lower-authority trust
+state and cannot establish primary-source closure:
 
 1. **15 V nominal** — the steady-state PD-contracted rail voltage.
 2. **32.4 V conditioned clamp point** — the exact High Diode SMAJ20A primary row gives
@@ -71,7 +72,7 @@ the usual LCSC stock caveat.
 
 ## Ratings matrix
 
-| Part | Rated limit (primary source) | vs 15 V nominal | vs ~32.4 V clamp transient | Verdict |
+| Part | Rated limit (cited evidence) | vs 15 V nominal | vs conditioned 32.4 V point | Verdict |
 |------|-------------------------------|------------------|------------------------------|---------|
 | U1 STUSB4500QTR — VDD pin | Manufacturer-authored DS12499 Rev 8 mirror states 28 V absolute max and 4.1–22 V operating range; mirror evidence remains `UNSOURCED` under the primary-only trust policy | Conditioned arithmetic is below the stated operating ceiling, but trust closure is OPEN | The 32.4 V conditioned D5 table point would exceed the stated 28 V absolute maximum; the actual waveform is unresolved | **EVIDENCE BLOCKER (UNSOURCED)** — require primary evidence plus simulation and measured VDD waveform |
 | U1 STUSB4500QTR — CC1/CC2/CC1DB/CC2DB pins | Manufacturer-authored Rev 8 mirror states 22 V short-to-VBUS protection; primary trust remains OPEN | Conditioned only | Generator topology does not place CC pins directly on `VBUS_IN`, but as-built continuity is unverified | OPEN |
