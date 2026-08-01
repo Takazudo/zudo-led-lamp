@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "src-type-c-c283540",
+      "record_id": "rec-type-c-31-m-17",
+      "document_title": "LCSC manufacturer-attributed TYPE-C-31-M-17 drawing",
+      "document_number": "C283540",
+      "revision": "undated",
+      "document_date": "UNSOURCED",
+      "authoritative_url": "https://www.lcsc.com/datasheet/C283540.pdf",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-08-02",
+      "authority_class": "DISTRIBUTOR_IDENTITY",
+      "sha256": "b722062074a48ae955d2e2b00c046ca5ab0be6153acbc5cd4bd561e0a24dd781",
+      "availability": "SOURCE UNAVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "1",
+      "locator": "Document title block, contact sketch and dimension figure",
+      "evidence_extract": "A distributor route associates C283540 with TYPE-C-31-M-17 and a 6-contact USB-C receptacle drawing; no manufacturer-primary document was available."
+    }
+  ]
+}

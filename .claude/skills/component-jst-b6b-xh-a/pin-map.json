@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "pin_maps": [
+    {
+      "pin_map_id": "pinmap-jst-b6b-xh-a",
+      "record_id": "rec-jst-b6b-xh-a",
+      "symbol": "B6B-XH-A",
+      "footprint": "CONN-TH_6P-P2.50_B6B-XH-A-LF-SN",
+      "pins": [
+        {
+          "symbol_pin": "1",
+          "name": "1",
+          "footprint_pad": "1",
+          "function": "Board P VBUS_OUT conductor A"
+        },
+        {
+          "symbol_pin": "2",
+          "name": "2",
+          "footprint_pad": "2",
+          "function": "Board P VBUS_OUT conductor B"
+        },
+        {
+          "symbol_pin": "3",
+          "name": "3",
+          "footprint_pad": "3",
+          "function": "Board P ATT"
+        },
+        {
+          "symbol_pin": "4",
+          "name": "4",
+          "footprint_pad": "4",
+          "function": "Board P PDOK"
+        },
+        {
+          "symbol_pin": "5",
+          "name": "5",
+          "footprint_pad": "5",
+          "function": "Board P GND conductor A"
+        },
+        {
+          "symbol_pin": "6",
+          "name": "6",
+          "footprint_pad": "6",
+          "function": "Board P GND conductor B"
+        }
+      ],
+      "reviewed_by": "JST B6B-XH-A six-circuit header orientation plus board_p_spec.py; mate mapping remains open"
+    },
+    {
+      "pin_map_id": "pinmap-jst-b6b-xh-a-board-l",
+      "record_id": "rec-jst-b6b-xh-a",
+      "symbol": "B6B-XH-A Board L J2",
+      "footprint": "CONN-TH_6P-P2.50_B6B-XH-A-LF-SN",
+      "pins": [
+        {
+          "symbol_pin": "1",
+          "name": "1",
+          "footprint_pad": "1",
+          "function": "Board L VBUS_L conductor A"
+        },
+        {
+          "symbol_pin": "2",
+          "name": "2",
+          "footprint_pad": "2",
+          "function": "Board L VBUS_L conductor B"
+        },
+        {
+          "symbol_pin": "3",
+          "name": "3",
+          "footprint_pad": "3",
+          "function": "Board L ATT"
+        },
+        {
+          "symbol_pin": "4",
+          "name": "4",
+          "footprint_pad": "4",
+          "function": "Board L PDOK"
+        },
+        {
+          "symbol_pin": "5",
+          "name": "5",
+          "footprint_pad": "5",
+          "function": "Board L GND conductor A"
+        },
+        {
+          "symbol_pin": "6",
+          "name": "6",
+          "footprint_pad": "6",
+          "function": "Board L GND conductor B"
+        }
+      ],
+      "reviewed_by": "JST B6B-XH-A six-circuit header orientation plus board_l_spec.py; mate mapping remains open"
+    }
+  ]
+}

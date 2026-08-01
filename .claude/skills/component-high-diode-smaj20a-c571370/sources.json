@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "src-high-diode-c571370",
+      "record_id": "rec-high-diode-smaj20a",
+      "document_title": "LCSC manufacturer-attributed High Diode SMAJ20A mirror",
+      "document_number": "C571370",
+      "revision": "undated",
+      "document_date": "UNSOURCED",
+      "authoritative_url": "https://www.lcsc.com/datasheet/C571370.pdf",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-08-02",
+      "authority_class": "DISTRIBUTOR_IDENTITY",
+      "sha256": "ffd0eefab167d6bb25b0ab03ed097a0e1597c30a4db2dce43a5108312fad6e70",
+      "availability": "SOURCE UNAVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "1",
+      "locator": "Document title block, SMAJ20A selection row, polarity/package figure",
+      "evidence_extract": "Distributor route attributes C571370 to High Diode SMAJ20A; no manufacturer-primary document was retrievable, so values are not promoted."
+    }
+  ]
+}

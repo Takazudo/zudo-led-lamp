@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "coverage": [
+    {
+      "coverage_id": "cov-jst-header",
+      "record_id": "rec-jst-b6b-xh-a",
+      "domain": "header identity/pitch/ratings/dimensions",
+      "status": "COVERED",
+      "reason": "Official JST XH catalog general table and B6B-XH-A row"
+    },
+    {
+      "coverage_id": "cov-jst-project-map",
+      "record_id": "rec-jst-b6b-xh-a",
+      "domain": "Board P and Board L signal mapping",
+      "status": "COVERED",
+      "reason": "Current generator connectivity is recorded in pin map and interaction"
+    },
+    {
+      "coverage_id": "cov-jst-harness",
+      "record_id": "rec-jst-b6b-xh-a",
+      "domain": "mating housing/contact/wire/completed harness selection",
+      "status": "OPEN",
+      "reason": "No mating BOM, wire specification, crimp process, or completed pin-to-pin harness has been selected"
+    }
+  ]
+}

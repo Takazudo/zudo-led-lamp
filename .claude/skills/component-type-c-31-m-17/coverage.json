@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "coverage": [
+    {
+      "coverage_id": "cov-type-c-identity",
+      "record_id": "rec-type-c-31-m-17",
+      "domain": "manufacturer-primary identity",
+      "status": "OPEN",
+      "reason": "Only a distributor-attributed exact mirror was located"
+    },
+    {
+      "coverage_id": "cov-type-c-ratings",
+      "record_id": "rec-type-c-31-m-17",
+      "domain": "electrical ratings and durability",
+      "status": "OPEN",
+      "reason": "No manufacturer-primary rating table available"
+    },
+    {
+      "coverage_id": "cov-type-c-contacts",
+      "record_id": "rec-type-c-31-m-17",
+      "domain": "contact/shell numbering and duplicate-pin topology",
+      "status": "OPEN",
+      "reason": "Project mapping exists but physical contact equivalence is not primary-source locked"
+    },
+    {
+      "coverage_id": "cov-type-c-mechanical",
+      "record_id": "rec-type-c-31-m-17",
+      "domain": "mechanical drawing and orientation",
+      "status": "OPEN",
+      "reason": "Footprint must be checked against incoming parts or a controlled drawing"
+    }
+  ]
+}
