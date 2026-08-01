@@ -11,6 +11,12 @@ A spec module defines:
 Every connected pin gets a global label at its endpoint (no wires); floating
 pins get no_connect markers. Connectivity is verified separately by
 verify_netlist.py diffing a kicad-cli netlist export against the same spec.
+
+All node UUIDs are derived deterministically from stable identity strings
+(project + ref/net/pin), not random — CI regenerates both boards and diffs
+the result against the checked-in .kicad_sch (scripts/schgen/verify.sh calls
+this "regen-idempotency"); random UUIDs would make that diff non-empty on
+every run regardless of whether the spec actually changed.
 """
 import math
 import os
@@ -21,9 +27,13 @@ from sexp import load, atom, find_all
 PROJ = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 LIB_PATH = os.path.join(PROJ, 'symbols', 'zudo-led-lamp.kicad_sym')
 
+# Fixed, arbitrary namespace for uuid5 — only needs to be stable across runs.
+_UUID_NAMESPACE = uuid.UUID('a3f0c9d2-2f3e-4a9b-9b0f-3c1d7e8f4a10')
 
-def new_uuid():
-    return str(uuid.uuid4())
+
+def new_uuid(seed):
+    """Deterministic UUID derived from `seed` (see module docstring)."""
+    return str(uuid.uuid5(_UUID_NAMESPACE, seed))
 
 
 class Library:
@@ -121,7 +131,7 @@ def generate(spec):
     n = check_coverage(spec, pin_cache)
     print(f'coverage OK: {n} pin specs over {len(spec.COMPONENTS)} components')
 
-    root_uuid = new_uuid()
+    root_uuid = new_uuid(f'{spec.PROJECT_NAME}:root')
     parts = []
     parts.append('(kicad_sch')
     parts.append('\t(version 20260306)')
@@ -169,7 +179,7 @@ def generate(spec):
         body.append('\t\t(in_bom yes)')
         body.append('\t\t(on_board yes)')
         body.append(f'\t\t(dnp {"yes" if dnp else "no"})')
-        body.append(f'\t\t(uuid "{new_uuid()}")')
+        body.append(f'\t\t(uuid "{new_uuid(f"{spec.PROJECT_NAME}:{ref}:instance")}")')
         props = [
             ('Reference', ref, ref_pos[0], ref_pos[1], False),
             ('Value', value, val_pos[0], val_pos[1], False),
@@ -183,8 +193,9 @@ def generate(spec):
             body.append(
                 f'\t\t(property "{pname}" "{pval}"\n\t\t\t(at {px:g} {py:g} 0)'
                 f'\n\t\t\t(effects\n\t\t\t\t(font (size 1.27 1.27)){hide_s}\n\t\t\t)\n\t\t)')
-        for num, *_rest in pin_cache[symname]:
-            body.append(f'\t\t(pin "{num}"\n\t\t\t(uuid "{new_uuid()}")\n\t\t)')
+        for pin_idx, (num, *_rest) in enumerate(pin_cache[symname]):
+            pin_uuid = new_uuid(f'{spec.PROJECT_NAME}:{ref}:pin:{num}:{pin_idx}')
+            body.append(f'\t\t(pin "{num}"\n\t\t\t(uuid "{pin_uuid}")\n\t\t)')
         body.append(
             f'\t\t(instances\n\t\t\t(project "{spec.PROJECT_NAME}"\n\t\t\t\t(path "/{root_uuid}"'
             f'\n\t\t\t\t\t(reference "{ref}")\n\t\t\t\t\t(unit 1)\n\t\t\t\t)\n\t\t\t)\n\t\t)')
@@ -194,20 +205,22 @@ def generate(spec):
     for net, specs in spec.NETS.items():
         for s in specs:
             ref, num = s.split('.')
-            for (x, y, ang) in abs_pin_positions(spec, pin_cache, ref)[num]:
+            for label_idx, (x, y, ang) in enumerate(abs_pin_positions(spec, pin_cache, ref)[num]):
                 justify = {0: 'left', 90: 'left', 180: 'right', 270: 'right'}[ang]
+                label_uuid = new_uuid(f'{spec.PROJECT_NAME}:label:{net}:{s}:{label_idx}')
                 parts.append(
                     f'\t(global_label "{net}"\n'
                     f'\t\t(shape passive)\n'
                     f'\t\t(at {x:g} {y:g} {ang})\n'
                     f'\t\t(effects\n\t\t\t(font (size 1.27 1.27))\n\t\t\t(justify {justify})\n\t\t)\n'
-                    f'\t\t(uuid "{new_uuid()}")\n'
+                    f'\t\t(uuid "{label_uuid}")\n'
                     f'\t)')
 
     for s in spec.NO_CONNECT:
         ref, num = s.split('.')
-        for (x, y, _ang) in abs_pin_positions(spec, pin_cache, ref)[num]:
-            parts.append(f'\t(no_connect\n\t\t(at {x:g} {y:g})\n\t\t(uuid "{new_uuid()}")\n\t)')
+        for nc_idx, (x, y, _ang) in enumerate(abs_pin_positions(spec, pin_cache, ref)[num]):
+            nc_uuid = new_uuid(f'{spec.PROJECT_NAME}:nc:{s}:{nc_idx}')
+            parts.append(f'\t(no_connect\n\t\t(at {x:g} {y:g})\n\t\t(uuid "{nc_uuid}")\n\t)')
 
     parts.append('\t(sheet_instances\n\t\t(path "/"\n\t\t\t(page "1")\n\t\t)\n\t)')
     parts.append('\t(embedded_fonts no)')

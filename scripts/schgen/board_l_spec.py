@@ -8,7 +8,7 @@ EC11 symbol pins: A/B/C terminals, D/E push-button terminals (unused), 6/7 mount
 
 PROJECT_NAME = 'board-l'
 OUT = 'boards/board-l/board-l.kicad_sch'
-PAPER = 'A2'  # 68 parts + title block did not fit A3 without collisions
+PAPER = 'A2'  # 71 parts + title block did not fit A3 without collisions
 
 _C100N = ('CC0603KRX7R9BB104', '100nF/50V', 'C14663', 'zudo-led-lamp:C0603')
 _C10U = ('CL31A106KBHNNNE', '10uF/50V', 'C13585', 'zudo-led-lamp:C1206')
