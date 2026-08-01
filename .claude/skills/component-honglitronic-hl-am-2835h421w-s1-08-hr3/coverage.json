@@ -1,8 +1,79 @@
-{"schema_version":1,"coverage":[
-{"coverage_id":"cov-c210315-spec","record_id":"rec-c210315","domain":"identity-polarity-optical-electrical-and-process-ratings","status":"COVERED","reason":"fact-c210315-manufacturer through fact-c210315-reflow"},
-{"coverage_id":"cov-c210315-sharing","record_id":"rec-c210315","domain":"installed-branch-current-and-sharing","status":"OPEN","reason":"parallel topology plus component ratings does not establish actual branch currents"},
-{"coverage_id":"cov-c210315-thermal","record_id":"rec-c210315","domain":"junction-temperature-and-enclosure-thermal-state","status":"OPEN","reason":"no installed thermal measurement or junction calculation"},
-{"coverage_id":"cov-c210315-driver","record_id":"rec-c210315","domain":"pwm-waveform-and-driver-fault-response","status":"OPEN","reason":"driver configuration, PWM waveform and fault behavior are outside retained evidence"},
-{"coverage_id":"cov-c2934070-context","record_id":"rec-c2934070","domain":"mirror-rated-resistance-power-voltage-and-temperature-context","status":"COVERED","reason":"fact-c2934070-resistance through fact-c2934070-temperature retain lower-authority UNSOURCED context"},
-{"coverage_id":"cov-c2934070-stress","record_id":"rec-c2934070","domain":"installed-resistor-temperature-and-pulse-stress","status":"OPEN","reason":"nominal calculations do not establish installed waveform, temperature, sharing or pulse stress"}
-]}
+{
+  "schema_version": 1,
+  "coverage": [
+    {
+      "coverage_id": "cov-c210315-spec",
+      "record_id": "rec-c210315",
+      "domain": "polarity-optical-electrical-and-process-ratings",
+      "status": "COVERED",
+      "reason": "The manufacturer family/base drawing supports these conditioned polarity, optical, electrical and process ratings.",
+      "fact_ids": [
+        "fact-c210315-manufacturer",
+        "fact-c210315-polarity",
+        "fact-c210315-flux",
+        "fact-c210315-vf",
+        "fact-c210315-cri",
+        "fact-c210315-view",
+        "fact-c210315-maxima",
+        "fact-c210315-reflow"
+      ]
+    },
+    {
+      "coverage_id": "cov-c210315-exact-order-code",
+      "record_id": "rec-c210315",
+      "domain": "exact-cct-and-orderability-identity",
+      "status": "OPEN",
+      "reason": "The manufacturer family/base drawing does not independently bind distributor C210315 to the exact CCT/order-code suffix.",
+      "fact_ids": []
+    },
+    {
+      "coverage_id": "cov-c210315-sharing",
+      "record_id": "rec-c210315",
+      "domain": "installed-branch-current-and-sharing",
+      "status": "OPEN",
+      "reason": "parallel topology plus component ratings does not establish actual branch currents",
+      "fact_ids": []
+    },
+    {
+      "coverage_id": "cov-c210315-thermal",
+      "record_id": "rec-c210315",
+      "domain": "junction-temperature-and-enclosure-thermal-state",
+      "status": "OPEN",
+      "reason": "no installed thermal measurement or junction calculation",
+      "fact_ids": []
+    },
+    {
+      "coverage_id": "cov-c210315-driver",
+      "record_id": "rec-c210315",
+      "domain": "pwm-waveform-and-driver-fault-response",
+      "status": "OPEN",
+      "reason": "driver configuration, PWM waveform and fault behavior are outside retained evidence",
+      "fact_ids": []
+    },
+    {
+      "coverage_id": "cov-c2934070-context",
+      "record_id": "rec-c2934070",
+      "domain": "identity-resistance-power-voltage-and-temperature",
+      "status": "COVERED",
+      "reason": "fact-c2934070-manufacturer through fact-c2934070-temperature are locked to the manufacturer-primary FRC specification.",
+      "fact_ids": [
+        "fact-c2934070-manufacturer",
+        "fact-c2934070-resistance",
+        "fact-c2934070-tolerance",
+        "fact-c2934070-power",
+        "fact-c2934070-tcr",
+        "fact-c2934070-voltage",
+        "fact-c2934070-rcwv",
+        "fact-c2934070-temperature"
+      ]
+    },
+    {
+      "coverage_id": "cov-c2934070-stress",
+      "record_id": "rec-c2934070",
+      "domain": "installed-resistor-temperature-and-pulse-stress",
+      "status": "OPEN",
+      "reason": "nominal calculations do not establish installed waveform, temperature, sharing or pulse stress",
+      "fact_ids": []
+    }
+  ]
+}

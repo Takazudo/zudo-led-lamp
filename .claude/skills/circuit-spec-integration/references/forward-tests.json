@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "case_id": "usb-pd-programmed-state",
+      "prompt": "Change the STUSB4500QTR C2678061 NVM policy to request 15 V and prove the UMW AO3401A C347476 load switch remains safely off through dead-battery, reset, attach, hard reset, fault, and disconnect.",
+      "expected_trigger_skill": "circuit-spec-integration",
+      "routing_queries": [{"query":"STUSB4500QTR C2678061","expected_line_ids":["line-c2678061"]},{"query":"UMW AO3401A C347476","expected_line_ids":["line-c347476"]}],
+      "direct_record_ids": ["rec-stusb4500qtr", "rec-umw-ao3401a", "rec-c25803", "rec-c22807", "rec-c14663", "rec-c21189", "rec-rd-0603waf5101t5e"],
+      "subordinate_record_ids": ["rec-rd-0603waf5101t5e"],
+      "required_source_ids": ["src-stusb-ds12499", "src-stusb-um2650", "src-stusb-stsw004", "src-umw-ao3401a-board-p-generator", "src-rd-board-p-generator"],
+      "rule_ids": ["rule-usb-pd-nvm-load-switch"],
+      "required_fact_ids": ["fact-stusb-nvm-load", "fact-stusb-artifact", "fact-umw-ao3401a-project-nets", "fact-rd-fit-state"],
+      "expected_verdicts": ["UNSOURCED"],
+      "must_refuse": true
+    },
+    {
+      "case_id": "logic-converter-substitution",
+      "prompt": "Evaluate changing the installed FNR4030S4R7MT C167874 inductor value/package and CL21A226MAQNNNE C45783 output-capacitor population around AP63203WU-7 C780769; recalculate saturation, heating, timing, and effective capacitance over the full V15 and load envelope.",
+      "expected_trigger_skill": "circuit-spec-integration",
+      "routing_queries": [{"query":"FNR4030S4R7MT C167874","expected_line_ids":["line-c167874"]},{"query":"AP63203WU-7 C780769","expected_line_ids":["line-c780769"]},{"query":"CL21A226MAQNNNE C45783","expected_line_ids":["line-c45783"]}],
+      "direct_record_ids": ["rec-ap63203wu-7", "rec-fnr4030s4r7mt", "rec-cl21a226maqnnne", "rec-c529334"],
+      "subordinate_record_ids": ["rec-fnr4030s4r7mt", "rec-cl21a226maqnnne"],
+      "required_source_ids": ["src-ap6320x-ds41326", "src-fnr-series-mirror", "src-samsung-cl21-product"],
+      "rule_ids": ["rule-ap63203-logic-stage"],
+      "required_fact_ids": ["fact-fnr-isat-margin", "fact-fnr-irated-margin", "fact-ap63203-min-off-time", "fact-cl21-effective-capacitance-status"],
+      "expected_verdicts": ["UNSOURCED"],
+      "must_refuse": true
+    },
+    {
+      "case_id": "mcu-led-thermal-change",
+      "prompt": "Raise the STM32G031F8P6 C529334 PWM ceiling for the AL8860MP-13 C500782 LED stage and prove LED junction, FOJAN FRC2512F33R0TS C2934070 ballast, NTC sensing, enclosure thermal state, and firmware thresholds remain safe.",
+      "expected_trigger_skill": "circuit-spec-integration",
+      "routing_queries": [{"query":"STM32G031F8P6 C529334","expected_line_ids":["line-c529334"]},{"query":"AL8860MP-13 C500782","expected_line_ids":["line-c500782"]},{"query":"FRC2512F33R0TS C2934070","expected_line_ids":["line-c2934070"]},{"query":"NCP18XH103F03RB C13564","expected_line_ids":["line-c13564"]}],
+      "direct_record_ids": ["rec-al8860mp-13", "rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c210315", "rec-c2934070", "rec-c4216", "rec-c13564", "rec-c529334", "rec-c17414"],
+      "subordinate_record_ids": ["rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c2934070"],
+      "required_source_ids": ["src-al8860-ds39014", "src-c210315-spec", "src-c2934070-spec", "src-c2934070-generator", "src-c13564-current", "src-c529334-ds"],
+      "rule_ids": ["rule-al8860-led-stage", "rule-ntc-adc-firmware"],
+      "required_fact_ids": ["fact-al8860-peak-current", "fact-c2934070-rcwv", "fact-c210315-maxima", "fact-c2934070-topology", "fact-c13564-max-current", "fact-c13564-curve-caveat", "fact-c529334-adc"],
+      "expected_verdicts": ["NEEDS BENCH", "UNSOURCED"],
+      "must_refuse": true
+    }
+  ],
+  "negative_routes": [
+    {"kind":"conflicting-identifiers","query":"0603WAF4700T5E C23162","expected_line_ids":[]},
+    {"kind":"conflicting-identifiers","query":"CL31A106KBHNNNE C15849","expected_line_ids":[]},
+    {"kind":"wrong-vendor","query":"High Diode SS26 C7420363","expected_line_ids":[]},
+    {"kind":"superseded-identity","query":"C1711 100 nF capacitor","expected_line_ids":[]},
+    {"kind":"ambiguous-alias","query":"UNI-ROYAL resistor","expected_line_ids":[]}
+  ]
+}

@@ -75,12 +75,12 @@ the usual LCSC stock caveat.
 |------|-------------------------------|------------------|------------------------------|---------|
 | U1 STUSB4500QTR — VDD pin | Absolute max **28 V** (ST DS12499 Rev 5, Table 20 "Absolute maximum ratings"). Recommended *operating* range is 4.1–22 V (Table 21) — a narrower, separate figure | Pass, 46% margin below the 22 V operating ceiling | Exceeds the 28 V absolute max by ~4.4 V (16%) during a full clamp event | **Residual risk, transient-only** — unchanged from zudo-pd's own accepted tradeoff (see note below) |
 | U1 STUSB4500QTR — CC1/CC2/CC1DB/CC2DB pins | Absolute max **22 V** short-to-VBUS protection (DS12499 Table 20) | Pass | CC pins are not on the `VBUS_IN` net and are not directly exposed to the D5 clamp path | Pass |
-| Q1 AO3401A | VDS absolute max **−30 V** (AOS datasheet Rev 3.1, Dec 2023, "Absolute Maximum Ratings") | Pass — Vgs ≈ −9.6 V at 15 V, well inside the ±12 V gate limit | Exceeds −30 V by ~2.4 V (8%) if VDS tracks the full clamp voltage during a fault | **Residual risk, transient-only** — this is the same margin gap zudo-pd's own board-split decision explicitly accepted for Q1, carried forward unchanged |
+| Q1 UMW AO3401A, exact C347476 | VDS absolute max **−30 V** (UMW manufacturer specification); this exact orderable must not be attributed to AOS | Pass — Vgs ≈ −9.6 V at 15 V, inside the ±12 V gate limit | Exceeds −30 V by ~2.4 V (8%) if VDS tracks the full clamp voltage during a fault | **Residual risk, transient-only** — generator evidence confirms Q1 source/gate/drain nets but does not prove the fault waveform |
 | D5 SMAJ20A | VRWM (standoff) 20 V, breakdown 22.2–24.5 V, clamp ≤32.4 V @ 10/1000 µs (JLCPCB catalog data, consistent with the datasheet figures zudo-pd's own decision doc cites) | Pass, 33% standoff margin | **This is the device that defines the ceiling** — passes by construction | Pass |
 | J1 receptacle (C283540) | Voltage rating 20 V continuous, current 5.0 A (HRQ Electronics datasheet, see above) | Pass, 33% margin | Exceeds the 20 V *continuous* rating nominally, but the 100 VAC dielectric withstand test (≈141 V peak) covers the transient by a wide margin — this is an insulation-breakdown question, not a continuous-duty one | Pass (on insulation-breakdown grounds; flagged distinction between continuous rating and dielectric withstand) |
 | JOUT — JST B6B-XH-A(LF)(SN) | 250 V, 3 A/contact (JLCPCB catalog, C144397) | Pass, wide margin | Pass, wide margin | Pass |
 | C1 (10 µF, C13585) | 50 V X5R (JLCPCB catalog) | Pass | Pass | Pass |
-| C2, C35 (100 nF, C1711) | 50 V X7R (JLCPCB catalog) | Pass | Pass | Pass |
+| C2, C35 (100 nF, exact C14663 CC0603KRX7R9BB104) | 50 V X7R (manufacturer specification) | Pass | Pass | Pass |
 | C30, C34 (1 µF, C15849) | 50 V X5R (JLCPCB catalog) — note: exceeds the 16 V figure in zudo-pd's own component notes, which was a legacy value, not this verified part's actual rating | Pass | Pass | Pass |
 | R11–R16, R19, R20 (chip resistors) | 75 V (JLCPCB catalog, 0603 thick-film series) | Pass | Pass | Pass |
 | R17, R18 (DNP, C23186) | 75 V | N/A — never populated on a powered build | N/A | Pass (DNP) |
@@ -114,7 +114,7 @@ The one genuine, datasheet-provable gap this audit found — the C456012 recepta
 
 - ST DS12499 Rev 5 (STUSB4500 datasheet) — Table 20 "Absolute maximum ratings", Table
   21 "Operating conditions".
-- AOS AO3401A datasheet, Rev 3.1 (December 2023) — "Absolute Maximum Ratings" table.
+- UMW (Youtai Semiconductor) AO3401A specification for exact orderable C347476 — title block, pin figure, and absolute-maximum table.
 - Manufacturer datasheets for C456012 (Shenzhen Shouhan Technology, "TYPE-C 6P") and
   C283540 (HRQ Electronics, "TYPE-C-31-M-17"), both retrieved from JLCPCB's part pages.
 - Local JLCPCB parts database (snapshot dated 2026-07-25) for catalog ratings on

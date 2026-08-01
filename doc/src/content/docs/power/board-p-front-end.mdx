@@ -56,7 +56,7 @@ flowchart TD
   CCESD["D6 / D7 PESD24VS1UB\nDNP (enclosed/production builds only)"] -.-> U1
 
   U1 -->|"VBUS_VS_DISCH via R14 470R"| P18["Pin-18 sense/discharge"]
-  U1 -->|"VBEN (active-low OD)"| GATE["Q1 gate node\nR11 100k pull-up, R12 56k series, C35 100n softstart"]
+  U1 -->|"VBEN (active-low OD)"| GATE["Q1 gate node\nR11 100k pull-up, R12 150k series, C35 100n to VBUS_IN"]
   GATE --> Q1["Q1 AO3401A P-FET\nload switch"]
 
   D5["D5 SMAJ20A\nVBUS clamp"] --- U1
@@ -82,14 +82,14 @@ netlist because that schematic does not exist yet.
 
 | Net | Connected pins (Ref.Pin) | Value/Note |
 |-----|--------------------------|------------|
-| `VBUS_IN` | `J1.A9 J1.B9 U1.VDD C1.2 C2.2 R14.1 R11.2 Q1.S J3.4 D5.cathode` | Receptacle VBUS (5 V pre-contract, 15 V post-contract). `U1.VDD` direct (operating range 4.1–22 V, absolute max 28 V — see [ratings matrix](./ratings-matrix.mdx)). `C1` 10 µF + `C2` 100 nF decoupling. `D5` cathode = SMAJ20A VBUS clamp |
+| `VBUS_IN` | `J1.A9 J1.B9 U1.VDD C1.2 C2.2 C35.2 R14.1 R11.2 Q1.S J3.4 D5.cathode` | Receptacle VBUS (5 V pre-contract, 15 V post-contract). `U1.VDD` direct (operating range 4.1–22 V, absolute max 28 V — see [ratings matrix](./ratings-matrix.mdx)). `C1` 10 µF + `C2` 100 nF decoupling. `C35` returns the gate capacitor to `VBUS_IN`. `D5` cathode = SMAJ20A VBUS clamp |
 | `CC1` | `J1.A5 U1.CC1 R17.1(DNP) R19.2 D6.1(DNP)` | Connector CC1 to `U1.CC1` is plain copper. `R17` (5.1 kΩ external Rd) is DNP — see [lessons](./lessons-from-zudo-pd.mdx) for why. `R19` (0 Ω, fitted) bridges `CC1DB↔CC1`. `D6` = PESD24VS1UB, DNP |
 | `CC2` | `J1.B5 U1.CC2 R18.1(DNP) R20.2 D7.1(DNP)` | Mirror of CC1 |
 | `CC1DB` | `U1.CC1DB R19.1 J3.1` | Dead-battery pin. `R19` (0 Ω) bridges to `CC1` net — restores ST's VBUS-only-sink reference topology (DS12499 §3.5) |
 | `CC2DB` | `U1.CC2DB R20.1 J3.2` | Mirror; `R20` bridges to `CC2` |
 | `VBUS_VS_DISCH` | `U1.pin18 R14.2` | Pin-18 sense/discharge node. `R14` 470 Ω series from `VBUS_IN` |
-| `VBEN` (VBUS_EN_SNK) | `U1.pin16 R12.1 J3.8` | Active-low open-drain. `R12` 56 kΩ series to the gate node |
-| `Net-(Q1-G)` | `Q1.G R11.1 R12.2 C35.1` | Q1 gate. `R11` 100 kΩ pull-up to `VBUS_IN` (default OFF). `C35` 100 nF soft-start to GND (τ ≈ 56 kΩ × 100 nF ≈ 5.6 ms) |
+| `VBEN` (VBUS_EN_SNK) | `U1.pin16 R12.1 J3.8` | Active-low open-drain. `R12` is the generated 150 kΩ C22807 series part to the gate node |
+| `Net-(Q1-G)` | `Q1.G R11.1 R12.2 C35.1` | Q1 gate. Generator evidence places `R11` 100 kΩ and `C35` 100 nF between `Q1_G` and `VBUS_IN`; this topology does not justify the obsolete gate-to-ground RC time-constant claim |
 | `VBUS_OUT` | `Q1.D R13.1 JOUT.1 JOUT.2` | Switched output of the load switch — the reusable "switched 15 V sink" rail, paired across two downstream connector pins for current sharing |
 | `Net-(U1-DISCH)` | `U1.DISCH R13.2` | DISCH pin → `R13` 470 Ω → `VBUS_OUT` (system-side discharge) |
 | `VREG_2V7` | `U1.VREG_2V7 C30.2 R15.2 R16.2 J3.3` | 2.7 V internal regulator / I2C pull-up rail. `C30` decap |
@@ -98,7 +98,7 @@ netlist because that schematic does not exist yet.
 | `SDA` | `U1.SDA R16.1 J2.2` | NVM programming data. `R16` 4.7 kΩ pull-up |
 | `ATT` | `U1.ATTACH J3.6 JOUT.3` | ATTACH flag, open-drain active-low, no on-board pull-up |
 | `PDOK` | `U1.POWER_OK2 J3.7 JOUT.4` | Asserts on a live PDO2/15 V contract, open-drain active-low, no on-board pull-up |
-| `GND` | `U1.GND U1.RESET U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 C35.2 R17.2(DNP) R18.2(DNP) J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.RESET` active-high, grounded = run. `U1.ADDR0/1` → I2C address `0x28`. `U1.VSYS` grounded (VDD-only supply). `U1.EP` = exposed thermal/electrical pad |
+| `GND` | `U1.GND U1.RESET U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 R17.2(DNP) R18.2(DNP) J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.RESET` active-high, grounded = run. `U1.ADDR0/1` → I2C address `0x28`. `U1.VSYS` grounded (VDD-only supply). `U1.EP` = exposed thermal/electrical pad |
 | Unused U1 pins | `NC`, `POWER_OK3` (float), `GPIO` (float), `A_B_SIDE` (float), `ALERT` (float) | Same disposition as zudo-pd's Board A |
 | `J2` pad 4 | `J2.4` | Unconnected (NC) |
 
@@ -119,16 +119,16 @@ per-part rating evidence and the one part this audit swapped out.
 | Ref | Part | LCSC | Package | Role | Stock (DB 2026-07-25) |
 |-----|------|------|---------|------|------------------------|
 | U1 | STUSB4500QTR | [C2678061](https://jlcpcb.com/partdetail/C2678061) | QFN-24-EP (4×4) | PD sink controller | 4,562 |
-| Q1 | AO3401A | [C347476](https://jlcpcb.com/partdetail/C347476) | SOT-23 | Load switch (P-FET) | 862,120 |
+| Q1 | UMW (Youtai Semiconductor) AO3401A | [C347476](https://jlcpcb.com/partdetail/C347476) | SOT-23 | Load switch (P-FET) | 862,120 |
 | J1 | TYPE-C-31-M-17 | [C283540](https://jlcpcb.com/partdetail/C283540) | 6P SMD, right-angle | USB-C PD input — **replaces zudo-pd's C456012**, see [ratings matrix](./ratings-matrix.mdx) | 33,876 |
 | D5 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) (alt [C1973455](https://jlcpcb.com/partdetail/C1973455)) | SMA | VBUS TVS clamp | 3,770 (alt: 1 — essentially depleted, use primary) |
 | C1 | 10 µF 50V X5R | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | VDD bulk decouple | 1,877,266 |
-| C2 | 100 nF 50V X7R | [C1711](https://jlcpcb.com/partdetail/C1711) | 0805 | VDD HF decouple | 17,509 |
+| C2 | 100 nF 50V X7R | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | VDD HF decouple | — |
 | C30 | 1 µF 50V X5R | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | VREG_2V7 decouple | 5,979,916 |
 | C34 | 1 µF 50V X5R | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | VREG_1V2 decouple | 5,979,916 |
-| C35 | 100 nF 50V X7R | [C1711](https://jlcpcb.com/partdetail/C1711) | 0805 | Gate soft-start | 17,509 |
+| C35 | 100 nF 50V X7R | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | Gate-to-VBUS_IN capacitor | — |
 | R11 | 100 kΩ | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | Gate pull-up | 7,990,119 |
-| R12 | 56 kΩ | [C23206](https://jlcpcb.com/partdetail/C23206) | 0603 | Gate divider | 219,781 |
+| R12 | 150 kΩ | [C22807](https://jlcpcb.com/partdetail/C22807) | 0603 | VBEN-to-gate series resistor | — |
 | R13 | 470 Ω | [C23179](https://jlcpcb.com/partdetail/C23179) | 0603 | DISCH resistor | 1,899,614 |
 | R14 | 470 Ω | [C23179](https://jlcpcb.com/partdetail/C23179) | 0603 | Pin-18 series R | 1,899,614 |
 | R15 | 4.7 kΩ | [C23162](https://jlcpcb.com/partdetail/C23162) | 0603 | I2C SCL pull-up | 7,433,362 |

@@ -6,28 +6,32 @@
       "record_id": "rec-high-diode-smaj20a",
       "domain": "manufacturer-primary identity and package drawing",
       "status": "OPEN",
-      "reason": "Only an unavailable distributor-attributed mirror was located"
+      "reason": "Only an unavailable distributor-attributed mirror was located",
+      "fact_ids": []
     },
     {
       "coverage_id": "cov-high-ratings",
       "record_id": "rec-high-diode-smaj20a",
       "domain": "standoff/breakdown/clamp/leakage ratings",
       "status": "OPEN",
-      "reason": "No High Diode primary rating table is retained"
+      "reason": "No High Diode primary rating table is retained",
+      "fact_ids": []
     },
     {
       "coverage_id": "cov-high-pulse",
       "record_id": "rec-high-diode-smaj20a",
       "domain": "pulse waveform/derating and thermal limits",
       "status": "OPEN",
-      "reason": "Exact vendor pulse and thermal conditions are unavailable"
+      "reason": "Exact vendor pulse and thermal conditions are unavailable",
+      "fact_ids": []
     },
     {
       "coverage_id": "cov-high-polarity",
       "record_id": "rec-high-diode-smaj20a",
       "domain": "polarity marking",
       "status": "OPEN",
-      "reason": "Project mapping exists but exact device marking has not been verified"
+      "reason": "Project mapping exists but exact device marking has not been verified",
+      "fact_ids": []
     }
   ]
 }

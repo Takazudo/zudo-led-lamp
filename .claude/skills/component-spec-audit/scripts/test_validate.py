@@ -1,7 +1,10 @@
 import copy
+import hashlib
 import importlib.util
+import shutil
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 
 MODULE_PATH = Path(__file__).with_name("validate.py")
@@ -146,9 +149,123 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         with self.assertRaisesRegex(validator.ContractError, "open domains"):
             validator.validate_bundle(bundle, self.schema, True)
         bundle = validator.template_bundle()
-        bundle["coverage"][0]["status"] = "OPEN"
+        bundle["coverage"][0]["status"] = "COVERED"
         with self.assertRaisesRegex(validator.ContractError, "open domains"):
             validator.validate_bundle(bundle, self.schema, True)
+
+    def test_every_owner_directory_and_artifact_is_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            skills_root = Path(directory)
+            owners = {line["owner_skill"] for line in self.lines}
+            for owner in owners:
+                shutil.copytree(validator.ROOT / ".claude/skills" / owner, skills_root / owner)
+            validator.validate_local_skills(self.schema, self.lines, skills_root)
+            shutil.rmtree(skills_root / sorted(owners)[0])
+            with self.assertRaisesRegex(validator.ContractError, "expected exact directories"):
+                validator.validate_local_skills(self.schema, self.lines, skills_root)
+
+        with tempfile.TemporaryDirectory() as directory:
+            skills_root = Path(directory)
+            owners = {line["owner_skill"] for line in self.lines}
+            for owner in owners:
+                shutil.copytree(validator.ROOT / ".claude/skills" / owner, skills_root / owner)
+            (skills_root / sorted(owners)[0] / "facts.json").unlink()
+            with self.assertRaisesRegex(validator.ContractError, "missing local manifest files"):
+                validator.validate_local_skills(self.schema, self.lines, skills_root)
+
+    def test_available_source_rejects_zero_hash_sentinel(self):
+        source = validator.template_bundle()["sources"][0]
+        source["availability"] = "AVAILABLE"
+        source["sha256"] = validator.ZERO_SHA256
+        with self.assertRaisesRegex(validator.ContractError, "all-zero"):
+            validator.validate_source(source, self.schema)
+        source["availability"] = "SOURCE UNAVAILABLE"
+        validator.validate_source(source, self.schema)
+
+    def test_calculated_exponent_is_bounded(self):
+        self.assertAlmostEqual(validator.arithmetic("value ** 0.5", {"value": 33}), 33 ** 0.5)
+        with self.assertRaisesRegex(validator.ContractError, "safety bound"):
+            validator.arithmetic("value ** 1000000", {"value": 33})
+
+    def test_routing_fails_closed_on_conflicts_and_filters(self):
+        cases = {
+            "0603WAF4700T5E C23162": [],
+            "UNI-ROYAL 0603WAF1003T5E": ["line-c25803"],
+            "CL31A106KBHNNNE C15849": [],
+            "Samsung Electro-Mechanics 0603WAF1003T5E": [],
+            "100 kOhm resistor 0603WAF1003T5E": ["line-c25803"],
+            "RLP25FEER200": ["line-c459674"],
+            "C45783": ["line-c45783"],
+            "other-vendor SS26 C999019": [],
+            "UNI-ROYAL": [],
+            "100 kOhm resistor": [],
+        }
+        for query, expected in cases.items():
+            with self.subTest(query=query):
+                self.assertEqual(validator.resolve(query, self.lines), expected)
+
+        bundle = validator.load_skill_bundle(validator.ROOT / ".claude/skills/component-project-passives")
+        self.assertEqual(validator.resolve_bundle_route("0603WAF4700T5E C23162", bundle["routes"]), [])
+        self.assertEqual(validator.resolve_bundle_route("UNI-ROYAL 0603WAF1003T5E", bundle["routes"]), ["rec-c25803"])
+
+    def test_browser_headers_success_and_403_are_explicit(self):
+        source = copy.deepcopy(validator.template_bundle()["sources"][0])
+        source.update({"availability": "AVAILABLE", "sha256": hashlib.sha256(b"ok").hexdigest()})
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *_args): return False
+            def read(self): return b"ok"
+
+        def success(request, timeout):
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            self.assertIn("Mozilla/5.0", request.get_header("User-agent"))
+            self.assertIn("application/pdf", request.get_header("Accept"))
+            return Response()
+
+        self.assertEqual(validator.fetch_source(source, success), b"ok")
+
+        def forbidden(_request, timeout):
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            raise urllib.error.HTTPError(source["authoritative_url"], 403, "Forbidden", {}, None)
+
+        with self.assertRaises(urllib.error.HTTPError):
+            validator.fetch_source(source, forbidden)
+
+    def test_coverage_and_interaction_trust_fail_closed(self):
+        bundle = validator.template_bundle()
+        bundle["coverage"][0]["status"] = "COVERED"
+        bundle["records"][0]["open_domains"] = []
+        with self.assertRaisesRegex(validator.ContractError, "unavailable or UNSOURCED"):
+            validator.validate_bundle(bundle, self.schema, True)
+        bundle = validator.template_bundle()
+        bundle["interactions"][0]["verdict"] = "PASS - primary-source confirmed"
+        with self.assertRaisesRegex(validator.ContractError, "not trust-closed"):
+            validator.validate_bundle(bundle, self.schema, True)
+
+    def test_real_pin_locks_reject_deletion_rename_and_swap(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        locks = validator.load(validator.FIXTURES / "golden/real-pin-maps.json")
+        validator.validate_real_pin_locks(aggregate, locks)
+        for mutation in ("delete", "rename", "swap"):
+            changed = copy.deepcopy(aggregate)
+            mapping = next(item for item in changed["pin_maps"] if len(item["pins"]) >= 2)
+            if mutation == "delete": mapping["pins"].pop()
+            elif mutation == "rename": mapping["pins"][0]["name"] += "_MUTATED"
+            else:
+                mapping["pins"][0]["footprint_pad"], mapping["pins"][1]["footprint_pad"] = mapping["pins"][1]["footprint_pad"], mapping["pins"][0]["footprint_pad"]
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(validator.ContractError, "canonical pin map changed"):
+                validator.validate_real_pin_locks(changed, locks)
+
+    def test_critical_fact_review_locks_claim_locator_and_conditions(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        review = validator.load(validator.FIXTURES / "golden/critical-fact-review.json")
+        validator.validate_critical_fact_review(aggregate, review)
+        changed = copy.deepcopy(aggregate)
+        fact_id = review["reviews"][0]["fact_id"]
+        next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)["locator"] += " changed"
+        with self.assertRaisesRegex(validator.ContractError, "locator/conditions changed"):
+            validator.validate_critical_fact_review(changed, review)
 
     def test_malicious_generator_is_rejected_without_execution(self):
         with tempfile.TemporaryDirectory() as directory:

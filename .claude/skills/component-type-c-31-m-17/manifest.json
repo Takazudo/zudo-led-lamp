@@ -11,7 +11,9 @@
       "manufacturer": "Korean Hroparts Elec",
       "lcsc": "C283540",
       "package": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
-      "source_ids": ["src-type-c-c283540"],
+      "source_ids": [
+        "src-type-c-c283540"
+      ],
       "fact_ids": [
         "fact-type-c-31-m-17-manufacturer",
         "fact-type-c-31-m-17-identity",
@@ -19,7 +21,10 @@
         "fact-type-c-31-m-17-ratings",
         "fact-type-c-31-m-17-mechanical"
       ],
-      "interaction_ids": ["int-type-c-netlist", "int-type-c-bench"],
+      "interaction_ids": [
+        "int-type-c-netlist",
+        "int-type-c-bench"
+      ],
       "open_domains": [
         "manufacturer-primary identity",
         "electrical ratings and durability",

@@ -1,5 +1,5 @@
 {"schema_version":1,"interactions":[
 {"interaction_id":"int-c2991196-interface","record_ids":["rec-c2991196"],"fact_ids":["fact-c2991196-phases","fact-c2991196-contact-timing","fact-c2991196-topology"],"conditions":"Verify firmware edge convention and debounce against the installed series/RC network and contact behavior","verdict":"NEEDS BENCH"},
 {"interaction_id":"int-c2991196-mechanical","record_ids":["rec-c2991196"],"fact_ids":["fact-c2991196-mechanical","fact-c2991196-life"],"conditions":"Panel support, knob load, torque and installed environmental stress determine achieved life","verdict":"NEEDS BENCH"},
-{"interaction_id":"int-c2991196-label","record_ids":["rec-c2991196"],"fact_ids":["fact-c2991196-detents","fact-c2991196-label-conflict"],"conditions":"Do not use the generator display string as the detent count; correct metadata in its owning design task","verdict":"BLOCKER - deterministic spec violation"}
+{"interaction_id":"int-c2991196-label","record_ids":["rec-c2991196"],"fact_ids":["fact-c2991196-detents","fact-c2991196-label-conflict"],"conditions":"Generator text and lower-authority mirror disagree; recover manufacturer-primary evidence before treating either detent count as deterministic","verdict":"UNSOURCED"}
 ]}

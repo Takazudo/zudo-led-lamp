@@ -45,3 +45,5 @@ jobs:
         run: python3 .claude/skills/component-spec-audit/scripts/validate.py
       - name: Test validator and fixtures (offline)
         run: python3 -m unittest discover -s .claude/skills/component-spec-audit/scripts -p 'test_*.py'
+      - name: Test cross-component routing and refusals (offline)
+        run: python3 .claude/skills/circuit-spec-integration/scripts/check_forward_tests.py

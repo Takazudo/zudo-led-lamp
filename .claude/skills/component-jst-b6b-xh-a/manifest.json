@@ -11,7 +11,10 @@
       "manufacturer": "JST",
       "lcsc": "C144397",
       "package": "CONN-TH_6P-P2.50_B6B-XH-A-LF-SN",
-      "source_ids": ["src-jst-xh", "src-jst-xh-header"],
+      "source_ids": [
+        "src-jst-xh",
+        "src-jst-xh-header"
+      ],
       "fact_ids": [
         "fact-jst-b6b-xh-a-manufacturer",
         "fact-jst-b6b-xh-a-identity",
@@ -22,8 +25,12 @@
         "fact-jst-b6b-xh-a-dimensions",
         "fact-jst-b6b-xh-a-harness"
       ],
-      "interaction_ids": ["int-jst-board-map", "int-jst-harness-bench"],
+      "interaction_ids": [
+        "int-jst-board-map",
+        "int-jst-harness-bench"
+      ],
       "open_domains": [
+        "Board P and Board L signal mapping",
         "mating housing/contact/wire/completed harness selection"
       ]
     }

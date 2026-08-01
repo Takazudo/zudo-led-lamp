@@ -21,6 +21,12 @@ TEMPLATE = AUDIT / "assets/component-skill-template"
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ID = re.compile(r"^[a-z][a-z0-9-]*$")
 LOCATOR_DETAIL = re.compile(r"(section|table|figure|row|pin|title block|calculated)", re.I)
+ZERO_SHA256 = "0" * 64
+HTTP_TIMEOUT_SECONDS = 20
+HTTP_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (compatible; zudo-led-lamp-component-spec/1.0)",
+    "Accept": "application/pdf,text/plain,text/html;q=0.9,*/*;q=0.8",
+}
 
 
 class ContractError(ValueError):
@@ -233,17 +239,44 @@ def validate_inventory(data):
     return lines
 
 
-def resolve(query, lines):
-    q = query.casefold()
+def contains_alias(query, alias):
+    return re.search(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", query, re.I) is not None
+
+
+def resolve_identities(query, entries, *, id_key):
     lcsc_tokens = {token.upper() for token in re.findall(r"\bC\d+\b", query, re.I)}
-    if lcsc_tokens:
-        return [line["line_id"] for line in lines if line["lcsc"] in lcsc_tokens]
-    found = []
-    for line in lines:
-        aliases = (line["mpn"], line["lcsc"], f"{line['manufacturer']} {line['mpn']}", f"{line['function']} {line['mpn']}")
-        if any(alias.casefold() in q for alias in aliases):
-            found.append(line["line_id"])
-    return found
+    known_lcsc = {entry["lcsc"] for entry in entries}
+    mentioned_lcsc = lcsc_tokens & known_lcsc
+    unknown_lcsc = lcsc_tokens - known_lcsc
+    mentioned_mpn = {entry["mpn"].casefold() for entry in entries if contains_alias(query, entry["mpn"])}
+    mpn_matches = {entry[id_key] for entry in entries if entry["mpn"].casefold() in mentioned_mpn}
+    lcsc_matches = {entry[id_key] for entry in entries if entry["lcsc"] in mentioned_lcsc}
+
+    # Exact identifiers are resolved independently. Any conflict or unknown explicit
+    # LCSC token fails closed instead of allowing one identifier to override another.
+    if unknown_lcsc or len(mentioned_lcsc) > 1 or len(mpn_matches) > 1:
+        return []
+    if lcsc_matches and mpn_matches and lcsc_matches != mpn_matches:
+        return []
+    candidates = lcsc_matches or mpn_matches
+    if not candidates:
+        return []
+
+    # Manufacturer/function text narrows an exact identity; it never unions sibling
+    # records or selects a record by a bare ambiguous alias.
+    manufacturer_matches = {entry[id_key] for entry in entries if contains_alias(query, entry["manufacturer"])}
+    function_matches = {entry[id_key] for entry in entries if contains_alias(query, entry["function"])}
+    filtered = {
+        entry[id_key] for entry in entries
+        if entry[id_key] in candidates
+        and (not manufacturer_matches or entry[id_key] in manufacturer_matches)
+        and (not function_matches or entry[id_key] in function_matches)
+    }
+    return sorted(filtered)
+
+
+def resolve(query, lines):
+    return resolve_identities(query, lines, id_key="line_id")
 
 
 def validate_routing(lines, fixtures=None):
@@ -265,6 +298,8 @@ def validate_source(source, schema):
     require(source["availability"] in schema["source_availability"], f"{source['source_id']}: invalid availability")
     require(source["authority_class"] in schema["authority_classes"], f"{source['source_id']}: authority class")
     require(HEX64.fullmatch(source["sha256"]), f"{source['source_id']}: SHA-256 must be 64 lowercase hex digits")
+    if source["availability"] == "AVAILABLE":
+        require(source["sha256"] != ZERO_SHA256, f"{source['source_id']}: AVAILABLE source cannot use all-zero SHA-256 sentinel")
     require(isinstance(source["physical_pdf_page_index"], int) and source["physical_pdf_page_index"] >= 0, f"{source['source_id']}: PDF page index")
     for key in ("document_title", "document_number", "revision", "document_date", "authoritative_url", "retrieval_date", "printed_page_label", "locator", "evidence_extract"):
         require(isinstance(source[key], str) and source[key].strip(), f"{source['source_id']}: blank {key}")
@@ -295,11 +330,14 @@ def arithmetic(expression, values):
         if isinstance(node, ast.Expression): return ev(node.body)
         if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)): return node.value
         if isinstance(node, ast.Name) and node.id in values: return values[node.id]
-        if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div)):
+        if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow)):
             left, right = ev(node.left), ev(node.right)
             if isinstance(node.op, ast.Add): return left + right
             if isinstance(node.op, ast.Sub): return left - right
             if isinstance(node.op, ast.Mult): return left * right
+            if isinstance(node.op, ast.Pow):
+                require(abs(left) <= 1e12 and -10 <= right <= 10, "calculated exponent exceeds safety bound")
+                return left ** right
             return left / right
         raise ContractError(f"unsafe or unknown expression: {expression}")
     return ev(tree)
@@ -355,11 +393,18 @@ def validate_pin_maps(pin_maps):
 
 
 def resolve_bundle_route(query, routes):
-    lcsc_tokens = {token.upper() for token in re.findall(r"\bC\d+\b", query, re.I)}
-    if lcsc_tokens:
-        return sorted({route["record_id"] for route in routes if lcsc_tokens & set(route["aliases"]["lcsc"])})
-    lowered = query.casefold()
-    return sorted({route["record_id"] for route in routes if any(alias.casefold() in lowered for values in route["aliases"].values() for alias in values)})
+    entries = []
+    for route in routes:
+        for mpn in route["aliases"]["mpn"]:
+            for lcsc in route["aliases"]["lcsc"]:
+                entries.append({
+                    "record_id": route["record_id"],
+                    "mpn": mpn,
+                    "lcsc": lcsc,
+                    "manufacturer": route["aliases"]["manufacturer"][0],
+                    "function": route["aliases"]["function"][0],
+                })
+    return resolve_identities(query, entries, id_key="record_id")
 
 
 def validate_pass_trust(facts, sources):
@@ -386,6 +431,39 @@ def validate_pass_trust(facts, sources):
                 require(trusted(fact["fact_id"], set()), f"{fact['fact_id']}: calculated PASS dependency closure is not fully trusted")
 
 
+def fact_evidence_available(fact_id, facts_by_id, sources_by_id, trail=None):
+    trail = trail or set()
+    require(fact_id not in trail, f"{fact_id}: evidence dependency cycle")
+    fact = facts_by_id[fact_id]
+    source = sources_by_id[fact["source_id"]]
+    if source["availability"] != "AVAILABLE" or fact["verdict"] == "UNSOURCED":
+        return False
+    if fact["provenance"] == "CALCULATED":
+        return bool(fact["depends_on"]) and all(
+            fact_evidence_available(dependency, facts_by_id, sources_by_id, trail | {fact_id})
+            for dependency in fact["depends_on"]
+        )
+    return True
+
+
+def fact_primary_trusted(fact_id, facts_by_id, sources_by_id, trail=None):
+    trail = trail or set()
+    require(fact_id not in trail, f"{fact_id}: trust dependency cycle")
+    fact = facts_by_id[fact_id]
+    if fact["provenance"] == "CALCULATED":
+        return fact["verdict"] == "PASS - primary-source confirmed" and bool(fact["depends_on"]) and all(
+            fact_primary_trusted(dependency, facts_by_id, sources_by_id, trail | {fact_id})
+            for dependency in fact["depends_on"]
+        )
+    source = sources_by_id[fact["source_id"]]
+    return (
+        fact["provenance"] == "PRIMARY-SPEC"
+        and fact["verdict"] == "PASS - primary-source confirmed"
+        and source["availability"] == "AVAILABLE"
+        and source["authority_class"] == "MANUFACTURER_PRIMARY"
+    )
+
+
 def validate_bundle(bundle, schema, allow_synthetic_line=False):
     records, sources, facts = bundle["records"], bundle["sources"], bundle["facts"]
     coverage, routes = bundle["coverage"], bundle["routes"]
@@ -398,6 +476,8 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
     record_ids = {record["record_id"] for record in records}
     require(len(record_ids) == len(records), "duplicate record ID")
     records_by_id = {record["record_id"]: record for record in records}
+    facts_by_id = {fact["fact_id"]: fact for fact in facts}
+    sources_by_id = {source["source_id"]: source for source in sources}
     id_groups = {
         "source": [item["source_id"] for item in sources], "fact": [item["fact_id"] for item in facts],
         "interaction": [item["interaction_id"] for item in interactions], "coverage": [item["coverage_id"] for item in coverage],
@@ -447,6 +527,12 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
         require(item["status"] in ("COVERED", "OPEN"), f"{item['coverage_id']}: unexplained coverage gap")
         require(isinstance(item["reason"], str) and item["reason"].strip(), f"{item['coverage_id']}: coverage reason")
         require(item["record_id"] in record_ids, f"{item['coverage_id']}: orphan coverage/unknown record ID")
+        require(isinstance(item["fact_ids"], list) and len(item["fact_ids"]) == len(set(item["fact_ids"])), f"{item['coverage_id']}: fact_ids must be a unique list")
+        require(set(item["fact_ids"]) <= set(facts_by_id), f"{item['coverage_id']}: unknown coverage fact ID")
+        require(all(facts_by_id[fact_id]["record_id"] == item["record_id"] for fact_id in item["fact_ids"]), f"{item['coverage_id']}: coverage fact belongs to another record")
+        if item["status"] == "COVERED":
+            require(item["fact_ids"], f"{item['coverage_id']}: COVERED domain requires explicit fact IDs")
+            require(all(fact_evidence_available(fact_id, facts_by_id, sources_by_id) for fact_id in item["fact_ids"]), f"{item['coverage_id']}: COVERED domain depends on unavailable or UNSOURCED evidence")
     for interaction in interactions:
         required_keys(interaction, schema["interaction_required"], "interaction")
         require(interaction["verdict"] in schema["verdicts"], f"{interaction['interaction_id']}: verdict")
@@ -454,6 +540,8 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
         require(set(interaction["fact_ids"]) <= {fact["fact_id"] for fact in facts}, f"{interaction['interaction_id']}: unknown fact ID")
         fact_record_ids = {fact["record_id"] for fact in facts if fact["fact_id"] in interaction["fact_ids"]}
         require(fact_record_ids <= set(interaction["record_ids"]), f"{interaction['interaction_id']}: fact belongs to an unlisted record")
+        if interaction["verdict"] == "PASS - primary-source confirmed":
+            require(interaction["fact_ids"] and all(fact_primary_trusted(fact_id, facts_by_id, sources_by_id) for fact_id in interaction["fact_ids"]), f"{interaction['interaction_id']}: PASS interaction is not trust-closed")
     for route in routes:
         required_keys(route, ("route_id", "record_id", "aliases", "positive", "negative"), "route")
         require(set(route["aliases"]) == {"mpn", "lcsc", "manufacturer", "function"}, f"{route['route_id']}: routing alias classes")
@@ -468,6 +556,7 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
             require(resolve_bundle_route(query, routes) == [], f"{route['route_id']}: negative query unexpectedly resolves: {query}")
     for mapping in pin_maps:
         require(mapping["record_id"] in record_ids, f"{mapping['pin_map_id']}: orphan pin map/unknown record ID")
+    require({mapping["record_id"] for mapping in pin_maps} == record_ids, "pin maps: exact record coverage parity required")
 
 
 def load_skill_bundle(skill_dir):
@@ -482,13 +571,125 @@ def load_skill_bundle(skill_dir):
     }
 
 
-def validate_local_skills(schema, inventory):
+def canonical_pin_map(mapping):
+    payload = {
+        "record_id": mapping["record_id"],
+        "pin_map_id": mapping["pin_map_id"],
+        "symbol": mapping["symbol"],
+        "footprint": mapping["footprint"],
+        "pins": sorted(
+            ({key: pin[key] for key in ("symbol_pin", "name", "footprint_pad", "function")} for pin in mapping["pins"]),
+            key=lambda pin: (pin["symbol_pin"], pin["footprint_pad"]),
+        ),
+    }
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def validate_real_pin_locks(aggregate, data):
+    locks = data["locks"]
+    records = {record["record_id"]: record for record in aggregate["records"]}
+    maps = {mapping["pin_map_id"]: mapping for mapping in aggregate["pin_maps"]}
+    facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
+    require(len(maps) == len(aggregate["pin_maps"]) and {mapping["record_id"] for mapping in maps.values()} == set(records), "real pin maps: exact record/pin-map parity required")
+    require(len(locks) == len(maps) and {lock["pin_map_id"] for lock in locks} == set(maps), "real pin locks: exact pin-map parity required")
+    for lock in locks:
+        required_keys(lock, ("record_id", "pin_map_id", "canonical_sha256", "evidence_fact_ids", "trust_status", "critical_pins", "reviewer"), "real pin lock")
+        mapping = maps[lock["pin_map_id"]]
+        require(lock["record_id"] == mapping["record_id"], f"{lock['record_id']}: pin-map record lock changed")
+        require(lock["canonical_sha256"] == canonical_pin_map(mapping), f"{lock['record_id']}: canonical pin map changed")
+        require(lock["trust_status"] in ("TRUSTED", "PROJECT-LOCKED", "NEEDS BENCH", "UNSOURCED"), f"{lock['record_id']}: pin trust status")
+        require(lock["evidence_fact_ids"] and set(lock["evidence_fact_ids"]) <= set(facts), f"{lock['record_id']}: pin evidence fact IDs")
+        require(all(facts[fact_id]["record_id"] == lock["record_id"] for fact_id in lock["evidence_fact_ids"]), f"{lock['record_id']}: pin evidence belongs to another record")
+        pins = {(pin["symbol_pin"], pin["name"], pin["footprint_pad"], pin["function"]) for pin in mapping["pins"]}
+        locked = {(pin["symbol_pin"], pin["name"], pin["footprint_pad"], pin["function"]) for pin in lock["critical_pins"]}
+        require(locked <= pins, f"{lock['record_id']}: critical pin lock changed")
+    require(next(lock for lock in locks if lock["record_id"] == "rec-stusb4500qtr")["trust_status"] == "UNSOURCED", "STUSB pin lock must stay UNSOURCED")
+    al = next(mapping for mapping in maps.values() if mapping["record_id"] == "rec-al8860mp-13")
+    ep = next((pin for pin in al["pins"] if pin["name"] == "EP"), None)
+    require(ep is not None and ep["symbol_pin"] == "9" and ep["footprint_pad"] == "9", "AL8860 EP must independently map symbol pin 9 to footprint pad 9")
+
+
+def validate_critical_fact_review(aggregate, data):
+    facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
+    sources = {source["source_id"]: source for source in aggregate["sources"]}
+    reviews = data["reviews"]
+    require(reviews, "critical fact review: empty")
+    require(len({review["review_id"] for review in reviews}) == len(reviews), "critical fact review: duplicate review ID")
+    required_domains = {"connector", "polarity", "pin", "default-state", "rail", "converter", "thermal", "current"}
+    require(required_domains <= {review["domain"] for review in reviews}, "critical fact review: required destructive-risk domains missing")
+    passes = data.get("independent_review_passes", [])
+    require(len(passes) >= 2, "critical fact review: two independent review passes required")
+    pass_ids = []
+    for review_pass in passes:
+        required_keys(review_pass, ("reviewer", "review_log", "review_ids"), "critical fact independent pass")
+        require(review_pass["reviewer"].strip() and review_pass["review_log"].strip() and review_pass["review_ids"], "critical fact review: incomplete independent pass")
+        pass_ids.extend(review_pass["review_ids"])
+    require(len(pass_ids) == len(set(pass_ids)) and set(pass_ids) == {review["review_id"] for review in reviews}, "critical fact review: every fact needs exactly one independent family pass in addition to integration review")
+    for review in reviews:
+        required_keys(review, ("review_id", "domain", "fact_id", "source_id", "physical_pdf_page_index", "printed_page_label", "locator", "evidence_extract", "conditions", "reviewer", "status"), "critical fact review")
+        require(review["fact_id"] in facts and review["source_id"] in sources, f"{review['review_id']}: unknown fact/source")
+        fact, source = facts[review["fact_id"]], sources[review["source_id"]]
+        require(fact["source_id"] == review["source_id"], f"{review['review_id']}: fact/source mismatch")
+        require(review["physical_pdf_page_index"] == source["physical_pdf_page_index"], f"{review['review_id']}: physical page index changed")
+        require(review["printed_page_label"] == source["printed_page_label"], f"{review['review_id']}: printed page label changed")
+        require(review["locator"] == fact["locator"] and review["conditions"] == fact["conditions"], f"{review['review_id']}: locator/conditions changed")
+        require(isinstance(review["evidence_extract"], str) and review["evidence_extract"].strip(), f"{review['review_id']}: minimal extract required")
+        require(review["status"] in ("CONFIRMED", "OPEN", "UNSOURCED"), f"{review['review_id']}: review status")
+        if source["availability"] == "SOURCE UNAVAILABLE" or fact["verdict"] == "UNSOURCED":
+            require(review["status"] in ("OPEN", "UNSOURCED"), f"{review['review_id']}: unavailable/UNSOURCED fact cannot be confirmed")
+
+
+def validate_refresh_evidence(aggregate, data):
+    sources = {source["source_id"]: source for source in aggregate["sources"]}
+    evidence = data["evidence"]
+    require(evidence, "refresh evidence: empty")
+    classes = set()
+    for item in evidence:
+        required_keys(item, ("source_id", "authoritative_url", "sha256", "checked_at", "result", "retrieval_profile"), "refresh evidence")
+        require(item["source_id"] in sources, f"refresh evidence: unknown source {item['source_id']}")
+        source = sources[item["source_id"]]
+        require(source["availability"] == "AVAILABLE", f"{item['source_id']}: refresh evidence source unavailable")
+        require((item["authoritative_url"], item["sha256"]) == (source["authoritative_url"], source["sha256"]), f"{item['source_id']}: stale refresh evidence")
+        require(item["result"] == "MATCH" and item["retrieval_profile"] == "browser-like-v1", f"{item['source_id']}: invalid refresh result/profile")
+        classes.add(source["authority_class"])
+    require("PROJECT_GENERATOR" in classes and "MANUFACTURER_PRIMARY" in classes, "refresh evidence requires generator and manufacturer-primary examples")
+
+
+def validate_integration_artifacts(aggregate):
+    integration = ROOT / ".claude/skills/circuit-spec-integration"
+    frontmatter(integration / "SKILL.md", "circuit-spec-integration")
+    for relative in ("agents/openai.yaml", "references/rules.json", "references/forward-tests.json", "scripts/check_forward_tests.py"):
+        require((integration / relative).is_file(), f"circuit-spec-integration: missing {relative}")
+    facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
+    records = {record["record_id"] for record in aggregate["records"]}
+    rules = load(integration / "references/rules.json")["rules"]
+    required_domains = {"rail-envelope", "usb-pd-nvm-load-switch", "al8860-led-stage", "ap63203-logic-stage", "ntc-adc-firmware", "source-to-bench-chain"}
+    require(len({rule["rule_id"] for rule in rules}) == len(rules), "integration rules: duplicate rule ID")
+    require({rule["domain"] for rule in rules} == required_domains, "integration rules: exact required domains")
+    for rule in rules:
+        required_keys(rule, ("rule_id", "domain", "record_ids", "fact_ids", "conditions", "verdict", "refusal"), "integration rule")
+        require(set(rule["record_ids"]) <= records and set(rule["fact_ids"]) <= set(facts), f"{rule['rule_id']}: unknown record/fact ID")
+        require(rule["record_ids"] and rule["fact_ids"] and rule["conditions"].strip() and rule["refusal"].strip(), f"{rule['rule_id']}: incomplete conditioned refusal")
+        require(rule["verdict"] in ("NEEDS BENCH", "UNSOURCED"), f"{rule['rule_id']}: unsafe integration verdict")
+    chain = next(rule for rule in rules if rule["domain"] == "source-to-bench-chain")
+    expected_stages = ["official-source", "conditioned-requirement", "generated-netlist", "symbol-footprint", "pcb-bom-cpl", "as-built", "programmed", "bench"]
+    require([stage["stage"] for stage in chain["evidence_chain"]] == expected_stages, "integration evidence chain: stage order changed")
+    require(all(stage["status"] == "OPEN" for stage in chain["evidence_chain"][-4:]), "integration evidence chain: downstream proof must remain OPEN")
+
+
+def validate_local_skills(schema, inventory, skills_root=None):
     required = schema["required_skill_files"]
     owners = {line["owner_skill"] for line in inventory}
+    skills_root = skills_root or (ROOT / ".claude/skills")
+    actual_component_dirs = {
+        path.name for path in skills_root.glob("component-*")
+        if path.is_dir() and path.name != "component-spec-audit"
+    }
+    require(actual_component_dirs == owners, f"owner skills: expected exact directories {sorted(owners)}, got {sorted(actual_component_dirs)}")
     global_ids = {label: set() for label in ("record", "source", "fact", "interaction")}
-    for skill_dir in sorted((ROOT / ".claude/skills").glob("component-*")):
-        if skill_dir.name == "component-spec-audit" or not skill_dir.is_dir():
-            continue
+    aggregate = {key: [] for key in ("records", "sources", "facts", "coverage", "routes", "interactions", "pin_maps")}
+    for owner in sorted(owners):
+        skill_dir = skills_root / owner
         missing = [name for name in required if not (skill_dir / name).is_file()]
         require(not missing, f"{skill_dir.name}: missing local manifest files {missing}")
         frontmatter(skill_dir / "SKILL.md", skill_dir.name)
@@ -511,6 +712,12 @@ def validate_local_skills(schema, inventory):
         for label, values in current.items():
             require(not (values & global_ids[label]), f"{skill_dir.name}: duplicate global {label} IDs")
             global_ids[label].update(values)
+        for key in aggregate:
+            aggregate[key].extend(bundle[key])
+    expected_line_ids = {line["line_id"] for line in inventory}
+    actual_line_ids = [record["line_id"] for record in aggregate["records"]]
+    require(len(actual_line_ids) == 32 and set(actual_line_ids) == expected_line_ids, "owner skills: exact global 32-record parity required")
+    return aggregate
 
 
 def validate_golden(data, schema, enforce_lock=True):
@@ -590,46 +797,64 @@ def store_and_verify(payload, target, expected_sha256, source_id):
         target.unlink(missing_ok=True)
 
 
-def online_sources(schema):
+def fetch_source(source, opener=urllib.request.urlopen):
+    request = urllib.request.Request(source["authoritative_url"], headers=HTTP_HEADERS)
+    with opener(request, timeout=HTTP_TIMEOUT_SECONDS) as response:
+        return response.read()
+
+
+def online_sources(schema, sources, selected_ids=None, opener=urllib.request.urlopen):
     temp = ROOT / "tmp/pdfs"
     temp.mkdir(parents=True, exist_ok=True)
+    sources_by_id = {source["source_id"]: source for source in sources}
+    selected = set(selected_ids or ())
+    if selected:
+        require(selected <= set(sources_by_id), f"online refresh: unknown source IDs {sorted(selected - set(sources_by_id))}")
+        chosen = [sources_by_id[source_id] for source_id in sorted(selected)]
+    else:
+        chosen = [source for source in sources if source["availability"] == "AVAILABLE"]
     try:
-        for skill_dir in sorted((ROOT / ".claude/skills").glob("component-*")):
-            source_file = skill_dir / "sources.json"
-            if not source_file.exists(): continue
-            for source in load(source_file)["sources"]:
-                validate_source(source, schema)
-                if source["availability"] != "AVAILABLE": continue
-                target = temp / f"{source['source_id']}.pdf"
-                with urllib.request.urlopen(source["authoritative_url"], timeout=30) as response:
-                    payload = response.read()
-                store_and_verify(payload, target, source["sha256"], source["source_id"])
+        for source in chosen:
+            validate_source(source, schema)
+            require(source["availability"] == "AVAILABLE", f"{source['source_id']}: only AVAILABLE sources can be refreshed")
+            target = temp / f"{source['source_id']}.download"
+            payload = fetch_source(source, opener)
+            store_and_verify(payload, target, source["sha256"], source["source_id"])
     finally:
         if temp.exists() and not any(temp.iterdir()): temp.rmdir()
 
 
-def validate_all(online=False):
+def validate_all(online=False, refresh_source_ids=None):
     schema = load(REFS / "schema.json")
     frontmatter(AUDIT / "SKILL.md", "component-spec-audit")
     inventory = validate_inventory(load(REFS / "inventory.json"))
     validate_routing(inventory)
-    validate_local_skills(schema, inventory)
+    aggregate = validate_local_skills(schema, inventory)
     validate_bundle(template_bundle(), schema, True)
     run_seeded_fixtures(schema, inventory)
-    if online: online_sources(schema)
+    validate_real_pin_locks(aggregate, load(FIXTURES / "golden/real-pin-maps.json"))
+    validate_critical_fact_review(aggregate, load(FIXTURES / "golden/critical-fact-review.json"))
+    validate_refresh_evidence(aggregate, load(FIXTURES / "refresh-evidence.json"))
+    validate_integration_artifacts(aggregate)
+    if online or refresh_source_ids:
+        online_sources(schema, aggregate["sources"], refresh_source_ids)
     return len(inventory)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--online", action="store_true", help="opt in to authoritative URL/hash checks")
+    parser.add_argument("--refresh-source", action="append", default=[], metavar="SOURCE_ID", help="opt in to refreshing one exact AVAILABLE source ID; repeatable")
     args = parser.parse_args()
     try:
-        count = validate_all(args.online)
+        require(not (args.online and args.refresh_source), "choose --online or --refresh-source, not both")
+        count = validate_all(args.online, args.refresh_source)
     except (ContractError, json.JSONDecodeError, OSError) as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 1
-    print(f"PASS: component-spec contract; {count} lines; offline={not args.online}")
+    offline = not args.online and not args.refresh_source
+    refreshed = ",".join(args.refresh_source) if args.refresh_source else ("all" if args.online else "none")
+    print(f"PASS: component-spec contract; {count} lines; offline={offline}; refreshed={refreshed}")
     return 0
 
 

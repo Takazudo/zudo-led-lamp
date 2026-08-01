@@ -1,1 +1,46 @@
-{"schema_version":1,"skill":"component-alps-ec11l1525g01","records":[{"record_id":"rec-c2991196","line_id":"line-c2991196","kind":"standalone","parent_record_id":null,"mpn":"EC11L1525G01","manufacturer":"Alps Alpine","lcsc":"C2991196","package":"SW-TH_ALPS_EC11L1525G01","source_ids":["src-c2991196-spec","src-c2991196-page","src-c2991196-generator"],"fact_ids":["fact-c2991196-manufacturer","fact-c2991196-phases","fact-c2991196-detents","fact-c2991196-contact-timing","fact-c2991196-mechanical","fact-c2991196-life","fact-c2991196-switch","fact-c2991196-solder","fact-c2991196-lifecycle","fact-c2991196-topology","fact-c2991196-label-conflict"],"interaction_ids":["int-c2991196-interface","int-c2991196-mechanical","int-c2991196-label"],"open_domains":["current-lifecycle-and-approved-replacement","firmware-debounce-and-ui-direction","installed-panel-knob-load-and-life","installed-switch-and-bench-state"]}]}
+{
+  "schema_version": 1,
+  "skill": "component-alps-ec11l1525g01",
+  "records": [
+    {
+      "record_id": "rec-c2991196",
+      "line_id": "line-c2991196",
+      "kind": "standalone",
+      "parent_record_id": null,
+      "mpn": "EC11L1525G01",
+      "manufacturer": "Alps Alpine",
+      "lcsc": "C2991196",
+      "package": "SW-TH_ALPS_EC11L1525G01",
+      "source_ids": [
+        "src-c2991196-spec",
+        "src-c2991196-page",
+        "src-c2991196-generator"
+      ],
+      "fact_ids": [
+        "fact-c2991196-manufacturer",
+        "fact-c2991196-phases",
+        "fact-c2991196-detents",
+        "fact-c2991196-contact-timing",
+        "fact-c2991196-mechanical",
+        "fact-c2991196-life",
+        "fact-c2991196-switch",
+        "fact-c2991196-solder",
+        "fact-c2991196-lifecycle",
+        "fact-c2991196-topology",
+        "fact-c2991196-label-conflict"
+      ],
+      "interaction_ids": [
+        "int-c2991196-interface",
+        "int-c2991196-mechanical",
+        "int-c2991196-label"
+      ],
+      "open_domains": [
+        "phase-detent-switch-mechanical-and-process-context",
+        "current-lifecycle-and-approved-replacement",
+        "firmware-debounce-and-ui-direction",
+        "installed-panel-knob-load-and-life",
+        "installed-switch-and-bench-state"
+      ]
+    }
+  ]
+}

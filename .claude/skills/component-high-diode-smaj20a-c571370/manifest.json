@@ -11,7 +11,9 @@
       "manufacturer": "High Diode",
       "lcsc": "C571370",
       "package": "SMA_L4.2-W2.6-LS5.3-RD",
-      "source_ids": ["src-high-diode-c571370"],
+      "source_ids": [
+        "src-high-diode-c571370"
+      ],
       "fact_ids": [
         "fact-high-diode-smaj20a-manufacturer",
         "fact-high-diode-smaj20a-identity",
@@ -22,7 +24,10 @@
         "fact-high-diode-smaj20a-leakage",
         "fact-high-diode-smaj20a-thermal"
       ],
-      "interaction_ids": ["int-high-diode-netlist", "int-high-diode-bench"],
+      "interaction_ids": [
+        "int-high-diode-netlist",
+        "int-high-diode-bench"
+      ],
       "open_domains": [
         "manufacturer-primary identity and package drawing",
         "standoff/breakdown/clamp/leakage ratings",

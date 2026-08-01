@@ -6,28 +6,32 @@
       "record_id": "rec-type-c-31-m-17",
       "domain": "manufacturer-primary identity",
       "status": "OPEN",
-      "reason": "Only a distributor-attributed exact mirror was located"
+      "reason": "Only a distributor-attributed exact mirror was located",
+      "fact_ids": []
     },
     {
       "coverage_id": "cov-type-c-ratings",
       "record_id": "rec-type-c-31-m-17",
       "domain": "electrical ratings and durability",
       "status": "OPEN",
-      "reason": "No manufacturer-primary rating table available"
+      "reason": "No manufacturer-primary rating table available",
+      "fact_ids": []
     },
     {
       "coverage_id": "cov-type-c-contacts",
       "record_id": "rec-type-c-31-m-17",
       "domain": "contact/shell numbering and duplicate-pin topology",
       "status": "OPEN",
-      "reason": "Project mapping exists but physical contact equivalence is not primary-source locked"
+      "reason": "Project mapping exists but physical contact equivalence is not primary-source locked",
+      "fact_ids": []
     },
     {
       "coverage_id": "cov-type-c-mechanical",
       "record_id": "rec-type-c-31-m-17",
       "domain": "mechanical drawing and orientation",
       "status": "OPEN",
-      "reason": "Footprint must be checked against incoming parts or a controlled drawing"
+      "reason": "Footprint must be checked against incoming parts or a controlled drawing",
+      "fact_ids": []
     }
   ]
 }
