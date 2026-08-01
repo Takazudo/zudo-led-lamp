@@ -179,17 +179,18 @@ for a 1.6× derated margin (2.0× nameplate). GND uses the identical two-contact
   not in the schematic — see [Lessons Carried From zudo-pd](./lessons-from-zudo-pd.mdx)
   for the programming procedure and its pitfalls.
 - **Electrical limits to respect downstream:** anything wired to `VBUS_OUT` must
-  tolerate the D5 (SMAJ20A) clamp ceiling during a fault event, not just the nominal
-  15 V — see [Worst-Case Ratings Matrix](./ratings-matrix.mdx) for the exact numbers
-  and which parts have residual (accepted, transient-only) margin gaps against that
-  ceiling.
+  be assessed against the real protected-rail waveform, not just the nominal 15 V.
+  D5's 32.4 V figure is one manufacturer table point at 12.3 A, 10/1000 µs, and
+  25 °C; it is not a universal clamp ceiling or proof of the installed waveform.
+  See [Worst-Case Ratings Matrix](./ratings-matrix.mdx) and the open
+  [input-protection evidence gate](https://github.com/Takazudo/zudo-led-lamp/issues/34).
 
 ## References
 
 - The zudo-pd project's Board A design (STUSB4500-based reusable USB-PD 15 V sink
   core) — the direct source of this circuit, credited throughout this page.
-- [Worst-Case Ratings Matrix](./ratings-matrix.mdx) — per-part datasheet-sourced
-  rating verification, including the USB-C receptacle swap.
+- [Worst-Case Ratings Matrix](./ratings-matrix.mdx) — conditioned exact-part rating
+  evidence and the source, mapping, simulation, and bench stages that remain open.
 - [Charger Compatibility](./charger-compatibility.mdx) — why the front end uses an
   auto-negotiating certified controller instead of a resistor-strapped one.
 - [Lessons Carried From zudo-pd](./lessons-from-zudo-pd.mdx) — design rules, the NVM

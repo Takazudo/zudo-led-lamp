@@ -109,8 +109,12 @@ connector, and an input pin costs nothing. Firmware does not act on it in v1.
 
 The U1/Q1 transient envelope remains open in the
 [ratings matrix](/docs/power/ratings-matrix/). This architecture pass does not silently close
-them: they are surge-event-only, they were reasoned through against primary datasheets,
-and nothing about a lower steady-state load changes a clamp-event analysis.
+them: the exact UMW Q1 limits are manufacturer-primary, but the retained STUSB Rev 8
+limits are manufacturer-authored mirror evidence under the project's strict trust
+policy. The 32.4 V TVS value is also conditioned on 12.3 A, 10/1000 µs, and 25 °C.
+Nothing about a lower steady-state load proves the real clamp waveform; issue #34 keeps
+PD energization and a protected-chain PASS blocked pending mapping, simulation,
+programmed-state, as-built, and bench evidence.
 
 ## What the design review changed (2026-08-01)
 
