@@ -9,9 +9,10 @@
         "fact-stusb-ccdb",
         "fact-stusb-disch",
         "fact-stusb-vbus-vs-disch",
-        "fact-stusb-vben"
+        "fact-stusb-vben",
+        "fact-stusb-vreg2v7-load"
       ],
-      "conditions": "Assert U1.24=VBUS_IN; U1.18 reaches VBUS_IN only through R14; U1.9 reaches VBUS_OUT only through R13; U1.16=VBEN drives the PMOS gate network; U1.1/5 bridge through R19/R20 to CC1/CC2; U1.22 and EP are GND; NC pins remain NC",
+      "conditions": "Assert U1.24=VBUS_IN; U1.18 reaches VBUS_IN only through R14; U1.9 reaches VBUS_OUT only through R13; U1.16=VBEN drives the PMOS gate network; U1.1/5 bridge through R19/R20 to CC1/CC2; U1.22 and EP are GND; NC pins remain NC; U1.23=VREG_2V7 also bridges to R15.2/R16.2 (I2C pull-ups) and pogo pad J3.3, an external DC load beyond decoupling that DS12499 does not yet authorize",
       "verdict": "UNSOURCED"
     },
     {
