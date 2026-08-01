@@ -45,6 +45,9 @@
         "int-stusb-external-rd"
       ],
       "open_domains": [
+        "identity/package/pinout",
+        "unpowered/reset/startup/normal/fault/disconnect behavior",
+        "safe power/provisioning/bench discriminators",
         "project NVM image and factory-state capture",
         "NVM write endurance and production write budget"
       ]
@@ -81,16 +84,25 @@
       "manufacturer": "UNI-ROYAL",
       "lcsc": "C23186",
       "package": "R0603",
-      "source_ids": ["src-rd-c23186"],
+      "source_ids": [
+        "src-rd-uniroyal-smd-sp-001",
+        "src-rd-board-p-generator",
+        "src-rd-c23186"
+      ],
       "fact_ids": [
         "fact-rd-manufacturer",
         "fact-rd-value",
+        "fact-rd-tolerance",
+        "fact-rd-power",
+        "fact-rd-tcr",
+        "fact-rd-voltage-cap",
+        "fact-rd-rcwv-squared",
         "fact-rd-pinout",
         "fact-rd-fit-state"
       ],
       "interaction_ids": ["int-stusb-external-rd"],
       "open_domains": [
-        "manufacturer-primary electrical and mechanical specification"
+        "as-built fit state and external-Rd interaction"
       ]
     }
   ]

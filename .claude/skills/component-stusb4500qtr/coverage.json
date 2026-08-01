@@ -5,15 +5,15 @@
       "coverage_id": "cov-stusb-identity",
       "record_id": "rec-stusb4500qtr",
       "domain": "identity/package/pinout",
-      "status": "COVERED",
-      "reason": "DS12499 device summary and QFN pin table"
+      "status": "OPEN",
+      "reason": "DS12499 exact URL and locator are known, but no official document byte lock is available and all dependent identity/pin facts remain UNSOURCED"
     },
     {
       "coverage_id": "cov-stusb-states",
       "record_id": "rec-stusb4500qtr",
       "domain": "unpowered/reset/startup/normal/fault/disconnect behavior",
-      "status": "COVERED",
-      "reason": "DS12499 pin sections plus UM2650 state and fault registers"
+      "status": "OPEN",
+      "reason": "DS12499 and UM2650 bytes are unavailable; reset/state/fault facts remain UNSOURCED and require source recovery plus bench confirmation"
     },
     {
       "coverage_id": "cov-stusb-nvm",
@@ -33,8 +33,8 @@
       "coverage_id": "cov-stusb-bringup",
       "record_id": "rec-stusb4500qtr",
       "domain": "safe power/provisioning/bench discriminators",
-      "status": "COVERED",
-      "reason": "Operating ranges, state registers, reference design, and explicit project checks are recorded"
+      "status": "OPEN",
+      "reason": "Operating/state/reference sources are unavailable and project NVM/readback/power-cycle evidence has not been supplied"
     },
     {
       "coverage_id": "cov-pesd-spec",
@@ -55,14 +55,21 @@
       "record_id": "rec-rd-0603waf5101t5e",
       "domain": "exact orderable identity and project placement",
       "status": "COVERED",
-      "reason": "Distributor identity route plus project generator, retained as UNSOURCED"
+      "reason": "UNI-ROYAL part-number system confirms the exact MPN and ratings; immutable project generator confirms C23186 placements and DNP state"
     },
     {
       "coverage_id": "cov-rd-primary",
       "record_id": "rec-rd-0603waf5101t5e",
       "domain": "manufacturer-primary electrical and mechanical specification",
+      "status": "COVERED",
+      "reason": "UNI-ROYAL SMD-SP-001 V.7 confirms 0603 size, 5.1 kOhm, 1%, 0.1 W, TCR and voltage ratings"
+    },
+    {
+      "coverage_id": "cov-rd-fit",
+      "record_id": "rec-rd-0603waf5101t5e",
+      "domain": "as-built fit state and external-Rd interaction",
       "status": "OPEN",
-      "reason": "Exact primary PDF was unavailable; distributor mirror cannot establish ratings"
+      "reason": "Generator marks R17/R18 DNP and selects fitted CCDB bridges, but the assembled fit state and parallel-termination behavior require inspection/bench confirmation"
     }
   ]
 }

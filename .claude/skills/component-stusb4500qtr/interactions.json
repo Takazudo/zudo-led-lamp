@@ -64,7 +64,12 @@
     {
       "interaction_id": "int-stusb-external-rd",
       "record_ids": ["rec-stusb4500qtr", "rec-rd-0603waf5101t5e"],
-      "fact_ids": ["fact-stusb-ccdb", "fact-rd-value", "fact-rd-fit-state"],
+      "fact_ids": [
+        "fact-stusb-ccdb",
+        "fact-rd-value",
+        "fact-rd-tolerance",
+        "fact-rd-fit-state"
+      ],
       "conditions": "R17/R18 are DNP CC-to-GND external Rd options while R19/R20 fit CCDB bridges; fitting both may parallel Rd and is prohibited until the exact intended topology and resistance tolerance are re-audited",
       "verdict": "NEEDS BENCH"
     }

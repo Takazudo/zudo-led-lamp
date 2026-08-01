@@ -140,6 +140,20 @@
       "verdict": "NEEDS BENCH",
       "depends_on": [],
       "expression": ""
+    },
+    {
+      "fact_id": "fact-umw-ao3401a-project-nets",
+      "record_id": "rec-umw-ao3401a",
+      "source_id": "src-umw-ao3401a-board-p-generator",
+      "class": "PROJECT_STATE",
+      "value": "Q1.1=Q1_G; Q1.2=VBUS_IN; Q1.3=VBUS_OUT",
+      "unit": "NONE",
+      "conditions": "current Board P generated schematic source at immutable revision 410bc1a",
+      "locator": "src-umw-ao3401a-board-p-generator: COMPONENTS row Q1 and NETS rows Q1_G, VBUS_IN and VBUS_OUT",
+      "provenance": "PROJECT-CHOICE",
+      "verdict": "NOT APPLICABLE",
+      "depends_on": [],
+      "expression": ""
     }
   ]
 }
