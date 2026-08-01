@@ -19,7 +19,8 @@
         "fact-umw-ao3401a-thermal",
         "fact-umw-ao3401a-soa",
         "fact-umw-ao3401a-project-nets"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-umw-electrical",
@@ -39,7 +40,8 @@
         "fact-umw-ao3401a-thermal",
         "fact-umw-ao3401a-soa",
         "fact-umw-ao3401a-project-nets"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-umw-thermal",
@@ -47,7 +49,8 @@
       "domain": "application SOA/thermal/inrush behavior",
       "status": "OPEN",
       "reason": "UMW thermal rows and SOA figures are available, but installed copper, inrush waveform, negotiated VBUS and temperature require bench evidence",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-umw-project-netlist",
@@ -55,7 +58,8 @@
       "domain": "generated connectivity versus symbol/footprint/as-built confirmation",
       "status": "OPEN",
       "reason": "Immutable generator source records Q1 nets, but exported netlist, footprint mapping and assembled orientation must be independently checked",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     }
   ]
 }

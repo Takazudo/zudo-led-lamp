@@ -14,8 +14,8 @@
     {"fact_id":"fact-child-pin","record_id":"rec-child","source_id":"src-child","class":"PROJECT_STATE","value":"IN","unit":"NONE","conditions":"all states","locator":"src-child: Section 1, Table 1, row pin 1","provenance":"UNVERIFIED","verdict":"UNSOURCED","depends_on":[],"expression":""}
   ],
   "coverage":[
-    {"coverage_id":"cov-parent","record_id":"rec-parent","domain":"pinout","status":"OPEN","reason":"fact-parent-pin is UNSOURCED","fact_ids":["fact-parent-pin"]},
-    {"coverage_id":"cov-child","record_id":"rec-child","domain":"pinout","status":"OPEN","reason":"fact-child-pin is UNSOURCED","fact_ids":["fact-child-pin"]}
+    {"coverage_id":"cov-parent","record_id":"rec-parent","domain":"pinout","status":"OPEN","reason":"fact-parent-pin is UNSOURCED","fact_ids":["fact-parent-pin"],"blocking_fact_ids":["fact-parent-pin"]},
+    {"coverage_id":"cov-child","record_id":"rec-child","domain":"pinout","status":"OPEN","reason":"fact-child-pin is UNSOURCED","fact_ids":["fact-child-pin"],"blocking_fact_ids":["fact-child-pin"]}
   ],
   "routes":[
     {"route_id":"route-parent","record_id":"rec-parent","aliases":{"mpn":["PARENT-MPN"],"lcsc":["C000000"],"manufacturer":["Parent Maker"],"function":["parent function"]},"positive":["PARENT-MPN","C000000"],"negative":["UNRELATED-ONE"]},

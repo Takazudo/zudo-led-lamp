@@ -6,8 +6,11 @@
       "record_id": "rec-c2991196",
       "domain": "phase-detent-switch-mechanical-and-process-context",
       "status": "OPEN",
-      "reason": "facts retain exact mirror-spec locators, lower-authority UNSOURCED status, and project pin topology Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "facts retain exact mirror-spec locators, lower-authority UNSOURCED status, and project pin topology. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
       "fact_ids": [
+        "fact-c2991196-label-conflict"
+      ],
+      "blocking_fact_ids": [
         "fact-c2991196-label-conflict"
       ]
     },
@@ -19,6 +22,9 @@
       "reason": "fact-c2991196-lifecycle: current manufacturer page unavailable",
       "fact_ids": [
         "fact-c2991196-lifecycle"
+      ],
+      "blocking_fact_ids": [
+        "fact-c2991196-lifecycle"
       ]
     },
     {
@@ -27,7 +33,8 @@
       "domain": "firmware-debounce-and-ui-direction",
       "status": "OPEN",
       "reason": "contact timing does not establish firmware debounce or user-facing direction",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c2991196-load",
@@ -36,6 +43,10 @@
       "status": "OPEN",
       "reason": "fact-c2991196-mechanical and fact-c2991196-life require installed mechanical validation",
       "fact_ids": [
+        "fact-c2991196-mechanical",
+        "fact-c2991196-life"
+      ],
+      "blocking_fact_ids": [
         "fact-c2991196-mechanical",
         "fact-c2991196-life"
       ]
@@ -47,6 +58,9 @@
       "status": "OPEN",
       "reason": "fact-c2991196-topology leaves D/E unused and provides no bench result",
       "fact_ids": [
+        "fact-c2991196-topology"
+      ],
+      "blocking_fact_ids": [
         "fact-c2991196-topology"
       ]
     }
