@@ -20,7 +20,7 @@
           "function": "project anode/GND mapping"
         }
       ],
-      "reviewed_by": "board_p_spec.py and board_l_spec.py project mapping; exact High Diode pin evidence unavailable"
+      "reviewed_by": "official High Diode band=cathode evidence plus generator/KiCad K/A-to-pad-1/2 mapping; incoming reel/body orientation and continuity remain bench-gated"
     }
   ]
 }

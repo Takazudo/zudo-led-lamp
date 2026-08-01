@@ -34,6 +34,7 @@ def main():
         selected = [rules[rule_id] for rule_id in case["rule_ids"]]
         selected_record_ids = set().union(*(set(rule["record_ids"]) for rule in selected))
         selected_fact_ids = set().union(*(set(rule["fact_ids"]) for rule in selected))
+        selected_calculation_ids = {item["calculation_id"] for rule in selected for item in rule.get("conditioned_calculations", [])}
         assert len(case["prompt"].split()) >= 18, case["case_id"]
         assert case["expected_trigger_skill"] == "circuit-spec-integration", case["case_id"]
         assert [rule["verdict"] for rule in selected] == case["expected_verdicts"], case["case_id"]
@@ -44,6 +45,7 @@ def main():
         assert set(case["required_fact_ids"]) <= selected_fact_ids <= set(facts), case["case_id"]
         assert all(facts[fact_id]["source_id"] in case["required_source_ids"] for fact_id in case["required_fact_ids"]), case["case_id"]
         assert all(facts[fact_id]["conditions"].strip() and facts[fact_id]["locator"].strip() for fact_id in case["required_fact_ids"]), case["case_id"]
+        assert set(case["required_calculation_ids"]) <= selected_calculation_ids, case["case_id"]
         assert all(bool(rule["refusal"].strip()) == case["must_refuse"] for rule in selected), case["case_id"]
         for query in case["routing_queries"]:
             assert validator.resolve(query["query"], inventory) == query["expected_line_ids"], case["case_id"]

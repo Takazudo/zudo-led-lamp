@@ -27,9 +27,10 @@ that BOM):
    current-dependent number on Board P — Q1 conduction loss, JOUT contact loading, the
    XH derate — improves by roughly 7x against the original analysis. No part needs
    changing.
-2. **Clamp ceiling propagates downstream.** D5 (SMAJ20A) clamps at ≤32.4 V worst case,
-   and Q1 passes that transient straight to Board L when the switch is on. Board L's
-   input-facing parts were selected against 32.4 V, not 15 V — see
+2. **The conditioned clamp point propagates downstream.** The exact D5/D10 SMAJ20A
+   primary row gives VC max 32.4 V only at IPP 12.3 A for a 10/1000 µs waveform at
+   25 °C. Board L's input-facing parts were screened against that point, but both rail
+   waveforms still require simulation and bench confirmation — see
    [the driver input-rating decision](./decisions.mdx#led-driver-ic-driver-input-rating-vs-the-clamp-ceiling).
 3. **The 5 V-only first-power-up rule is a hard bring-up gate**, not advice. It is
    restated in [Next Steps](./next-steps.mdx#bring-up-sequence).
@@ -101,13 +102,13 @@ connector, and an input pin costs nothing. Firmware does not act on it in v1.
 
 | Part | Limit | At 410 mA / 15 V | Verdict |
 |---|---|---|---|
-| Q1 AO3401A | 30 V VDS abs max, ±12 V VGS abs max, 4.2 A, 50 mΩ @ Vgs −4.5 V | Conduction loss `0.41² × 0.05` = **8 mW**; Vgs = −6.0 V (100k/150k divider) | Pass. The divider was re-ratioed from 56 k so that even a 20 V mis-contract gives Vgs = −8.0 V, inside the ±12 V gate rating; the transient-only VDS gap against the 32.4 V clamp is unchanged and still accepted |
+| Q1 UMW AO3401A (exact C347476) | 30 V VDS abs max, ±12 V VGS abs max, 4.2 A, 65 mΩ max @ VGS −4.5 V / ID −4 A | Conservative 25 °C conduction estimate `0.41² × 0.065` = **10.9 mW**; ideal steady VGS = −6.0 V (100k/150k divider) | Nominal conduction is low, but temperature, PCB thermal path and the dynamic clamp waveform remain open. A 20 V mis-contract gives ideal steady VGS = −8.0 V; do not treat the 32.4 V clamp event as accepted without waveform/duration analysis |
 | JOUT XH contacts | 3 A/contact | 205 mA per paired contact | Pass, 14x derated margin |
-| U1 STUSB4500 VDD | 28 V abs max, 22 V operating | 15 V | Pass; transient-only gap against 32.4 V unchanged and still accepted |
-| J1 receptacle C283540 | 20 V, 5 A | 15 V, 0.41 A | Pass |
+| U1 STUSB4500 VDD | Rev 8 mirror states 28 V abs max, 22 V operating | 15 V | Nominal conditioned check passes; primary trust and transient waveform remain an **EVIDENCE BLOCKER (UNSOURCED)** |
+| J1 receptacle C283540 | Primary Rev A drawing: 20 V, 5 A | 15 V, 0.41 A | Rating check has margin; numeric pin/shell mapping and incoming continuity remain an evidence gate |
 
-The two residual transient-only gaps (U1 VDD, Q1 VDS) are inherited unchanged from the
-[ratings matrix](/docs/power/ratings-matrix/). This architecture pass does not re-open
+The U1/Q1 transient envelope remains open in the
+[ratings matrix](/docs/power/ratings-matrix/). This architecture pass does not silently close
 them: they are surge-event-only, they were reasoned through against primary datasheets,
 and nothing about a lower steady-state load changes a clamp-event analysis.
 
@@ -126,7 +127,7 @@ programming interface, now reflected in the tables above:
 2. **R12 changed 56 kΩ → 150 kΩ.** The old 100k/56k divider put V_GS at −12.8 V in a
    20 V mis-contract — the exact scenario the NVM trap creates — over the AO3401A's
    ±12 V absolute maximum. The 100k/150k ratio gives −6.0 V at 15 V (R_DS(on) is
-   already at its 50 mΩ spec by −4.5 V, so conduction loss is unchanged) and −8.0 V
+   specified at 65 mΩ maximum by −4.5 V, so the conservative conduction estimate remains low) and −8.0 V
    at 20 V.
 3. **`U1.RESET` is no longer hard-grounded.** It reaches GND through R21 (10 kΩ, the
    same C17414 reel Board L uses) and is brought out on the previously unused `J2.4`,

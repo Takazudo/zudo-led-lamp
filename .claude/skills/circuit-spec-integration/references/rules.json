@@ -4,26 +4,35 @@
     {
       "rule_id": "rule-rail-envelope",
       "domain": "rail-envelope",
-      "record_ids": ["rec-type-c-31-m-17", "rec-stusb4500qtr", "rec-high-diode-smaj20a", "rec-umw-ao3401a", "rec-bsmd1206-075-30v", "rec-al8860mp-13", "rec-ap63203wu-7", "rec-jst-b6b-xh-a"],
-      "fact_ids": ["fact-type-c-31-m-17-ratings", "fact-stusb-supplies", "fact-high-diode-smaj20a-clamp", "fact-umw-ao3401a-vds", "fact-bhfuse-voltage-max", "fact-al8860-vin-recommended-max", "fact-al8860-vin-absolute-max", "fact-ap63203-vin-recommended-max", "fact-ap63203-vin-absolute-dc", "fact-ap63203-vin-transient", "fact-jst-b6b-xh-a-current"],
+      "record_ids": ["rec-type-c-31-m-17", "rec-stusb4500qtr", "rec-high-diode-smaj20a", "rec-umw-ao3401a", "rec-bsmd1206-075-30v", "rec-al8860mp-13", "rec-ap63203wu-7", "rec-jst-b6b-xh-a", "rec-c13585", "rec-c14663", "rec-c15849", "rec-cl21a226maqnnne"],
+      "fact_ids": ["fact-type-c-31-m-17-ratings", "fact-stusb-supplies", "fact-stusb-vdd-absolute-max", "fact-stusb-cc-absolute-max", "fact-stusb-vbus-pin-absolute-max", "fact-high-diode-smaj20a-clamp", "fact-umw-ao3401a-vds", "fact-umw-ao3401a-vgs", "fact-bhfuse-voltage-max", "fact-al8860-vin-recommended-max", "fact-al8860-vin-absolute-max", "fact-ap63203-vin-recommended-max", "fact-ap63203-vin-absolute-dc", "fact-ap63203-vin-transient", "fact-jst-b6b-xh-a-current", "fact-c13585-voltage", "fact-c14663-voltage", "fact-c15849-voltage", "fact-cl21-voltage"],
       "conditions": "Separate legal 5/15 V operation, 20 V mis-contract, and transient clamp behavior; harness current and upstream source impedance remain independent conditions.",
       "verdict": "UNSOURCED",
-      "refusal": "Do not declare the complete rail safe while the receptacle, STUSB, High Diode clamp, and harness/as-built evidence remain open."
+      "refusal": "Do not declare the complete rail safe while STUSB primary trust, project mapping, actual clamp/source-impedance waveform, and harness/as-built evidence remain open.",
+      "conditioned_calculations": [
+        {"calculation_id":"calc-stusb-vdd-clamp-overage","fact_ids":["fact-stusb-vdd-absolute-max","fact-high-diode-smaj20a-clamp"],"expression":"fact_high_diode_smaj20a_clamp - fact_stusb_vdd_absolute_max","result_key":"overage_v","overage_v":4.4,"conditions":"conditioned subtraction of the mirrored 28 V VDD absolute maximum from the High Diode 32.4 V table clamp point; UNSOURCED and not proof of the real VDD transient waveform"},
+        {"calculation_id":"calc-q1-vds-clamp-overage","fact_ids":["fact-umw-ao3401a-vds","fact-high-diode-smaj20a-clamp"],"expression":"fact_high_diode_smaj20a_clamp + fact_umw_ao3401a_vds","result_key":"overage_v","overage_v":2.4,"conditions":"conditioned magnitude overage above the -30 V Q1 VDS absolute maximum at the 32.4 V clamp table point; actual polarity, waveform, parasitics and as-built state remain open"}
+      ]
     },
     {
       "rule_id": "rule-usb-pd-nvm-load-switch",
       "domain": "usb-pd-nvm-load-switch",
-      "record_ids": ["rec-stusb4500qtr", "rec-umw-ao3401a", "rec-c25803", "rec-c22807", "rec-c14663", "rec-c21189", "rec-rd-0603waf5101t5e"],
-      "fact_ids": ["fact-stusb-pin-states", "fact-stusb-vben", "fact-stusb-nvm-load", "fact-stusb-volatile-pdo", "fact-stusb-artifact", "fact-umw-ao3401a-vgs", "fact-umw-ao3401a-project-nets", "fact-c25803-resistance", "fact-c22807-r12-topology", "fact-c14663-c35-topology", "fact-c21189-ccdb-topology", "fact-rd-fit-state"],
-      "conditions": "Evaluate detached, dead-battery, reset, NVM-loaded, attached, hard-reset, fault, and disconnect states; distinguish generated topology from programmed NVM and measured gate waveform.",
+      "record_ids": ["rec-stusb4500qtr", "rec-umw-ao3401a", "rec-c25803", "rec-c22807", "rec-c14663", "rec-c21189", "rec-rd-0603waf5101t5e", "rec-al8860mp-13", "rec-ap63203wu-7"],
+      "fact_ids": ["fact-stusb-pin-states", "fact-stusb-vben", "fact-stusb-nvm-load", "fact-stusb-volatile-pdo", "fact-stusb-artifact", "fact-umw-ao3401a-vgs", "fact-umw-ao3401a-project-nets", "fact-c25803-resistance", "fact-c22807-resistance", "fact-c22807-r12-topology", "fact-c14663-capacitance", "fact-c14663-c35-topology", "fact-c21189-ccdb-topology", "fact-rd-fit-state", "fact-al8860-project-nets", "fact-al8860-ctrl", "fact-ap63203-project-nets", "fact-ap63203-en-open"],
+      "conditions": "Evaluate detached, dead-battery, reset, NVM-loaded, attached, hard-reset, fault, and disconnect states. With VBEN held low and ideal nominal resistors, VGS=-VBUS*100k/(100k+150k): -6.0 V at 15 V, -8.0 V at 20 V, and -12.96 V at 32.4 V. C35 is gate-to-source, so the nominal small-signal gate time constant is (100k parallel 150k)*100 nF about 6 ms; device/parasitic behavior and the actual transient waveform remain separate.",
       "verdict": "UNSOURCED",
-      "refusal": "Do not infer PDOs, VBEN default policy, fitted Rd state, or programmed/read-back NVM bytes without the missing primary and as-built artifacts."
+      "refusal": "Do not infer PDOs, VBEN default policy, fitted Rd state, programmed/read-back NVM bytes, or a deterministic 32.4 V VGS violation/safe result without the actual VBEN/gate/source waveform, duration, device/parasitic model, as-built state, and bench evidence.",
+      "conditioned_calculations": [
+        {"calculation_id":"calc-q1-steady-vgs","fact_ids":["fact-stusb-vben","fact-c25803-resistance","fact-c22807-resistance","fact-c22807-r12-topology"],"expression":"-vbus_v * fact_c25803_resistance / (fact_c25803_resistance + fact_c22807_resistance)","result_key":"vgs_v","results":[{"vbus_v":15,"vgs_v":-6.0},{"vbus_v":20,"vgs_v":-8.0},{"vbus_v":32.4,"vgs_v":-12.96}],"conditions":"ideal steady VBEN-low divider only; absolute maximum is not an operating target"},
+        {"calculation_id":"calc-q1-steady-vgs-margin","fact_ids":["fact-umw-ao3401a-vgs","fact-c25803-resistance","fact-c22807-resistance","fact-c22807-r12-topology"],"expression":"fact_umw_ao3401a_vgs - vbus_v * fact_c25803_resistance / (fact_c25803_resistance + fact_c22807_resistance)","result_key":"margin_v","results":[{"vbus_v":15,"margin_v":6.0},{"vbus_v":20,"margin_v":4.0},{"vbus_v":32.4,"margin_v":-0.96}],"conditions":"ideal steady VBEN-low magnitude margin to the 12 V absolute maximum; the negative 32.4 V ideal-steady result is not a deterministic claim about the real transient waveform"},
+        {"calculation_id":"calc-q1-gate-tau","fact_ids":["fact-c25803-resistance","fact-c22807-resistance","fact-c14663-capacitance","fact-c14663-c35-topology"],"expression":"(fact_c25803_resistance * fact_c22807_resistance / (fact_c25803_resistance + fact_c22807_resistance)) * fact_c14663_capacitance * 1e-6","result_key":"result_s","result_s":0.006,"conditions":"fact-c14663 capacitance is expressed in uF; nominal small-signal RC only; excludes MOSFET capacitance, STUSB output impedance, PCB parasitics and nonlinear switching"}
+      ]
     },
     {
       "rule_id": "rule-al8860-led-stage",
       "domain": "al8860-led-stage",
       "record_ids": ["rec-al8860mp-13", "rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c210315", "rec-c2934070", "rec-c4216"],
-      "fact_ids": ["fact-al8860-sense-min", "fact-al8860-sense-max", "fact-al8860-current-min", "fact-al8860-current-max", "fact-al8860-peak-current", "fact-al8860-ctrl", "fact-al8860-faults", "fact-rlp25-resistance-min", "fact-rlp25-resistance-max", "fact-rlp25-power-margin", "fact-fxl-isat-margin", "fact-ss26-polarity", "fact-c210315-vf", "fact-c210315-maxima", "fact-c2934070-resistance", "fact-c2934070-power", "fact-c2934070-rcwv", "fact-c2934070-topology", "fact-c4216-ctrl-topology"],
+      "fact_ids": ["fact-al8860-sense-min", "fact-al8860-sense-max", "fact-al8860-current-min", "fact-al8860-current-max", "fact-al8860-peak-current", "fact-al8860-ctrl", "fact-al8860-faults", "fact-rlp25-resistance-min", "fact-rlp25-resistance-max", "fact-rlp25-power-margin", "fact-fxl-isat-margin", "fact-ss26-polarity", "fact-c210315-vf-min", "fact-c210315-vf-max", "fact-c210315-forward-current-max", "fact-c210315-power-max", "fact-c210315-reverse-voltage-max", "fact-c210315-junction-temperature-max", "fact-c210315-solder-temperature-max", "fact-c2934070-resistance", "fact-c2934070-power", "fact-c2934070-rcwv", "fact-c2934070-topology", "fact-c4216-ctrl-topology"],
       "conditions": "Use the full LED Vf/current/temperature envelope, resistor tolerance/TCR, magnetic current definition, diode polarity/waveform, ballast sharing, CTRL/PWM state, PCB thermal path, and fault behavior.",
       "verdict": "NEEDS BENCH",
       "refusal": "Do not promote mirror-only FXL or R+O SS26 limits, assumed branch sharing, or nominal arithmetic to a guaranteed selected-stage PASS."
@@ -32,7 +41,7 @@
       "rule_id": "rule-ap63203-logic-stage",
       "domain": "ap63203-logic-stage",
       "record_ids": ["rec-ap63203wu-7", "rec-fnr4030s4r7mt", "rec-cl21a226maqnnne", "rec-c529334"],
-      "fact_ids": ["fact-ap63203-en-open", "fact-ap63203-frequency", "fact-ap63203-min-on-time", "fact-ap63203-min-off-time", "fact-ap63203-required-inductor-current", "fact-ap63203-cap-min", "fact-ap63203-cap-max", "fact-ap63203-thermal", "fact-fnr-isat-margin", "fact-fnr-irated-margin", "fact-cl21-dc-bias", "fact-cl21-effective-capacitance-status", "fact-c529334-topology"],
+      "fact_ids": ["fact-ap63203-vin-recommended-max", "fact-ap63203-vin-absolute-dc", "fact-ap63203-vin-transient", "fact-ap63203-en-open", "fact-ap63203-frequency", "fact-ap63203-min-on-time", "fact-ap63203-min-off-time", "fact-ap63203-required-inductor-current", "fact-ap63203-cap-min", "fact-ap63203-cap-max", "fact-ap63203-thermal", "fact-fnr-isat-margin", "fact-fnr-irated-margin", "fact-cl21-dc-bias", "fact-cl21-effective-capacitance-status", "fact-c529334-topology"],
       "conditions": "Check V15 transients, EN-open startup, switching timing, actual V3P3 load steps, inductor heating/saturation, effective output capacitance, layout, and MCU operating state.",
       "verdict": "UNSOURCED",
       "refusal": "Do not infer minimum off-time, MCU load, guaranteed MLCC capacitance, or full-load FNR thermal margin from nominal values."
@@ -50,19 +59,20 @@
       "rule_id": "rule-evidence-chain",
       "domain": "source-to-bench-chain",
       "record_ids": ["rec-stusb4500qtr", "rec-umw-ao3401a", "rec-al8860mp-13", "rec-ap63203wu-7", "rec-c529334"],
-      "fact_ids": ["fact-stusb-artifact", "fact-umw-ao3401a-project-nets", "fact-al8860-project-nets", "fact-ap63203-project-nets", "fact-c529334-topology"],
+      "fact_ids": ["fact-stusb-vben", "fact-stusb-artifact", "fact-umw-ao3401a-vgs", "fact-umw-ao3401a-pinout", "fact-umw-ao3401a-project-nets", "fact-al8860-project-nets", "fact-ap63203-project-nets", "fact-c529334-topology"],
       "conditions": "Trace each claim through official source, conditioned requirement, generated netlist, symbol/footprint pin map, PCB/BOM/CPL identity, as-built inspection, programmed state, and bench evidence.",
       "verdict": "NEEDS BENCH",
       "refusal": "A completed upstream stage never implies a later as-built, programmed, or measured stage.",
       "evidence_chain": [
-        {"stage": "official-source", "status": "MIXED"},
-        {"stage": "conditioned-requirement", "status": "MIXED"},
-        {"stage": "generated-netlist", "status": "CONFIRMED"},
-        {"stage": "symbol-footprint", "status": "REVIEWED"},
-        {"stage": "pcb-bom-cpl", "status": "OPEN"},
-        {"stage": "as-built", "status": "OPEN"},
-        {"stage": "programmed", "status": "OPEN"},
-        {"stage": "bench", "status": "OPEN"}
+        {"stage": "official-source", "status": "MIXED", "fact_ids": ["fact-stusb-vben", "fact-umw-ao3401a-vgs"]},
+        {"stage": "conditioned-requirement", "status": "MIXED", "fact_ids": ["fact-stusb-artifact", "fact-umw-ao3401a-vgs"]},
+        {"stage": "generated-netlist", "status": "CONFIRMED", "fact_ids": ["fact-umw-ao3401a-project-nets", "fact-al8860-project-nets", "fact-ap63203-project-nets"]},
+        {"stage": "symbol-footprint", "status": "MIXED", "fact_ids": ["fact-umw-ao3401a-pinout", "fact-c529334-topology"]},
+        {"stage": "pcb-orientation", "status": "OPEN", "fact_ids": []},
+        {"stage": "bom-cpl", "status": "OPEN", "fact_ids": []},
+        {"stage": "as-built", "status": "OPEN", "fact_ids": []},
+        {"stage": "programmed", "status": "OPEN", "fact_ids": []},
+        {"stage": "bench", "status": "OPEN", "fact_ids": []}
       ]
     }
   ]

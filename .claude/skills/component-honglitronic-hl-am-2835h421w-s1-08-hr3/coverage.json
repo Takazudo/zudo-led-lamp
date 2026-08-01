@@ -11,10 +11,15 @@
         "fact-c210315-manufacturer",
         "fact-c210315-polarity",
         "fact-c210315-flux",
-        "fact-c210315-vf",
+        "fact-c210315-vf-min",
+        "fact-c210315-vf-max",
         "fact-c210315-cri",
         "fact-c210315-view",
-        "fact-c210315-maxima",
+        "fact-c210315-forward-current-max",
+        "fact-c210315-power-max",
+        "fact-c210315-reverse-voltage-max",
+        "fact-c210315-junction-temperature-max",
+        "fact-c210315-solder-temperature-max",
         "fact-c210315-reflow"
       ]
     },

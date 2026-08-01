@@ -1,5 +1,6 @@
 import copy
 import hashlib
+import io
 import importlib.util
 import shutil
 import tempfile
@@ -197,6 +198,21 @@ class ComponentSpecValidatorTests(unittest.TestCase):
             "RLP25FEER200": ["line-c459674"],
             "C45783": ["line-c45783"],
             "other-vendor SS26 C999019": [],
+            "Vishay SS26 C7420363": [],
+            "vishay SS26 C7420363": [],
+            "FakeCorp AO3401A C347476": [],
+            "fakecorp AO3401A C347476": [],
+            "AO3401A from Vishay C347476": [],
+            "SS26 by vishay C7420363": [],
+            "AOS AO3401A C347476": [],
+            "Alpha and Omega AO3401A C347476": [],
+            "Toshiba AO3401A C347476": [],
+            "AOS C347476": [],
+            "Vishay C7420363": [],
+            "Board-P AL8860MP-13 C500782": ["line-c500782"],
+            "review AL8860MP-13 CTRL pin": ["line-c500782"],
+            "inspect AL8860MP-13 CTRL pin": ["line-c500782"],
+            "new AL8860MP-13 design": ["line-c500782"],
             "UNI-ROYAL": [],
             "100 kOhm resistor": [],
         }
@@ -207,6 +223,12 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         bundle = validator.load_skill_bundle(validator.ROOT / ".claude/skills/component-project-passives")
         self.assertEqual(validator.resolve_bundle_route("0603WAF4700T5E C23162", bundle["routes"]), [])
         self.assertEqual(validator.resolve_bundle_route("UNI-ROYAL 0603WAF1003T5E", bundle["routes"]), ["rec-c25803"])
+
+    def test_external_vendor_qualifier_artifact_is_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing.json"
+            with self.assertRaisesRegex(validator.ContractError, "is required"):
+                validator.external_vendor_tokens(missing)
 
     def test_browser_headers_success_and_403_are_explicit(self):
         source = copy.deepcopy(validator.template_bundle()["sources"][0])
@@ -225,12 +247,24 @@ class ComponentSpecValidatorTests(unittest.TestCase):
 
         self.assertEqual(validator.fetch_source(source, success), b"ok")
 
+        source["request_headers"] = {"Referer": "https://manufacturer.example/product"}
+        def referer_success(request, timeout):
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            self.assertEqual(request.get_header("Referer"), source["request_headers"]["Referer"])
+            return Response()
+        self.assertEqual(validator.fetch_source(source, referer_success), b"ok")
+
+        error = urllib.error.HTTPError(source["authoritative_url"], 403, "Forbidden", {}, io.BytesIO(b"forbidden"))
+
         def forbidden(_request, timeout):
             self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
-            raise urllib.error.HTTPError(source["authoritative_url"], 403, "Forbidden", {}, None)
+            raise error
 
-        with self.assertRaises(urllib.error.HTTPError):
-            validator.fetch_source(source, forbidden)
+        try:
+            with self.assertRaises(urllib.error.HTTPError):
+                validator.fetch_source(source, forbidden)
+        finally:
+            error.close()
 
     def test_coverage_and_interaction_trust_fail_closed(self):
         bundle = validator.template_bundle()
@@ -241,6 +275,14 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         bundle = validator.template_bundle()
         bundle["interactions"][0]["verdict"] = "PASS - primary-source confirmed"
         with self.assertRaisesRegex(validator.ContractError, "not trust-closed"):
+            validator.validate_bundle(bundle, self.schema, True)
+        bundle = validator.template_bundle()
+        bundle["interactions"][0]["verdict"] = "BLOCKER - deterministic spec violation"
+        with self.assertRaisesRegex(validator.ContractError, "not trust-closed"):
+            validator.validate_bundle(bundle, self.schema, True)
+        bundle = validator.template_bundle()
+        bundle["facts"][0]["verdict"] = "BLOCKER - deterministic spec violation"
+        with self.assertRaisesRegex(validator.ContractError, "deterministic BLOCKER"):
             validator.validate_bundle(bundle, self.schema, True)
 
     def test_real_pin_locks_reject_deletion_rename_and_swap(self):
@@ -257,6 +299,41 @@ class ComponentSpecValidatorTests(unittest.TestCase):
             with self.subTest(mutation=mutation), self.assertRaisesRegex(validator.ContractError, "canonical pin map changed"):
                 validator.validate_real_pin_locks(changed, locks)
 
+    def test_pin_maps_match_kicad_symbols_and_footprints(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        validator.validate_pin_assets(aggregate, self.lines)
+        changed = copy.deepcopy(aggregate)
+        changed["pin_maps"][0]["pins"][0]["footprint_pad"] = "999"
+        with self.assertRaisesRegex(validator.ContractError, "differs from KiCad footprint"):
+            validator.validate_pin_assets(changed, self.lines)
+        for field in ("symbol", "footprint"):
+            changed = copy.deepcopy(aggregate)
+            changed["pin_maps"][0][field] += "_WRONG"
+            with self.subTest(field=field), self.assertRaisesRegex(validator.ContractError, "differs from generator"):
+                validator.validate_pin_assets(changed, self.lines)
+
+    def test_integration_calculations_recompute_from_raw_facts(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        validator.validate_integration_artifacts(aggregate)
+        for fact_id in ("fact-c25803-resistance", "fact-c22807-resistance", "fact-c14663-capacitance", "fact-high-diode-smaj20a-clamp", "fact-stusb-vdd-absolute-max"):
+            changed = copy.deepcopy(aggregate)
+            next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)["value"] *= 2
+            with self.subTest(fact_id=fact_id), self.assertRaisesRegex(validator.ContractError, "result is stale"):
+                validator.validate_integration_artifacts(changed)
+        rules_path = validator.ROOT / ".claude/skills/circuit-spec-integration/references/rules.json"
+        rules = validator.load(rules_path)
+        calculation = next(item for rule in rules["rules"] for item in rule.get("conditioned_calculations", []) if item["calculation_id"] == "calc-q1-steady-vgs")
+        changed_result = copy.deepcopy(calculation)
+        changed_result["results"][0]["vgs_v"] = -9.6
+        with self.assertRaisesRegex(validator.ContractError, "scenario result is stale"):
+            fact_values = {fact_id.replace("-", "_"): next(fact for fact in aggregate["facts"] if fact["fact_id"] == fact_id)["value"] for fact_id in calculation["fact_ids"] if isinstance(next(fact for fact in aggregate["facts"] if fact["fact_id"] == fact_id)["value"], (int, float))}
+            scenario = changed_result["results"][0]
+            validator.require(validator.arithmetic(changed_result["expression"], {**fact_values, "vbus_v": scenario["vbus_v"]}) == scenario["vgs_v"], "scenario result is stale")
+        changed = copy.deepcopy(aggregate)
+        changed["pin_maps"][0]["pins"][0]["footprint_pad"], changed["pin_maps"][0]["pins"][1]["footprint_pad"] = changed["pin_maps"][0]["pins"][1]["footprint_pad"], changed["pin_maps"][0]["pins"][0]["footprint_pad"]
+        with self.assertRaisesRegex(validator.ContractError, "symbol-pin to footprint-pad"):
+            validator.validate_pin_assets(changed, self.lines)
+
     def test_critical_fact_review_locks_claim_locator_and_conditions(self):
         aggregate = validator.validate_local_skills(self.schema, self.lines)
         review = validator.load(validator.FIXTURES / "golden/critical-fact-review.json")
@@ -265,6 +342,16 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         fact_id = review["reviews"][0]["fact_id"]
         next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)["locator"] += " changed"
         with self.assertRaisesRegex(validator.ContractError, "locator/conditions changed"):
+            validator.validate_critical_fact_review(changed, review)
+        for field, value in (("value", 104), ("unit", "kV")):
+            changed = copy.deepcopy(aggregate)
+            next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)[field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(validator.ContractError, "value/unit/evidence lock changed"):
+                validator.validate_critical_fact_review(changed, review)
+        changed = copy.deepcopy(aggregate)
+        source_id = review["reviews"][0]["source_id"]
+        next(source for source in changed["sources"] if source["source_id"] == source_id)["evidence_extract"] = "arbitrary"
+        with self.assertRaisesRegex(validator.ContractError, "value/unit/evidence lock changed"):
             validator.validate_critical_fact_review(changed, review)
 
     def test_malicious_generator_is_rejected_without_execution(self):

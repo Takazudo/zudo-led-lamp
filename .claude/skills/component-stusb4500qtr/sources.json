@@ -20,6 +20,24 @@
       "evidence_extract": "Current manufacturer-authored DS12499 Rev 8 retained from a reproducible mirror. QFN pins 1..24 and EP are enumerated. CC is Hi-Z in reset; CCDB enables passive dead-battery Rd. DISCH and VBUS_VS_DISCH have distinct sense/discharge roles. VBUS_EN_SNK is active-low open drain; mirror authority cannot close PRIMARY-SPEC trust."
     },
     {
+      "source_id": "src-stusb-ds12499-ratings",
+      "record_id": "rec-stusb4500qtr",
+      "document_title": "STUSB4500 standalone USB PD sink controller with short-to-VBUS protections",
+      "document_number": "DS12499",
+      "revision": "Rev 8",
+      "document_date": "2022-11",
+      "authoritative_url": "https://web.archive.org/web/20231016233405id_/http://www.st.com/resource/en/datasheet/stusb4500.pdf",
+      "alternate_authoritative_url": "https://www.st.com/resource/en/datasheet/stusb4500.pdf",
+      "retrieval_date": "2026-08-02",
+      "authority_class": "MANUFACTURER_MIRROR",
+      "sha256": "82d6080e6d3e994f0969f4f018039d1f0871db9f6793c80c09e63e80325029e8",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 26,
+      "printed_page_label": "27",
+      "locator": "Section 7.1, Table 20, absolute maximum rating rows VDD, CC/CCDB and high-voltage VBUS pins",
+      "evidence_extract": "Rev 8 Table 20 states VDD absolute maximum 28 V, CC1/CC2/CC1DB/CC2DB high-voltage absolute maximum 22 V, and VBUS_EN_SNK/VBUS_VS_DISCH/DISCH/POWER_OK2 high-voltage absolute maximum 28 V. Mirror authority cannot close primary-only trust."
+    },
+    {
       "source_id": "src-stusb-um2650",
       "record_id": "rec-stusb4500qtr",
       "document_title": "The STUSB4500 software programming guide",

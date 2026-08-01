@@ -4,18 +4,55 @@
     {
       "reviewer": "issue-21 family evidence review",
       "review_log": "component-spec-skills/reviews/issue-21.md",
-      "review_ids": ["review-jst-b6b-xh-a-current", "review-pesd-pinout", "review-umw-ao3401a-pinout", "review-stusb-vben", "review-umw-ao3401a-vds", "review-high-diode-smaj20a-clamp", "review-umw-ao3401a-thermal"]
+      "review_log_sha256": "d0a88bdd21e2c03d42e06b2b394b99cff4f9809ff23493ff98169e9d99804ddf",
+      "review_ids": ["review-jst-b6b-xh-a-current", "review-pesd-pinout", "review-umw-ao3401a-pinout", "review-stusb-vben", "review-umw-ao3401a-vds", "review-umw-ao3401a-thermal"]
     },
     {
       "reviewer": "issue-23 family evidence review",
       "review_log": "component-spec-skills/reviews/issue-23.md",
+      "review_log_sha256": "7f4cb16c29df09c90fc8103789b3f974f4152933436e037e92500d5a91bf262f",
       "review_ids": ["review-ss26-polarity", "review-al8860-pin-ep", "review-ap63203-en-open", "review-al8860-vin-recommended-max", "review-ap63203-vin-transient", "review-bhfuse-voltage-max", "review-al8860-sense-max", "review-ap63203-cap-min", "review-cl21-dc-bias", "review-bhfuse-surface-temperature", "review-rlp25-power", "review-fnr-irated-max"]
     },
     {
       "reviewer": "issue-24 independent control evidence audit",
       "review_log": "component-spec-skills/reviews/issue-24-independent-audit.md",
+      "review_log_sha256": "041bd9ff8510b02746c902ea301c56c12cb6f7bb1f1fb30474e1531dd8e1cac5",
       "review_ids": ["review-c492404-rating", "review-c210315-polarity", "review-c529334-pin-bonds", "review-c210315-maxima", "review-c2934070-power", "review-c13564-max-current"]
+    },
+    {
+      "reviewer": "issue-25 manager source-recovery review",
+      "review_log": "component-spec-skills/reviews/issue-25.md",
+      "review_log_sha256": "ec36be26675a1c15b1e861095324d5422e275792432df0777281a36037de6deb",
+      "review_ids": ["review-high-diode-smaj20a-clamp", "review-stusb-vdd-absolute-max"]
     }
+  ],
+  "fact_locks": [
+    {"review_id":"review-jst-b6b-xh-a-current","sha256":"1c2c3566010322e8aa303f1e2ee1bda22dbaa17d85f90fd70f45321a3a0603dc"},
+    {"review_id":"review-c492404-rating","sha256":"edd6fdeeec8e61a1576c149a499e7e2bd15cc1237e0e1c4c5fc7f18a2c2441e8"},
+    {"review_id":"review-pesd-pinout","sha256":"05b947b884296e5573dd89d60abdbc5f1430e12cf53af659a74b4f50490788e8"},
+    {"review_id":"review-c210315-polarity","sha256":"8071a9ffd763a98a97504d375b004cf24fe1d69dcd8ca7ede0cd8a8703550378"},
+    {"review_id":"review-ss26-polarity","sha256":"af03e39e28f498fb2df1d944f70edfb2880918e766cf7ec1d0635429ec9b973c"},
+    {"review_id":"review-al8860-pin-ep","sha256":"5f92ee14e78042c8b48fa8c5e90a34b75e041417e59be88620a775e553ecdfdd"},
+    {"review_id":"review-umw-ao3401a-pinout","sha256":"5ada5782fbeb20ec0a65135ee3b9671842ec1442adab30788574f7fffb0c1414"},
+    {"review_id":"review-c529334-pin-bonds","sha256":"55c3c79fec2c5d238eeb51dfbcb47a23fbc6fd3b669d5a735268b022b5f9f1b3"},
+    {"review_id":"review-stusb-vben","sha256":"da5068b1aa65697ab4b45dff1dcebd40882a645e33678806cb9332b01730c046"},
+    {"review_id":"review-stusb-vdd-absolute-max","sha256":"598a656dbbb71360c566ce2126318906c121b8ed5edf6f05116c84035f741086"},
+    {"review_id":"review-ap63203-en-open","sha256":"2be05643b0a89cad47e489feed7868b65e587fa299f887fc6af9451d75eeba7e"},
+    {"review_id":"review-al8860-vin-recommended-max","sha256":"0b6304aac0069ff1c25418a866294b634ad696106639b53fdab862b769d7e731"},
+    {"review_id":"review-ap63203-vin-transient","sha256":"18cf0350c06d4bbc0d9ef67b550a09323f860b4c65e6e9a4296a60a03f55e490"},
+    {"review_id":"review-bhfuse-voltage-max","sha256":"ec18fd263f06c1996c3a551795291e86b3165f0dd36ad96cdf4e290822174c51"},
+    {"review_id":"review-umw-ao3401a-vds","sha256":"8f381e05ff741a246a776dea7f334c45da2e53caf788dd88f0ce15f47d6cd502"},
+    {"review_id":"review-high-diode-smaj20a-clamp","sha256":"34403b8ceffacfb6ee2e8226a635c1c9edc60892660d2af72b76e39a538984ca"},
+    {"review_id":"review-al8860-sense-max","sha256":"d855f52e0360e7752b7c9c889871e48ddfa96774119fa13a0a560dda7dab854e"},
+    {"review_id":"review-ap63203-cap-min","sha256":"7020871abe9c14edb0efe6693445ae73bd0fd08e0ec1c49a95bffeed32bcddf5"},
+    {"review_id":"review-cl21-dc-bias","sha256":"5cd9fbd685e5f369a5c9660367912f5a2858a8d677328cc0a00e2a7f0a212bfb"},
+    {"review_id":"review-umw-ao3401a-thermal","sha256":"cd18d76cf8bdc258347d74f3c1ecb5c4895f123d0b2fa057c4b3e3db78937e4c"},
+    {"review_id":"review-bhfuse-surface-temperature","sha256":"ae1e002b4b7083a9ff94e2d62cde1759a66511ac82272c33b7092f2a37bb9642"},
+    {"review_id":"review-c210315-maxima","sha256":"2a2ee23238b9468c3b253276fae508a33f540761515b30869bafd753c54b15b0"},
+    {"review_id":"review-rlp25-power","sha256":"485554956fa596bdb03d5a3d310081644128ec94b972744daf806c77a9598baa"},
+    {"review_id":"review-fnr-irated-max","sha256":"95315683d7762c65aa51ec34b994124ce7785a6408df6a1b5a483e9148c66ad7"},
+    {"review_id":"review-c2934070-power","sha256":"2fa613d32a70b38176133a6323b302df4cc19af1a95f04ad199d024ada86318c"},
+    {"review_id":"review-c13564-max-current","sha256":"450f58e36ca6322a566f1470fbe15b2a5e026935228c805af43253116f782790"}
   ],
   "reviews": [
     {
@@ -136,6 +173,19 @@
       "status": "UNSOURCED"
     },
     {
+      "review_id": "review-stusb-vdd-absolute-max",
+      "domain": "rail",
+      "fact_id": "fact-stusb-vdd-absolute-max",
+      "source_id": "src-stusb-ds12499-ratings",
+      "physical_pdf_page_index": 26,
+      "printed_page_label": "27",
+      "locator": "src-stusb-ds12499: Section 7.1, Table 20, row VDD Supply voltage on VDD pin",
+      "evidence_extract": "VDD supply voltage absolute maximum is 28 V; the retained exact Rev 8 document is mirror-hosted.",
+      "conditions": "VDD pin absolute maximum; not an operating target; manufacturer-authored Rev 8 bytes are retained only through a mirror",
+      "reviewer": "issue-25 foreground destructive-risk review",
+      "status": "UNSOURCED"
+    },
+    {
       "review_id": "review-ap63203-en-open",
       "domain": "default-state",
       "fact_id": "fact-ap63203-en-open",
@@ -204,14 +254,14 @@
       "review_id": "review-high-diode-smaj20a-clamp",
       "domain": "rail",
       "fact_id": "fact-high-diode-smaj20a-clamp",
-      "source_id": "src-high-diode-c571370",
-      "physical_pdf_page_index": 0,
-      "printed_page_label": "1",
-      "locator": "src-high-diode-c571370: selection table clamp row, unavailable primary confirmation",
-      "evidence_extract": "unverified",
-      "conditions": "clamp current, waveform, pulse width, and temperature unknown",
+      "source_id": "src-high-diode-primary",
+      "physical_pdf_page_index": 1,
+      "printed_page_label": "2",
+      "locator": "src-high-diode-primary: page 2 exact SMAJ20A row VC/IPP and page 5 pulse waveform",
+      "evidence_extract": "VC maximum 32.4 V at IPP 12.3 A for the stated 10/1000 us waveform at TA 25 C",
+      "conditions": "maximum VC at IPP 12.3 A, 10/1000 us waveform, TA 25 C; not a universal rail ceiling",
       "reviewer": "issue-25 foreground destructive-risk review",
-      "status": "UNSOURCED"
+      "status": "CONFIRMED"
     },
     {
       "review_id": "review-al8860-sense-max",
@@ -281,13 +331,13 @@
     {
       "review_id": "review-c210315-maxima",
       "domain": "thermal",
-      "fact_id": "fact-c210315-maxima",
+      "fact_id": "fact-c210315-forward-current-max",
       "source_id": "src-c210315-spec",
       "physical_pdf_page_index": 0,
       "printed_page_label": "2",
-      "locator": "src-c210315-spec: section printed page 4 absolute maximum ratings",
-      "evidence_extract": "90 mA forward current, 306 mW dissipation, 5 V reverse, 115 C junction, 85 C solder point",
-      "conditions": "absolute maxima; not simultaneous operating targets",
+      "locator": "src-c210315-spec: printed page 4 forward-current row",
+      "evidence_extract": "90 mA absolute maximum forward current.",
+      "conditions": "absolute maximum; not an operating target; conditional on unresolved C210315-to-3000K bin binding",
       "reviewer": "issue-25 foreground destructive-risk review",
       "status": "CONFIRMED"
     },

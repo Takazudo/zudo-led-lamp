@@ -6,11 +6,12 @@
       "prompt": "Change the STUSB4500QTR C2678061 NVM policy to request 15 V and prove the UMW AO3401A C347476 load switch remains safely off through dead-battery, reset, attach, hard reset, fault, and disconnect.",
       "expected_trigger_skill": "circuit-spec-integration",
       "routing_queries": [{"query":"STUSB4500QTR C2678061","expected_line_ids":["line-c2678061"]},{"query":"UMW AO3401A C347476","expected_line_ids":["line-c347476"]}],
-      "direct_record_ids": ["rec-stusb4500qtr", "rec-umw-ao3401a", "rec-c25803", "rec-c22807", "rec-c14663", "rec-c21189", "rec-rd-0603waf5101t5e"],
+      "direct_record_ids": ["rec-stusb4500qtr", "rec-umw-ao3401a", "rec-c25803", "rec-c22807", "rec-c14663", "rec-c21189", "rec-rd-0603waf5101t5e", "rec-al8860mp-13", "rec-ap63203wu-7"],
       "subordinate_record_ids": ["rec-rd-0603waf5101t5e"],
-      "required_source_ids": ["src-stusb-ds12499", "src-stusb-um2650", "src-stusb-stsw004", "src-umw-ao3401a-board-p-generator", "src-rd-board-p-generator"],
+      "required_source_ids": ["src-stusb-ds12499", "src-stusb-um2650", "src-stusb-stsw004", "src-umw-ao3401a", "src-umw-ao3401a-board-p-generator", "src-c25803-uniroyal", "src-c22807-uniroyal", "src-c14663-generator", "src-rd-board-p-generator"],
       "rule_ids": ["rule-usb-pd-nvm-load-switch"],
-      "required_fact_ids": ["fact-stusb-nvm-load", "fact-stusb-artifact", "fact-umw-ao3401a-project-nets", "fact-rd-fit-state"],
+      "required_fact_ids": ["fact-stusb-nvm-load", "fact-stusb-artifact", "fact-umw-ao3401a-vgs", "fact-umw-ao3401a-project-nets", "fact-c25803-resistance", "fact-c22807-resistance", "fact-c14663-c35-topology", "fact-rd-fit-state"],
+      "required_calculation_ids": ["calc-q1-steady-vgs", "calc-q1-gate-tau"],
       "expected_verdicts": ["UNSOURCED"],
       "must_refuse": true
     },
@@ -24,6 +25,7 @@
       "required_source_ids": ["src-ap6320x-ds41326", "src-fnr-series-mirror", "src-samsung-cl21-product"],
       "rule_ids": ["rule-ap63203-logic-stage"],
       "required_fact_ids": ["fact-fnr-isat-margin", "fact-fnr-irated-margin", "fact-ap63203-min-off-time", "fact-cl21-effective-capacitance-status"],
+      "required_calculation_ids": [],
       "expected_verdicts": ["UNSOURCED"],
       "must_refuse": true
     },
@@ -36,7 +38,8 @@
       "subordinate_record_ids": ["rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c2934070"],
       "required_source_ids": ["src-al8860-ds39014", "src-c210315-spec", "src-c2934070-spec", "src-c2934070-generator", "src-c13564-current", "src-c529334-ds"],
       "rule_ids": ["rule-al8860-led-stage", "rule-ntc-adc-firmware"],
-      "required_fact_ids": ["fact-al8860-peak-current", "fact-c2934070-rcwv", "fact-c210315-maxima", "fact-c2934070-topology", "fact-c13564-max-current", "fact-c13564-curve-caveat", "fact-c529334-adc"],
+      "required_fact_ids": ["fact-al8860-peak-current", "fact-c2934070-rcwv", "fact-c210315-forward-current-max", "fact-c210315-junction-temperature-max", "fact-c2934070-topology", "fact-c13564-max-current", "fact-c13564-curve-caveat", "fact-c529334-adc"],
+      "required_calculation_ids": [],
       "expected_verdicts": ["NEEDS BENCH", "UNSOURCED"],
       "must_refuse": true
     }
@@ -45,6 +48,8 @@
     {"kind":"conflicting-identifiers","query":"0603WAF4700T5E C23162","expected_line_ids":[]},
     {"kind":"conflicting-identifiers","query":"CL31A106KBHNNNE C15849","expected_line_ids":[]},
     {"kind":"wrong-vendor","query":"High Diode SS26 C7420363","expected_line_ids":[]},
+    {"kind":"wrong-vendor-lowercase","query":"vishay SS26 C7420363","expected_line_ids":[]},
+    {"kind":"wrong-vendor-suffix","query":"AO3401A from Vishay C347476","expected_line_ids":[]},
     {"kind":"superseded-identity","query":"C1711 100 nF capacitor","expected_line_ids":[]},
     {"kind":"ambiguous-alias","query":"UNI-ROYAL resistor","expected_line_ids":[]}
   ]

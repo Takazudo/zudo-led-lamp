@@ -13,6 +13,7 @@
       "package": "QFN-24_L4.0-W4.0-P0.50-BL-EP2.8",
       "source_ids": [
         "src-stusb-ds12499",
+        "src-stusb-ds12499-ratings",
         "src-stusb-um2650",
         "src-stusb-um2398",
         "src-stusb-stsw004"
@@ -26,6 +27,9 @@
         "fact-stusb-vbus-vs-disch",
         "fact-stusb-vben",
         "fact-stusb-supplies",
+        "fact-stusb-vdd-absolute-max",
+        "fact-stusb-cc-absolute-max",
+        "fact-stusb-vbus-pin-absolute-max",
         "fact-stusb-load-time",
         "fact-stusb-state-sequence",
         "fact-stusb-nvm-load",

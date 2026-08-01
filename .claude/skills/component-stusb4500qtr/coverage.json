@@ -6,7 +6,7 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "identity/package/pinout",
       "status": "OPEN",
-      "reason": "DS12499 exact URL and locator are known, but no official document byte lock is available and all dependent identity/pin facts remain UNSOURCED",
+      "reason": "Exact DS12499 Rev 8 bytes are reproducibly retained from a manufacturer-document mirror, but primary-only trust and project symbol/footprint/as-built evidence remain open",
       "fact_ids": []
     },
     {
@@ -14,7 +14,7 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "unpowered/reset/startup/normal/fault/disconnect behavior",
       "status": "OPEN",
-      "reason": "DS12499 and UM2650 bytes are unavailable; reset/state/fault facts remain UNSOURCED and require source recovery plus bench confirmation",
+      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust remains UNSOURCED and state behavior still requires programmed/as-built bench confirmation",
       "fact_ids": []
     },
     {
@@ -38,7 +38,7 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "safe power/provisioning/bench discriminators",
       "status": "OPEN",
-      "reason": "Operating/state/reference sources are unavailable and project NVM/readback/power-cycle evidence has not been supplied",
+      "reason": "Operating/state mirror bytes are available, but primary-only trust, project NVM/readback/power-cycle evidence and bench waveforms remain open",
       "fact_ids": []
     },
     {

@@ -8,6 +8,7 @@ import ast
 import copy
 import hashlib
 import json
+import math
 import re
 import sys
 import urllib.request
@@ -198,8 +199,9 @@ def generator_inventory(specs=None):
                 continue
             mpn = expected_mpn(symbol, value, lcsc)
             package = footprint.split(":", 1)[-1]
-            entry = grouped.setdefault(lcsc, {"mpn": mpn, "package": package, "placements": []})
+            entry = grouped.setdefault(lcsc, {"mpn": mpn, "package": package, "symbols": set(), "placements": []})
             require(entry["mpn"] == mpn and entry["package"] == package, f"generator LCSC {lcsc}: conflicting identity")
+            entry["symbols"].add(symbol)
             entry["placements"].append({"board": board, "refdes": refdes, "dnp": bool(dnp)})
     return grouped, excluded
 
@@ -243,6 +245,31 @@ def contains_alias(query, alias):
     return re.search(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", query, re.I) is not None
 
 
+def looks_like_vendor_hint(token, known_vendor_tokens):
+    folded = token.casefold()
+    if folded in {"board-p", "board-l"}:
+        return False
+    return (
+        folded in known_vendor_tokens
+        or re.search(r"(?:corp|inc|ltd|semi|semiconductor|electronics?|vendor)$", folded) is not None
+        or (any(char.isupper() for char in token[1:]) and any(char.islower() for char in token))
+    )
+
+
+def external_vendor_tokens(path=None):
+    path = path or (REFS / "external-vendor-qualifiers.json")
+    require(path.is_file(), "routing: external-vendor-qualifiers.json is required")
+    data = load(path)
+    required_keys(data, ("schema_version", "vendor_names"), "external vendor qualifiers")
+    names = data["vendor_names"]
+    require(names and all(isinstance(name, str) and name.strip() for name in names), "routing: external vendor names must be nonblank")
+    require(len({name.casefold() for name in names}) == len(names), "routing: duplicate external vendor name")
+    return {
+        token.casefold() for name in names
+        for token in re.findall(r"[A-Za-z][A-Za-z0-9+&.-]*", name, re.I)
+    }
+
+
 def resolve_identities(query, entries, *, id_key):
     lcsc_tokens = {token.upper() for token in re.findall(r"\bC\d+\b", query, re.I)}
     known_lcsc = {entry["lcsc"] for entry in entries}
@@ -261,6 +288,53 @@ def resolve_identities(query, entries, *, id_key):
     candidates = lcsc_matches or mpn_matches
     if not candidates:
         return []
+
+    known_vendor_tokens = {
+        token.casefold() for item in entries
+        for token in re.findall(r"[A-Za-z][A-Za-z0-9+&.-]*", item["manufacturer"], re.I)
+    }
+    known_vendor_tokens.update(external_vendor_tokens())
+    function_tokens = {
+        token.casefold() for item in entries
+        for token in re.findall(r"[A-Za-z][A-Za-z0-9+&.-]*", item["function"], re.I)
+    }
+    known_vendor_tokens -= function_tokens
+    # Only vendor-like qualifiers use the prefix grammar. Ordinary verbs and
+    # adjectives before an MPN remain valid natural-language routing prompts.
+    for entry in entries:
+        if entry[id_key] not in candidates or not contains_alias(query, entry["mpn"]):
+            continue
+        qualifier = re.search(rf"\b([A-Za-z][A-Za-z0-9+&.-]*)\s+{re.escape(entry['mpn'])}(?![A-Za-z0-9])", query, re.I)
+        if qualifier and looks_like_vendor_hint(qualifier.group(1), known_vendor_tokens):
+            manufacturer_tokens = {
+                token for item in entries if item[id_key] == entry[id_key]
+                for token in re.findall(r"[A-Za-z][A-Za-z0-9+&.-]*", item["manufacturer"], re.I)
+            }
+            if qualifier.group(1).casefold() not in {token.casefold() for token in manufacturer_tokens}:
+                return []
+        suffix = re.search(rf"{re.escape(entry['mpn'])}(?![A-Za-z0-9])\s+(?:from|by)\s+([A-Za-z][A-Za-z0-9+&.-]*)", query, re.I)
+        if suffix:
+            manufacturer_tokens = {
+                token for item in entries if item[id_key] == entry[id_key]
+                for token in re.findall(r"[A-Za-z][A-Za-z0-9+&.-]*", item["manufacturer"], re.I)
+            }
+            if suffix.group(1).casefold() not in {token.casefold() for token in manufacturer_tokens}:
+                return []
+
+    # An explicit vendor immediately before an exact LCSC identifier is also a
+    # binding claim. Reject a mismatched claim instead of silently accepting the
+    # LCSC token alone; board names remain ordinary project qualifiers.
+    for entry in entries:
+        if entry[id_key] not in candidates or entry["lcsc"] not in mentioned_lcsc:
+            continue
+        qualifier = re.search(rf"\b([A-Za-z][A-Za-z0-9+&.-]*)\s+{re.escape(entry['lcsc'])}(?![A-Za-z0-9])", query, re.I)
+        if qualifier and looks_like_vendor_hint(qualifier.group(1), known_vendor_tokens):
+            manufacturer_tokens = {
+                token.casefold() for item in entries if item[id_key] == entry[id_key]
+                for token in re.findall(r"[A-Za-z][A-Za-z0-9+&.-]*", item["manufacturer"], re.I)
+            }
+            if qualifier.group(1).casefold() not in manufacturer_tokens:
+                return []
 
     # Manufacturer/function text narrows an exact identity; it never unions sibling
     # records or selects a record by a bare ambiguous alias.
@@ -303,6 +377,9 @@ def validate_source(source, schema):
     require(isinstance(source["physical_pdf_page_index"], int) and source["physical_pdf_page_index"] >= 0, f"{source['source_id']}: PDF page index")
     for key in ("document_title", "document_number", "revision", "document_date", "authoritative_url", "retrieval_date", "printed_page_label", "locator", "evidence_extract"):
         require(isinstance(source[key], str) and source[key].strip(), f"{source['source_id']}: blank {key}")
+    request_headers = source.get("request_headers", {})
+    require(isinstance(request_headers, dict) and set(request_headers) <= {"Referer"}, f"{source['source_id']}: only a per-source Referer header is allowed")
+    require(all(isinstance(value, str) and value.startswith("https://") for value in request_headers.values()), f"{source['source_id']}: invalid per-source request header")
     require(LOCATOR_DETAIL.search(source["locator"]), f"{source['source_id']}: locator lacks section/table/figure/row detail")
 
 
@@ -330,6 +407,9 @@ def arithmetic(expression, values):
         if isinstance(node, ast.Expression): return ev(node.body)
         if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)): return node.value
         if isinstance(node, ast.Name) and node.id in values: return values[node.id]
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+            value = ev(node.operand)
+            return value if isinstance(node.op, ast.UAdd) else -value
         if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow)):
             left, right = ev(node.left), ev(node.right)
             if isinstance(node.op, ast.Add): return left + right
@@ -397,13 +477,9 @@ def resolve_bundle_route(query, routes):
     for route in routes:
         for mpn in route["aliases"]["mpn"]:
             for lcsc in route["aliases"]["lcsc"]:
-                entries.append({
-                    "record_id": route["record_id"],
-                    "mpn": mpn,
-                    "lcsc": lcsc,
-                    "manufacturer": route["aliases"]["manufacturer"][0],
-                    "function": route["aliases"]["function"][0],
-                })
+                for manufacturer in route["aliases"]["manufacturer"]:
+                    for function in route["aliases"]["function"]:
+                        entries.append({"record_id": route["record_id"], "mpn": mpn, "lcsc": lcsc, "manufacturer": manufacturer, "function": function})
     return resolve_identities(query, entries, id_key="record_id")
 
 
@@ -429,6 +505,12 @@ def validate_pass_trust(facts, sources):
             require(fact["provenance"] in ("PRIMARY-SPEC", "CALCULATED"), f"{fact['fact_id']}: PASS lacks primary/calculated provenance")
             if fact["provenance"] == "CALCULATED":
                 require(trusted(fact["fact_id"], set()), f"{fact['fact_id']}: calculated PASS dependency closure is not fully trusted")
+        if fact["verdict"] == "BLOCKER - deterministic spec violation":
+            if fact["provenance"] == "CALCULATED":
+                require(fact["depends_on"] and all(trusted(dependency, set()) for dependency in fact["depends_on"]), f"{fact['fact_id']}: deterministic BLOCKER dependency closure is not fully trusted")
+            else:
+                source = sources_by_id[fact["source_id"]]
+                require(fact["provenance"] == "PRIMARY-SPEC" and source["availability"] == "AVAILABLE" and source["authority_class"] == "MANUFACTURER_PRIMARY", f"{fact['fact_id']}: deterministic BLOCKER requires available manufacturer-primary evidence")
 
 
 def fact_evidence_available(fact_id, facts_by_id, sources_by_id, trail=None):
@@ -540,8 +622,8 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
         require(set(interaction["fact_ids"]) <= {fact["fact_id"] for fact in facts}, f"{interaction['interaction_id']}: unknown fact ID")
         fact_record_ids = {fact["record_id"] for fact in facts if fact["fact_id"] in interaction["fact_ids"]}
         require(fact_record_ids <= set(interaction["record_ids"]), f"{interaction['interaction_id']}: fact belongs to an unlisted record")
-        if interaction["verdict"] == "PASS - primary-source confirmed":
-            require(interaction["fact_ids"] and all(fact_primary_trusted(fact_id, facts_by_id, sources_by_id) for fact_id in interaction["fact_ids"]), f"{interaction['interaction_id']}: PASS interaction is not trust-closed")
+        if interaction["verdict"] in ("PASS - primary-source confirmed", "BLOCKER - deterministic spec violation"):
+            require(interaction["fact_ids"] and all(fact_primary_trusted(fact_id, facts_by_id, sources_by_id) for fact_id in interaction["fact_ids"]), f"{interaction['interaction_id']}: PASS/BLOCKER interaction is not trust-closed")
     for route in routes:
         required_keys(route, ("route_id", "record_id", "aliases", "positive", "negative"), "route")
         require(set(route["aliases"]) == {"mpn", "lcsc", "manufacturer", "function"}, f"{route['route_id']}: routing alias classes")
@@ -552,6 +634,13 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
         require(record["mpn"] in route["aliases"]["mpn"] and record["lcsc"] in route["aliases"]["lcsc"] and record["manufacturer"] in route["aliases"]["manufacturer"], f"{route['route_id']}: exact identity aliases missing")
         for query in route["positive"]:
             require(resolve_bundle_route(query, routes) == [route["record_id"]], f"{route['route_id']}: positive query does not resolve uniquely to its record: {query}")
+        for mpn in route["aliases"]["mpn"]:
+            require(resolve_bundle_route(mpn, routes) == [route["record_id"]], f"{route['route_id']}: declared MPN alias does not route")
+            for alias_class in ("manufacturer", "function"):
+                for alias in route["aliases"][alias_class]:
+                    require(resolve_bundle_route(f"{alias} {mpn}", routes) == [route["record_id"]], f"{route['route_id']}: declared {alias_class} alias does not route: {alias}")
+        for lcsc in route["aliases"]["lcsc"]:
+            require(resolve_bundle_route(lcsc, routes) == [route["record_id"]], f"{route['route_id']}: declared LCSC alias does not route")
         for query in route["negative"]:
             require(resolve_bundle_route(query, routes) == [], f"{route['route_id']}: negative query unexpectedly resolves: {query}")
     for mapping in pin_maps:
@@ -585,11 +674,58 @@ def canonical_pin_map(mapping):
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
+def sexp_named_block(text, kind, name):
+    match = re.search(rf'\({re.escape(kind)}\s+"{re.escape(name)}"', text)
+    require(match is not None, f"KiCad {kind} {name}: definition missing")
+    depth, quoted, escaped = 0, False, False
+    for index in range(match.start(), len(text)):
+        char = text[index]
+        if quoted:
+            if escaped: escaped = False
+            elif char == "\\": escaped = True
+            elif char == '"': quoted = False
+        elif char == '"': quoted = True
+        elif char == "(": depth += 1
+        elif char == ")":
+            depth -= 1
+            if depth == 0: return text[match.start():index + 1]
+    raise ContractError(f"KiCad {kind} {name}: unterminated definition")
+
+
+def validate_pin_assets(aggregate, inventory, symbols_path=None, footprints_root=None):
+    symbols_path = symbols_path or (ROOT / "symbols/zudo-led-lamp.kicad_sym")
+    footprints_root = footprints_root or (ROOT / "footprints/kicad")
+    symbol_text = symbols_path.read_text(encoding="utf-8")
+    generated, _ = generator_inventory()
+    records = {record["record_id"]: record for record in aggregate["records"]}
+    lines = {line["line_id"]: line for line in inventory}
+    for mapping in aggregate["pin_maps"]:
+        record = records[mapping["record_id"]]
+        line = lines[record["line_id"]]
+        generator_symbols = generated[line["lcsc"]]["symbols"]
+        require(len(generator_symbols) == 1, f"{record['record_id']}: conflicting generator symbols")
+        symbol = next(iter(generator_symbols))
+        require(mapping["symbol"] == symbol, f"{record['record_id']}: pin map symbol differs from generator")
+        require(mapping["footprint"] == generated[line["lcsc"]]["package"], f"{record['record_id']}: pin map footprint differs from generator")
+        block = sexp_named_block(symbol_text, "symbol", symbol)
+        actual_symbol_pins = set(re.findall(r'\(number\s+"([^"\s]+)"', block))
+        locked_symbol_pins = {pin["symbol_pin"] for pin in mapping["pins"]}
+        require(locked_symbol_pins == actual_symbol_pins, f"{record['record_id']}: pin map differs from KiCad symbol {symbol}")
+        footprint_path = footprints_root / f"{mapping['footprint']}.kicad_mod"
+        require(footprint_path.is_file(), f"{record['record_id']}: KiCad footprint missing")
+        footprint = footprint_path.read_text(encoding="utf-8")
+        actual_pads = set(re.findall(r'\(pad\s+"?([^"\s()]+)"?\s+', footprint))
+        locked_pads = {pin["footprint_pad"] for pin in mapping["pins"]}
+        require(locked_pads == actual_pads, f"{record['record_id']}: pin map differs from KiCad footprint {mapping['footprint']}")
+        require(all(pin["symbol_pin"] == pin["footprint_pad"] for pin in mapping["pins"]), f"{record['record_id']}: symbol-pin to footprint-pad mapping differs from KiCad numbering")
+
+
 def validate_real_pin_locks(aggregate, data):
     locks = data["locks"]
     records = {record["record_id"]: record for record in aggregate["records"]}
     maps = {mapping["pin_map_id"]: mapping for mapping in aggregate["pin_maps"]}
     facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
+    fact_owners = {fact["fact_id"]: fact["record_id"] for fact in aggregate["facts"]}
     require(len(maps) == len(aggregate["pin_maps"]) and {mapping["record_id"] for mapping in maps.values()} == set(records), "real pin maps: exact record/pin-map parity required")
     require(len(locks) == len(maps) and {lock["pin_map_id"] for lock in locks} == set(maps), "real pin locks: exact pin-map parity required")
     for lock in locks:
@@ -621,12 +757,18 @@ def validate_critical_fact_review(aggregate, data):
     require(len(passes) >= 2, "critical fact review: two independent review passes required")
     pass_ids = []
     for review_pass in passes:
-        required_keys(review_pass, ("reviewer", "review_log", "review_ids"), "critical fact independent pass")
+        required_keys(review_pass, ("reviewer", "review_log", "review_log_sha256", "review_ids"), "critical fact independent pass")
         require(review_pass["reviewer"].strip() and review_pass["review_log"].strip() and review_pass["review_ids"], "critical fact review: incomplete independent pass")
+        require(HEX64.fullmatch(review_pass["review_log_sha256"]) and review_pass["review_log_sha256"] != ZERO_SHA256, "critical fact review: independent pass needs a concrete review-log hash")
         pass_ids.extend(review_pass["review_ids"])
+    require(len({review_pass["reviewer"] for review_pass in passes}) == len(passes), "critical fact review: independent pass reviewers must be distinct")
     require(len(pass_ids) == len(set(pass_ids)) and set(pass_ids) == {review["review_id"] for review in reviews}, "critical fact review: every fact needs exactly one independent family pass in addition to integration review")
+    locks = {lock["review_id"]: lock["sha256"] for lock in data.get("fact_locks", [])}
+    require(len(locks) == len(reviews) and set(locks) == {review["review_id"] for review in reviews}, "critical fact review: exact value/unit/evidence lock parity required")
     for review in reviews:
         required_keys(review, ("review_id", "domain", "fact_id", "source_id", "physical_pdf_page_index", "printed_page_label", "locator", "evidence_extract", "conditions", "reviewer", "status"), "critical fact review")
+        pass_reviewer = next(review_pass["reviewer"] for review_pass in passes if review["review_id"] in review_pass["review_ids"])
+        require(review["reviewer"] != pass_reviewer, f"{review['review_id']}: foreground and independent reviewers must differ")
         require(review["fact_id"] in facts and review["source_id"] in sources, f"{review['review_id']}: unknown fact/source")
         fact, source = facts[review["fact_id"]], sources[review["source_id"]]
         require(fact["source_id"] == review["source_id"], f"{review['review_id']}: fact/source mismatch")
@@ -634,6 +776,12 @@ def validate_critical_fact_review(aggregate, data):
         require(review["printed_page_label"] == source["printed_page_label"], f"{review['review_id']}: printed page label changed")
         require(review["locator"] == fact["locator"] and review["conditions"] == fact["conditions"], f"{review['review_id']}: locator/conditions changed")
         require(isinstance(review["evidence_extract"], str) and review["evidence_extract"].strip(), f"{review['review_id']}: minimal extract required")
+        lock_payload = {
+            "value": fact["value"], "unit": fact["unit"], "locator": fact["locator"], "conditions": fact["conditions"],
+            "source_evidence_extract": source["evidence_extract"], "review_evidence_extract": review["evidence_extract"],
+        }
+        actual_lock = hashlib.sha256(json.dumps(lock_payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        require(locks[review["review_id"]] == actual_lock, f"{review['review_id']}: value/unit/evidence lock changed")
         require(review["status"] in ("CONFIRMED", "OPEN", "UNSOURCED"), f"{review['review_id']}: review status")
         if source["availability"] == "SOURCE UNAVAILABLE" or fact["verdict"] == "UNSOURCED":
             require(review["status"] in ("OPEN", "UNSOURCED"), f"{review['review_id']}: unavailable/UNSOURCED fact cannot be confirmed")
@@ -661,6 +809,7 @@ def validate_integration_artifacts(aggregate):
     for relative in ("agents/openai.yaml", "references/rules.json", "references/forward-tests.json", "scripts/check_forward_tests.py"):
         require((integration / relative).is_file(), f"circuit-spec-integration: missing {relative}")
     facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
+    fact_owners = {fact["fact_id"]: fact["record_id"] for fact in aggregate["facts"]}
     records = {record["record_id"] for record in aggregate["records"]}
     rules = load(integration / "references/rules.json")["rules"]
     required_domains = {"rail-envelope", "usb-pd-nvm-load-switch", "al8860-led-stage", "ap63203-logic-stage", "ntc-adc-firmware", "source-to-bench-chain"}
@@ -669,12 +818,39 @@ def validate_integration_artifacts(aggregate):
     for rule in rules:
         required_keys(rule, ("rule_id", "domain", "record_ids", "fact_ids", "conditions", "verdict", "refusal"), "integration rule")
         require(set(rule["record_ids"]) <= records and set(rule["fact_ids"]) <= set(facts), f"{rule['rule_id']}: unknown record/fact ID")
+        require({fact_owners[fact_id] for fact_id in rule["fact_ids"]} <= set(rule["record_ids"]), f"{rule['rule_id']}: fact owner missing from record_ids")
         require(rule["record_ids"] and rule["fact_ids"] and rule["conditions"].strip() and rule["refusal"].strip(), f"{rule['rule_id']}: incomplete conditioned refusal")
         require(rule["verdict"] in ("NEEDS BENCH", "UNSOURCED"), f"{rule['rule_id']}: unsafe integration verdict")
+        calculations = rule.get("conditioned_calculations", [])
+        require(len({item["calculation_id"] for item in calculations}) == len(calculations), f"{rule['rule_id']}: duplicate conditioned calculation")
+        for item in calculations:
+            required_keys(item, ("calculation_id", "fact_ids", "expression", "result_key", "conditions"), "conditioned calculation")
+            require(set(item["fact_ids"]) <= set(rule["fact_ids"]) and item["expression"].strip() and item["conditions"].strip(), f"{item['calculation_id']}: incomplete calculation evidence")
+            require(item["result_key"] in item or item.get("results"), f"{item['calculation_id']}: calculation result missing")
+            fact_values = {fact_id.replace("-", "_"): facts[fact_id]["value"] for fact_id in item["fact_ids"] if isinstance(facts[fact_id]["value"], (int, float))}
+            names = expression_names(item["expression"])
+            require(set(fact_values) <= names, f"{item['calculation_id']}: declared numeric fact is unused")
+            require({name for name in names if name.startswith("fact_")} <= {fact_id.replace("-", "_") for fact_id in item["fact_ids"]}, f"{item['calculation_id']}: expression uses an undeclared fact")
+            if item.get("results"):
+                for scenario in item["results"]:
+                    require(item["result_key"] in scenario, f"{item['calculation_id']}: scenario output missing")
+                    inputs = {key: value for key, value in scenario.items() if key != item["result_key"] and isinstance(value, (int, float))}
+                    require(names - set(fact_values) == set(inputs), f"{item['calculation_id']}: scenario variables must be explicit and exact")
+                    require(math.isclose(arithmetic(item["expression"], {**fact_values, **inputs}), scenario[item["result_key"]], rel_tol=1e-12, abs_tol=1e-12), f"{item['calculation_id']}: scenario result is stale")
+            else:
+                require(math.isclose(arithmetic(item["expression"], fact_values), item[item["result_key"]], rel_tol=1e-12, abs_tol=1e-12), f"{item['calculation_id']}: result is stale")
     chain = next(rule for rule in rules if rule["domain"] == "source-to-bench-chain")
-    expected_stages = ["official-source", "conditioned-requirement", "generated-netlist", "symbol-footprint", "pcb-bom-cpl", "as-built", "programmed", "bench"]
+    expected_stages = ["official-source", "conditioned-requirement", "generated-netlist", "symbol-footprint", "pcb-orientation", "bom-cpl", "as-built", "programmed", "bench"]
     require([stage["stage"] for stage in chain["evidence_chain"]] == expected_stages, "integration evidence chain: stage order changed")
-    require(all(stage["status"] == "OPEN" for stage in chain["evidence_chain"][-4:]), "integration evidence chain: downstream proof must remain OPEN")
+    for stage in chain["evidence_chain"]:
+        required_keys(stage, ("stage", "status", "fact_ids"), "integration evidence stage")
+        require(stage["status"] in ("CONFIRMED", "MIXED", "OPEN"), f"integration evidence chain: invalid status {stage['status']}")
+        require(set(stage["fact_ids"]) <= set(chain["fact_ids"]), f"integration evidence chain: unknown stage fact")
+        if stage["status"] == "CONFIRMED":
+            require(stage["fact_ids"] and all(fact_evidence_available(fact_id, facts, {source["source_id"]: source for source in aggregate["sources"]}) for fact_id in stage["fact_ids"]), f"integration evidence chain: CONFIRMED stage lacks available evidence")
+        if stage["status"] == "OPEN":
+            require(not stage["fact_ids"], f"integration evidence chain: OPEN stage must not claim proof")
+    require(all(stage["status"] == "OPEN" for stage in chain["evidence_chain"][-5:]), "integration evidence chain: downstream proof must remain OPEN")
 
 
 def validate_local_skills(schema, inventory, skills_root=None):
@@ -798,7 +974,7 @@ def store_and_verify(payload, target, expected_sha256, source_id):
 
 
 def fetch_source(source, opener=urllib.request.urlopen):
-    request = urllib.request.Request(source["authoritative_url"], headers=HTTP_HEADERS)
+    request = urllib.request.Request(source["authoritative_url"], headers={**HTTP_HEADERS, **source.get("request_headers", {})})
     with opener(request, timeout=HTTP_TIMEOUT_SECONDS) as response:
         return response.read()
 
@@ -833,6 +1009,7 @@ def validate_all(online=False, refresh_source_ids=None):
     validate_bundle(template_bundle(), schema, True)
     run_seeded_fixtures(schema, inventory)
     validate_real_pin_locks(aggregate, load(FIXTURES / "golden/real-pin-maps.json"))
+    validate_pin_assets(aggregate, inventory)
     validate_critical_fact_review(aggregate, load(FIXTURES / "golden/critical-fact-review.json"))
     validate_refresh_evidence(aggregate, load(FIXTURES / "refresh-evidence.json"))
     validate_integration_artifacts(aggregate)

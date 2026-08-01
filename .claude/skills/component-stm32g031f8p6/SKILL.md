@@ -9,7 +9,7 @@ Run the central component-spec validator and read every JSON file here before ap
 
 ## Use boundaries
 
-Treat each TSSOP package pin as one physical bond even when the ST pin name contains slash-separated functions. Resolve alternate functions and ADC channel/sample-time constraints before firmware assignment. Preserve PA13/PA14 SWD reset pulls, the PA14/BOOT0 sharing hazard, reset-network behavior, option-byte uncertainty, debug low-power effects, and applicable errata. Do not infer programmed option bytes, clock tree, ADC sample time, timer mode, UART error handling, or bench state from the schematic.
+Treat each TSSOP package pin as one physical bond. PA11[PA9] and PA12[PA10] are SYSCFG software-remappable names, not bonded or slash aliases. Resolve alternate functions and ADC channel/sample-time constraints before firmware assignment. Preserve PA13/PA14 SWD reset pulls, the PA14/BOOT0 sharing hazard, reset-network behavior, option-byte uncertainty, debug low-power effects, and applicable errata. Do not infer programmed option bytes, clock tree, ADC sample time, timer mode, UART error handling, or bench state from the schematic.
 
 The subordinate J3 header is hand-fit/DNP. Its primary product page/drawing establish connector ratings and dimensions; the project generator establishes the SWDIO, SWCLK, NRST, 3V3, and GND order. The connector record does not prove target voltage compatibility, programmer behavior, or whether J3 is fitted.
 

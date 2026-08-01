@@ -5,6 +5,6 @@ description: Audit the exact High Diode SMAJ20A C571370 TVS used on Boards P and
 
 # Exact High Diode SMAJ20A
 
-Run the central validator and read every local artifact. Reject SMAJ20A tables from Littelfuse, Diodes Incorporated, Taiwan Semiconductor, or any other vendor. The exact source found is only an LCSC manufacturer-attributed mirror and was unavailable to primary verification, so every identity, electrical, mechanical, and polarity claim remains `UNSOURCED`.
+Run the central validator and read every local artifact. Reject SMAJ20A tables from Littelfuse, Diodes Incorporated, Taiwan Semiconductor, or any other vendor. The official High Diode table confirms 20 V standoff, 22.2–24.5 V breakdown, the conditioned 32.4 V clamp row, leakage, 400 W pulse rating, temperature range, package and cathode band; the stable distributor mirror binds C571370. Keep each waveform condition attached and do not mix superseded or other-vendor tables.
 
-The current project maps pad 1 as cathode on VBUS and pad 2 as anode on GND. Treat that as a static project assertion, not component proof. Confirm incoming marking/polarity and obtain High Diode primary standoff, breakdown, clamp/current/waveform, leakage, pulse derating, package, and thermal data before production or substitution.
+The current project maps pad 1 as cathode on VBUS and pad 2 as anode on GND. Treat that as a static project assertion, not as-built proof. Confirm the D5 and D10 incoming marking, numeric pad mapping, orientation and continuity; simulate both rails with actual source impedance/parasitics and capture the real transient waveforms before production or substitution.
