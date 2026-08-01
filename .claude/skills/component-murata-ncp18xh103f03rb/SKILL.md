@@ -1,0 +1,12 @@
+---
+name: component-murata-ncp18xh103f03rb
+description: Resolve the exact Murata NCP18XH103F03RB NTC used on Board L. Use for nominal resistance, beta context, divider topology, ADC interpretation, self-heating, thermal response, lifecycle, and temperature-threshold questions.
+---
+
+# Murata NCP18XH103F03RB
+
+Run the central validator and read all local JSON before using this record. Murata's current primary part list confirms exact identity, NRND status, 10 kOhm nominal resistance, B-value context, and maximum measurement current.
+
+Do not convert the 3380 K beta value into a guaranteed full resistance-temperature table. Exact full R-T tolerance, installed self-heating/dissipation, thermal time constant, placement response, and firmware thresholds stay open and require further primary data or measurement.
+
+Board L places RT1 from NTC_SENSE to ground, with R26 pulling up to V3P3 and C24 shunting the sense node. This establishes divider topology only. ADC code-to-temperature behavior still depends on the exact pull-up, supply/reference, sampling time, tolerances, self-heating, airflow, PCB coupling, conversion algorithm, and threshold policy.

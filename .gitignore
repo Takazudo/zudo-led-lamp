@@ -1,4 +1,5 @@
 worktrees/
+tmp/pdfs/
 .DS_Store
 
 # VSCode Local History

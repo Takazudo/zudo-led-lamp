@@ -1,0 +1,49 @@
+name: Component spec skills
+
+on:
+  pull_request:
+    paths:
+      - 'CLAUDE.md'
+      - '.claude/skills/**'
+      - '.github/workflows/component-spec-skills.yml'
+      - 'scripts/schgen/board_p_spec.py'
+      - 'scripts/schgen/board_l_spec.py'
+      - 'doc/src/content/docs/architecture/bom.mdx'
+      - 'doc/src/content/docs/**/*.mdx'
+      - 'boards/**/*.kicad_sch'
+      - 'boards/**/*.kicad_pcb'
+      - 'symbols/**/*.kicad_sym'
+      - 'footprints/**/*.kicad_mod'
+      - 'firmware/**'
+  push:
+    paths:
+      - 'CLAUDE.md'
+      - '.claude/skills/**'
+      - '.github/workflows/component-spec-skills.yml'
+      - 'scripts/schgen/board_p_spec.py'
+      - 'scripts/schgen/board_l_spec.py'
+      - 'doc/src/content/docs/architecture/bom.mdx'
+      - 'doc/src/content/docs/**/*.mdx'
+      - 'boards/**/*.kicad_sch'
+      - 'boards/**/*.kicad_pcb'
+      - 'symbols/**/*.kicad_sym'
+      - 'footprints/**/*.kicad_mod'
+      - 'firmware/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate frozen component contract (offline)
+        run: python3 .claude/skills/component-spec-audit/scripts/validate.py
+      - name: Test validator and fixtures (offline)
+        run: python3 -m unittest discover -s .claude/skills/component-spec-audit/scripts -p 'test_*.py'
+      - name: Test cross-component routing and refusals (offline)
+        run: python3 .claude/skills/circuit-spec-integration/scripts/check_forward_tests.py

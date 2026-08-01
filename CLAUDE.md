@@ -1,0 +1,16 @@
+# Project routing
+
+Use `.claude/skills/component-spec-audit` whenever circuit, schematic, PCB, BOM, firmware, bring-up, substitution, or related documentation work touches component identity, behavior, ratings, pins, packages, defaults, or interactions. Run its offline validator first and route every exact MPN/LCSC/function through the central inventory. Never infer unavailable evidence from memory or a same-name/generic-family part.
+
+Load every matching exact owner skill, including first-class subordinate records:
+
+- `component-stusb4500qtr`: STUSB4500QTR, PESD24VS1UB,115, and the DNP external-Rd resistors.
+- `component-umw-ao3401a-c347476`, `component-type-c-31-m-17`, `component-high-diode-smaj20a-c571370`, and `component-jst-b6b-xh-a`: Board P switching, receptacle, TVS, and harness header.
+- `component-project-passives`: exact Samsung/Yageo MLCC and UNI-ROYAL resistor lines assigned there.
+- `component-al8860mp-13`: AL8860 plus its sense resistor, inductor, and exact R+O catch diode.
+- `component-ap63203wu-7`: AP63203 plus its inductor and exact output MLCC.
+- `component-bhfuse-bsmd1206-075-30v`: input PPTC.
+- `component-stm32g031f8p6`: MCU plus hand-fit SWD header.
+- `component-alps-ec11l1525g01`, `component-murata-ncp18xh103f03rb`, and `component-honglitronic-hl-am-2835h421w-s1-08-hr3`: encoder, NTC, LED, and LED-ballast records.
+
+Also load `circuit-spec-integration` for any cross-component rail, protection, startup, state/configuration, converter, sensing, thermal, harness, symbol/footprint, as-built, or firmware interaction. Component and integration skills audit design state; they do not authorize silently changing component selections, connectivity, firmware behavior, or unresolved harness domains.

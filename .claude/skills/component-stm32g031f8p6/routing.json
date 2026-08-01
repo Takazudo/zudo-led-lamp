@@ -1,0 +1,4 @@
+{"schema_version":1,"routes":[
+{"route_id":"route-c529334","record_id":"rec-c529334","aliases":{"mpn":["STM32G031F8P6"],"lcsc":["C529334"],"manufacturer":["STMicroelectronics"],"function":["Board L microcontroller"]},"positive":["STM32G031F8P6","C529334"],"negative":["STM32G031K8U6 C2041000"]},
+{"route_id":"route-c492404","record_id":"rec-c492404","aliases":{"mpn":["PZ254V-11-05P"],"lcsc":["C492404"],"manufacturer":["XFCN"],"function":["Board L SWD header"]},"positive":["PZ254V-11-05P","C492404"],"negative":["PZ254V-11-06P C999024"]}
+]}

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "provenance_note": "Observed Claude Code policy rendering/refusal after explicit /circuit-spec-integration invocation with a frozen evidence packet. Deterministic forward fixtures separately prove routing and evidence discovery; these runs do not claim independent model discovery of IDs.",
+  "runs": [
+    {
+      "run_id": "observed-usb-pd-programmed-state",
+      "case_id": "usb-pd-programmed-state",
+      "runner": "Claude Code CLI 2.1.220",
+      "model": "claude-haiku-4-5-20251001",
+      "run_date": "2026-08-02",
+      "cost_usd": 0.022947,
+      "invocation": {"skill":"/circuit-spec-integration","tools":"disabled","session_persistence":false,"evidence_packet":"frozen"},
+      "prompt": "Change the STUSB4500QTR C2678061 NVM policy to request 15 V and prove the UMW AO3401A C347476 load switch remains safely off through dead-battery, reset, attach, hard reset, fault, and disconnect.",
+      "prompt_sha256": "db20bf48d2a6f14cb0257abdcb7d2a9da2364c84b1fe65d5f621ae702458f67e",
+      "response_sha256": "fb9cddaac541d1f81c31969d415c86b8a0946b584705409960be8c6d844c56cc",
+      "response": {
+        "trigger_skill": "circuit-spec-integration",
+        "loaded_skills": ["component-spec-audit","circuit-spec-integration","component-stusb4500qtr","component-umw-ao3401a-c347476","component-project-passives","component-al8860mp-13","component-ap63203wu-7"],
+        "fact_ids": ["fact-stusb-nvm-load","fact-stusb-artifact","fact-umw-ao3401a-vgs","fact-umw-ao3401a-project-nets","fact-c25803-resistance","fact-c22807-resistance","fact-c14663-c35-topology","fact-rd-fit-state"],
+        "source_ids": ["src-stusb-ds12499","src-stusb-um2650","src-stusb-stsw004","src-umw-ao3401a","src-umw-ao3401a-board-p-generator","src-c25803-uniroyal","src-c22807-uniroyal","src-c14663-generator","src-rd-board-p-generator"],
+        "conditions": ["mirror-only STUSB trust; NVM/readback/as-built state absent","ideal VBEN-low divider gives VGS -6 V at 15 V, -8 V at 20 V, -12.96 V at conditioned 32.4 V TVS table point","nominal gate tau approximately 6 ms excluding device/parasitic/waveform effects"],
+        "calculation_ids": ["calc-q1-steady-vgs","calc-q1-gate-tau"],
+        "verdicts": ["UNSOURCED"],
+        "refused": true,
+        "refusal": "Safety proof cannot be established without as-built NVM readback, dynamic gate, parasitic and waveform evidence, reset and fault sequencing, and bench or simulation evidence; no design change is authorized."
+      }
+    },
+    {
+      "run_id": "observed-logic-converter-substitution",
+      "case_id": "logic-converter-substitution",
+      "runner": "Claude Code CLI 2.1.220",
+      "model": "claude-haiku-4-5-20251001",
+      "run_date": "2026-08-02",
+      "cost_usd": 0.034142,
+      "invocation": {"skill":"/circuit-spec-integration","tools":"disabled","session_persistence":false,"evidence_packet":"frozen"},
+      "prompt": "Evaluate changing the installed FNR4030S4R7MT C167874 inductor value/package and CL21A226MAQNNNE C45783 output-capacitor population around AP63203WU-7 C780769; recalculate saturation, heating, timing, and effective capacitance over the full V15 and load envelope.",
+      "prompt_sha256": "04b6551190505e0cfa091588e7af2cc9709320bd6bf869602549d4391eca5211",
+      "response_sha256": "1841a9c9f24410ae164a5c0367288588bd9e44ab3aacb60b1883d85c4e4e9c38",
+      "response": {
+        "trigger_skill": "circuit-spec-integration",
+        "loaded_skills": ["component-spec-audit","circuit-spec-integration","component-ap63203wu-7","component-stm32g031f8p6"],
+        "fact_ids": ["fact-fnr-isat-margin","fact-fnr-irated-margin","fact-ap63203-min-off-time","fact-cl21-effective-capacitance-status"],
+        "source_ids": ["src-ap6320x-ds41326","src-fnr-series-mirror","src-samsung-cl21-product"],
+        "conditions": ["V15 transients, EN-open startup, switching timing, actual 3V3 load steps, inductor heat/saturation, effective capacitance, layout and MCU state","mirror-only FNR evidence","unavailable min-off-time","no guaranteed effective installed capacitance"],
+        "calculation_ids": [],
+        "verdicts": ["UNSOURCED"],
+        "refused": true,
+        "refusal": "No substitution or change is authorized until primary minimum-off-time and inductor evidence and installed effective capacitance close."
+      }
+    },
+    {
+      "run_id": "observed-mcu-led-thermal-change",
+      "case_id": "mcu-led-thermal-change",
+      "runner": "Claude Code CLI 2.1.220",
+      "model": "claude-haiku-4-5-20251001",
+      "run_date": "2026-08-02",
+      "cost_usd": 0.023615,
+      "invocation": {"skill":"/circuit-spec-integration","tools":"disabled","session_persistence":false,"evidence_packet":"frozen"},
+      "prompt": "Raise the STM32G031F8P6 C529334 PWM ceiling for the AL8860MP-13 C500782 LED stage and prove LED junction, FOJAN FRC2512F33R0TS C2934070 ballast, NTC sensing, enclosure thermal state, and firmware thresholds remain safe.",
+      "prompt_sha256": "6d0ae548554b3b891679a8d234b008983503121449b7368ab3719a894a26759a",
+      "response_sha256": "1f04adc4c9e9f1b6e80b60069cbb59ab3c85577e2b2a9d3d6cf5de0ba52ee394",
+      "response": {
+        "trigger_skill": "circuit-spec-integration",
+        "loaded_skills": ["component-spec-audit","circuit-spec-integration","component-al8860mp-13","component-honglitronic-hl-am-2835h421w-s1-08-hr3","component-murata-ncp18xh103f03rb","component-stm32g031f8p6","component-project-passives"],
+        "fact_ids": ["fact-al8860-peak-current","fact-c2934070-rcwv","fact-c210315-forward-current-max","fact-c210315-junction-temperature-max","fact-c2934070-topology","fact-c13564-max-current","fact-c13564-curve-caveat","fact-c529334-adc"],
+        "source_ids": ["src-al8860-ds39014","src-c210315-spec","src-c2934070-spec","src-c2934070-generator","src-c13564-current","src-c529334-ds"],
+        "conditions": ["full LED Vf/current/temperature envelope","eight-branch current sharing","PWM and faults","PCB/enclosure thermal path","NTC divider ADC acquisition and firmware thresholds"],
+        "calculation_ids": [],
+        "verdicts": ["NEEDS BENCH","UNSOURCED"],
+        "refused": true,
+        "refusal": "No PWM change is authorized until measured junction, waveform and enclosure state, sourced ADC and NTC firmware thresholds, branch sharing, and thermal path close."
+      }
+    }
+  ]
+}
