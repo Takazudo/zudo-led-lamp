@@ -1,0 +1,9 @@
+{"schema_version":1,"coverage":[
+{"coverage_id":"cov-c529334-pins","record_id":"rec-c529334","domain":"package-pins-reset-boot-adc-and-errata-context","status":"COVERED","reason":"fact-c529334-pin-bonds through fact-c529334-errata retain locators but remain UNSOURCED because exact official bytes were unavailable"},
+{"coverage_id":"cov-c529334-options","record_id":"rec-c529334","domain":"programmed-option-bytes-and-boot-policy","status":"OPEN","reason":"fact-c529334-boot: programmed option bytes are not retained"},
+{"coverage_id":"cov-c529334-fw","record_id":"rec-c529334","domain":"firmware-pin-mux-clock-and-timer-state","status":"OPEN","reason":"fact-c529334-mux lists only candidates; firmware is absent"},
+{"coverage_id":"cov-c529334-adc","record_id":"rec-c529334","domain":"adc-sample-time-and-installed-source-impedance","status":"OPEN","reason":"fact-c529334-adc: ADC configuration and effective source impedance are unverified"},
+{"coverage_id":"cov-c529334-debug","record_id":"rec-c529334","domain":"debug-low-power-and-bench-state","status":"OPEN","reason":"fact-c529334-debug: DBG settings and measured behavior are absent"},
+{"coverage_id":"cov-c492404-spec","record_id":"rec-c492404","domain":"identity-ratings-mechanical-and-project-pin-order","status":"COVERED","reason":"fact-c492404-manufacturer; fact-c492404-rating; fact-c492404-mechanical; fact-c492404-topology"},
+{"coverage_id":"cov-c492404-fit","record_id":"rec-c492404","domain":"installed-header-and-programmer-state","status":"OPEN","reason":"fact-c492404-topology marks J3 hand-fit/DNP; installed state and programmer behavior require inspection"}
+]}

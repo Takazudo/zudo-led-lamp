@@ -1,0 +1,8 @@
+{"schema_version":1,"coverage":[
+{"coverage_id":"cov-c13564-context","record_id":"rec-c13564","domain":"older-catalog-nominal-context-and-project-divider-topology","status":"COVERED","reason":"fact-c13564-resistance through fact-c13564-topology retain lower-authority context without PASS"},
+{"coverage_id":"cov-c13564-rt","record_id":"rec-c13564","domain":"guaranteed-full-resistance-temperature-table","status":"OPEN","reason":"fact-c13564-curve-caveat: exact current guaranteed table unavailable"},
+{"coverage_id":"cov-c13564-selfheat","record_id":"rec-c13564","domain":"installed-dissipation-factor-and-self-heating","status":"OPEN","reason":"catalog nominal context does not guarantee installed thermal coupling"},
+{"coverage_id":"cov-c13564-time","record_id":"rec-c13564","domain":"thermal-time-constant-and-placement-response","status":"OPEN","reason":"no exact retained time constant or installed placement measurement"},
+{"coverage_id":"cov-c13564-life","record_id":"rec-c13564","domain":"current-nrnd-lifecycle-confirmation","status":"OPEN","reason":"fact-c13564-lifecycle: current primary source unavailable"},
+{"coverage_id":"cov-c13564-fw","record_id":"rec-c13564","domain":"firmware-conversion-and-thresholds","status":"OPEN","reason":"conversion algorithm, ADC configuration and thresholds are absent"}
+]}

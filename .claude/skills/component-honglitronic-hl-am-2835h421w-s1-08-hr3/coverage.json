@@ -1,0 +1,8 @@
+{"schema_version":1,"coverage":[
+{"coverage_id":"cov-c210315-spec","record_id":"rec-c210315","domain":"identity-polarity-optical-electrical-and-process-ratings","status":"COVERED","reason":"fact-c210315-manufacturer through fact-c210315-reflow"},
+{"coverage_id":"cov-c210315-sharing","record_id":"rec-c210315","domain":"installed-branch-current-and-sharing","status":"OPEN","reason":"parallel topology plus component ratings does not establish actual branch currents"},
+{"coverage_id":"cov-c210315-thermal","record_id":"rec-c210315","domain":"junction-temperature-and-enclosure-thermal-state","status":"OPEN","reason":"no installed thermal measurement or junction calculation"},
+{"coverage_id":"cov-c210315-driver","record_id":"rec-c210315","domain":"pwm-waveform-and-driver-fault-response","status":"OPEN","reason":"driver configuration, PWM waveform and fault behavior are outside retained evidence"},
+{"coverage_id":"cov-c2934070-context","record_id":"rec-c2934070","domain":"mirror-rated-resistance-power-voltage-and-temperature-context","status":"COVERED","reason":"fact-c2934070-resistance through fact-c2934070-temperature retain lower-authority UNSOURCED context"},
+{"coverage_id":"cov-c2934070-stress","record_id":"rec-c2934070","domain":"installed-resistor-temperature-and-pulse-stress","status":"OPEN","reason":"nominal calculations do not establish installed waveform, temperature, sharing or pulse stress"}
+]}

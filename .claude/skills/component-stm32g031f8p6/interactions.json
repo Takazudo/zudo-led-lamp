@@ -1,0 +1,6 @@
+{"schema_version":1,"interactions":[
+{"interaction_id":"int-c529334-firmware","record_ids":["rec-c529334"],"fact_ids":["fact-c529334-mux","fact-c529334-topology","fact-c529334-errata"],"conditions":"Pin mux, clocks, UART error paths and timer modes must be verified against actual firmware and applicable errata","verdict":"NEEDS BENCH"},
+{"interaction_id":"int-c529334-boot-debug","record_ids":["rec-c529334"],"fact_ids":["fact-c529334-boot","fact-c529334-debug","fact-c529334-errata"],"conditions":"PA14 is both SWCLK and a BOOT0-capable package pin; inspect option bytes and power-cycle/debug sequence before recovery assumptions","verdict":"NEEDS BENCH"},
+{"interaction_id":"int-c529334-adc","record_ids":["rec-c529334"],"fact_ids":["fact-c529334-adc","fact-c529334-topology","fact-c529334-errata"],"conditions":"NTC_SENSE accuracy depends on source impedance, acquisition time, VDDA/VREF, first-sample behavior and installed RC network","verdict":"NEEDS BENCH"},
+{"interaction_id":"int-c492404-programming","record_ids":["rec-c529334","rec-c492404"],"fact_ids":["fact-c492404-topology","fact-c529334-reset","fact-c529334-boot","fact-c529334-debug"],"conditions":"J3 is DNP and exposes reset/SWD/power; verify fitment, orientation, target-power policy and debugger behavior before use","verdict":"NEEDS BENCH"}
+]}
