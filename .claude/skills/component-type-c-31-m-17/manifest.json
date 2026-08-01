@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "skill": "component-type-c-31-m-17",
+  "records": [
+    {
+      "record_id": "rec-type-c-31-m-17",
+      "line_id": "line-c283540",
+      "kind": "standalone",
+      "parent_record_id": null,
+      "mpn": "TYPE-C-31-M-17",
+      "manufacturer": "Korean Hroparts Elec",
+      "lcsc": "C283540",
+      "package": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
+      "source_ids": ["src-type-c-c283540"],
+      "fact_ids": [
+        "fact-type-c-31-m-17-manufacturer",
+        "fact-type-c-31-m-17-identity",
+        "fact-type-c-31-m-17-contacts",
+        "fact-type-c-31-m-17-ratings",
+        "fact-type-c-31-m-17-mechanical"
+      ],
+      "interaction_ids": ["int-type-c-netlist", "int-type-c-bench"],
+      "open_domains": [
+        "manufacturer-primary identity",
+        "electrical ratings and durability",
+        "contact/shell numbering and duplicate-pin topology",
+        "mechanical drawing and orientation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "interactions": [
+    {
+      "interaction_id": "int-high-diode-netlist",
+      "record_ids": ["rec-high-diode-smaj20a"],
+      "fact_ids": [
+        "fact-high-diode-smaj20a-polarity",
+        "fact-high-diode-smaj20a-standoff",
+        "fact-high-diode-smaj20a-clamp"
+      ],
+      "conditions": "Assert D5 and D10 pad 1 connect to their VBUS rails and pad 2 to GND; because exact polarity/ratings are UNSOURCED, procurement/energization above current-limited 5 V is blocked pending verification",
+      "verdict": "UNSOURCED"
+    },
+    {
+      "interaction_id": "int-high-diode-bench",
+      "record_ids": ["rec-high-diode-smaj20a"],
+      "fact_ids": [
+        "fact-high-diode-smaj20a-identity",
+        "fact-high-diode-smaj20a-polarity",
+        "fact-high-diode-smaj20a-leakage",
+        "fact-high-diode-smaj20a-thermal"
+      ],
+      "conditions": "Verify reel label and body marking, diode polarity at low current, leakage below intended VBUS, absence of heating at maximum negotiated VBUS, and surge behavior only with a controlled fixture after primary limits are obtained",
+      "verdict": "NEEDS BENCH"
+    }
+  ]
+}

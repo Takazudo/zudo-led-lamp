@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "facts": [
+    {
+      "fact_id": "fact-type-c-31-m-17-manufacturer",
+      "record_id": "rec-type-c-31-m-17",
+      "source_id": "src-type-c-c283540",
+      "class": "PROJECT_STATE",
+      "value": "Korean Hroparts Elec",
+      "unit": "NONE",
+      "conditions": "distributor-attributed identity only",
+      "locator": "src-type-c-c283540: document title block/manufacturer attribution",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-type-c-31-m-17-identity",
+      "record_id": "rec-type-c-31-m-17",
+      "source_id": "src-type-c-c283540",
+      "class": "PROJECT_STATE",
+      "value": "TYPE-C-31-M-17 / C283540",
+      "unit": "NONE",
+      "conditions": "exact project orderable, not manufacturer-primary verified",
+      "locator": "src-type-c-c283540: title block and distributor row C283540",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-type-c-31-m-17-contacts",
+      "record_id": "rec-type-c-31-m-17",
+      "source_id": "src-type-c-c283540",
+      "class": "PROJECT_STATE",
+      "value": "project maps 1=GND, 2/5=VBUS, 3=CC1, 4=CC2, 6=GND, 0=shell",
+      "unit": "NONE",
+      "conditions": "current symbol/netlist contract only; physical contact equivalence requires continuity",
+      "locator": "src-type-c-c283540: contact sketch; project pin-map rows 0-6",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-type-c-31-m-17-ratings",
+      "record_id": "rec-type-c-31-m-17",
+      "source_id": "src-type-c-c283540",
+      "class": "RECOMMENDED_OPERATION",
+      "value": "current, voltage, temperature, and mating-cycle ratings unverified",
+      "unit": "NONE",
+      "conditions": "do not use distributor attributes as design ratings",
+      "locator": "src-type-c-c283540: distributor attribute rows; no primary table",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-type-c-31-m-17-mechanical",
+      "record_id": "rec-type-c-31-m-17",
+      "source_id": "src-type-c-c283540",
+      "class": "PROJECT_STATE",
+      "value": "footprint geometry and mating-face orientation unverified against manufacturer-controlled drawing",
+      "unit": "NONE",
+      "conditions": "incoming-part inspection required before assembly",
+      "locator": "src-type-c-c283540: dimension figure and project footprint pad rows",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    }
+  ]
+}

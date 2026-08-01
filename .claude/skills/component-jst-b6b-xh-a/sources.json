@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "src-jst-xh",
+      "record_id": "rec-jst-b6b-xh-a",
+      "document_title": "XH CONNECTOR",
+      "document_number": "eXH",
+      "revision": "2025-06 hosted catalog",
+      "document_date": "2025-06",
+      "authoritative_url": "https://www.jst.com/wp-content/uploads/2025/06/eXH.pdf",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-08-02",
+      "authority_class": "MANUFACTURER_PRIMARY",
+      "sha256": "1128a1bdb747cf3da211ed85e11c542f2d310652d8188a69b2dc0e8c40115ef8",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "1",
+      "locator": "Page 1 general specifications table, rows Current rating through Applicable PC board thickness",
+      "evidence_extract": "JST XH is a 2.50 mm pitch wire-to-board family. Series rating conditions are tabulated for current, voltage, temperature, wire, and PCB thickness."
+    },
+    {
+      "source_id": "src-jst-xh-header",
+      "record_id": "rec-jst-b6b-xh-a",
+      "document_title": "XH CONNECTOR - header dimensions",
+      "document_number": "eXH",
+      "revision": "2025-06 hosted catalog",
+      "document_date": "2025-06",
+      "authoritative_url": "https://www.jst.com/wp-content/uploads/2025/06/eXH.pdf",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-08-02",
+      "authority_class": "MANUFACTURER_PRIMARY",
+      "sha256": "1128a1bdb747cf3da211ed85e11c542f2d310652d8188a69b2dc0e8c40115ef8",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 4,
+      "printed_page_label": "5",
+      "locator": "Page 5 Header table row 6 circuits B6B-XH-A; top-entry dimension figure and note 1",
+      "evidence_extract": "The six-circuit without-boss top-entry row is B6B-XH-A with A=12.5 mm and B=17.4 mm. Posts are square 0.64 mm. Note 1 says (LF)(SN) is displayed on a label."
+    }
+  ]
+}

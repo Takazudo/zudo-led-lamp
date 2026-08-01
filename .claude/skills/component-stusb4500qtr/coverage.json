@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "coverage": [
+    {
+      "coverage_id": "cov-stusb-identity",
+      "record_id": "rec-stusb4500qtr",
+      "domain": "identity/package/pinout",
+      "status": "COVERED",
+      "reason": "DS12499 device summary and QFN pin table"
+    },
+    {
+      "coverage_id": "cov-stusb-states",
+      "record_id": "rec-stusb4500qtr",
+      "domain": "unpowered/reset/startup/normal/fault/disconnect behavior",
+      "status": "COVERED",
+      "reason": "DS12499 pin sections plus UM2650 state and fault registers"
+    },
+    {
+      "coverage_id": "cov-stusb-nvm",
+      "record_id": "rec-stusb4500qtr",
+      "domain": "project NVM image and factory-state capture",
+      "status": "OPEN",
+      "reason": "No as-built 40-byte dump or project-normalized image has been supplied"
+    },
+    {
+      "coverage_id": "cov-stusb-endurance",
+      "record_id": "rec-stusb4500qtr",
+      "domain": "NVM write endurance and production write budget",
+      "status": "OPEN",
+      "reason": "No manufacturer-primary endurance row is present in the retained reviewed extracts"
+    },
+    {
+      "coverage_id": "cov-stusb-bringup",
+      "record_id": "rec-stusb4500qtr",
+      "domain": "safe power/provisioning/bench discriminators",
+      "status": "COVERED",
+      "reason": "Operating ranges, state registers, reference design, and explicit project checks are recorded"
+    },
+    {
+      "coverage_id": "cov-pesd-spec",
+      "record_id": "rec-pesd24vs1ub",
+      "domain": "identity/pinout/standoff/breakdown/clamp/leakage/package",
+      "status": "COVERED",
+      "reason": "Nexperia datasheet tables and package figure"
+    },
+    {
+      "coverage_id": "cov-pesd-bench",
+      "record_id": "rec-pesd24vs1ub",
+      "domain": "as-built DNP fit state and CC signal-integrity impact",
+      "status": "OPEN",
+      "reason": "The generator marks D6/D7 DNP and no fitted-board measurement exists"
+    },
+    {
+      "coverage_id": "cov-rd-identity",
+      "record_id": "rec-rd-0603waf5101t5e",
+      "domain": "exact orderable identity and project placement",
+      "status": "COVERED",
+      "reason": "Distributor identity route plus project generator, retained as UNSOURCED"
+    },
+    {
+      "coverage_id": "cov-rd-primary",
+      "record_id": "rec-rd-0603waf5101t5e",
+      "domain": "manufacturer-primary electrical and mechanical specification",
+      "status": "OPEN",
+      "reason": "Exact primary PDF was unavailable; distributor mirror cannot establish ratings"
+    }
+  ]
+}
