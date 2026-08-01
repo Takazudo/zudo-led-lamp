@@ -47,6 +47,15 @@
       "blocking_fact_ids": []
     },
     {
+      "coverage_id": "cov-stusb-vreg2v7-load",
+      "record_id": "rec-stusb4500qtr",
+      "domain": "VREG_2V7 external DC loading and NVM-jig voltage matching",
+      "status": "OPEN",
+      "reason": "Pin 23 (VREG_2V7) is documented decoupling-only in DS12499, yet Board P loads it with R15/R16 4.7k I2C pull-ups and exposes it on debug pogo pad J3.3 (net U1.23 C30.2 R15.2 R16.2 J3.3); closure requires a manufacturer-primary locator authorizing this external DC load (or a re-route decision, out of this plan's scope) plus confirmation that the NVM-programming jig's logic levels match 2.7 V before issue #34's programming artifact executes",
+      "fact_ids": ["fact-stusb-vreg2v7-load"],
+      "blocking_fact_ids": ["fact-stusb-vreg2v7-load"]
+    },
+    {
       "coverage_id": "cov-pesd-spec",
       "record_id": "rec-pesd24vs1ub",
       "domain": "identity/pinout/standoff/breakdown/clamp/leakage/package",

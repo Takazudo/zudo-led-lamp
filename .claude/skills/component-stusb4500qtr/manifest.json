@@ -16,7 +16,8 @@
         "src-stusb-ds12499-ratings",
         "src-stusb-um2650",
         "src-stusb-um2398",
-        "src-stusb-stsw004"
+        "src-stusb-stsw004",
+        "src-stusb-board-p-generator"
       ],
       "fact_ids": [
         "fact-stusb-manufacturer",
@@ -38,7 +39,8 @@
         "fact-stusb-fault-status",
         "fact-stusb-reference-design",
         "fact-stusb-artifact",
-        "fact-stusb-endurance"
+        "fact-stusb-endurance",
+        "fact-stusb-vreg2v7-load"
       ],
       "interaction_ids": [
         "int-stusb-netlist",
@@ -53,7 +55,8 @@
         "unpowered/reset/startup/normal/fault/disconnect behavior",
         "project NVM image and factory-state capture",
         "NVM write endurance and production write budget",
-        "safe power/provisioning/bench discriminators"
+        "safe power/provisioning/bench discriminators",
+        "VREG_2V7 external DC loading and NVM-jig voltage matching"
       ]
     },
     {

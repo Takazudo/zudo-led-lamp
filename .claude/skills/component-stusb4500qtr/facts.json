@@ -282,6 +282,20 @@
       "expression": ""
     },
     {
+      "fact_id": "fact-stusb-vreg2v7-load",
+      "record_id": "rec-stusb4500qtr",
+      "source_id": "src-stusb-board-p-generator",
+      "class": "PROJECT_STATE",
+      "value": "VREG_2V7 (pin 23) bridges to C30.2, R15.2, R16.2 and debug pogo pad J3.3; R15/R16 are 4.7k I2C pull-ups fed from this pin rather than VDD/VSYS",
+      "unit": "NONE",
+      "conditions": "current Board P generator connectivity; DS12499 documents pin 23 as 2.7 V regulator decoupling only and does not authorize external DC loading",
+      "locator": "src-stusb-board-p-generator: NETS table row VREG_2V7 and rows SCL/SDA",
+      "provenance": "PROJECT-CHOICE",
+      "verdict": "NEEDS BENCH",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
       "fact_id": "fact-pesd-manufacturer",
       "record_id": "rec-pesd24vs1ub",
       "source_id": "src-pesd24vs1ub",

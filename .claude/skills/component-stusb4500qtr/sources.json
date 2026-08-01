@@ -92,6 +92,24 @@
       "evidence_extract": "The library loads a GUI-exported STUSB-NVM.h image automatically and supports read/write customization workflows."
     },
     {
+      "source_id": "src-stusb-board-p-generator",
+      "record_id": "rec-stusb4500qtr",
+      "document_title": "Board P generated schematic specification",
+      "document_number": "board-p-spec",
+      "revision": "410bc1a342286dd6c205d6dcec0f248b8a963987",
+      "document_date": "2026-08-01",
+      "authoritative_url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_p_spec.py",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-08-02",
+      "authority_class": "PROJECT_GENERATOR",
+      "sha256": "8be1483b0800f9932fe0e2d09cbc4393f702807474316eb32a46d1ae9d0905ac",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "source",
+      "locator": "NETS table row VREG_2V7 (U1.23, C30.2, R15.2, R16.2, J3.3) and rows SCL/SDA (R15.1/R16.1); pin-map function 'VREG_2V7 regulator decoupling' for U1 pin 23",
+      "evidence_extract": "VREG_2V7 net bridges U1.23 to C30.2, R15.2, R16.2 and debug pogo pad J3.3. R15/R16 are 4.7k I2C pull-ups whose pin-1 side lands on SCL/SDA; their pin-2 side is fed from VREG_2V7 rather than VDD/VSYS. J3 is the PogoPad_1x8_Debug header, exposing VREG_2V7 externally at J3.3."
+    },
+    {
       "source_id": "src-pesd24vs1ub",
       "record_id": "rec-pesd24vs1ub",
       "document_title": "PESD24VS1UB ESD protection diode in SOD523 package",
