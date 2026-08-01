@@ -63,6 +63,29 @@
       "blocking_fact_ids": [
         "fact-c2991196-topology"
       ]
+    },
+    {
+      "coverage_id": "cov-c2991196-real-operating-point",
+      "record_id": "rec-c2991196",
+      "domain": "encoder-real-operating-point-bench-gate",
+      "status": "OPEN",
+      "reason": "The design's real operating point differs from every retained spec test condition. V3P3's 10 kOhm pull-up gives roughly 0.33 mA closed-contact current versus the retained 5 V/5 kOhm chatter-bounce test circuit. The only retained minimum-current spec, 500 uA, belongs to the unused D/E push switch, not the A/B/C rotary contacts, so no retained wetting-current minimum covers the rotary path. C22/C23 100 nF at ENC_A/ENC_B discharge through R27/R28 100 Ohm at roughly 33 mA peak with no retained contact-current rating for that transient. Bench debounce and contact verification at the real 3.3 V/10k operating point is required before this domain can close.",
+      "fact_ids": [
+        "fact-c2991196-real-topology",
+        "fact-c2991196-real-rail",
+        "fact-c2991196-real-pullup",
+        "fact-c2991196-real-series-r",
+        "fact-c2991196-real-current",
+        "fact-c2991196-real-discharge-peak",
+        "fact-c2991196-switch",
+        "fact-c2991196-contact-timing"
+      ],
+      "blocking_fact_ids": [
+        "fact-c2991196-real-current",
+        "fact-c2991196-real-discharge-peak",
+        "fact-c2991196-switch",
+        "fact-c2991196-contact-timing"
+      ]
     }
   ]
 }

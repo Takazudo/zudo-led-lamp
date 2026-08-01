@@ -14,7 +14,9 @@
       "source_ids": [
         "src-c2991196-spec",
         "src-c2991196-page",
-        "src-c2991196-generator"
+        "src-c2991196-generator",
+        "src-c2991196-primary-retry",
+        "src-c2991196-encoder-rc"
       ],
       "fact_ids": [
         "fact-c2991196-manufacturer",
@@ -27,19 +29,27 @@
         "fact-c2991196-solder",
         "fact-c2991196-lifecycle",
         "fact-c2991196-topology",
-        "fact-c2991196-label-conflict"
+        "fact-c2991196-label-conflict",
+        "fact-c2991196-real-topology",
+        "fact-c2991196-real-rail",
+        "fact-c2991196-real-pullup",
+        "fact-c2991196-real-series-r",
+        "fact-c2991196-real-current",
+        "fact-c2991196-real-discharge-peak"
       ],
       "interaction_ids": [
         "int-c2991196-interface",
         "int-c2991196-mechanical",
-        "int-c2991196-label"
+        "int-c2991196-label",
+        "int-c2991196-real-operating-point"
       ],
       "open_domains": [
         "phase-detent-switch-mechanical-and-process-context",
         "current-lifecycle-and-approved-replacement",
         "firmware-debounce-and-ui-direction",
         "installed-panel-knob-load-and-life",
-        "installed-switch-and-bench-state"
+        "installed-switch-and-bench-state",
+        "encoder-real-operating-point-bench-gate"
       ]
     }
   ]
