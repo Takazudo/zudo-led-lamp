@@ -1,0 +1,5 @@
+{"schema_version":1,"coverage":[
+  {"coverage_id":"cov-bhfuse-electrical","record_id":"rec-bsmd1206-075-30v","domain":"hold-trip-voltage-current-time-resistance","status":"COVERED","reason":"fact-bhfuse-hold-25c through fact-bhfuse-resistance-reset-max"},
+  {"coverage_id":"cov-bhfuse-thermal","record_id":"rec-bsmd1206-075-30v","domain":"ambient-derating-cycling-reset-processing-package","status":"COVERED","reason":"fact-bhfuse-hold-85c through fact-bhfuse-package"},
+  {"coverage_id":"cov-bhfuse-fault","record_id":"rec-bsmd1206-075-30v","domain":"fault-current-ambient-and-cycling","status":"OPEN","reason":"The generator does not bound upstream fault current/energy, ambient/local heating, trip count, cooling interval, or downstream normal-load envelope."}
+]}
