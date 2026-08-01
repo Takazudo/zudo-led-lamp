@@ -7,15 +7,17 @@
       "domain": "identity/package/pinout",
       "status": "OPEN",
       "reason": "Exact DS12499 Rev 8 bytes are reproducibly retained from a manufacturer-document mirror, but primary-only trust and project symbol/footprint/as-built evidence remain open",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-stusb-states",
       "record_id": "rec-stusb4500qtr",
       "domain": "unpowered/reset/startup/normal/fault/disconnect behavior",
       "status": "OPEN",
-      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust remains UNSOURCED and state behavior still requires programmed/as-built bench confirmation",
-      "fact_ids": []
+      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust in these mirror bytes has not been established, and state behavior still requires programmed/as-built bench confirmation",
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-stusb-nvm",
@@ -23,7 +25,8 @@
       "domain": "project NVM image and factory-state capture",
       "status": "OPEN",
       "reason": "No as-built 40-byte dump or project-normalized image has been supplied",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-stusb-endurance",
@@ -31,7 +34,8 @@
       "domain": "NVM write endurance and production write budget",
       "status": "OPEN",
       "reason": "No manufacturer-primary endurance row is present in the retained reviewed extracts",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-stusb-bringup",
@@ -39,7 +43,8 @@
       "domain": "safe power/provisioning/bench discriminators",
       "status": "OPEN",
       "reason": "Operating/state mirror bytes are available, but primary-only trust, project NVM/readback/power-cycle evidence and bench waveforms remain open",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-pesd-spec",
@@ -56,7 +61,8 @@
         "fact-pesd-leakage",
         "fact-pesd-capacitance",
         "fact-pesd-esd"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-pesd-bench",
@@ -64,7 +70,8 @@
       "domain": "as-built DNP fit state and CC signal-integrity impact",
       "status": "OPEN",
       "reason": "The generator marks D6/D7 DNP and no fitted-board measurement exists",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-rd-identity",
@@ -82,7 +89,8 @@
         "fact-rd-rcwv-squared",
         "fact-rd-pinout",
         "fact-rd-fit-state"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-rd-primary",
@@ -100,7 +108,8 @@
         "fact-rd-rcwv-squared",
         "fact-rd-pinout",
         "fact-rd-fit-state"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-rd-fit",
@@ -108,7 +117,8 @@
       "domain": "as-built fit state and external-Rd interaction",
       "status": "OPEN",
       "reason": "Generator marks R17/R18 DNP and selects fitted CCDB bridges, but the assembled fit state and parallel-termination behavior require inspection/bench confirmation",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     }
   ]
 }

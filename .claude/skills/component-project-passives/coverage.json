@@ -11,7 +11,8 @@
         "fact-c13585-manufacturer",
         "fact-c13585-capacitance",
         "fact-c13585-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c13585-temp",
@@ -22,7 +23,8 @@
       "fact_ids": [
         "fact-c13585-dielectric",
         "fact-c13585-package"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c13585-bias",
@@ -31,6 +33,9 @@
       "status": "OPEN",
       "reason": "fact-c13585-curve-caveat: installed voltage/curve point is not retained",
       "fact_ids": [
+        "fact-c13585-curve-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c13585-curve-caveat"
       ]
     },
@@ -42,6 +47,9 @@
       "reason": "fact-c13585-curve-caveat: exact aging data/condition is not retained",
       "fact_ids": [
         "fact-c13585-curve-caveat"
+      ],
+      "blocking_fact_ids": [
+        "fact-c13585-curve-caveat"
       ]
     },
     {
@@ -51,6 +59,9 @@
       "status": "OPEN",
       "reason": "fact-c13585-curve-caveat: typical curve is not a guaranteed layout-specific limit",
       "fact_ids": [
+        "fact-c13585-curve-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c13585-curve-caveat"
       ]
     },
@@ -64,7 +75,8 @@
         "fact-c14663-manufacturer",
         "fact-c14663-capacitance",
         "fact-c14663-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c14663-temp",
@@ -75,7 +87,8 @@
       "fact_ids": [
         "fact-c14663-dielectric",
         "fact-c14663-termination"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c14663-bias",
@@ -84,6 +97,9 @@
       "status": "OPEN",
       "reason": "fact-c14663-simulation-caveat: simulation is not specification",
       "fact_ids": [
+        "fact-c14663-simulation-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c14663-simulation-caveat"
       ]
     },
@@ -95,6 +111,9 @@
       "reason": "fact-c14663-simulation-caveat: exact aging condition is not retained",
       "fact_ids": [
         "fact-c14663-simulation-caveat"
+      ],
+      "blocking_fact_ids": [
+        "fact-c14663-simulation-caveat"
       ]
     },
     {
@@ -104,6 +123,9 @@
       "status": "OPEN",
       "reason": "fact-c14663-simulation-caveat: simulation is not a maximum capability",
       "fact_ids": [
+        "fact-c14663-simulation-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c14663-simulation-caveat"
       ]
     },
@@ -117,7 +139,8 @@
         "fact-c15849-manufacturer",
         "fact-c15849-capacitance",
         "fact-c15849-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c15849-temp",
@@ -128,7 +151,8 @@
       "fact_ids": [
         "fact-c15849-dielectric",
         "fact-c15849-package"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c15849-bias",
@@ -137,6 +161,9 @@
       "status": "OPEN",
       "reason": "fact-c15849-curve-caveat: installed voltage/curve point is not retained",
       "fact_ids": [
+        "fact-c15849-curve-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c15849-curve-caveat"
       ]
     },
@@ -148,6 +175,9 @@
       "reason": "fact-c15849-curve-caveat: exact aging data/condition is not retained",
       "fact_ids": [
         "fact-c15849-curve-caveat"
+      ],
+      "blocking_fact_ids": [
+        "fact-c15849-curve-caveat"
       ]
     },
     {
@@ -157,6 +187,9 @@
       "status": "OPEN",
       "reason": "fact-c15849-curve-caveat: typical curve is not a guaranteed layout-specific limit",
       "fact_ids": [
+        "fact-c15849-curve-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c15849-curve-caveat"
       ]
     },
@@ -173,7 +206,8 @@
         "fact-c25803-power",
         "fact-c25803-tcr",
         "fact-c25803-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c25803-pulse",
@@ -182,6 +216,9 @@
       "status": "OPEN",
       "reason": "fact-c25803-pulse-caveat",
       "fact_ids": [
+        "fact-c25803-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c25803-pulse-caveat"
       ]
     },
@@ -198,7 +235,8 @@
         "fact-c22807-power",
         "fact-c22807-tcr",
         "fact-c22807-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c22807-pulse",
@@ -207,6 +245,9 @@
       "status": "OPEN",
       "reason": "fact-c22807-pulse-caveat",
       "fact_ids": [
+        "fact-c22807-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c22807-pulse-caveat"
       ]
     },
@@ -223,7 +264,8 @@
         "fact-c23179-power",
         "fact-c23179-tcr",
         "fact-c23179-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c23179-pulse",
@@ -232,6 +274,9 @@
       "status": "OPEN",
       "reason": "fact-c23179-pulse-caveat",
       "fact_ids": [
+        "fact-c23179-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c23179-pulse-caveat"
       ]
     },
@@ -248,7 +293,8 @@
         "fact-c23162-power",
         "fact-c23162-tcr",
         "fact-c23162-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c23162-pulse",
@@ -257,6 +303,9 @@
       "status": "OPEN",
       "reason": "fact-c23162-pulse-caveat",
       "fact_ids": [
+        "fact-c23162-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c23162-pulse-caveat"
       ]
     },
@@ -271,7 +320,8 @@
         "fact-c21189-rated-current",
         "fact-c21189-overload-current",
         "fact-c21189-temperature"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c21189-pulse",
@@ -280,6 +330,9 @@
       "status": "OPEN",
       "reason": "fact-c21189-pulse-caveat",
       "fact_ids": [
+        "fact-c21189-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c21189-pulse-caveat"
       ]
     },
@@ -296,7 +349,8 @@
         "fact-c17414-power",
         "fact-c17414-tcr",
         "fact-c17414-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c17414-pulse",
@@ -305,6 +359,9 @@
       "status": "OPEN",
       "reason": "fact-c17414-pulse-caveat",
       "fact_ids": [
+        "fact-c17414-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c17414-pulse-caveat"
       ]
     },
@@ -321,7 +378,8 @@
         "fact-c4216-power",
         "fact-c4216-tcr",
         "fact-c4216-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c4216-pulse",
@@ -330,6 +388,9 @@
       "status": "OPEN",
       "reason": "fact-c4216-pulse-caveat",
       "fact_ids": [
+        "fact-c4216-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c4216-pulse-caveat"
       ]
     },
@@ -346,7 +407,8 @@
         "fact-c22775-power",
         "fact-c22775-tcr",
         "fact-c22775-voltage"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c22775-pulse",
@@ -355,6 +417,9 @@
       "status": "OPEN",
       "reason": "fact-c22775-pulse-caveat",
       "fact_ids": [
+        "fact-c22775-pulse-caveat"
+      ],
+      "blocking_fact_ids": [
         "fact-c22775-pulse-caveat"
       ]
     }

@@ -20,7 +20,8 @@
         "fact-ap63203-soft-start",
         "fact-ap63203-peak-limit-min",
         "fact-ap63203-hiccup"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-ap63203-lc",
@@ -41,7 +42,8 @@
         "fact-ap63203-reference-cap",
         "fact-ap63203-thermal",
         "fact-ap63203-layout"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-ap63203-off",
@@ -49,7 +51,8 @@
       "domain": "minimum-off-time",
       "status": "OPEN",
       "reason": "DS41326 gives 80 ns minimum on-time but no minimum off-time; the 220 ns bootstrap refresh interval is a different behavior.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-ap63203-load",
@@ -57,15 +60,28 @@
       "domain": "project-load-transients-and-thermal",
       "status": "OPEN",
       "reason": "The generated source does not bound V3P3 load steps, sustained load, copper thermal impedance, or V15 transients.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-fnr-spec",
       "record_id": "rec-fnr4030s4r7mt",
       "domain": "inductance-dcr-srf-current-package",
       "status": "OPEN",
-      "reason": "fact-fnr-inductance through fact-fnr-package Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "fact-fnr-inductance through fact-fnr-package. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
       "fact_ids": [
+        "fact-fnr-inductance",
+        "fact-fnr-tolerance",
+        "fact-fnr-inductance-min",
+        "fact-fnr-dcr-max",
+        "fact-fnr-srf-min",
+        "fact-fnr-isat-max",
+        "fact-fnr-irated-max",
+        "fact-fnr-rating-definitions",
+        "fact-fnr-temperature",
+        "fact-fnr-package"
+      ],
+      "blocking_fact_ids": [
         "fact-fnr-inductance",
         "fact-fnr-tolerance",
         "fact-fnr-inductance-min",
@@ -84,7 +100,8 @@
       "domain": "project-load-and-temperature",
       "status": "OPEN",
       "reason": "The exact mirror shows the 2.0 A heating criterion below the 2.7 A full-load recommendation; actual load/ripple/temperature require analysis and bench verification.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-cl21-spec",
@@ -100,7 +117,8 @@
         "fact-cl21-dielectric",
         "fact-cl21-temperature",
         "fact-cl21-package"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-cl21-bias",
@@ -108,7 +126,8 @@
       "domain": "guaranteed-effective-capacitance",
       "status": "OPEN",
       "reason": "The locked Samsung PDF requires evaluation of Class II capacitance under DC voltage but does not provide an exact 3.3 V curve or a guaranteed minimum including tolerance, temperature, aging, and lot spread.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     }
   ]
 }

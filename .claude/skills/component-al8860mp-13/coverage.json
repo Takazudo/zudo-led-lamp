@@ -11,7 +11,8 @@
         "fact-al8860-topology",
         "fact-al8860-pin-ep",
         "fact-al8860-project-nets"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-al8860-limits-control",
@@ -34,7 +35,8 @@
         "fact-al8860-inductance-min",
         "fact-al8860-inductance-max",
         "fact-al8860-faults"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-al8860-layout",
@@ -44,7 +46,8 @@
       "reason": "fact-al8860-layout",
       "fact_ids": [
         "fact-al8860-layout"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-al8860-led-domain",
@@ -52,7 +55,8 @@
       "domain": "led-string-voltage-temperature",
       "status": "OPEN",
       "reason": "Exact LED VF versus current/temperature and switching-node overshoot require the LED/integration records and bench waveform.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-rlp25-ratings",
@@ -72,7 +76,8 @@
         "fact-rlp25-project-nets",
         "fact-rlp25-worst-power",
         "fact-rlp25-power-margin"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-rlp25-project-pulse",
@@ -80,14 +85,15 @@
       "domain": "project-pulse-load",
       "status": "OPEN",
       "reason": "The generated design does not define startup/fault pulse energy or local resistor temperature; verify against the 5x/5 s test and derating.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-fxl-electrical",
       "record_id": "rec-fxl0630-330-m",
       "domain": "inductance-dcr-current-package",
       "status": "OPEN",
-      "reason": "fact-fxl-inductance through fact-fxl-isat-margin Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "fact-fxl-inductance through fact-fxl-isat-margin. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
       "fact_ids": [
         "fact-fxl-inductance",
         "fact-fxl-tolerance",
@@ -101,6 +107,19 @@
         "fact-fxl-package",
         "fact-fxl-project-nets",
         "fact-fxl-isat-margin"
+      ],
+      "blocking_fact_ids": [
+        "fact-fxl-inductance",
+        "fact-fxl-tolerance",
+        "fact-fxl-inductance-min",
+        "fact-fxl-dcr-max",
+        "fact-fxl-isat-max",
+        "fact-fxl-irated-max",
+        "fact-fxl-rating-definitions",
+        "fact-fxl-voltage-max",
+        "fact-fxl-temperature",
+        "fact-fxl-package",
+        "fact-fxl-isat-margin"
       ]
     },
     {
@@ -109,14 +128,15 @@
       "domain": "self-resonance-and-end-application-temperature",
       "status": "OPEN",
       "reason": "The exact FXL0630 table does not state SRF, and mirror current ratings require end-application temperature/ripple verification.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-ss26-electrical",
       "record_id": "rec-ro-ss26",
       "domain": "polarity-voltage-current-leakage-package",
       "status": "OPEN",
-      "reason": "fact-ss26-polarity through fact-ss26-current-margin Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "fact-ss26-polarity through fact-ss26-current-margin. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
       "fact_ids": [
         "fact-ss26-polarity",
         "fact-ss26-reverse-voltage",
@@ -131,6 +151,20 @@
         "fact-ss26-project-nets",
         "fact-ss26-voltage-margin",
         "fact-ss26-current-margin"
+      ],
+      "blocking_fact_ids": [
+        "fact-ss26-polarity",
+        "fact-ss26-reverse-voltage",
+        "fact-ss26-rms-voltage",
+        "fact-ss26-average-current",
+        "fact-ss26-surge-current",
+        "fact-ss26-forward-voltage",
+        "fact-ss26-leakage-25c",
+        "fact-ss26-leakage-100c",
+        "fact-ss26-thermal",
+        "fact-ss26-package",
+        "fact-ss26-voltage-margin",
+        "fact-ss26-current-margin"
       ]
     },
     {
@@ -139,7 +173,8 @@
       "domain": "junction-temperature-and-switch-waveform",
       "status": "OPEN",
       "reason": "Mirror thermal data is typical and the generated source does not bound SW overshoot, diode duty cycle, or junction temperature.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     }
   ]
 }
