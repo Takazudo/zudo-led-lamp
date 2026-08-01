@@ -158,7 +158,7 @@
           "function": "exposed-pad ground"
         }
       ],
-      "reviewed_by": "board_p_spec.py; DS12499 Rev 8 Figure 2/Table 1 remains SOURCE UNAVAILABLE, so the controller pin map is UNSOURCED pending a byte-locked official review"
+      "reviewed_by": "board_p_spec.py plus reproducibly retained DS12499 Rev 8 mirror bytes; strict manufacturer-primary trust, project mapping and as-built verification remain open"
     },
     {
       "pin_map_id": "pinmap-pesd24vs1ub",

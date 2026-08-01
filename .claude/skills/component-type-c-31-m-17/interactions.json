@@ -6,9 +6,10 @@
       "record_ids": ["rec-type-c-31-m-17"],
       "fact_ids": [
         "fact-type-c-31-m-17-contacts",
+        "fact-type-c-31-m-17-project-map",
         "fact-type-c-31-m-17-mechanical"
       ],
-      "conditions": "Assert J1.2/J1.5=VBUS_IN, J1.3=CC1, J1.4=CC2, J1.1/J1.6/J1.0=GND; because physical identity is unresolved, treat this as a static project assertion plus procurement blocker until verified",
+      "conditions": "Generator plus stable productCode mirror and official drawing establish the orderable/model evidence stages; assert and continuity-check J1.2/J1.5=VBUS_IN, J1.3=CC1, J1.4=CC2, J1.1/J1.6/J1.0=GND because official contact names do not prove project numeric mapping/orientation",
       "verdict": "UNSOURCED"
     },
     {
@@ -17,6 +18,7 @@
       "fact_ids": [
         "fact-type-c-31-m-17-identity",
         "fact-type-c-31-m-17-contacts",
+        "fact-type-c-31-m-17-project-map",
         "fact-type-c-31-m-17-mechanical"
       ],
       "conditions": "Inspect incoming marking and geometry; continuity-map VBUS/GND/CC/shell with no cable and both plug orientations; check shorts before applying current-limited 5 V; then observe CC attach and thermal rise",

@@ -58,7 +58,7 @@ called 4s "tight". Against this part's datasheet Vf ceiling of 3.2 V, a 4s strin
 
 | | |
 |---|---|
-| **Chosen** | Per-string ballast resistors, 33 Ω 1206 ([C2907384](https://jlcpcb.com/partdetail/C2907384)) |
+| **Chosen** | Per-string ballast resistors, 33 Ω 2512 FOJAN FRC2512F33R0TS ([C2934070](https://jlcpcb.com/partdetail/C2934070)); generator evidence places R30–R37 one per branch, while the primary specification gives 1 W nominal power and a calculated 5.745 V RCWV at 33 Ω |
 | **Rejected** | One CC driver per string |
 | **Rejected** | Vf-binned procurement, no ballast |
 
@@ -84,26 +84,26 @@ is the largest value that keeps duty at or under 75% at nominal Vf.
 | **Rejected** | PT4115 ([C347356](https://jlcpcb.com/partdetail/C347356)) |
 | **Rejected** | TPS92511 ([C114277](https://jlcpcb.com/partdetail/C114277)) |
 
-### Driver input rating vs the clamp ceiling
+### Driver input rating vs a conditioned clamp screening point
 
 The [driver research](/docs/research/driver-ics/#rail-constraint-the-tvs-clamp-ceiling)
-required each candidate to clear the SMAJ20A's **~32.4 V** worst-case clamp or justify
-not doing so, and the [ratings matrix](/docs/power/ratings-matrix/) is where that number
-comes from.
+screened each candidate against the SMAJ20A's **32.4 V** table point. That point is
+specified only at 12.3 A, a 10/1000 µs pulse, and 25 °C; it is a conservative
+selection reference, not a prediction or universal ceiling for the installed rail.
+The [ratings matrix](/docs/power/ratings-matrix/) keeps the actual waveform open.
 
-| Candidate | VIN operating | VIN absolute max | vs 32.4 V |
+| Candidate | VIN operating | VIN absolute max | Against the conditioned 32.4 V screening point |
 |---|---|---|---|
-| PT4115 | 6–30 V | not confirmable from a primary datasheet in the research pass | **Fails** — 2.4 V below the clamp, with no absolute-max figure to fall back on |
-| **AL8860** | 4.5–**40 V** | **42 V** (DS39014 Rev 5) | **Clears** — +7.6 V operating, +9.6 V absolute |
-| TPS92511 | 4.5–65 V | — | Clears with the widest margin |
+| PT4115 | 6–30 V | not confirmable from a primary datasheet in the research pass | Does not cover the screening point; no confirmed absolute-max fallback |
+| **AL8860** | 4.5–**40 V** | **42 V** (DS39014 Rev 5) | Covers the screening point by 7.6 V operating / 9.6 V absolute |
+| TPS92511 | 4.5–65 V | — | Covers the screening point with the widest margin |
 
-PT4115 is **rejected on the clamp ceiling**, not accepted with a justification. The
-research page offered "accept the residual risk" as an option; this pass declines it,
-because unlike Board P's two inherited gaps — where no better part existed — a fully
-clearing alternative costs the same money. Manufacturing a new residual risk when a
-free alternative exists is not a trade worth making.
+PT4115 is rejected by this conservative screening rule, not because 32.4 V has been
+proven as the installed rail waveform. AL8860 provides more static headroom at the same
+cost, while the actual transient still requires the source-impedance, parasitic,
+simulation, and bench evidence tracked in issue #34.
 
-TPS92511 clears the ceiling by more, but was rejected on two counts: its 500 mA maximum
+TPS92511 offers more static voltage headroom, but was rejected on two counts: its 500 mA maximum
 sits exactly at this design's operating current with **zero headroom**, and the research
 pass could not confirm its IADJ formula or its full passive count from a primary
 datasheet, so it is not schematic-ready. The AL8860 is characterised end to end.
@@ -134,17 +134,20 @@ This is the one place where this pass **overrides** a research recommendation. T
 [logic-rail page](/docs/research/control-logic-rail/) says an LDO is fine below ~30 mA,
 and the actual budget is ~25 mA, so on dissipation grounds the LDO wins.
 
-The clamp ceiling overrules it. AMS1117's 15 V absolute maximum is violated at the
-*nominal* rail voltage — that part is unusable here regardless of load. HT7333's 18 V
-ceiling is fine at nominal but sits **14.4 V under** the 32.4 V clamp, which would create
-a brand-new residual risk in a design that has been careful to only inherit the two it
-could not avoid.
+The rail envelope overrules it. AMS1117's 15 V absolute maximum leaves no operating
+margin at the *nominal* rail voltage—an absolute maximum is not an operating target.
+HT7333's 18 V ceiling has little transient headroom. As a conservative screen, it also
+sits **14.4 V under** SMAJ20A's conditioned 32.4 V table point; that subtraction does
+not predict the installed waveform, but it exposes evidence that the LDO choice cannot
+close.
 
-AP63203's absolute maximum is **35 V DC and 40 V for 400 ms** (DS41326 Rev 3). The clamp
-event is a 10/1000 µs transient, so the 400 ms rating covers it outright. It is the only
-candidate with **zero** residual, and it costs about $0.60 and three extra passives.
+AP63203's absolute maximum is **35 V DC and 40 V for 400 ms** (DS41326 Rev 3). Its
+static limits cover the conditioned 32.4 V screening point, so it is the strongest
+candidate and costs about $0.60 plus three passives. This does not make the real clamp
+event zero-risk: source impedance, waveform, effective capacitance, layout, and bench
+behavior remain open.
 
-XL7015E1 clears the ceiling by even more (80 V), but needs a feedback divider and a
+XL7015E1 has still more static voltage headroom (80 V), but needs a feedback divider and a
 150 kHz-class inductor whose researched candidate showed only **238** units in stock.
 AP63203 is fixed-output, needs no divider, and its inductor is a 250,000-unit part.
 
@@ -331,20 +334,24 @@ a Board L fault — a shorted LED string, a failed driver — can pull 45 W thro
 harness before anything intervenes. A 750 mA hold bounds that at under 2x the normal
 draw.
 
-**Residual, stated:** the PPTC's 30 V rating sits **1.4 V (4.7%) below** the 32.4 V clamp
-ceiling during a surge event. That is the same transient-only category as Board P's two
-inherited gaps and roughly a third the size of the smallest of them. Every 1206-class
-PPTC in the catalog with a 750 mA hold tops out at 30 V, so clearing it would mean
-dropping the fuse entirely — a worse trade.
+**Conditioned open point:** the PPTC's 30 V rating is **1.4 V below** the SMAJ20A's
+32.4 V table value at 12.3 A, 10/1000 µs, and 25 °C. That subtraction is a useful
+screening lead, not an installed-waveform result or an accepted over-rating. Actual
+source impedance, clamp current, duration, parasitics, and fuse stress remain part of
+the issue #34 simulation and bench gate.
 
-## Summary of accepted residual risks
+## Summary of open conditioned risks
 
-| Risk | Category | Where |
+| Risk | Evidence status | Where |
 |---|---|---|
-| U1 STUSB4500 VDD, 4.4 V over absolute max at full clamp | transient only, inherited | [ratings matrix](/docs/power/ratings-matrix/) |
-| Q1 AO3401A VDS, 2.4 V over absolute max at full clamp | transient only, inherited | [ratings matrix](/docs/power/ratings-matrix/) |
-| F1 PPTC, 1.4 V over its 30 V rating at full clamp | transient only, new | this page, above |
+| U1 STUSB4500 VDD, conditioned 4.4 V over its mirror-stated absolute maximum at the D5 table point | **UNSOURCED / waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/) |
+| Q1 exact UMW (Youtai Semiconductor) AO3401A VDS, conditioned 2.4 V magnitude over absolute maximum at that table point | **Waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/) |
+| F1 PPTC, conditioned 1.4 V over its 30 V rating at that table point | **Waveform and pulse stress OPEN**, not accepted | this page, above |
 | Duty cycle 78% at the LED bin's Vf maximum, versus a 75% recommendation | steady state, bounded — 98% is the hard maximum | [Board L](./board-l.mdx#al8860-constant-current-driver) |
 | Worst-case string imbalance puts one LED at 94% of its package rating | steady state, datasheet-bounded | [Board L](./board-l.mdx#led-array-and-the-brightness-number-ballast-and-current-sharing) |
 | R21's ability to hold CTRL low is not datasheet-provable | covered by a second mechanism; verify at bring-up | [Board L](./board-l.mdx#mcu-knob-and-dimming-path-safe-default-off) |
-| The whole Board P topology has never run on hardware | inherited, unavoidable | [Lessons Carried From zudo-pd](/docs/power/lessons-from-zudo-pd/) |
+| The whole Board P topology has never run on hardware | as-built and bench evidence OPEN | [input-protection evidence gate](https://github.com/Takazudo/zudo-led-lamp/issues/34) |
+
+These first three rows are conditioned arithmetic, not permission to energize or call
+either protected input chain PASS. The current no-PD gate is tracked in
+[issue #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).

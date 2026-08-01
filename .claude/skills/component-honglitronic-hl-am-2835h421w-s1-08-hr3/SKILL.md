@@ -5,7 +5,7 @@ description: Resolve the exact Honglitronic HL-AM-2835H421W-S1-08-HR3 LED and su
 
 # Board L LED string and ballast
 
-Run the central validator and read every local JSON file before using these records. The exact Honglitronic specification is manufacturer-authored but mirror-hosted, so its LED facts remain `UNVERIFIED`/`UNSOURCED`. The FOJAN specification is manufacturer-authored but mirror-hosted, so ballast ratings remain `UNVERIFIED`/`UNSOURCED` despite exact order-code context.
+Run the central validator and read every local JSON file before using these records. Official primary specifications support the Honglitronic base-MPN LED limits and the exact FOJAN order code and ballast ratings. Available LCSC JSON-LD confirms only the C210315-to-exact-MPN/2800–3100 K/3000 K distributor identity; the bare MPN spans multiple CCT rows. Incoming reel/label/bin acceptance and real eight-branch current sharing remain open.
 
 The LED drawing defines pad 2 as anode and pad 1 as cathode. Exact 3000 K output is 27 lm minimum / 29 lm typical at 60 mA, with Ra at least 80 and forward voltage 2.6 to 3.2 V. Absolute maxima are not operating targets. Follow the assembly section's maximum two reflow cycles; a reliability-test condition mentioning three cycles is not process authorization.
 

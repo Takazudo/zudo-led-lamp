@@ -28,7 +28,10 @@
         "fact-umw-ao3401a-soa",
         "fact-umw-ao3401a-project-nets"
       ],
-      "interaction_ids": ["int-umw-ao3401a-netlist", "int-umw-ao3401a-bench"],
+      "interaction_ids": [
+        "int-umw-ao3401a-netlist",
+        "int-umw-ao3401a-bench"
+      ],
       "open_domains": [
         "application SOA/thermal/inrush behavior",
         "generated connectivity versus symbol/footprint/as-built confirmation"

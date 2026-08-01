@@ -1,17 +1,18 @@
 ---
 title: Worst-Case Ratings Matrix
-description: Every Board P part's voltage/current limits checked against the 15V PD-contracted rail and the SMAJ20A's worst-case transient clamp ceiling, validated against primary manufacturer datasheets — including the C456012 USB-C receptacle discrepancy this audit found and resolved.
+description: Conditioned Board P ratings audit against 15 V operation and the exact SMAJ20A 10/1000 µs clamp row, with explicit source-to-bench evidence gates.
 sidebar_position: 20
 ---
 
-This page validates every fitted [Board P](./board-p-front-end.mdx) part against two
-reference points, per primary manufacturer datasheets rather than any project's own
-prose claims about those parts:
+This page screens every fitted [Board P](./board-p-front-end.mdx) part against two
+reference points using the cited evidence. Manufacturer-primary evidence is used where
+available; manufacturer mirrors and catalog records retain their lower-authority trust
+state and cannot establish primary-source closure:
 
 1. **15 V nominal** — the steady-state PD-contracted rail voltage.
-2. **~32.4 V transient clamp ceiling** — the worst-case voltage D5 (SMAJ20A) can let
-   through during a surge event (10/1000 µs waveform) before it fully clamps. Any part
-   sharing the `VBUS_IN` net sees this ceiling during a fault, not just 15 V.
+2. **32.4 V conditioned clamp point** — the exact High Diode SMAJ20A primary row gives
+   VC max at IPP 12.3 A for a 10/1000 µs waveform at 25 °C. It is not a universal rail
+   ceiling; source impedance, waveform, layout and as-built behavior still require proof.
 
 ## The C456012 discrepancy — resolved
 
@@ -46,16 +47,16 @@ in the same mechanical family for a comparable price.
 **Replacement: C283540 (TYPE-C-31-M-17).** Found via the JLCPCB parts database by
 searching the USB Connectors category for explicitly 20 V-rated, right-angle SMD, 6-pin
 power-only receptacles (the same mounting style as C456012, so the swap is a drop-in
-at the schematic-symbol level). Verified against the manufacturer datasheet (HRQ
-Electronics), which states in its own **ELECTRICAL PERFORMANCE** section:
+at the schematic-symbol level). The current HRO Rev A manufacturer drawing states:
 
 > 4-1. CURRENT RATING: 5.0 A, VOLTAGE RATING: 20 V
 > 4-2. INSULATION RESISTANCE: 100 MΩ MIN
 > 4-3. DIELECTRIC WITHSTAND VOLTAGE: AC 100 V FOR 1 MINUTE
-> 4-4. LOW CONTACT RESISTANCE: initial 30 mΩ, after-life 50 mΩ
+> 4-4. LOW CONTACT RESISTANCE: initial 40 mΩ max, after-life 50 mΩ max
 
-The pinout is identical to C456012's convention (`A5=CC1, A9=VBUS, A12=GND, B12=GND,
-B9=VBUS, B5=CC2`), so this is a direct schematic-symbol swap, not a redesign. Stock at
+The drawing names contacts `A5/A9/A12/B12/B9/B5`, but that does not prove equivalence
+to the project's numeric pins or shell. Incoming-part orientation and continuity remain
+an evidence gate. Stock at
 JLCPCB was 33,876 units as of the 2026-07-25 DB snapshot — re-verify at order time per
 the usual LCSC stock caveat.
 
@@ -65,22 +66,22 @@ the usual LCSC stock caveat.
 | Dielectric withstand | AC 100–500 V / 1 min | AC 100 V / 1 min |
 | Insulation resistance | ≥100 MΩ | ≥100 MΩ |
 | Mount style | 6P SMD, right-angle | 6P SMD, right-angle (same) |
-| Pinout | A5/A9/A12/B12/B9/B5 = CC1/VBUS/GND/GND/VBUS/CC2 | Identical |
+| Contact labels | A5/A9/A12/B12/B9/B5 | Same USB contact names; project numeric mapping requires continuity |
 | Stock (DB 2026-07-25) | 527,859 | 33,876 |
-| Verdict | **Rejected** — headline rating does not cover this design's PD range with any datasheet-provable margin | **Selected** — 33% margin at 15 V, explicit 20 V continuous rating |
+| Verdict | **Rejected** — headline rating does not cover this design's PD range with any datasheet-provable margin | **Selected, evidence-gated** — primary 20 V/5 A ratings; numeric pin/shell mapping and incoming continuity still OPEN |
 
 ## Ratings matrix
 
-| Part | Rated limit (primary source) | vs 15 V nominal | vs ~32.4 V clamp transient | Verdict |
+| Part | Rated limit (cited evidence) | vs 15 V nominal | vs conditioned 32.4 V point | Verdict |
 |------|-------------------------------|------------------|------------------------------|---------|
-| U1 STUSB4500QTR — VDD pin | Absolute max **28 V** (ST DS12499 Rev 5, Table 20 "Absolute maximum ratings"). Recommended *operating* range is 4.1–22 V (Table 21) — a narrower, separate figure | Pass, 46% margin below the 22 V operating ceiling | Exceeds the 28 V absolute max by ~4.4 V (16%) during a full clamp event | **Residual risk, transient-only** — unchanged from zudo-pd's own accepted tradeoff (see note below) |
-| U1 STUSB4500QTR — CC1/CC2/CC1DB/CC2DB pins | Absolute max **22 V** short-to-VBUS protection (DS12499 Table 20) | Pass | CC pins are not on the `VBUS_IN` net and are not directly exposed to the D5 clamp path | Pass |
-| Q1 AO3401A | VDS absolute max **−30 V** (AOS datasheet Rev 3.1, Dec 2023, "Absolute Maximum Ratings") | Pass — Vgs ≈ −9.6 V at 15 V, well inside the ±12 V gate limit | Exceeds −30 V by ~2.4 V (8%) if VDS tracks the full clamp voltage during a fault | **Residual risk, transient-only** — this is the same margin gap zudo-pd's own board-split decision explicitly accepted for Q1, carried forward unchanged |
-| D5 SMAJ20A | VRWM (standoff) 20 V, breakdown 22.2–24.5 V, clamp ≤32.4 V @ 10/1000 µs (JLCPCB catalog data, consistent with the datasheet figures zudo-pd's own decision doc cites) | Pass, 33% standoff margin | **This is the device that defines the ceiling** — passes by construction | Pass |
-| J1 receptacle (C283540) | Voltage rating 20 V continuous, current 5.0 A (HRQ Electronics datasheet, see above) | Pass, 33% margin | Exceeds the 20 V *continuous* rating nominally, but the 100 VAC dielectric withstand test (≈141 V peak) covers the transient by a wide margin — this is an insulation-breakdown question, not a continuous-duty one | Pass (on insulation-breakdown grounds; flagged distinction between continuous rating and dielectric withstand) |
+| U1 STUSB4500QTR — VDD pin | Manufacturer-authored DS12499 Rev 8 mirror states 28 V absolute max and 4.1–22 V operating range; mirror evidence remains `UNSOURCED` under the primary-only trust policy | Conditioned arithmetic is below the stated operating ceiling, but trust closure is OPEN | The 32.4 V conditioned D5 table point would exceed the stated 28 V absolute maximum; the actual waveform is unresolved | **EVIDENCE BLOCKER (UNSOURCED)** — require primary evidence plus simulation and measured VDD waveform |
+| U1 STUSB4500QTR — CC1/CC2/CC1DB/CC2DB pins | Manufacturer-authored Rev 8 mirror states 22 V short-to-VBUS protection; primary trust remains OPEN | Conditioned only | Generator topology does not place CC pins directly on `VBUS_IN`, but as-built continuity is unverified | OPEN |
+| Q1 UMW AO3401A, exact C347476 | VDS absolute max **−30 V**, VGS absolute max **±12 V** (UMW manufacturer specification); this exact orderable must not be attributed to AOS | Ideal steady VBEN-low divider gives VGS = `−15×100k/(100k+150k)` = **−6.0 V** (and −8.0 V at a 20 V mis-contract) | A static 32.4 V divider calculation gives −12.96 V, but C35 is gate-to-source and the nominal `(100k∥150k)×100nF` time constant is about 6 ms; actual VDS/VGS depends on waveform, duration, device and parasitics | **OPEN transient risk** — do not call the clamp event a deterministic violation or PASS without measured gate/source/drain waveforms and as-built confirmation |
+| D5/D10 exact C571370 High Diode SMAJ20A | Primary PDF confirms band=cathode, VRWM 20 V, VBR 22.2–24.5 V @ 1 mA, VC max 32.4 V @ IPP 12.3 A for 10/1000 µs at 25 °C | Conditioned primary rating is compatible with 15 V nominal | Simulation/as-built D5 and D10 pad orientation, source impedance and actual waveform remain OPEN | **EVIDENCE BLOCKER** — primary ratings are closed; numeric pad mapping, both-rail simulation and measured waveforms are not |
+| J1 receptacle (exact C283540 TYPE-C-31-M-17) | Primary Rev A drawing confirms 5 A, 20 V, 100 VAC/min, 10,000 cycles and −30…+80 °C; stable distributor mirror binds C283540 | Conditioned rating has margin at 15 V / 0.41 A | Numeric project pin/shell mapping, incoming orientation and continuity remain OPEN | **EVIDENCE BLOCKER** — do not energize for PD until incoming-part mapping/continuity is verified |
 | JOUT — JST B6B-XH-A(LF)(SN) | 250 V, 3 A/contact (JLCPCB catalog, C144397) | Pass, wide margin | Pass, wide margin | Pass |
 | C1 (10 µF, C13585) | 50 V X5R (JLCPCB catalog) | Pass | Pass | Pass |
-| C2, C35 (100 nF, C1711) | 50 V X7R (JLCPCB catalog) | Pass | Pass | Pass |
+| C2, C35 (100 nF, exact C14663 CC0603KRX7R9BB104) | 50 V X7R (manufacturer specification) | Pass | Pass | Pass |
 | C30, C34 (1 µF, C15849) | 50 V X5R (JLCPCB catalog) — note: exceeds the 16 V figure in zudo-pd's own component notes, which was a legacy value, not this verified part's actual rating | Pass | Pass | Pass |
 | R11–R16, R19, R20 (chip resistors) | 75 V (JLCPCB catalog, 0603 thick-film series) | Pass | Pass | Pass |
 | R17, R18 (DNP, C23186) | 75 V | N/A — never populated on a powered build | N/A | Pass (DNP) |
@@ -88,35 +89,30 @@ the usual LCSC stock caveat.
 
 ## Summary
 
-No fitted part has a hard absolute-maximum violation at the 15 V steady-state PD
-contract — every part passes with real margin. Two parts (U1's VDD pin and Q1's VDS)
-have a residual, transient-only margin gap against the SMAJ20A's absolute worst-case
-~32.4 V clamp ceiling — a documented, accepted design tradeoff this audit inherits
-unchanged from zudo-pd's own board-split decision (it applies the same logic zudo-pd
-used to justify D5's own 20 V standoff choice: a hard surge clamp momentarily exceeding
-a downstream part's absolute-max rating is a known, transient-only residual risk, far
-better than a part with zero margin at the nominal operating voltage).
+The input-protection chain is not evidence-closed. Exact J1 and D5/D10 primary ratings
+are now retained, but their project/as-built mappings remain open; STUSB limits are
+retained only from a manufacturer-authored mirror, and Q1 VDS/VGS
+during a clamp event depends on the real waveform and gate/source dynamics. Nominal
+arithmetic is useful for planning, but it is not a fitted-chain PASS. Primary exact-part
+evidence, simulation, incoming/as-built continuity checks, and bench waveforms are required.
+Track that safety gate in [input-protection evidence blocker #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).
 
 :::note
-While re-verifying this, the audit also found that zudo-pd's own citation of "VDD
-abs-max is 22 V (DS12499)" — repeated in that project's board-a-usb-pd-core doc — is
-actually the *operating range* ceiling (DS12499 Table 21), not the *absolute maximum*
-rating (DS12499 Table 20, which is 28 V). This is a small correction that makes U1's
-margin against the clamp ceiling better than zudo-pd's own docs implied (4.4 V over,
-not 10.4 V over), but the risk category — residual, transient-only, accepted — is
-unchanged.
+The retained Rev 8 mirror distinguishes the 22 V operating ceiling from the 28 V
+absolute maximum. Those values remain conditioned leads, not primary-source closure,
+and neither value makes an unknown D5 clamp waveform acceptable.
 :::
 
-The one genuine, datasheet-provable gap this audit found — the C456012 receptacle's
-5 V-class manufacturer rating — has been closed by the C283540 swap documented above.
+The C283540 selection closes primary rating/mechanical evidence, but not project numeric
+contact mapping, orientation, or incoming continuity.
 
 ## References
 
-- ST DS12499 Rev 5 (STUSB4500 datasheet) — Table 20 "Absolute maximum ratings", Table
+- ST DS12499 Rev 8 manufacturer-authored archive mirror — Table 20 "Absolute maximum ratings", Table
   21 "Operating conditions".
-- AOS AO3401A datasheet, Rev 3.1 (December 2023) — "Absolute Maximum Ratings" table.
+- UMW (Youtai Semiconductor) AO3401A specification for exact orderable C347476 — title block, pin figure, and absolute-maximum table.
 - Manufacturer datasheets for C456012 (Shenzhen Shouhan Technology, "TYPE-C 6P") and
-  C283540 (HRQ Electronics, "TYPE-C-31-M-17"), both retrieved from JLCPCB's part pages.
+  C283540 (HRO, "TYPE-C-31-M-17"); the stable distributor mirror is used only for orderable binding.
 - Local JLCPCB parts database (snapshot dated 2026-07-25) for catalog ratings on
   passives, the D5/D6/D7 TVS/ESD parts, and the JOUT connector.
 - [Board P — USB-PD Front End](./board-p-front-end.mdx) for the full component list

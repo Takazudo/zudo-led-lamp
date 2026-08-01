@@ -57,24 +57,24 @@ the one pin through the one resistor. This was zudo-pd's earliest (v1/v3) failur
 
 ## TVS margin rule
 
-Pick a TVS standoff voltage **above the worst *legal* operating rail**, and confirm its
-worst-case clamp voltage against **every downstream part's absolute-maximum rating**,
-not just the nominal operating voltage:
+Pick a TVS standoff voltage **above the worst *legal* operating rail**, then compare each
+datasheet clamp point against **every downstream part's conditioned rating**. A clamp
+table row is a screening point, not a universal rail ceiling or substitute for the
+source-impedance, waveform, parasitic, simulation, and bench analysis:
 
 - D5 (SMAJ20A)'s 20 V standoff sits 33% above the 15 V contracted rail while still
   tolerating the 20 V mis-contract edge case (a PD source that briefly offers a
   different PDO than expected) without conducting.
-- Its ≤32.4 V clamp ceiling was then checked against every part sharing the `VBUS_IN`
-  net — see the [ratings matrix](./ratings-matrix.mdx) for the full per-part result.
-  Two parts (the STUSB4500's VDD pin and the load-switch MOSFET) have a small,
-  accepted, transient-only margin gap against that ceiling; nothing has a margin gap at
-  the 15 V nominal operating point.
+- Its 32.4 V row is specified at 12.3 A, 10/1000 µs, and 25 °C. Comparing that point
+  with every part on `VBUS_IN` exposes conditioned STUSB/Q1 overages, but those are
+  **open evidence risks, not accepted violations**—see the
+  [ratings matrix](./ratings-matrix.mdx) and [issue #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).
 
-The rule that actually matters in practice: **do the clamp-ceiling check explicitly and
-per-part.** It is easy to verify a TVS is "rated high enough" against the nominal rail
-and stop there — the real question is whether *every other part on that net* can
-survive what the TVS lets through during a fault, not just what it sees in normal
-operation.
+The rule that actually matters in practice: **do the conditioned clamp-point check
+explicitly and per-part, then prove the real waveform.** It is easy to verify a TVS is
+"rated high enough" against the nominal rail and stop there. The real question is what
+each part sees for the actual current, duration, temperature, source, and layout—not
+just what it sees in normal operation.
 
 ## Never a 5 V-class USB ESD array on a PD VBUS rail
 
@@ -91,8 +91,10 @@ PESD24VS1UB) available as an opt-in upgrade for enclosed/production builds only.
 
 A **fresh, unprogrammed STUSB4500 ships with PDO3 = 20 V/1.0 A at the highest
 priority.** Plug a fresh chip into any charger that supports 20 V PD before programming
-its NVM, and it will negotiate 20 V — directly onto a board designed around a 15 V rail
-and parts margined for a ~32.4 V transient, not a routine 20 V steady-state input.
+its NVM, and it will negotiate 20 V — directly onto a board designed around a 15 V
+rail. A routine 20 V steady-state input is outside the intended programmed state and
+is not made acceptable by the SMAJ20A's single conditioned 32.4 V datasheet point;
+the installed input-protection waveform remains an open evidence gate.
 
 **Rule: the first-ever power-up of an unprogrammed Board P must use a 5 V-only USB-C
 charger** (any ordinary phone charger with no PD-capable profile above 5 V, or a

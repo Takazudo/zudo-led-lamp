@@ -1,7 +1,12 @@
 import copy
+import hashlib
+import io
+import json
 import importlib.util
+import shutil
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 
 MODULE_PATH = Path(__file__).with_name("validate.py")
@@ -146,9 +151,288 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         with self.assertRaisesRegex(validator.ContractError, "open domains"):
             validator.validate_bundle(bundle, self.schema, True)
         bundle = validator.template_bundle()
-        bundle["coverage"][0]["status"] = "OPEN"
+        bundle["coverage"][0]["status"] = "COVERED"
         with self.assertRaisesRegex(validator.ContractError, "open domains"):
             validator.validate_bundle(bundle, self.schema, True)
+
+    def test_every_owner_directory_and_artifact_is_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            skills_root = Path(directory)
+            owners = {line["owner_skill"] for line in self.lines}
+            for owner in owners:
+                shutil.copytree(validator.ROOT / ".claude/skills" / owner, skills_root / owner)
+            validator.validate_local_skills(self.schema, self.lines, skills_root)
+            shutil.rmtree(skills_root / sorted(owners)[0])
+            with self.assertRaisesRegex(validator.ContractError, "expected exact directories"):
+                validator.validate_local_skills(self.schema, self.lines, skills_root)
+
+        with tempfile.TemporaryDirectory() as directory:
+            skills_root = Path(directory)
+            owners = {line["owner_skill"] for line in self.lines}
+            for owner in owners:
+                shutil.copytree(validator.ROOT / ".claude/skills" / owner, skills_root / owner)
+            (skills_root / sorted(owners)[0] / "facts.json").unlink()
+            with self.assertRaisesRegex(validator.ContractError, "missing local manifest files"):
+                validator.validate_local_skills(self.schema, self.lines, skills_root)
+
+    def test_available_source_rejects_zero_hash_sentinel(self):
+        source = validator.template_bundle()["sources"][0]
+        source["availability"] = "AVAILABLE"
+        source["sha256"] = validator.ZERO_SHA256
+        with self.assertRaisesRegex(validator.ContractError, "all-zero"):
+            validator.validate_source(source, self.schema)
+        source["availability"] = "SOURCE UNAVAILABLE"
+        validator.validate_source(source, self.schema)
+
+    def test_calculated_exponent_is_bounded(self):
+        self.assertAlmostEqual(validator.arithmetic("value ** 0.5", {"value": 33}), 33 ** 0.5)
+        with self.assertRaisesRegex(validator.ContractError, "safety bound"):
+            validator.arithmetic("value ** 1000000", {"value": 33})
+
+    def test_routing_fails_closed_on_conflicts_and_filters(self):
+        cases = {
+            "0603WAF4700T5E C23162": [],
+            "UNI-ROYAL 0603WAF1003T5E": ["line-c25803"],
+            "CL31A106KBHNNNE C15849": [],
+            "Samsung Electro-Mechanics 0603WAF1003T5E": [],
+            "100 kOhm resistor 0603WAF1003T5E": ["line-c25803"],
+            "RLP25FEER200": ["line-c459674"],
+            "C45783": ["line-c45783"],
+            "other-vendor SS26 C999019": [],
+            "Vishay SS26 C7420363": [],
+            "vishay SS26 C7420363": [],
+            "FakeCorp AO3401A C347476": [],
+            "fakecorp AO3401A C347476": [],
+            "AO3401A from Vishay C347476": [],
+            "SS26 by vishay C7420363": [],
+            "AOS AO3401A C347476": [],
+            "Alpha and Omega AO3401A C347476": [],
+            "Toshiba AO3401A C347476": [],
+            "AOS C347476": [],
+            "Vishay C7420363": [],
+            "Board-P AL8860MP-13 C500782": ["line-c500782"],
+            "review AL8860MP-13 CTRL pin": ["line-c500782"],
+            "inspect AL8860MP-13 CTRL pin": ["line-c500782"],
+            "new AL8860MP-13 design": ["line-c500782"],
+            "UNI-ROYAL": [],
+            "100 kOhm resistor": [],
+        }
+        for query, expected in cases.items():
+            with self.subTest(query=query):
+                self.assertEqual(validator.resolve(query, self.lines), expected)
+
+        bundle = validator.load_skill_bundle(validator.ROOT / ".claude/skills/component-project-passives")
+        self.assertEqual(validator.resolve_bundle_route("0603WAF4700T5E C23162", bundle["routes"]), [])
+        self.assertEqual(validator.resolve_bundle_route("UNI-ROYAL 0603WAF1003T5E", bundle["routes"]), ["rec-c25803"])
+
+    def test_external_vendor_qualifier_artifact_is_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing.json"
+            with self.assertRaisesRegex(validator.ContractError, "is required"):
+                validator.external_vendor_tokens(missing)
+
+    def test_browser_headers_success_and_403_are_explicit(self):
+        source = copy.deepcopy(validator.template_bundle()["sources"][0])
+        source.update({"availability": "AVAILABLE", "sha256": hashlib.sha256(b"ok").hexdigest()})
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *_args): return False
+            def read(self): return b"ok"
+
+        def success(request, timeout):
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            self.assertIn("Mozilla/5.0", request.get_header("User-agent"))
+            self.assertIn("application/pdf", request.get_header("Accept"))
+            return Response()
+
+        self.assertEqual(validator.fetch_source(source, success), b"ok")
+
+        source["request_headers"] = {"Referer": "https://manufacturer.example/product"}
+        def referer_success(request, timeout):
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            self.assertEqual(request.get_header("Referer"), source["request_headers"]["Referer"])
+            return Response()
+        self.assertEqual(validator.fetch_source(source, referer_success), b"ok")
+
+        error = urllib.error.HTTPError(source["authoritative_url"], 403, "Forbidden", {}, io.BytesIO(b"forbidden"))
+
+        def forbidden(_request, timeout):
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            raise error
+
+        try:
+            with self.assertRaises(urllib.error.HTTPError):
+                validator.fetch_source(source, forbidden)
+        finally:
+            error.close()
+        source["refresh_policy"] = "VOLATILE-HTML"
+        source["refresh_note"] = "live response hash is not deterministic"
+        source["authority_class"] = "DISTRIBUTOR_IDENTITY"
+        source["identity_extract_sha256"] = "1" * 64
+        validator.validate_source(source, self.schema)
+        source["authority_class"] = "MANUFACTURER_PRIMARY"
+        with self.assertRaisesRegex(validator.ContractError, "limited to canonical distributor identity"):
+            validator.validate_source(source, self.schema)
+
+    def test_online_refresh_uses_process_unique_temp_directory(self):
+        source = copy.deepcopy(validator.template_bundle()["sources"][0])
+        payload = b"stable-refresh-bytes"
+        source.update({"availability":"AVAILABLE", "sha256":hashlib.sha256(payload).hexdigest()})
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *_args): return False
+            def read(self): return payload
+
+        nested = False
+        def outer_opener(_request, timeout):
+            nonlocal nested
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            if not nested:
+                nested = True
+                validator.online_sources(self.schema, [source], [source["source_id"]], opener=lambda _request, timeout: Response())
+            return Response()
+
+        validator.online_sources(self.schema, [source], [source["source_id"]], opener=outer_opener)
+
+    def test_coverage_and_interaction_trust_fail_closed(self):
+        bundle = validator.template_bundle()
+        bundle["coverage"][0]["status"] = "COVERED"
+        bundle["records"][0]["open_domains"] = []
+        with self.assertRaisesRegex(validator.ContractError, "unavailable or UNSOURCED"):
+            validator.validate_bundle(bundle, self.schema, True)
+        bundle = validator.template_bundle()
+        bundle["interactions"][0]["verdict"] = "PASS - primary-source confirmed"
+        with self.assertRaisesRegex(validator.ContractError, "not trust-closed"):
+            validator.validate_bundle(bundle, self.schema, True)
+        bundle = validator.template_bundle()
+        bundle["interactions"][0]["verdict"] = "BLOCKER - deterministic spec violation"
+        with self.assertRaisesRegex(validator.ContractError, "not trust-closed"):
+            validator.validate_bundle(bundle, self.schema, True)
+        bundle = validator.template_bundle()
+        bundle["facts"][0]["verdict"] = "BLOCKER - deterministic spec violation"
+        with self.assertRaisesRegex(validator.ContractError, "deterministic BLOCKER"):
+            validator.validate_bundle(bundle, self.schema, True)
+
+    def test_real_pin_locks_reject_deletion_rename_and_swap(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        locks = validator.load(validator.FIXTURES / "golden/real-pin-maps.json")
+        validator.validate_real_pin_locks(aggregate, locks)
+        for mutation in ("delete", "rename", "swap"):
+            changed = copy.deepcopy(aggregate)
+            mapping = next(item for item in changed["pin_maps"] if len(item["pins"]) >= 2)
+            if mutation == "delete": mapping["pins"].pop()
+            elif mutation == "rename": mapping["pins"][0]["name"] += "_MUTATED"
+            else:
+                mapping["pins"][0]["footprint_pad"], mapping["pins"][1]["footprint_pad"] = mapping["pins"][1]["footprint_pad"], mapping["pins"][0]["footprint_pad"]
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(validator.ContractError, "canonical pin map changed"):
+                validator.validate_real_pin_locks(changed, locks)
+
+    def test_pin_maps_match_kicad_symbols_and_footprints(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        validator.validate_pin_assets(aggregate, self.lines)
+        changed = copy.deepcopy(aggregate)
+        changed["pin_maps"][0]["pins"][0]["footprint_pad"] = "999"
+        with self.assertRaisesRegex(validator.ContractError, "differs from KiCad footprint"):
+            validator.validate_pin_assets(changed, self.lines)
+        for field in ("symbol", "footprint"):
+            changed = copy.deepcopy(aggregate)
+            changed["pin_maps"][0][field] += "_WRONG"
+            with self.subTest(field=field), self.assertRaisesRegex(validator.ContractError, "differs from generator"):
+                validator.validate_pin_assets(changed, self.lines)
+
+    def test_integration_calculations_recompute_from_raw_facts(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        validator.validate_integration_artifacts(aggregate)
+        for fact_id in ("fact-c25803-resistance", "fact-c22807-resistance", "fact-c14663-capacitance", "fact-high-diode-smaj20a-clamp", "fact-stusb-vdd-absolute-max"):
+            changed = copy.deepcopy(aggregate)
+            next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)["value"] *= 2
+            with self.subTest(fact_id=fact_id), self.assertRaisesRegex(validator.ContractError, "result is stale"):
+                validator.validate_integration_artifacts(changed)
+        rules_path = validator.ROOT / ".claude/skills/circuit-spec-integration/references/rules.json"
+        rules = validator.load(rules_path)
+        calculation = next(item for rule in rules["rules"] for item in rule.get("conditioned_calculations", []) if item["calculation_id"] == "calc-q1-steady-vgs")
+        changed_result = copy.deepcopy(calculation)
+        changed_result["results"][0]["vgs_v"] = -9.6
+        with self.assertRaisesRegex(validator.ContractError, "scenario result is stale"):
+            fact_values = {fact_id.replace("-", "_"): next(fact for fact in aggregate["facts"] if fact["fact_id"] == fact_id)["value"] for fact_id in calculation["fact_ids"] if isinstance(next(fact for fact in aggregate["facts"] if fact["fact_id"] == fact_id)["value"], (int, float))}
+            scenario = changed_result["results"][0]
+            validator.require(validator.arithmetic(changed_result["expression"], {**fact_values, "vbus_v": scenario["vbus_v"]}) == scenario["vgs_v"], "scenario result is stale")
+        changed = copy.deepcopy(aggregate)
+        changed["pin_maps"][0]["pins"][0]["footprint_pad"], changed["pin_maps"][0]["pins"][1]["footprint_pad"] = changed["pin_maps"][0]["pins"][1]["footprint_pad"], changed["pin_maps"][0]["pins"][0]["footprint_pad"]
+        with self.assertRaisesRegex(validator.ContractError, "symbol-pin to footprint-pad"):
+            validator.validate_pin_assets(changed, self.lines)
+
+    def test_generator_prose_cannot_confirm_exported_netlist(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        rules_path = validator.ROOT / ".claude/skills/circuit-spec-integration/references/rules.json"
+        rules = validator.load(rules_path)
+        chain = next(rule for rule in rules["rules"] if rule["domain"] == "source-to-bench-chain")
+        generated = next(stage for stage in chain["evidence_chain"] if stage["stage"] == "generated-netlist")
+        self.assertEqual(generated["status"], "MIXED")
+        changed = copy.deepcopy(aggregate)
+        next(fact for fact in changed["facts"] if fact["fact_id"] == generated["fact_ids"][0])["value"] = "nonsense free text"
+        generated["status"] = "CONFIRMED"
+        with self.assertRaisesRegex(validator.ContractError, "generator prose cannot CONFIRM"):
+            validator.validate_evidence_chain(chain, changed)
+
+    def test_critical_fact_review_locks_claim_locator_and_conditions(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        review = validator.load(validator.FIXTURES / "golden/critical-fact-review.json")
+        validator.validate_critical_fact_review(aggregate, review)
+        changed = copy.deepcopy(aggregate)
+        fact_id = review["reviews"][0]["fact_id"]
+        next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)["locator"] += " changed"
+        with self.assertRaisesRegex(validator.ContractError, "locator/conditions changed"):
+            validator.validate_critical_fact_review(changed, review)
+        for field, value in (("value", 104), ("unit", "kV")):
+            changed = copy.deepcopy(aggregate)
+            next(fact for fact in changed["facts"] if fact["fact_id"] == fact_id)[field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(validator.ContractError, "value/unit/evidence lock changed"):
+                validator.validate_critical_fact_review(changed, review)
+        changed = copy.deepcopy(aggregate)
+        source_id = review["reviews"][0]["source_id"]
+        next(source for source in changed["sources"] if source["source_id"] == source_id)["evidence_extract"] = "arbitrary"
+        with self.assertRaisesRegex(validator.ContractError, "value/unit/evidence lock changed"):
+            validator.validate_critical_fact_review(changed, review)
+        changed_review = copy.deepcopy(review)
+        changed_review["independent_review_passes"][0]["review_log"] = "review-artifacts/missing.md"
+        with self.assertRaisesRegex(validator.ContractError, "review-log file is missing"):
+            validator.validate_critical_fact_review(aggregate, changed_review)
+        changed_review = copy.deepcopy(review)
+        changed_review["independent_review_passes"][0]["review_log_sha256"] = "f" * 64
+        with self.assertRaisesRegex(validator.ContractError, "review-log hash changed"):
+            validator.validate_critical_fact_review(aggregate, changed_review)
+
+    def test_unavailable_source_requires_zero_hash(self):
+        source = copy.deepcopy(validator.template_bundle()["sources"][0])
+        source["sha256"] = "f" * 64
+        with self.assertRaisesRegex(validator.ContractError, "SOURCE UNAVAILABLE must use all-zero"):
+            validator.validate_source(source, self.schema)
+
+    def test_distributor_identity_lane_cannot_promote_limits(self):
+        bundle = validator.load_skill_bundle(validator.ROOT / ".claude/skills/component-type-c-31-m-17")
+        fact = next(item for item in bundle["facts"] if item["provenance"] == "DISTRIBUTOR-IDENTITY")
+        validator.validate_bundle(bundle, self.schema)
+        for field, value in (("class", "ABSOLUTE_MAXIMUM"), ("verdict", "PASS - primary-source confirmed"), ("provenance", "PRIMARY-SPEC")):
+            changed = copy.deepcopy(bundle)
+            next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])[field] = value
+            with self.subTest(field=field), self.assertRaises(validator.ContractError):
+                validator.validate_bundle(changed, self.schema, True)
+        for field in ("lcsc", "manufacturer", "mpn"):
+            changed = copy.deepcopy(bundle)
+            next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])["value"][field] += "-wrong"
+            with self.subTest(identity_field=field), self.assertRaisesRegex(validator.ContractError, "differs from owning record"):
+                validator.validate_bundle(changed, self.schema, True)
+        changed = copy.deepcopy(bundle)
+        next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])["value"]["voltage_v"] = 20
+        with self.assertRaisesRegex(validator.ContractError, "exact structured identity keys"):
+            validator.validate_bundle(changed, self.schema, True)
+        changed = copy.deepcopy(bundle)
+        next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])["value"]["variant"] = "mutated identity parser output"
+        with self.assertRaisesRegex(validator.ContractError, "canonical distributor identity extract hash changed"):
+            validator.validate_bundle(changed, self.schema)
 
     def test_malicious_generator_is_rejected_without_execution(self):
         with tempfile.TemporaryDirectory() as directory:

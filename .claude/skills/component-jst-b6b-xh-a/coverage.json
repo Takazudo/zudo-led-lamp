@@ -6,21 +6,42 @@
       "record_id": "rec-jst-b6b-xh-a",
       "domain": "header identity/pitch/ratings/dimensions",
       "status": "COVERED",
-      "reason": "Official JST XH catalog general table and B6B-XH-A row"
+      "reason": "Official JST XH catalog general table and B6B-XH-A row",
+      "fact_ids": [
+        "fact-jst-b6b-xh-a-manufacturer",
+        "fact-jst-b6b-xh-a-identity",
+        "fact-jst-b6b-xh-a-pitch",
+        "fact-jst-b6b-xh-a-current",
+        "fact-jst-b6b-xh-a-voltage",
+        "fact-jst-b6b-xh-a-temperature",
+        "fact-jst-b6b-xh-a-dimensions",
+        "fact-jst-b6b-xh-a-harness"
+      ]
     },
     {
       "coverage_id": "cov-jst-project-map",
       "record_id": "rec-jst-b6b-xh-a",
       "domain": "Board P and Board L signal mapping",
-      "status": "COVERED",
-      "reason": "Current generator connectivity is recorded in pin map and interaction"
+      "status": "OPEN",
+      "reason": "Current generator connectivity is recorded in pin map and interaction Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "fact_ids": [
+        "fact-jst-b6b-xh-a-manufacturer",
+        "fact-jst-b6b-xh-a-identity",
+        "fact-jst-b6b-xh-a-pitch",
+        "fact-jst-b6b-xh-a-current",
+        "fact-jst-b6b-xh-a-voltage",
+        "fact-jst-b6b-xh-a-temperature",
+        "fact-jst-b6b-xh-a-dimensions",
+        "fact-jst-b6b-xh-a-harness"
+      ]
     },
     {
       "coverage_id": "cov-jst-harness",
       "record_id": "rec-jst-b6b-xh-a",
       "domain": "mating housing/contact/wire/completed harness selection",
       "status": "OPEN",
-      "reason": "No mating BOM, wire specification, crimp process, or completed pin-to-pin harness has been selected"
+      "reason": "No mating BOM, wire specification, crimp process, or completed pin-to-pin harness has been selected",
+      "fact_ids": []
     }
   ]
 }

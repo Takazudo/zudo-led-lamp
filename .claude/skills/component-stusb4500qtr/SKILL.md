@@ -7,7 +7,7 @@ description: Audit the exact STUSB4500QTR USB-PD sink controller, PESD24VS1UB,11
 
 Run the central offline validator, then read all seven local JSON artifacts. Resolve the controller and both DNP subordinates independently. Cite source and fact IDs with their conditions and locators.
 
-The retained ST controller documents are currently `SOURCE UNAVAILABLE`; controller identity, pin/state, operating-range, register, and NVM claims are therefore `UNSOURCED`. Do not treat the procedural gates below as confirmed numeric requirements until the exact official documents are byte-locked and re-reviewed. The UNI-ROYAL external-Rd family specification and Nexperia protector specification are independently available, but they do not close controller behavior.
+Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained as `MANUFACTURER_MIRROR`. Their dependent controller claims remain `UNSOURCED` under the primary-only trust policy; programmed and as-built state remain open. The UNI-ROYAL external-Rd family specification and Nexperia protector specification are independently available, but they do not close controller behavior.
 
 For controller work, separate unpowered/dead-battery, reset, configuration-load, normal attached, explicit-contract, fault/recovery, and disconnect states. Treat open-drain `0` as asserted and Hi-Z as deasserted. Do not infer the programmed NVM image: require a normalized 40-byte artifact, byte-for-byte readback, reset reload, full power-cycle reload, and negotiated-output bench evidence. Record the as-received factory image before any write. Check the current ST endurance limit before authorizing repeated writes; the retained record deliberately leaves endurance open.
 

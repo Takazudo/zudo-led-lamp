@@ -114,6 +114,48 @@
       "expression": ""
     },
     {
+      "fact_id": "fact-stusb-vdd-absolute-max",
+      "record_id": "rec-stusb4500qtr",
+      "source_id": "src-stusb-ds12499-ratings",
+      "class": "ABSOLUTE_MAXIMUM",
+      "value": 28,
+      "unit": "V",
+      "conditions": "VDD pin absolute maximum; not an operating target; manufacturer-authored Rev 8 bytes are retained only through a mirror",
+      "locator": "src-stusb-ds12499: Section 7.1, Table 20, row VDD Supply voltage on VDD pin",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-stusb-cc-absolute-max",
+      "record_id": "rec-stusb4500qtr",
+      "source_id": "src-stusb-ds12499-ratings",
+      "class": "ABSOLUTE_MAXIMUM",
+      "value": 22,
+      "unit": "V",
+      "conditions": "CC1, CC2, CC1DB and CC2DB high-voltage absolute maximum; not an operating target; mirror evidence",
+      "locator": "src-stusb-ds12499: Section 7.1, Table 20, grouped rows VCC1/VCC2/VCC1DB/VCC2DB",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-stusb-vbus-pin-absolute-max",
+      "record_id": "rec-stusb4500qtr",
+      "source_id": "src-stusb-ds12499-ratings",
+      "class": "ABSOLUTE_MAXIMUM",
+      "value": 28,
+      "unit": "V",
+      "conditions": "VBUS_EN_SNK, VBUS_VS_DISCH, DISCH and POWER_OK2 high-voltage absolute maximum; not an operating target; mirror evidence",
+      "locator": "src-stusb-ds12499: Section 7.1, Table 20, grouped high-voltage VBUS-pin rows",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
       "fact_id": "fact-stusb-load-time",
       "record_id": "rec-stusb4500qtr",
       "source_id": "src-stusb-ds12499",

@@ -182,11 +182,12 @@ the diode and resistive terms). The honest statement of the 3s-vs-4s choice is: 
 far above it. 3s is still the right call. If bench accuracy suffers, 22 Ω ballast pulls
 nominal duty to ~72% at the cost of ~40% worse current sharing.
 
-**Input rating vs the clamp ceiling.** AL8860's recommended VIN maximum is 40 V and its
+**Input rating vs a conditioned clamp point.** AL8860's recommended VIN maximum is 40 V and its
 absolute maximum is **42 V** (DS39014 Rev 5, "Absolute Maximum Ratings"). Board P's
-SMAJ20A clamps at ≤32.4 V worst case, so the driver clears the ceiling by **7.6 V on the
-operating rating and 9.6 V on the absolute maximum**. This is the reason PT4115 was
-rejected — see [Decisions](./decisions.mdx#led-driver-ic-driver-input-rating-vs-the-clamp-ceiling).
+SMAJ20A table gives 32.4 V only at 12.3 A, 10/1000 µs, and 25 °C. AL8860 has **7.6 V
+recommended / 9.6 V absolute static headroom** against that screening point, which is
+why it was selected over PT4115. The actual waveform remains open—see
+[Decisions](./decisions.mdx#driver-input-rating-vs-a-conditioned-clamp-screening-point).
 
 ## AP63203 logic rail (not an LDO)
 
@@ -194,17 +195,18 @@ rejected — see [Decisions](./decisions.mdx#led-driver-ic-driver-input-rating-v
 
 The [logic-rail research](/docs/research/control-logic-rail/) says an LDO is fine below
 ~30 mA, and this rail draws ~25 mA worst case. By that rule alone the LDO wins. The
-**clamp ceiling overrides it**:
+conditioned rail-envelope screen overrides it:
 
-| Candidate | VIN max | vs 32.4 V clamp |
+| Candidate | VIN max | Against the conditioned 32.4 V table point |
 |---|---|---|
-| AMS1117-3.3 | 15 V | Violated at the *nominal* rail, let alone a transient — rejected outright |
-| HT7333-1 | 18 V | **14.4 V over** during a clamp event — a new residual gap this design would be creating from scratch |
-| **AP63203WU-7** | 32 V recommended, **35 V DC / 40 V for 400 ms absolute max** (DS41326 Rev 3) | **Clears it** — 2.6 V margin on the DC absolute max, 7.6 V on the 400 ms rating, against a 10/1000 µs event |
+| AMS1117-3.3 | 15 V | No operating margin at the nominal rail; absolute maximum cannot be the design point |
+| HT7333-1 | 18 V | **14.4 V below** the conditioned screen, with little transient headroom |
+| **AP63203WU-7** | 32 V recommended, **35 V DC / 40 V for 400 ms absolute max** (DS41326 Rev 3) | Static limits cover the screening point by 2.6 V DC / 7.6 V transient |
 
-Board P's audit accepted two transient-only gaps because the parts in question had no
-better alternative. Board L has one, for about $0.60, so it takes it. Zero new residual
-risk is worth a three-part BOM increase.
+AP63203 provides the strongest supported static headroom for about $0.60 and a
+three-part BOM increase. It does not close the protected-rail proof: actual clamp
+current/waveform, effective capacitance, layout, loads, and bench behavior remain open
+under issue #34.
 
 Component values from DS41326 Table 2 (AP63203, 3.3 V): L = 3.9 µH, C1 = 10 µF,
 C2 = 2 x 22 µF, C3 = 100 nF. Implemented as **L2 = 4.7 µH**

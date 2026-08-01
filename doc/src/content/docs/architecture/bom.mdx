@@ -24,8 +24,8 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 |---|---|---|---|---|---|---|---|
 | U1 | 1 | STUSB4500QTR | [C2678061](https://jlcpcb.com/partdetail/C2678061) | QFN-24-EP 4x4 | Extended | 4,562 | PD sink controller |
 | Q1 | 1 | AO3401A | [C347476](https://jlcpcb.com/partdetail/C347476) | SOT-23 | Extended | 862,120 | Load switch (P-FET) |
-| J1 | 1 | TYPE-C-31-M-17 | [C283540](https://jlcpcb.com/partdetail/C283540) | 6P SMD right-angle | Extended | 33,876 | USB-C PD input, 20 V/5 A rated |
-| D5 | 1 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) | SMA | Extended | 3,770 | VBUS TVS, 20 V standoff |
+| J1 | 1 | TYPE-C-31-M-17 | [C283540](https://jlcpcb.com/partdetail/C283540) | 6P SMD right-angle | Extended | 33,876 | Primary 20 V/5 A rating; project numeric contact mapping/incoming continuity OPEN |
+| D5 | 1 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) | SMA | Extended | 3,770 | Primary VRWM 20 V; numeric pad/orientation and actual clamp waveform OPEN |
 | C1 | 1 | CL31A106KBHNNNE 10 µF 50 V | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | **Basic** | 1,877,266 | VDD bulk |
 | C2, C35 | 2 | CC0603KRX7R9BB104 100 nF 50 V | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | **Basic** | 12,618,106 | VDD HF decouple, gate–source soft-start. The C1711 → C14663 swap recommended on the [Board P page](./board-p.mdx) was applied at KiCad capture — one Extended line removed, reel shared with Board L |
 | C30, C34 | 2 | CL10A105KB8NNNC 1 µF 50 V | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | **Basic** | 5,979,916 | VREG decoupling |
@@ -52,7 +52,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | U2 | 1 | AL8860MP-13 | [C500782](https://jlcpcb.com/partdetail/C500782) | MSOP-8-EP | Extended | **4,000** | CC buck LED driver, 4.5–40 V, 1.5 A |
 | U3 | 1 | STM32G031F8P6 | [C529334](https://jlcpcb.com/partdetail/C529334) | TSSOP-20 | Extended | 12,551 | Control MCU, Cortex-M0+, 64 KB |
 | U4 | 1 | AP63203WU-7 | [C780769](https://jlcpcb.com/partdetail/C780769) | TSOT-23-6 | Extended | 11,392 | 3.3 V synchronous buck, 3.8–32 V |
-| D10 | 1 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) | SMA | Extended | **3,770** | Local 15 V input TVS |
+| D10 | 1 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) | SMA | Extended | **3,770** | Local 15 V input TVS; numeric pad/orientation and actual waveform OPEN |
 | D11 | 1 | SS26 | [C7420363](https://jlcpcb.com/partdetail/C7420363) | SMA | *Preferred* | 282,808 | Catch diode, 60 V/2 A Schottky |
 | L1 | 1 | FXL0630-330-M 33 µH | [C177245](https://jlcpcb.com/partdetail/C177245) | SMD 7x6.6 mm | Extended | 228,367 | LED buck inductor, 2.5 A sat, 310 mΩ |
 | L2 | 1 | FNR4030S4R7MT 4.7 µH | [C167874](https://jlcpcb.com/partdetail/C167874) | SMD 4x4 mm | Extended | 252,195 | Logic buck inductor, shielded, 78 mΩ |
@@ -85,7 +85,7 @@ they are the specialty parts — but each needs a re-check before ordering.
 
 | Part | Stock | Risk and fallback |
 |---|---|---|
-| D5 / D10 SMAJ20A ([C571370](https://jlcpcb.com/partdetail/C571370)) | **3,770**, and **two boards need it** | Lowest-stock line in the whole design. The alternate the power audit found ([C1973455](https://jlcpcb.com/partdetail/C1973455)) showed **1 unit** — effectively unavailable. If C571370 is out, search the SMAJ20A family fresh rather than substituting a different standoff voltage: the 20 V figure is load-bearing for the whole [ratings analysis](/docs/power/ratings-matrix/) |
+| D5 / D10 SMAJ20A ([C571370](https://jlcpcb.com/partdetail/C571370)) | **3,770**, and **two boards need it** | Lowest-stock line in the whole design. Do not make a same-name or different-standoff substitution: exact vendor identity, conditioned clamp table, pad orientation, and both rail waveforms must be re-audited in the [ratings analysis](/docs/power/ratings-matrix/) |
 | U2 AL8860MP-13 ([C500782](https://jlcpcb.com/partdetail/C500782)) | **4,000** | Fine for a prototype run. `AL8860WT-7` (TSOT-25) is pin-compatible in function but showed 0 stock and is limited to 1 A — it would still cover this design's 500 mA if the MSOP part disappears |
 | SW1 EC11L1525G01 ([C2991196](https://jlcpcb.com/partdetail/C2991196)) | **4,566** | The [knob research](/docs/research/control-knob/) found two other EC11 SKUs in the 4,600–5,500 range ([C370970](https://jlcpcb.com/partdetail/C370970), [C470748](https://jlcpcb.com/partdetail/C470748)); any of them substitutes, at a higher unit price. Verify the pinout of whichever is fitted — EC11 terminal order is not universal across SKUs |
 | RS1 RLP25FEER200 ([C459674](https://jlcpcb.com/partdetail/C459674)) | **20,654** | Any 200 mΩ ±1% 2512 sense resistor rated 1 W or better substitutes directly; the value, not the manufacturer, is what sets 500 mA |

@@ -13,6 +13,7 @@
       "package": "QFN-24_L4.0-W4.0-P0.50-BL-EP2.8",
       "source_ids": [
         "src-stusb-ds12499",
+        "src-stusb-ds12499-ratings",
         "src-stusb-um2650",
         "src-stusb-um2398",
         "src-stusb-stsw004"
@@ -26,6 +27,9 @@
         "fact-stusb-vbus-vs-disch",
         "fact-stusb-vben",
         "fact-stusb-supplies",
+        "fact-stusb-vdd-absolute-max",
+        "fact-stusb-cc-absolute-max",
+        "fact-stusb-vbus-pin-absolute-max",
         "fact-stusb-load-time",
         "fact-stusb-state-sequence",
         "fact-stusb-nvm-load",
@@ -47,9 +51,9 @@
       "open_domains": [
         "identity/package/pinout",
         "unpowered/reset/startup/normal/fault/disconnect behavior",
-        "safe power/provisioning/bench discriminators",
         "project NVM image and factory-state capture",
-        "NVM write endurance and production write budget"
+        "NVM write endurance and production write budget",
+        "safe power/provisioning/bench discriminators"
       ]
     },
     {
@@ -61,7 +65,9 @@
       "manufacturer": "Nexperia",
       "lcsc": "C85382",
       "package": "SOD-523_L1.2-W0.8-LS1.6-RD",
-      "source_ids": ["src-pesd24vs1ub"],
+      "source_ids": [
+        "src-pesd24vs1ub"
+      ],
       "fact_ids": [
         "fact-pesd-manufacturer",
         "fact-pesd-pinout",
@@ -72,8 +78,12 @@
         "fact-pesd-capacitance",
         "fact-pesd-esd"
       ],
-      "interaction_ids": ["int-stusb-cc-protection"],
-      "open_domains": ["as-built DNP fit state and CC signal-integrity impact"]
+      "interaction_ids": [
+        "int-stusb-cc-protection"
+      ],
+      "open_domains": [
+        "as-built DNP fit state and CC signal-integrity impact"
+      ]
     },
     {
       "record_id": "rec-rd-0603waf5101t5e",
@@ -100,7 +110,9 @@
         "fact-rd-pinout",
         "fact-rd-fit-state"
       ],
-      "interaction_ids": ["int-stusb-external-rd"],
+      "interaction_ids": [
+        "int-stusb-external-rd"
+      ],
       "open_domains": [
         "as-built fit state and external-Rd interaction"
       ]
