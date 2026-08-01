@@ -12,7 +12,7 @@
         "fact-stusb-vben"
       ],
       "conditions": "Assert U1.24=VBUS_IN; U1.18 reaches VBUS_IN only through R14; U1.9 reaches VBUS_OUT only through R13; U1.16=VBEN drives the PMOS gate network; U1.1/5 bridge through R19/R20 to CC1/CC2; U1.22 and EP are GND; NC pins remain NC",
-      "verdict": "PASS - primary-source confirmed"
+      "verdict": "UNSOURCED"
     },
     {
       "interaction_id": "int-stusb-safe-power",
