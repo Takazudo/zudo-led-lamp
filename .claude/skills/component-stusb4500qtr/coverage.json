@@ -6,18 +6,18 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "identity/package/pinout",
       "status": "OPEN",
-      "reason": "Exact DS12499 Rev 8 bytes are reproducibly retained from a manufacturer-document mirror, but primary-only trust and project symbol/footprint/as-built evidence remain open",
-      "fact_ids": [],
-      "blocking_fact_ids": []
+      "reason": "Exact DS12499 Rev 8 bytes are reproducibly retained from a manufacturer-document mirror, but primary-only trust and project symbol/footprint/as-built evidence remain open; fact-stusb-ds12499-primary-attempt: a dated 2026-08-02 direct st.com retrieval found the primary source unavailable",
+      "fact_ids": ["fact-stusb-ds12499-primary-attempt"],
+      "blocking_fact_ids": ["fact-stusb-ds12499-primary-attempt"]
     },
     {
       "coverage_id": "cov-stusb-states",
       "record_id": "rec-stusb4500qtr",
       "domain": "unpowered/reset/startup/normal/fault/disconnect behavior",
       "status": "OPEN",
-      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust in these mirror bytes has not been established, and state behavior still requires programmed/as-built bench confirmation",
-      "fact_ids": [],
-      "blocking_fact_ids": []
+      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust in these mirror bytes has not been established, and state behavior still requires programmed/as-built bench confirmation; fact-stusb-ds12499-primary-attempt and fact-stusb-um2650-primary-attempt: dated 2026-08-02 direct st.com retrieval found both primary sources unavailable",
+      "fact_ids": ["fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"],
+      "blocking_fact_ids": ["fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"]
     },
     {
       "coverage_id": "cov-stusb-nvm",
@@ -42,9 +42,9 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "safe power/provisioning/bench discriminators",
       "status": "OPEN",
-      "reason": "Operating/state mirror bytes are available, but primary-only trust, project NVM/readback/power-cycle evidence and bench waveforms remain open",
-      "fact_ids": [],
-      "blocking_fact_ids": []
+      "reason": "Operating/state mirror bytes are available, but primary-only trust, project NVM/readback/power-cycle evidence and bench waveforms remain open; fact-stusb-ds12499-primary-attempt and fact-stusb-um2650-primary-attempt: dated 2026-08-02 direct st.com retrieval found both primary sources unavailable",
+      "fact_ids": ["fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"],
+      "blocking_fact_ids": ["fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"]
     },
     {
       "coverage_id": "cov-stusb-vreg2v7-load",

@@ -282,6 +282,34 @@
       "expression": ""
     },
     {
+      "fact_id": "fact-stusb-ds12499-primary-attempt",
+      "record_id": "rec-stusb4500qtr",
+      "source_id": "src-stusb-ds12499-primary-attempt",
+      "class": "PROJECT_STATE",
+      "value": "direct manufacturer-primary retrieval of DS12499 from st.com is not established; retained bytes remain a reproducible mirror only",
+      "unit": "NONE",
+      "conditions": "attempted 2026-08-02; every st.com path timed out and a community.st.com mirror redirected to its forum homepage",
+      "locator": "src-stusb-ds12499-primary-attempt: cover title block, inaccessible retrieval response",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
+      "fact_id": "fact-stusb-um2650-primary-attempt",
+      "record_id": "rec-stusb4500qtr",
+      "source_id": "src-stusb-um2650-primary-attempt",
+      "class": "PROJECT_STATE",
+      "value": "direct manufacturer-primary retrieval of UM2650 from st.com is not established; retained bytes remain a reproducible mirror only",
+      "unit": "NONE",
+      "conditions": "attempted 2026-08-02; canonical and legacy st.com paths both timed out",
+      "locator": "src-stusb-um2650-primary-attempt: cover title block, inaccessible retrieval response",
+      "provenance": "UNVERIFIED",
+      "verdict": "UNSOURCED",
+      "depends_on": [],
+      "expression": ""
+    },
+    {
       "fact_id": "fact-stusb-vreg2v7-load",
       "record_id": "rec-stusb4500qtr",
       "source_id": "src-stusb-board-p-generator",
