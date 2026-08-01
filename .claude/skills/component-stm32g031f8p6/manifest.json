@@ -26,13 +26,15 @@
         "fact-c529334-boot",
         "fact-c529334-debug",
         "fact-c529334-errata",
-        "fact-c529334-topology"
+        "fact-c529334-topology",
+        "fact-c529334-boot-artifact"
       ],
       "interaction_ids": [
         "int-c529334-firmware",
         "int-c529334-boot-debug",
         "int-c529334-adc",
-        "int-c492404-programming"
+        "int-c492404-programming",
+        "int-c529334-boot-artifact"
       ],
       "open_domains": [
         "package-pins-reset-boot-adc-and-errata-context",

@@ -31,12 +31,14 @@
       "record_id": "rec-c529334",
       "domain": "programmed-option-bytes-and-boot-policy",
       "status": "OPEN",
-      "reason": "fact-c529334-boot: programmed option bytes are not retained",
+      "reason": "fact-c529334-boot: programmed option bytes are not retained; fact-c529334-boot-artifact: no nBOOT_SEL/nBOOT0/nBOOT1 option-byte readback artifact has been captured, so verdict stays NEEDS BENCH",
       "fact_ids": [
-        "fact-c529334-boot"
+        "fact-c529334-boot",
+        "fact-c529334-boot-artifact"
       ],
       "blocking_fact_ids": [
-        "fact-c529334-boot"
+        "fact-c529334-boot",
+        "fact-c529334-boot-artifact"
       ]
     },
     {
