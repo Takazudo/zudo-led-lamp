@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "required_skill_files": ["SKILL.md", "manifest.json", "sources.json", "facts.json", "coverage.json", "routing.json", "interactions.json", "pin-map.json"],
+  "record_required": ["record_id", "line_id", "kind", "parent_record_id", "mpn", "manufacturer", "lcsc", "package", "source_ids", "fact_ids", "interaction_ids", "open_domains"],
+  "source_required": ["source_id", "document_title", "document_number", "revision", "document_date", "authoritative_url", "alternate_authoritative_url", "retrieval_date", "authority_class", "sha256", "availability", "physical_pdf_page_index", "printed_page_label", "locator", "evidence_extract"],
+  "fact_required": ["fact_id", "record_id", "source_id", "class", "value", "unit", "conditions", "locator", "provenance", "verdict", "depends_on", "expression"],
+  "coverage_required": ["coverage_id", "record_id", "domain", "status", "reason"],
+  "interaction_required": ["interaction_id", "record_ids", "fact_ids", "conditions", "verdict"],
+  "source_availability": ["AVAILABLE", "SOURCE UNAVAILABLE"],
+  "authority_classes": ["MANUFACTURER_PRIMARY", "MANUFACTURER_MIRROR", "REFERENCE_DESIGN", "DISTRIBUTOR_IDENTITY", "PROJECT_GENERATOR", "BENCH_RECORD"],
+  "fact_classes": ["ABSOLUTE_MAXIMUM", "RECOMMENDED_OPERATION", "GUARANTEED_ELECTRICAL", "TYPICAL_CURVE", "TRANSIENT", "PROTECTION_STANDOFF", "PROTECTION_BREAKDOWN", "PROTECTION_CLAMP", "THERMAL_SOA", "PROJECT_STATE"],
+  "provenance": ["PRIMARY-SPEC", "REFERENCE-DESIGN", "CALCULATED", "PROJECT-CHOICE", "BENCH-OBSERVED", "UNVERIFIED"],
+  "verdicts": ["PASS - primary-source confirmed", "BLOCKER - deterministic spec violation", "NEEDS BENCH", "UNSOURCED", "NOT APPLICABLE"]
+}
