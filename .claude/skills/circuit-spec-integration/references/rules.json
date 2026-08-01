@@ -66,7 +66,7 @@
       "evidence_chain": [
         {"stage": "official-source", "status": "MIXED", "fact_ids": ["fact-stusb-vben", "fact-umw-ao3401a-vgs"]},
         {"stage": "conditioned-requirement", "status": "MIXED", "fact_ids": ["fact-stusb-artifact", "fact-umw-ao3401a-vgs"]},
-        {"stage": "generated-netlist", "status": "CONFIRMED", "fact_ids": ["fact-umw-ao3401a-project-nets", "fact-al8860-project-nets", "fact-ap63203-project-nets"]},
+        {"stage": "generated-netlist", "status": "MIXED", "fact_ids": ["fact-umw-ao3401a-project-nets", "fact-al8860-project-nets", "fact-ap63203-project-nets"]},
         {"stage": "symbol-footprint", "status": "MIXED", "fact_ids": ["fact-umw-ao3401a-pinout", "fact-c529334-topology"]},
         {"stage": "pcb-orientation", "status": "OPEN", "fact_ids": []},
         {"stage": "bom-cpl", "status": "OPEN", "fact_ids": []},

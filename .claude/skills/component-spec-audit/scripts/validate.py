@@ -11,6 +11,7 @@ import json
 import math
 import re
 import sys
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -374,12 +375,19 @@ def validate_source(source, schema):
     require(HEX64.fullmatch(source["sha256"]), f"{source['source_id']}: SHA-256 must be 64 lowercase hex digits")
     if source["availability"] == "AVAILABLE":
         require(source["sha256"] != ZERO_SHA256, f"{source['source_id']}: AVAILABLE source cannot use all-zero SHA-256 sentinel")
+    else:
+        require(source["sha256"] == ZERO_SHA256, f"{source['source_id']}: SOURCE UNAVAILABLE must use all-zero SHA-256 sentinel")
     require(isinstance(source["physical_pdf_page_index"], int) and source["physical_pdf_page_index"] >= 0, f"{source['source_id']}: PDF page index")
     for key in ("document_title", "document_number", "revision", "document_date", "authoritative_url", "retrieval_date", "printed_page_label", "locator", "evidence_extract"):
         require(isinstance(source[key], str) and source[key].strip(), f"{source['source_id']}: blank {key}")
     request_headers = source.get("request_headers", {})
     require(isinstance(request_headers, dict) and set(request_headers) <= {"Referer"}, f"{source['source_id']}: only a per-source Referer header is allowed")
     require(all(isinstance(value, str) and value.startswith("https://") for value in request_headers.values()), f"{source['source_id']}: invalid per-source request header")
+    refresh_policy = source.get("refresh_policy", "HASH-LOCKED")
+    require(refresh_policy in ("HASH-LOCKED", "VOLATILE-HTML"), f"{source['source_id']}: invalid refresh policy")
+    if refresh_policy == "VOLATILE-HTML":
+        require(isinstance(source.get("refresh_note"), str) and "not deterministic" in source["refresh_note"], f"{source['source_id']}: volatile refresh needs an explicit note")
+        require(source["availability"] == "AVAILABLE" and source["authority_class"] == "DISTRIBUTOR_IDENTITY" and HEX64.fullmatch(source.get("identity_extract_sha256", "")), f"{source['source_id']}: volatile refresh is limited to canonical distributor identity web evidence")
     require(LOCATOR_DETAIL.search(source["locator"]), f"{source['source_id']}: locator lacks section/table/figure/row detail")
 
 
@@ -433,6 +441,8 @@ def expression_names(expression):
 
 def validate_facts(facts, sources, schema):
     source_ids = {source["source_id"] for source in sources}
+    sources_by_id = {source["source_id"]: source for source in sources}
+    facts_by_id = {fact["fact_id"]: fact for fact in facts}
     require(len({fact["fact_id"] for fact in facts}) == len(facts), "facts: duplicate fact ID")
     for fact in facts:
         required_keys(fact, schema["fact_required"], fact.get("fact_id", "fact"))
@@ -441,6 +451,10 @@ def validate_facts(facts, sources, schema):
         require(fact["class"] in schema["fact_classes"], f"{fact['fact_id']}: fact class")
         require(fact["provenance"] in schema["provenance"], f"{fact['fact_id']}: provenance")
         require(fact["verdict"] in schema["verdicts"], f"{fact['fact_id']}: verdict")
+        if fact["provenance"] == "DISTRIBUTOR-IDENTITY" or fact["verdict"] == "CONFIRMED - distributor identity only":
+            source = sources_by_id[fact["source_id"]]
+            require(fact["provenance"] == "DISTRIBUTOR-IDENTITY" and fact["verdict"] == "CONFIRMED - distributor identity only", f"{fact['fact_id']}: distributor identity provenance/verdict must be paired")
+            require(fact["class"] == "PROJECT_STATE" and source["availability"] == "AVAILABLE" and source["authority_class"] == "DISTRIBUTOR_IDENTITY", f"{fact['fact_id']}: distributor identity lane requires AVAILABLE DISTRIBUTOR_IDENTITY PROJECT_STATE evidence")
         for key in ("unit", "conditions", "locator"):
             require(isinstance(fact[key], str) and fact[key].strip(), f"{fact['fact_id']}: missing {key}")
         require(LOCATOR_DETAIL.search(fact["locator"]), f"{fact['fact_id']}: locator lacks exact detail")
@@ -456,6 +470,7 @@ def validate_facts(facts, sources, schema):
     values = {fact["fact_id"]: fact["value"] for fact in facts}
     for fact in facts:
         if fact["provenance"] == "CALCULATED":
+            require(all(facts_by_id[dependency]["provenance"] != "DISTRIBUTOR-IDENTITY" for dependency in fact["depends_on"]), f"{fact['fact_id']}: calculations cannot depend on distributor identity evidence")
             dependency_values = {key.replace("-", "_"): values[key] for key in fact["depends_on"]}
             require(arithmetic(fact["expression"], dependency_values) == fact["value"], f"{fact['fact_id']}: derived value is stale")
 
@@ -602,6 +617,14 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
         require(fact["record_id"] in record_ids, f"{fact['fact_id']}: orphan fact/unknown record ID")
         source = next(item for item in sources if item["source_id"] == fact["source_id"])
         require(source["record_id"] == fact["record_id"], f"{fact['fact_id']}: source belongs to a different record")
+        if fact["provenance"] == "DISTRIBUTOR-IDENTITY":
+            record = records_by_id[fact["record_id"]]
+            require(isinstance(fact["value"], dict) and set(fact["value"]) == {"lcsc", "manufacturer", "mpn", "variant"}, f"{fact['fact_id']}: distributor identity value must use exact structured identity keys")
+            require(fact["value"]["lcsc"] == record["lcsc"] and fact["value"]["manufacturer"] == record["manufacturer"] and fact["value"]["mpn"] == record["mpn"], f"{fact['fact_id']}: distributor identity differs from owning record")
+            require(isinstance(fact["value"]["variant"], str) and fact["value"]["variant"].strip() and fact["unit"] == "NONE" and not fact["depends_on"] and not fact["expression"], f"{fact['fact_id']}: invalid distributor identity variant/units/dependencies")
+            extract_hash = source.get("identity_extract_sha256", "")
+            actual_extract_hash = hashlib.sha256(json.dumps(fact["value"], sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+            require(HEX64.fullmatch(extract_hash) and extract_hash == actual_extract_hash, f"{fact['fact_id']}: canonical distributor identity extract hash changed")
         if fact["provenance"] == "PRIMARY-SPEC":
             require(source["authority_class"] == "MANUFACTURER_PRIMARY", f"{fact['fact_id']}: primary provenance needs manufacturer primary source")
     for item in coverage:
@@ -617,7 +640,7 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
             require(all(fact_evidence_available(fact_id, facts_by_id, sources_by_id) for fact_id in item["fact_ids"]), f"{item['coverage_id']}: COVERED domain depends on unavailable or UNSOURCED evidence")
     for interaction in interactions:
         required_keys(interaction, schema["interaction_required"], "interaction")
-        require(interaction["verdict"] in schema["verdicts"], f"{interaction['interaction_id']}: verdict")
+        require(interaction["verdict"] in schema["verdicts"] and interaction["verdict"] != "CONFIRMED - distributor identity only", f"{interaction['interaction_id']}: verdict")
         require(interaction["record_ids"] and set(interaction["record_ids"]) <= record_ids, f"{interaction['interaction_id']}: orphan interaction/unknown record ID")
         require(set(interaction["fact_ids"]) <= {fact["fact_id"] for fact in facts}, f"{interaction['interaction_id']}: unknown fact ID")
         fact_record_ids = {fact["record_id"] for fact in facts if fact["fact_id"] in interaction["fact_ids"]}
@@ -760,6 +783,9 @@ def validate_critical_fact_review(aggregate, data):
         required_keys(review_pass, ("reviewer", "review_log", "review_log_sha256", "review_ids"), "critical fact independent pass")
         require(review_pass["reviewer"].strip() and review_pass["review_log"].strip() and review_pass["review_ids"], "critical fact review: incomplete independent pass")
         require(HEX64.fullmatch(review_pass["review_log_sha256"]) and review_pass["review_log_sha256"] != ZERO_SHA256, "critical fact review: independent pass needs a concrete review-log hash")
+        review_log_path = AUDIT / review_pass["review_log"]
+        require(review_log_path.is_file() and review_log_path.resolve().is_relative_to(AUDIT.resolve()), "critical fact review: committed review-log file is missing or outside audit skill")
+        require(hashlib.sha256(review_log_path.read_bytes()).hexdigest() == review_pass["review_log_sha256"], "critical fact review: review-log hash changed")
         pass_ids.extend(review_pass["review_ids"])
     require(len({review_pass["reviewer"] for review_pass in passes}) == len(passes), "critical fact review: independent pass reviewers must be distinct")
     require(len(pass_ids) == len(set(pass_ids)) and set(pass_ids) == {review["review_id"] for review in reviews}, "critical fact review: every fact needs exactly one independent family pass in addition to integration review")
@@ -803,10 +829,27 @@ def validate_refresh_evidence(aggregate, data):
     require("PROJECT_GENERATOR" in classes and "MANUFACTURER_PRIMARY" in classes, "refresh evidence requires generator and manufacturer-primary examples")
 
 
+def validate_evidence_chain(chain, aggregate):
+    facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
+    expected_stages = ["official-source", "conditioned-requirement", "generated-netlist", "symbol-footprint", "pcb-orientation", "bom-cpl", "as-built", "programmed", "bench"]
+    require([stage["stage"] for stage in chain["evidence_chain"]] == expected_stages, "integration evidence chain: stage order changed")
+    for stage in chain["evidence_chain"]:
+        required_keys(stage, ("stage", "status", "fact_ids"), "integration evidence stage")
+        require(stage["status"] in ("CONFIRMED", "MIXED", "OPEN"), f"integration evidence chain: invalid status {stage['status']}")
+        require(set(stage["fact_ids"]) <= set(chain["fact_ids"]), "integration evidence chain: unknown stage fact")
+        if stage["status"] == "CONFIRMED":
+            require(stage["fact_ids"] and all(fact_evidence_available(fact_id, facts, {source["source_id"]: source for source in aggregate["sources"]}) for fact_id in stage["fact_ids"]), "integration evidence chain: CONFIRMED stage lacks available evidence")
+        if stage["stage"] == "generated-netlist":
+            require(stage["status"] == "MIXED", "integration evidence chain: generator prose cannot CONFIRM an exported netlist")
+        if stage["status"] == "OPEN":
+            require(not stage["fact_ids"], "integration evidence chain: OPEN stage must not claim proof")
+    require(all(stage["status"] == "OPEN" for stage in chain["evidence_chain"][-5:]), "integration evidence chain: downstream proof must remain OPEN")
+
+
 def validate_integration_artifacts(aggregate):
     integration = ROOT / ".claude/skills/circuit-spec-integration"
     frontmatter(integration / "SKILL.md", "circuit-spec-integration")
-    for relative in ("agents/openai.yaml", "references/rules.json", "references/forward-tests.json", "scripts/check_forward_tests.py"):
+    for relative in ("agents/openai.yaml", "references/rules.json", "references/forward-tests.json", "references/observed-runs.json", "scripts/check_forward_tests.py"):
         require((integration / relative).is_file(), f"circuit-spec-integration: missing {relative}")
     facts = {fact["fact_id"]: fact for fact in aggregate["facts"]}
     fact_owners = {fact["fact_id"]: fact["record_id"] for fact in aggregate["facts"]}
@@ -840,17 +883,7 @@ def validate_integration_artifacts(aggregate):
             else:
                 require(math.isclose(arithmetic(item["expression"], fact_values), item[item["result_key"]], rel_tol=1e-12, abs_tol=1e-12), f"{item['calculation_id']}: result is stale")
     chain = next(rule for rule in rules if rule["domain"] == "source-to-bench-chain")
-    expected_stages = ["official-source", "conditioned-requirement", "generated-netlist", "symbol-footprint", "pcb-orientation", "bom-cpl", "as-built", "programmed", "bench"]
-    require([stage["stage"] for stage in chain["evidence_chain"]] == expected_stages, "integration evidence chain: stage order changed")
-    for stage in chain["evidence_chain"]:
-        required_keys(stage, ("stage", "status", "fact_ids"), "integration evidence stage")
-        require(stage["status"] in ("CONFIRMED", "MIXED", "OPEN"), f"integration evidence chain: invalid status {stage['status']}")
-        require(set(stage["fact_ids"]) <= set(chain["fact_ids"]), f"integration evidence chain: unknown stage fact")
-        if stage["status"] == "CONFIRMED":
-            require(stage["fact_ids"] and all(fact_evidence_available(fact_id, facts, {source["source_id"]: source for source in aggregate["sources"]}) for fact_id in stage["fact_ids"]), f"integration evidence chain: CONFIRMED stage lacks available evidence")
-        if stage["status"] == "OPEN":
-            require(not stage["fact_ids"], f"integration evidence chain: OPEN stage must not claim proof")
-    require(all(stage["status"] == "OPEN" for stage in chain["evidence_chain"][-5:]), "integration evidence chain: downstream proof must remain OPEN")
+    validate_evidence_chain(chain, aggregate)
 
 
 def validate_local_skills(schema, inventory, skills_root=None):
@@ -980,8 +1013,8 @@ def fetch_source(source, opener=urllib.request.urlopen):
 
 
 def online_sources(schema, sources, selected_ids=None, opener=urllib.request.urlopen):
-    temp = ROOT / "tmp/pdfs"
-    temp.mkdir(parents=True, exist_ok=True)
+    temp_parent = ROOT / "tmp/pdfs"
+    temp_parent.mkdir(parents=True, exist_ok=True)
     sources_by_id = {source["source_id"]: source for source in sources}
     selected = set(selected_ids or ())
     if selected:
@@ -989,15 +1022,15 @@ def online_sources(schema, sources, selected_ids=None, opener=urllib.request.url
         chosen = [sources_by_id[source_id] for source_id in sorted(selected)]
     else:
         chosen = [source for source in sources if source["availability"] == "AVAILABLE"]
-    try:
+    with tempfile.TemporaryDirectory(prefix="component-spec-refresh-", dir=temp_parent) as directory:
+        temp = Path(directory)
         for source in chosen:
             validate_source(source, schema)
             require(source["availability"] == "AVAILABLE", f"{source['source_id']}: only AVAILABLE sources can be refreshed")
+            require(source.get("refresh_policy", "HASH-LOCKED") == "HASH-LOCKED", f"{source['source_id']}: volatile source cannot claim deterministic selective refresh")
             target = temp / f"{source['source_id']}.download"
             payload = fetch_source(source, opener)
             store_and_verify(payload, target, source["sha256"], source["source_id"])
-    finally:
-        if temp.exists() and not any(temp.iterdir()): temp.rmdir()
 
 
 def validate_all(online=False, refresh_source_ids=None):

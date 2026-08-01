@@ -13,10 +13,12 @@
       "package": "LED-SMD_L3.3-W2.8-RD",
       "source_ids": [
         "src-c210315-spec",
+        "src-c210315-lcsc",
         "src-c210315-generator"
       ],
       "fact_ids": [
         "fact-c210315-manufacturer",
+        "fact-c210315-orderable-identity",
         "fact-c210315-polarity",
         "fact-c210315-flux",
         "fact-c210315-vf-min",
@@ -37,7 +39,7 @@
         "int-c210315-process"
       ],
       "open_domains": [
-        "exact-cct-and-orderability-identity",
+        "incoming-reel-label-and-cct-acceptance",
         "installed-branch-current-and-sharing",
         "junction-temperature-and-enclosure-thermal-state",
         "pwm-waveform-and-driver-fault-response"

@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import io
+import json
 import importlib.util
 import shutil
 import tempfile
@@ -265,6 +266,35 @@ class ComponentSpecValidatorTests(unittest.TestCase):
                 validator.fetch_source(source, forbidden)
         finally:
             error.close()
+        source["refresh_policy"] = "VOLATILE-HTML"
+        source["refresh_note"] = "live response hash is not deterministic"
+        source["authority_class"] = "DISTRIBUTOR_IDENTITY"
+        source["identity_extract_sha256"] = "1" * 64
+        validator.validate_source(source, self.schema)
+        source["authority_class"] = "MANUFACTURER_PRIMARY"
+        with self.assertRaisesRegex(validator.ContractError, "limited to canonical distributor identity"):
+            validator.validate_source(source, self.schema)
+
+    def test_online_refresh_uses_process_unique_temp_directory(self):
+        source = copy.deepcopy(validator.template_bundle()["sources"][0])
+        payload = b"stable-refresh-bytes"
+        source.update({"availability":"AVAILABLE", "sha256":hashlib.sha256(payload).hexdigest()})
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *_args): return False
+            def read(self): return payload
+
+        nested = False
+        def outer_opener(_request, timeout):
+            nonlocal nested
+            self.assertEqual(timeout, validator.HTTP_TIMEOUT_SECONDS)
+            if not nested:
+                nested = True
+                validator.online_sources(self.schema, [source], [source["source_id"]], opener=lambda _request, timeout: Response())
+            return Response()
+
+        validator.online_sources(self.schema, [source], [source["source_id"]], opener=outer_opener)
 
     def test_coverage_and_interaction_trust_fail_closed(self):
         bundle = validator.template_bundle()
@@ -334,6 +364,19 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         with self.assertRaisesRegex(validator.ContractError, "symbol-pin to footprint-pad"):
             validator.validate_pin_assets(changed, self.lines)
 
+    def test_generator_prose_cannot_confirm_exported_netlist(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        rules_path = validator.ROOT / ".claude/skills/circuit-spec-integration/references/rules.json"
+        rules = validator.load(rules_path)
+        chain = next(rule for rule in rules["rules"] if rule["domain"] == "source-to-bench-chain")
+        generated = next(stage for stage in chain["evidence_chain"] if stage["stage"] == "generated-netlist")
+        self.assertEqual(generated["status"], "MIXED")
+        changed = copy.deepcopy(aggregate)
+        next(fact for fact in changed["facts"] if fact["fact_id"] == generated["fact_ids"][0])["value"] = "nonsense free text"
+        generated["status"] = "CONFIRMED"
+        with self.assertRaisesRegex(validator.ContractError, "generator prose cannot CONFIRM"):
+            validator.validate_evidence_chain(chain, changed)
+
     def test_critical_fact_review_locks_claim_locator_and_conditions(self):
         aggregate = validator.validate_local_skills(self.schema, self.lines)
         review = validator.load(validator.FIXTURES / "golden/critical-fact-review.json")
@@ -353,6 +396,43 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         next(source for source in changed["sources"] if source["source_id"] == source_id)["evidence_extract"] = "arbitrary"
         with self.assertRaisesRegex(validator.ContractError, "value/unit/evidence lock changed"):
             validator.validate_critical_fact_review(changed, review)
+        changed_review = copy.deepcopy(review)
+        changed_review["independent_review_passes"][0]["review_log"] = "review-artifacts/missing.md"
+        with self.assertRaisesRegex(validator.ContractError, "review-log file is missing"):
+            validator.validate_critical_fact_review(aggregate, changed_review)
+        changed_review = copy.deepcopy(review)
+        changed_review["independent_review_passes"][0]["review_log_sha256"] = "f" * 64
+        with self.assertRaisesRegex(validator.ContractError, "review-log hash changed"):
+            validator.validate_critical_fact_review(aggregate, changed_review)
+
+    def test_unavailable_source_requires_zero_hash(self):
+        source = copy.deepcopy(validator.template_bundle()["sources"][0])
+        source["sha256"] = "f" * 64
+        with self.assertRaisesRegex(validator.ContractError, "SOURCE UNAVAILABLE must use all-zero"):
+            validator.validate_source(source, self.schema)
+
+    def test_distributor_identity_lane_cannot_promote_limits(self):
+        bundle = validator.load_skill_bundle(validator.ROOT / ".claude/skills/component-type-c-31-m-17")
+        fact = next(item for item in bundle["facts"] if item["provenance"] == "DISTRIBUTOR-IDENTITY")
+        validator.validate_bundle(bundle, self.schema)
+        for field, value in (("class", "ABSOLUTE_MAXIMUM"), ("verdict", "PASS - primary-source confirmed"), ("provenance", "PRIMARY-SPEC")):
+            changed = copy.deepcopy(bundle)
+            next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])[field] = value
+            with self.subTest(field=field), self.assertRaises(validator.ContractError):
+                validator.validate_bundle(changed, self.schema, True)
+        for field in ("lcsc", "manufacturer", "mpn"):
+            changed = copy.deepcopy(bundle)
+            next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])["value"][field] += "-wrong"
+            with self.subTest(identity_field=field), self.assertRaisesRegex(validator.ContractError, "differs from owning record"):
+                validator.validate_bundle(changed, self.schema, True)
+        changed = copy.deepcopy(bundle)
+        next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])["value"]["voltage_v"] = 20
+        with self.assertRaisesRegex(validator.ContractError, "exact structured identity keys"):
+            validator.validate_bundle(changed, self.schema, True)
+        changed = copy.deepcopy(bundle)
+        next(item for item in changed["facts"] if item["fact_id"] == fact["fact_id"])["value"]["variant"] = "mutated identity parser output"
+        with self.assertRaisesRegex(validator.ContractError, "canonical distributor identity extract hash changed"):
+            validator.validate_bundle(changed, self.schema)
 
     def test_malicious_generator_is_rejected_without_execution(self):
         with tempfile.TemporaryDirectory() as directory:

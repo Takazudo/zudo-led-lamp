@@ -3,26 +3,26 @@
   "independent_review_passes": [
     {
       "reviewer": "issue-21 family evidence review",
-      "review_log": "component-spec-skills/reviews/issue-21.md",
+      "review_log": "review-artifacts/issue-21.md",
       "review_log_sha256": "d0a88bdd21e2c03d42e06b2b394b99cff4f9809ff23493ff98169e9d99804ddf",
       "review_ids": ["review-jst-b6b-xh-a-current", "review-pesd-pinout", "review-umw-ao3401a-pinout", "review-stusb-vben", "review-umw-ao3401a-vds", "review-umw-ao3401a-thermal"]
     },
     {
       "reviewer": "issue-23 family evidence review",
-      "review_log": "component-spec-skills/reviews/issue-23.md",
+      "review_log": "review-artifacts/issue-23.md",
       "review_log_sha256": "7f4cb16c29df09c90fc8103789b3f974f4152933436e037e92500d5a91bf262f",
       "review_ids": ["review-ss26-polarity", "review-al8860-pin-ep", "review-ap63203-en-open", "review-al8860-vin-recommended-max", "review-ap63203-vin-transient", "review-bhfuse-voltage-max", "review-al8860-sense-max", "review-ap63203-cap-min", "review-cl21-dc-bias", "review-bhfuse-surface-temperature", "review-rlp25-power", "review-fnr-irated-max"]
     },
     {
       "reviewer": "issue-24 independent control evidence audit",
-      "review_log": "component-spec-skills/reviews/issue-24-independent-audit.md",
-      "review_log_sha256": "041bd9ff8510b02746c902ea301c56c12cb6f7bb1f1fb30474e1531dd8e1cac5",
+      "review_log": "review-artifacts/issue-24-independent-audit.md",
+      "review_log_sha256": "8349a2b19360b540220a6961abdf1131f5fc0f03042ae954c1da5969ea9ae6cc",
       "review_ids": ["review-c492404-rating", "review-c210315-polarity", "review-c529334-pin-bonds", "review-c210315-maxima", "review-c2934070-power", "review-c13564-max-current"]
     },
     {
       "reviewer": "issue-25 manager source-recovery review",
-      "review_log": "component-spec-skills/reviews/issue-25.md",
-      "review_log_sha256": "ec36be26675a1c15b1e861095324d5422e275792432df0777281a36037de6deb",
+      "review_log": "review-artifacts/issue-25.md",
+      "review_log_sha256": "eff10d2a47ad25de43aa040673dca7b9c12e231cff4b7ee076b30fd010d17617",
       "review_ids": ["review-high-diode-smaj20a-clamp", "review-stusb-vdd-absolute-max"]
     }
   ],
@@ -48,7 +48,7 @@
     {"review_id":"review-cl21-dc-bias","sha256":"5cd9fbd685e5f369a5c9660367912f5a2858a8d677328cc0a00e2a7f0a212bfb"},
     {"review_id":"review-umw-ao3401a-thermal","sha256":"cd18d76cf8bdc258347d74f3c1ecb5c4895f123d0b2fa057c4b3e3db78937e4c"},
     {"review_id":"review-bhfuse-surface-temperature","sha256":"ae1e002b4b7083a9ff94e2d62cde1759a66511ac82272c33b7092f2a37bb9642"},
-    {"review_id":"review-c210315-maxima","sha256":"2a2ee23238b9468c3b253276fae508a33f540761515b30869bafd753c54b15b0"},
+    {"review_id":"review-c210315-maxima","sha256":"3be21f464450e1695792703ba43b6ef9cf64cf2ce9de6b6cecd065c2bc88320f"},
     {"review_id":"review-rlp25-power","sha256":"485554956fa596bdb03d5a3d310081644128ec94b972744daf806c77a9598baa"},
     {"review_id":"review-fnr-irated-max","sha256":"95315683d7762c65aa51ec34b994124ce7785a6408df6a1b5a483e9148c66ad7"},
     {"review_id":"review-c2934070-power","sha256":"2fa613d32a70b38176133a6323b302df4cc19af1a95f04ad199d024ada86318c"},
@@ -337,7 +337,7 @@
       "printed_page_label": "2",
       "locator": "src-c210315-spec: printed page 4 forward-current row",
       "evidence_extract": "90 mA absolute maximum forward current.",
-      "conditions": "absolute maximum; not an operating target; conditional on unresolved C210315-to-3000K bin binding",
+      "conditions": "absolute maximum; not an operating target; manufacturer limit applied to distributor-confirmed C210315 3000 K identity; incoming reel/label/bin acceptance remains open",
       "reviewer": "issue-25 foreground destructive-risk review",
       "status": "CONFIRMED"
     },

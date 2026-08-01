@@ -27,8 +27,16 @@
       "coverage_id": "cov-c210315-exact-order-code",
       "record_id": "rec-c210315",
       "domain": "exact-cct-and-orderability-identity",
+      "status": "COVERED",
+      "reason": "Available LCSC JSON-LD confirms the exact C210315-to-MPN/2800-3100 K/3000 K distributor identity only; the manufacturer PDF remains the electrical authority.",
+      "fact_ids": ["fact-c210315-orderable-identity"]
+    },
+    {
+      "coverage_id": "cov-c210315-incoming-acceptance",
+      "record_id": "rec-c210315",
+      "domain": "incoming-reel-label-and-cct-acceptance",
       "status": "OPEN",
-      "reason": "The manufacturer family/base drawing does not independently bind distributor C210315 to the exact CCT/order-code suffix.",
+      "reason": "Distributor identity and manufacturer bin tables do not prove the received reel label, WS/TC bin fields, fitted population, or measured CCT.",
       "fact_ids": []
     },
     {

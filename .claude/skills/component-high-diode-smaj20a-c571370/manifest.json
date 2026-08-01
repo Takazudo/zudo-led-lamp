@@ -31,7 +31,6 @@
         "int-high-diode-bench"
       ],
       "open_domains": [
-        "exact C571370 distributor binding",
         "project pad mapping and incoming continuity"
       ]
     }

@@ -37,7 +37,6 @@
         "int-type-c-bench"
       ],
       "open_domains": [
-        "exact C283540 distributor binding",
         "contact/shell numbering and duplicate-pin topology",
         "project footprint orientation and incoming fit"
       ]
