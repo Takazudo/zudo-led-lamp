@@ -18,9 +18,16 @@
     {
       "coverage_id": "cov-umw-thermal",
       "record_id": "rec-umw-ao3401a",
-      "domain": "SOA/thermal/pulsed versus DC behavior",
-      "status": "COVERED",
-      "reason": "UMW thermal rows and SOA figures; application remains bench-dependent"
+      "domain": "application SOA/thermal/inrush behavior",
+      "status": "OPEN",
+      "reason": "UMW thermal rows and SOA figures are available, but installed copper, inrush waveform, negotiated VBUS and temperature require bench evidence"
+    },
+    {
+      "coverage_id": "cov-umw-project-netlist",
+      "record_id": "rec-umw-ao3401a",
+      "domain": "generated connectivity versus symbol/footprint/as-built confirmation",
+      "status": "OPEN",
+      "reason": "Immutable generator source records Q1 nets, but exported netlist, footprint mapping and assembled orientation must be independently checked"
     }
   ]
 }

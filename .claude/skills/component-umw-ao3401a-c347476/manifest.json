@@ -11,7 +11,10 @@
       "manufacturer": "UMW (Youtai Semiconductor)",
       "lcsc": "C347476",
       "package": "SOT-23_L2.9-W1.3-P1.90-LS2.4-BR",
-      "source_ids": ["src-umw-ao3401a"],
+      "source_ids": [
+        "src-umw-ao3401a",
+        "src-umw-ao3401a-board-p-generator"
+      ],
       "fact_ids": [
         "fact-umw-ao3401a-manufacturer",
         "fact-umw-ao3401a-pinout",
@@ -22,10 +25,14 @@
         "fact-umw-ao3401a-threshold",
         "fact-umw-ao3401a-body-diode",
         "fact-umw-ao3401a-thermal",
-        "fact-umw-ao3401a-soa"
+        "fact-umw-ao3401a-soa",
+        "fact-umw-ao3401a-project-nets"
       ],
       "interaction_ids": ["int-umw-ao3401a-netlist", "int-umw-ao3401a-bench"],
-      "open_domains": []
+      "open_domains": [
+        "application SOA/thermal/inrush behavior",
+        "generated connectivity versus symbol/footprint/as-built confirmation"
+      ]
     }
   ]
 }
