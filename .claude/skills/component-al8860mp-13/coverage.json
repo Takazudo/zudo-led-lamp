@@ -1,0 +1,12 @@
+{"schema_version":1,"coverage":[
+  {"coverage_id":"cov-al8860-pin-topology","record_id":"rec-al8860mp-13","domain":"pin-topology-and-ep","status":"COVERED","reason":"fact-al8860-topology, fact-al8860-pin-ep, fact-al8860-project-nets"},
+  {"coverage_id":"cov-al8860-limits-control","record_id":"rec-al8860mp-13","domain":"limits-control-timing-faults","status":"COVERED","reason":"fact-al8860-vin-recommended-max through fact-al8860-faults"},
+  {"coverage_id":"cov-al8860-layout","record_id":"rec-al8860mp-13","domain":"layout-and-thermal","status":"COVERED","reason":"fact-al8860-layout"},
+  {"coverage_id":"cov-al8860-led-domain","record_id":"rec-al8860mp-13","domain":"led-string-voltage-temperature","status":"OPEN","reason":"Exact LED VF versus current/temperature and switching-node overshoot require the LED/integration records and bench waveform."},
+  {"coverage_id":"cov-rlp25-ratings","record_id":"rec-rlp25feer200","domain":"resistance-power-tcr-overload","status":"COVERED","reason":"fact-rlp25-resistance through fact-rlp25-power-margin"},
+  {"coverage_id":"cov-rlp25-project-pulse","record_id":"rec-rlp25feer200","domain":"project-pulse-load","status":"OPEN","reason":"The generated design does not define startup/fault pulse energy or local resistor temperature; verify against the 5x/5 s test and derating."},
+  {"coverage_id":"cov-fxl-electrical","record_id":"rec-fxl0630-330-m","domain":"inductance-dcr-current-package","status":"COVERED","reason":"fact-fxl-inductance through fact-fxl-isat-margin"},
+  {"coverage_id":"cov-fxl-open","record_id":"rec-fxl0630-330-m","domain":"self-resonance-and-end-application-temperature","status":"OPEN","reason":"The exact FXL0630 table does not state SRF, and mirror current ratings require end-application temperature/ripple verification."},
+  {"coverage_id":"cov-ss26-electrical","record_id":"rec-ro-ss26","domain":"polarity-voltage-current-leakage-package","status":"COVERED","reason":"fact-ss26-polarity through fact-ss26-current-margin"},
+  {"coverage_id":"cov-ss26-open","record_id":"rec-ro-ss26","domain":"junction-temperature-and-switch-waveform","status":"OPEN","reason":"Mirror thermal data is typical and the generated source does not bound SW overshoot, diode duty cycle, or junction temperature."}
+]}
