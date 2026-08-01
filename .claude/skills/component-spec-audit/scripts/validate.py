@@ -9,7 +9,6 @@ import copy
 import hashlib
 import json
 import re
-import runpy
 import sys
 import urllib.request
 from pathlib import Path
@@ -63,10 +62,129 @@ def frontmatter(path: Path, expected_name: str):
     require(fields.get("disable-model-invocation") != "true", f"{path}: model invocation disabled")
 
 
-def generator_inventory():
+class ComponentDsl:
+    """Interpret only the declarative COMPONENTS prefix of a generator spec."""
+
+    def __init__(self, path):
+        self.path = path
+        self.env = {}
+
+    def error(self, node, message):
+        line = getattr(node, "lineno", "?")
+        raise ContractError(f"{self.path}:{line}: unsafe generator syntax: {message}")
+
+    def value(self, node):
+        if isinstance(node, ast.Constant) and isinstance(node.value, (str, int, float, bool, type(None))):
+            return node.value
+        if isinstance(node, ast.Name):
+            if node.id in self.env:
+                return self.env[node.id]
+            self.error(node, f"unknown name {node.id}")
+        if isinstance(node, (ast.Tuple, ast.List)):
+            result = []
+            for item in node.elts:
+                if isinstance(item, ast.Starred):
+                    expanded = self.value(item.value)
+                    require(isinstance(expanded, (tuple, list)), f"{self.path}:{item.lineno}: starred value must be tuple/list")
+                    result.extend(expanded)
+                else:
+                    result.append(self.value(item))
+            return tuple(result) if isinstance(node, ast.Tuple) else result
+        if isinstance(node, ast.Dict):
+            require(all(key is not None for key in node.keys), f"{self.path}:{node.lineno}: dict unpacking is not allowed")
+            return {self.value(key): self.value(value) for key, value in zip(node.keys, node.values)}
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+            operand = self.value(node.operand)
+            require(isinstance(operand, (int, float)), f"{self.path}:{node.lineno}: unary operand must be numeric")
+            return operand if isinstance(node.op, ast.UAdd) else -operand
+        if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv)):
+            left, right = self.value(node.left), self.value(node.right)
+            require(isinstance(left, (int, float)) and isinstance(right, (int, float)), f"{self.path}:{node.lineno}: arithmetic operands must be numeric")
+            if isinstance(node.op, ast.Add): return left + right
+            if isinstance(node.op, ast.Sub): return left - right
+            if isinstance(node.op, ast.Mult): return left * right
+            if isinstance(node.op, ast.Div): return left / right
+            return left // right
+        if isinstance(node, ast.JoinedStr):
+            parts = []
+            for item in node.values:
+                if isinstance(item, ast.Constant) and isinstance(item.value, str):
+                    parts.append(item.value)
+                elif isinstance(item, ast.FormattedValue) and item.conversion == -1 and item.format_spec is None:
+                    parts.append(str(self.value(item.value)))
+                else:
+                    self.error(item, "unsupported f-string field")
+            return "".join(parts)
+        self.error(node, type(node).__name__)
+
+    def assign(self, target, value):
+        if isinstance(target, ast.Name):
+            self.env[target.id] = value
+            return
+        if isinstance(target, ast.Subscript) and isinstance(target.value, ast.Name) and target.value.id == "COMPONENTS":
+            require("COMPONENTS" in self.env and isinstance(self.env["COMPONENTS"], dict), f"{self.path}:{target.lineno}: COMPONENTS not initialized")
+            self.env["COMPONENTS"][self.value(target.slice)] = value
+            return
+        self.error(target, "assignment target")
+
+    def statement(self, statement):
+        if isinstance(statement, ast.Assign) and len(statement.targets) == 1:
+            self.assign(statement.targets[0], self.value(statement.value))
+            return
+        if isinstance(statement, ast.For):
+            require(isinstance(statement.target, ast.Name), f"{self.path}:{statement.lineno}: range target must be a name")
+            call = statement.iter
+            require(isinstance(call, ast.Call) and isinstance(call.func, ast.Name) and call.func.id == "range" and not call.keywords, f"{self.path}:{statement.lineno}: only range loops are allowed")
+            args = [self.value(arg) for arg in call.args]
+            require(1 <= len(args) <= 3 and all(isinstance(arg, int) for arg in args), f"{self.path}:{statement.lineno}: range args must be integers")
+            require(not statement.orelse, f"{self.path}:{statement.lineno}: for-else is not allowed")
+            iterations = range(*args)
+            require(len(iterations) <= 10_000, f"{self.path}:{statement.lineno}: range loop exceeds safety limit")
+            for item in iterations:
+                self.env[statement.target.id] = item
+                for child in statement.body:
+                    self.statement(child)
+            return
+        self.error(statement, type(statement).__name__)
+
+    def parse(self):
+        try:
+            tree = ast.parse(self.path.read_text(encoding="utf-8"), filename=str(self.path))
+        except SyntaxError as exc:
+            raise ContractError(f"{self.path}:{exc.lineno}: unsafe generator syntax: invalid Python") from exc
+        for index, statement in enumerate(tree.body):
+            if index == 0 and isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Constant) and isinstance(statement.value.value, str):
+                continue
+            if isinstance(statement, ast.Assign) and len(statement.targets) == 1 and isinstance(statement.targets[0], ast.Name) and statement.targets[0].id == "NETS":
+                for node in ast.walk(statement.value):
+                    if isinstance(node, (ast.Attribute, ast.Lambda, ast.NamedExpr)) or (isinstance(node, ast.Call) and not (isinstance(node.func, ast.Name) and node.func.id == "range")):
+                        self.error(node, "unsupported executable syntax in ignored NETS declaration")
+                for tail in tree.body[index + 1:]:
+                    require(not any(((isinstance(node, ast.Name) and node.id == "COMPONENTS") or (isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == "COMPONENTS")) and isinstance(node.ctx, ast.Store) for node in ast.walk(tail)), f"{self.path}:{getattr(tail, 'lineno', '?')}: COMPONENTS mutation after NETS is not allowed")
+                    if isinstance(tail, (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.While, ast.If, ast.With, ast.AsyncWith, ast.Try, ast.Expr)):
+                        self.error(tail, "unsupported statement after NETS")
+                    for node in ast.walk(tail):
+                        if isinstance(node, (ast.Attribute, ast.Lambda, ast.NamedExpr, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)):
+                            self.error(node, "unsupported syntax after NETS")
+                        if isinstance(node, ast.Call) and not (isinstance(node.func, ast.Name) and node.func.id == "range"):
+                            self.error(node, "arbitrary call after NETS")
+                break
+            if isinstance(statement, (ast.Import, ast.ImportFrom)):
+                self.error(statement, "imports are not allowed")
+            self.statement(statement)
+        require(isinstance(self.env.get("COMPONENTS"), dict), f"{self.path}: COMPONENTS dictionary missing")
+        return self.env["COMPONENTS"]
+
+
+def parse_components(path):
+    return ComponentDsl(Path(path)).parse()
+
+
+def generator_inventory(specs=None):
     grouped, excluded = {}, []
-    for board, relpath in (("board-p", "scripts/schgen/board_p_spec.py"), ("board-l", "scripts/schgen/board_l_spec.py")):
-        components = runpy.run_path(str(ROOT / relpath))["COMPONENTS"]
+    specs = specs or (("board-p", ROOT / "scripts/schgen/board_p_spec.py"), ("board-l", ROOT / "scripts/schgen/board_l_spec.py"))
+    for board, path in specs:
+        components = parse_components(path)
         for refdes, item in components.items():
             symbol, value, lcsc, footprint, dnp, _position = item
             if not lcsc:
@@ -179,9 +297,20 @@ def arithmetic(expression, values):
         if isinstance(node, ast.Name) and node.id in values: return values[node.id]
         if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div)):
             left, right = ev(node.left), ev(node.right)
-            return {ast.Add: left + right, ast.Sub: left - right, ast.Mult: left * right, ast.Div: left / right}[type(node.op)]
+            if isinstance(node.op, ast.Add): return left + right
+            if isinstance(node.op, ast.Sub): return left - right
+            if isinstance(node.op, ast.Mult): return left * right
+            return left / right
         raise ContractError(f"unsafe or unknown expression: {expression}")
     return ev(tree)
+
+
+def expression_names(expression):
+    try:
+        tree = ast.parse(expression, mode="eval")
+    except SyntaxError as exc:
+        raise ContractError(f"invalid calculated expression: {expression}") from exc
+    return {node.id for node in ast.walk(tree) if isinstance(node, ast.Name)}
 
 
 def validate_facts(facts, sources, schema):
@@ -199,11 +328,18 @@ def validate_facts(facts, sources, schema):
         require(LOCATOR_DETAIL.search(fact["locator"]), f"{fact['fact_id']}: locator lacks exact detail")
         if fact["provenance"] == "CALCULATED":
             require(fact["depends_on"] and fact["expression"], f"{fact['fact_id']}: calculated fact lacks dependencies/expression")
+            require(fact["fact_id"] not in fact["depends_on"], f"{fact['fact_id']}: calculated fact depends on itself")
+            expected_names = {dependency.replace("-", "_") for dependency in fact["depends_on"]}
+            actual_names = expression_names(fact["expression"])
+            require(actual_names == expected_names, f"{fact['fact_id']}: expression variables must exactly match depends_on fact IDs")
+        else:
+            require(not fact["depends_on"] and not fact["expression"], f"{fact['fact_id']}: raw fact cannot declare derived dependencies/expression")
     graph_cycles(facts)
     values = {fact["fact_id"]: fact["value"] for fact in facts}
     for fact in facts:
         if fact["provenance"] == "CALCULATED":
-            require(arithmetic(fact["expression"], {key.replace("-", "_"): value for key, value in values.items()}) == fact["value"], f"{fact['fact_id']}: derived value is stale")
+            dependency_values = {key.replace("-", "_"): values[key] for key in fact["depends_on"]}
+            require(arithmetic(fact["expression"], dependency_values) == fact["value"], f"{fact['fact_id']}: derived value is stale")
 
 
 def validate_pin_maps(pin_maps):
@@ -218,63 +354,120 @@ def validate_pin_maps(pin_maps):
             required_keys(pin, ("symbol_pin", "name", "footprint_pad", "function"), mapping["pin_map_id"])
 
 
+def resolve_bundle_route(query, routes):
+    lcsc_tokens = {token.upper() for token in re.findall(r"\bC\d+\b", query, re.I)}
+    if lcsc_tokens:
+        return sorted({route["record_id"] for route in routes if lcsc_tokens & set(route["aliases"]["lcsc"])})
+    lowered = query.casefold()
+    return sorted({route["record_id"] for route in routes if any(alias.casefold() in lowered for values in route["aliases"].values() for alias in values)})
+
+
+def validate_pass_trust(facts, sources):
+    facts_by_id = {fact["fact_id"]: fact for fact in facts}
+    sources_by_id = {source["source_id"]: source for source in sources}
+
+    def trusted(fact_id, trail):
+        require(fact_id not in trail, f"{fact_id}: trust dependency cycle")
+        fact = facts_by_id[fact_id]
+        if fact["provenance"] == "CALCULATED":
+            require(fact["verdict"] == "PASS - primary-source confirmed", f"{fact_id}: calculated PASS dependency is not PASS")
+            require(fact["depends_on"], f"{fact_id}: calculated PASS has no dependencies")
+            return all(trusted(dependency, trail | {fact_id}) for dependency in fact["depends_on"])
+        source = sources_by_id[fact["source_id"]]
+        return fact["provenance"] == "PRIMARY-SPEC" and fact["verdict"] == "PASS - primary-source confirmed" and source["availability"] == "AVAILABLE" and source["authority_class"] == "MANUFACTURER_PRIMARY"
+
+    for fact in facts:
+        if fact["provenance"] == "PRIMARY-SPEC" and fact["verdict"] == "PASS - primary-source confirmed":
+            source = sources_by_id[fact["source_id"]]
+            require(source["availability"] == "AVAILABLE" and source["authority_class"] == "MANUFACTURER_PRIMARY", f"{fact['fact_id']}: PRIMARY-SPEC PASS requires AVAILABLE MANUFACTURER_PRIMARY")
+        if fact["verdict"] == "PASS - primary-source confirmed":
+            require(fact["provenance"] in ("PRIMARY-SPEC", "CALCULATED"), f"{fact['fact_id']}: PASS lacks primary/calculated provenance")
+            if fact["provenance"] == "CALCULATED":
+                require(trusted(fact["fact_id"], set()), f"{fact['fact_id']}: calculated PASS dependency closure is not fully trusted")
+
+
 def validate_bundle(bundle, schema, allow_synthetic_line=False):
     records, sources, facts = bundle["records"], bundle["sources"], bundle["facts"]
-    for source in sources: validate_source(source, schema)
+    coverage, routes = bundle["coverage"], bundle["routes"]
+    interactions, pin_maps = bundle["interactions"], bundle["pin_maps"]
+    for source in sources:
+        validate_source(source, schema)
     validate_facts(facts, sources, schema)
-    validate_pin_maps(bundle["pin_maps"])
+    validate_pass_trust(facts, sources)
+    validate_pin_maps(pin_maps)
     record_ids = {record["record_id"] for record in records}
     require(len(record_ids) == len(records), "duplicate record ID")
+    records_by_id = {record["record_id"]: record for record in records}
     id_groups = {
-        "source": [item["source_id"] for item in sources],
-        "fact": [item["fact_id"] for item in facts],
-        "interaction": [item["interaction_id"] for item in bundle["interactions"]],
-        "coverage": [item["coverage_id"] for item in bundle["coverage"]],
-        "route": [item["route_id"] for item in bundle["routes"]],
-        "pin map": [item["pin_map_id"] for item in bundle["pin_maps"]],
+        "source": [item["source_id"] for item in sources], "fact": [item["fact_id"] for item in facts],
+        "interaction": [item["interaction_id"] for item in interactions], "coverage": [item["coverage_id"] for item in coverage],
+        "route": [item["route_id"] for item in routes], "pin map": [item["pin_map_id"] for item in pin_maps],
     }
     for label, values in id_groups.items():
         require(len(set(values)) == len(values), f"duplicate {label} ID")
     for record in records:
         required_keys(record, schema["record_required"], record.get("record_id", "record"))
         require(record["kind"] in ("standalone", "subordinate"), f"{record['record_id']}: record kind")
-        require((record["kind"] == "subordinate") == bool(record["parent_record_id"]), f"{record['record_id']}: subordinate parent contract")
+        if record["kind"] == "subordinate":
+            parent = records_by_id.get(record["parent_record_id"])
+            require(parent is not None and parent["kind"] == "standalone", f"{record['record_id']}: subordinate parent must resolve to a standalone record in this bundle")
+        else:
+            require(record["parent_record_id"] is None, f"{record['record_id']}: standalone parent_record_id must be null")
+        assigned_sources = {item["source_id"] for item in sources if item.get("record_id") == record["record_id"]}
+        assigned_facts = {item["fact_id"] for item in facts if item.get("record_id") == record["record_id"]}
+        assigned_interactions = {item["interaction_id"] for item in interactions if record["record_id"] in item.get("record_ids", [])}
+        for key in ("source_ids", "fact_ids", "interaction_ids"):
+            require(len(record[key]) == len(set(record[key])), f"{record['record_id']}: duplicate {key}")
+        require(set(record["source_ids"]) == assigned_sources, f"{record['record_id']}: source ID parity/orphan failure")
+        require(set(record["fact_ids"]) == assigned_facts, f"{record['record_id']}: fact ID parity/orphan failure")
+        require(set(record["interaction_ids"]) == assigned_interactions, f"{record['record_id']}: interaction ID parity/orphan failure")
         manufacturer_facts = [fact for fact in facts if fact["record_id"] == record["record_id"] and fact["fact_id"].endswith("-manufacturer")]
         require(manufacturer_facts, f"{record['record_id']}: unsourced manufacturer fact")
         for fact in manufacturer_facts:
             require(fact["value"] == record["manufacturer"] and fact["provenance"] in ("PRIMARY-SPEC", "UNVERIFIED"), f"{record['record_id']}: manufacturer evidence invalid")
-        require(set(record["source_ids"]) <= {x["source_id"] for x in sources}, f"{record['record_id']}: source IDs")
-        require(set(record["fact_ids"]) <= {x["fact_id"] for x in facts}, f"{record['record_id']}: fact IDs")
-        require(set(record["interaction_ids"]) <= {x["interaction_id"] for x in bundle["interactions"]}, f"{record['record_id']}: interaction IDs")
+        record_coverage = [item for item in coverage if item.get("record_id") == record["record_id"]]
+        require(record_coverage, f"{record['record_id']}: requires coverage")
+        require(any(item.get("record_id") == record["record_id"] for item in routes), f"{record['record_id']}: requires routing fixture")
+        require(any(item.get("record_id") == record["record_id"] for item in pin_maps), f"{record['record_id']}: requires pin map")
+        domains = record["open_domains"]
+        require(isinstance(domains, list) and all(isinstance(domain, str) and domain.strip() for domain in domains), f"{record['record_id']}: open_domains must be nonblank strings")
+        require(len(domains) == len(set(domains)), f"{record['record_id']}: duplicate open domain")
+        open_coverage = {item["domain"] for item in record_coverage if item.get("status") == "OPEN"}
+        require(open_coverage == set(domains), f"{record['record_id']}: open domains and OPEN coverage must match exactly")
     for source in sources:
-        require(source.get("record_id") in record_ids, f"{source['source_id']}: unknown record ID")
+        require(source.get("record_id") in record_ids, f"{source['source_id']}: orphan source/unknown record ID")
     for fact in facts:
-        require(fact["record_id"] in record_ids, f"{fact['fact_id']}: unknown record ID")
+        require(fact["record_id"] in record_ids, f"{fact['fact_id']}: orphan fact/unknown record ID")
         source = next(item for item in sources if item["source_id"] == fact["source_id"])
+        require(source["record_id"] == fact["record_id"], f"{fact['fact_id']}: source belongs to a different record")
         if fact["provenance"] == "PRIMARY-SPEC":
             require(source["authority_class"] == "MANUFACTURER_PRIMARY", f"{fact['fact_id']}: primary provenance needs manufacturer primary source")
-        if fact["verdict"] == "PASS - primary-source confirmed":
-            require(fact["provenance"] in ("PRIMARY-SPEC", "CALCULATED"), f"{fact['fact_id']}: PASS lacks primary/calculated provenance")
-    for coverage in bundle["coverage"]:
-        required_keys(coverage, schema["coverage_required"], "coverage")
-        require(coverage["status"] in ("COVERED", "OPEN"), f"{coverage['coverage_id']}: unexplained coverage gap")
-        require(coverage["reason"].strip(), f"{coverage['coverage_id']}: coverage reason")
-        require(coverage["record_id"] in record_ids, f"{coverage['coverage_id']}: unknown record ID")
-    for interaction in bundle["interactions"]:
+    for item in coverage:
+        required_keys(item, schema["coverage_required"], "coverage")
+        require(item["status"] in ("COVERED", "OPEN"), f"{item['coverage_id']}: unexplained coverage gap")
+        require(isinstance(item["reason"], str) and item["reason"].strip(), f"{item['coverage_id']}: coverage reason")
+        require(item["record_id"] in record_ids, f"{item['coverage_id']}: orphan coverage/unknown record ID")
+    for interaction in interactions:
         required_keys(interaction, schema["interaction_required"], "interaction")
         require(interaction["verdict"] in schema["verdicts"], f"{interaction['interaction_id']}: verdict")
-        require(set(interaction["record_ids"]) <= record_ids, f"{interaction['interaction_id']}: unknown record ID")
+        require(interaction["record_ids"] and set(interaction["record_ids"]) <= record_ids, f"{interaction['interaction_id']}: orphan interaction/unknown record ID")
         require(set(interaction["fact_ids"]) <= {fact["fact_id"] for fact in facts}, f"{interaction['interaction_id']}: unknown fact ID")
-    for route in bundle["routes"]:
+        fact_record_ids = {fact["record_id"] for fact in facts if fact["fact_id"] in interaction["fact_ids"]}
+        require(fact_record_ids <= set(interaction["record_ids"]), f"{interaction['interaction_id']}: fact belongs to an unlisted record")
+    for route in routes:
         required_keys(route, ("route_id", "record_id", "aliases", "positive", "negative"), "route")
         require(set(route["aliases"]) == {"mpn", "lcsc", "manufacturer", "function"}, f"{route['route_id']}: routing alias classes")
         require(all(route["aliases"][key] for key in route["aliases"]), f"{route['route_id']}: blank routing aliases")
         require(route["positive"] and route["negative"], f"{route['route_id']}: positive/negative routing fixtures")
-        require(route["record_id"] in record_ids, f"{route['route_id']}: unknown record ID")
-        record = next(item for item in records if item["record_id"] == route["record_id"])
+        require(route["record_id"] in record_ids, f"{route['route_id']}: orphan route/unknown record ID")
+        record = records_by_id[route["record_id"]]
         require(record["mpn"] in route["aliases"]["mpn"] and record["lcsc"] in route["aliases"]["lcsc"] and record["manufacturer"] in route["aliases"]["manufacturer"], f"{route['route_id']}: exact identity aliases missing")
-    for mapping in bundle["pin_maps"]:
-        require(mapping["record_id"] in record_ids, f"{mapping['pin_map_id']}: unknown record ID")
+        for query in route["positive"]:
+            require(resolve_bundle_route(query, routes) == [route["record_id"]], f"{route['route_id']}: positive query does not resolve uniquely to its record: {query}")
+        for query in route["negative"]:
+            require(resolve_bundle_route(query, routes) == [], f"{route['route_id']}: negative query unexpectedly resolves: {query}")
+    for mapping in pin_maps:
+        require(mapping["record_id"] in record_ids, f"{mapping['pin_map_id']}: orphan pin map/unknown record ID")
 
 
 def load_skill_bundle(skill_dir):
@@ -372,7 +565,7 @@ def run_seeded_fixtures(schema, inventory):
         else:
             raise ContractError(f"{path.name}: seeded mutation passed")
     subordinate = load(FIXTURES / "valid/subordinate-record.json")
-    validate_bundle({"records":[subordinate["record"]], "sources":[subordinate["source"]], "facts":subordinate["facts"], "coverage":[subordinate["coverage"]], "routes":[subordinate["route"]], "interactions":[subordinate["interaction"]], "pin_maps":[subordinate["pin_map"]]}, schema, True)
+    validate_bundle(subordinate, schema, True)
     for case in load(FIXTURES / "invalid/contract-cases.json")["cases"]:
         try:
             if case["base"] == "inventory":
