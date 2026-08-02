@@ -14,3 +14,7 @@ Treat each TSSOP package pin as one physical bond. PA11[PA9] and PA12[PA10] are 
 The subordinate J3 header is hand-fit/DNP. Its primary product page/drawing establish connector ratings and dimensions; the project generator establishes the SWDIO, SWCLK, NRST, 3V3, and GND order. The connector record does not prove target voltage compatibility, programmer behavior, or whether J3 is fitted.
 
 Use `interactions.json` for cross-domain constraints and `coverage.json` for explicit unknowns. A claim marked `UNSOURCED` is useful audit context, never a guaranteed design limit.
+
+## Human component reference
+
+Human projection of this bundle: [rec-c529334](/docs/components/records/c529334/), [rec-c492404](/docs/components/records/c492404/). Those pages are generated from the JSON files here and add nothing to them — where the two disagree, this bundle is correct. See also the [component catalog](/docs/components/catalog/) and the [cross-component rules](/docs/components/integration/).

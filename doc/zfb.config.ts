@@ -15,10 +15,19 @@ export default defineConfig(
     imageEnlarge: true,
     dynamicPageTransition: true,
     docHistory: true,
+    // Generated component pages carry their own provenance (source, revision,
+    // locator, retrieval date) on the page itself. Git history of the
+    // generated MDX would show generator churn, not evidence history, so it is
+    // excluded. The first pattern covers /docs/components/ itself (its slug is
+    // `components`, not `components/index`), the second everything beneath.
+    docHistoryExclude: ["components", "components/**"],
     bodyFootUtilArea: {
       docHistory: true,
       viewSourceLink: false,
     },
+    // Registers the MDX components generated component pages reference,
+    // without editing the package-owned route stub under pages/.
+    chromeBindingsModule: "./src/chrome-bindings.tsx",
     // Publish the REPO-ROOT .claude, not doc/.claude. The component-audit
     // skills that document this circuit live at the repo root; doc/.claude
     // holds only tooling for editing this site and is deliberately unpublished.
@@ -29,11 +38,16 @@ export default defineConfig(
       claudeDir: "../.claude",
       scanRoot: "..",
     },
+    // Generated trees have no translated counterpart and never will — the
+    // generators write only into the default-locale content dir. Listing them
+    // keeps a future locale from advertising a translation that cannot exist.
     defaultLocaleOnlyPrefixes: [
+      "/docs/claude/",
       "/docs/claude-md/",
       "/docs/claude-skills/",
       "/docs/claude-agents/",
       "/docs/claude-commands/",
+      "/docs/components/",
     ],
     footer: {
       links: [],
@@ -71,10 +85,38 @@ export default defineConfig(
         path: "/docs/how-to",
         categoryMatch: "how-to",
       },
+      // Took the sixth slot from `Claude` rather than adding a seventh — the
+      // header is capped at 6 — but as a dropdown over BOTH categories, not a
+      // plain swap. `categoryMatch` is a PREFIX test
+      // (`topCategory.startsWith(cm)` in zudo-doc's `getNavSectionForSlug`),
+      // so the single old `claude` entry was what sectioned `claude/`,
+      // `claude-md/` AND `claude-skills/`. Dropping it left every one of those
+      // pages with `navSection === undefined` and therefore an EMPTY sidebar —
+      // a link from elsewhere still reached them, but there was no way to
+      // browse between them once you arrived.
+      //
+      // `getCategoryOrder` reads `categoryMatch` off children too, so listing
+      // both here restores the claude sidebar while keeping six top-level
+      // items. The two belong under one heading on the merits: the component
+      // pages are a projection of exactly the bundles the claude pages publish
+      // raw. The parent carries no `categoryMatch` of its own — a child
+      // claiming the active category already highlights it, and repeating
+      // `components` would duplicate it in the prefix list.
       {
-        label: "Claude",
-        path: "/docs/claude",
-        categoryMatch: "claude",
+        label: "Components",
+        path: "/docs/components",
+        children: [
+          {
+            label: "Catalog & Records",
+            path: "/docs/components",
+            categoryMatch: "components",
+          },
+          {
+            label: "Raw Agent Resources",
+            path: "/docs/claude",
+            categoryMatch: "claude",
+          },
+        ],
       },
     ],
     headerRightItems: [

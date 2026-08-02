@@ -17,9 +17,13 @@ Documentation site built with [zudo-doc](https://github.com/zudolab/zudo-doc) �
 - `pnpm dev:network` — same, but zfb binds `--host 0.0.0.0` for LAN access (`pnpm dev:zfb:network` individually); the doc-history server stays loopback-only and LAN clients reach it through zfb's `/doc-history/*` dev proxy
 - **Trusted networks only:** this also serves your git doc-history — including UNPUBLISHED local commits — to anyone on the LAN via the `/doc-history/*` proxy
 - `run-p` swallows trailing args, so other zfb flags don't forward through `pnpm dev` — pass them directly instead: `pnpm run dev:zfb -- <flags>`
-- `pnpm build` — static HTML export to `dist/`
-- `pnpm check` — TypeScript type checking
+- `pnpm build` — regenerates the component docs, then static HTML export to `dist/`
+- `pnpm check` — TypeScript type checking (covers `component-docs/` too)
 - `pnpm preview` — serve the built `dist/`
+- `pnpm generate:components` — project `.claude/skills/**` evidence into `src/content/docs/components/`
+- `pnpm check:components` — fail if that generated output or `component-docs/preflight.json` is stale
+- `pnpm test:components` — the generator's own test suite
+- `pnpm b4push` — `check` + `test:components` + `build` + `check:components`
 
 ## Key Directories
 
@@ -28,13 +32,24 @@ zfb.config.ts             # THE one config file — zudoDoc({ ...only fields you
 pages/
 ├── index.tsx             # 1-line re-export of the package home route
 └── docs/[[...slug]].tsx  # self-contained doc-route stub (required for `pnpm dev`)
+component-docs/           # component-knowledge projection (see its ARCHITECTURE.md)
+├── core/                 # provider-neutral: view model, publication policy, safe MDX
+├── adapters/circuit/     # this repo's evidence provider (.claude/skills + validate.py)
+├── cli/                  # generate / check / watch entrypoints
+└── preflight.json        # committed publication report — regenerate, never hand-edit
 src/
-├── chrome-bindings.tsx   # optional typed primary chrome / named header / MDX bindings
+├── chrome-bindings.tsx   # typed primary chrome / named header / MDX bindings
 ├── content/
 │   └── docs/             # MDX content (this project's showcase docs)
+│       └── components/   # GENERATED — never hand-edit; owned by component-docs/
 └── styles/
     └── global.css        # @import chain + a token-override slot — that's it
 ```
+
+**`src/content/docs/components/` is exclusively generated.** Edit the evidence under
+`.claude/skills/` or the renderers under `component-docs/core/render/`, then run
+`pnpm generate:components`. A hand-authored file placed in that tree fails the
+generator rather than being deleted. Full contract: `component-docs/ARCHITECTURE.md`.
 
 Everything else — layout, header, sidebar, footer, doc chrome, islands, and the default design tokens — lives in `node_modules/@takazudo/zudo-doc`. For supported markup replacement, create `src/chrome-bindings.tsx` with `defineChromeBindings`, set `chromeBindingsModule`, and use the primary `Header` / `Footer` / `Sidebar` / `Toc` / `Breadcrumb` / `DocPager` slots or the named `headerRightComponents` registry. The generated default, locale, and doc-history route shapes already consume the same binding object; do not fork a route stub for presentational customization. `npx zudo-doc eject <component>` only copies source: heed its primary, nested-chrome, or content-layer remediation before expecting the copy to render. Settings you didn't set explicitly in `zfb.config.ts` use the package's documented defaults — hover `zudoDoc`'s `ZudoDocConfig` argument in your editor to see every field and its `@default`.
 
@@ -68,7 +83,7 @@ Admonitions (above), tabbed content (`<Tabs>` / `<TabItem>`, `<CodeGroup>`), and
 
 ## Enabled Features
 
-- **search** — Full-text search via Pagefind
+- **search** — zudo-doc's own index: the build emits `search-index.json` and an inline client that scores by case-insensitive substring over `title` (+3), `description` (+2) and `body` (+1), with `body` truncated to 300 characters. Not Pagefind — `pagefind` is an unused devDependency, referenced by no script and by nothing in `zfb.config.ts`, and `dist/` contains no `pagefind/` directory.
 - **claudeResources** — Auto-generated docs for Claude Code resources
 - **sidebarResizer** — Draggable sidebar width
 - **sidebarToggle** — Show/hide desktop sidebar
