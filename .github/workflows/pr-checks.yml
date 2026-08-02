@@ -9,9 +9,12 @@
 # (wrangler versions upload --preview-alias) -> route smoke test -> sticky PR
 # comment.
 #
-# Everything up to and including the scans is CREDENTIAL-FREE and mandatory: it
-# is the same sequence as `pnpm b4push`, so a green local gate predicts a green
-# CI run. Only the last three steps need Cloudflare secrets.
+# Everything up to and including the scans is CREDENTIAL-FREE and mandatory,
+# and it is `pnpm b4push` plus two steps b4push cannot express as one command:
+# the generated-output drift check (it needs a clean git index, not a script)
+# and the link check (it needs the build's captured log). Both have a two-line
+# local equivalent in doc/component-docs/ARCHITECTURE.md §10. Only the last
+# three steps need Cloudflare secrets.
 #
 # Secret gating: same readiness-step pattern as main-deploy.yml — the
 # `secrets` context is not available in job-level `if:` expressions. Until
@@ -151,23 +154,37 @@ jobs:
           BUILD_LOG: ${{ runner.temp }}/doc-build.log
         run: bash component-docs/scripts/check-zfb-link-warnings.sh "$BUILD_LOG"
 
-      # Two committed generated trees, one check. The claude-resources
-      # generator rewrites doc/src/content/docs/claude*/ on every build, and
-      # `pnpm build` runs `generate:components` first, which rewrites
-      # doc/src/content/docs/components/. A source edit under .claude/skills/,
+      # THE drift authority for every committed generated file. The
+      # claude-resources generator rewrites doc/src/content/docs/claude*/ on
+      # every build, and `pnpm build` runs `generate:components` first, which
+      # rewrites doc/src/content/docs/components/ AND
+      # doc/component-docs/preflight.json. A source edit under .claude/skills/,
       # a CLAUDE.md, or the generator itself that lands without a rebuild leaves
-      # the committed pages stale; this fails the PR instead. Same contract as
+      # the committed output stale; this fails the PR instead. Same contract as
       # the boards regen-idempotency check in component-spec-skills.yml.
-      - name: Generated docs are up to date
-        run: git diff --exit-code -- doc/src/content/docs
+      #
+      # Two details are load-bearing, and both were holes that CI would have
+      # passed clean over:
+      #
+      #   `--intent-to-add`  a newly generated page arrives UNTRACKED, and
+      #                      `git diff` cannot see untracked files. A PR adding
+      #                      a record without committing its page would pass.
+      #   preflight.json     lives outside doc/src/content/docs, so it needs
+      #                      naming here. Nothing else in this job can catch it:
+      #                      `build` rewrites it before any later step looks, so
+      #                      a stale committed copy is invisible downstream.
+      - name: Generated output is committed and up to date
+        run: |
+          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json
+          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json
 
-      # The generated tree is not the whole projection:
-      # doc/component-docs/preflight.json is committed too, and the step above
-      # cannot see it. `check:components` re-projects from the evidence and
-      # compares — so it is also the SECOND generation run, which makes this
-      # pair the two-run idempotency check: build generated the tree, this
-      # regenerates it in memory and proves byte-identical output.
-      - name: Component projection has no drift
+      # The SECOND generation run, which makes this pair the two-run
+      # idempotency check: `build` projected and wrote the tree, this
+      # re-projects from the evidence and proves the result byte-identical.
+      # Run-to-run nondeterminism would otherwise surface as an intermittent
+      # diff on some unrelated PR; here it fails where it is caused, naming the
+      # files that moved.
+      - name: Component generation is deterministic
         working-directory: doc
         run: pnpm check:components
 

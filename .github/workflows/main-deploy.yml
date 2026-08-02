@@ -104,16 +104,19 @@ jobs:
       # The gap this closes: the job built fresh output but never compared it
       # to what was committed, so a direct push carrying stale generated pages
       # deployed a rebuilt site while the repository kept claiming otherwise.
-      # Both committed generated trees are covered — claude*/ from the
-      # claude-resources generator, components/ from `generate:components`,
-      # which `pnpm build` runs first.
-      - name: Generated docs are up to date
-        run: git diff --exit-code -- doc/src/content/docs
+      # Every committed generated file is covered — claude*/ from the
+      # claude-resources generator, components/ and preflight.json from
+      # `generate:components`, which `pnpm build` runs first. See pr-checks.yml
+      # for why `--intent-to-add` and the explicit preflight.json path are both
+      # required rather than tidy.
+      - name: Generated output is committed and up to date
+        run: |
+          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json
+          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json
 
-      # doc/component-docs/preflight.json is committed and the diff above does
-      # not reach it. This also re-projects from the evidence, so build + this
-      # step are the two generation runs that prove determinism.
-      - name: Component projection has no drift
+      # The second generation run: build wrote the tree, this re-projects from
+      # the evidence and proves the result byte-identical.
+      - name: Component generation is deterministic
         working-directory: doc
         run: pnpm check:components
 

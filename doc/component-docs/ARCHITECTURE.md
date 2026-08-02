@@ -97,7 +97,7 @@ adapter directory and no change under `core/`.
 | `build` | `pnpm generate:components && zfb build` | generation precedes the content snapshot |
 | `dev` | `pnpm generate:components && run-p dev:zfb dev:history dev:components` | seeded, then watched |
 | `check` | `zfb check` (unchanged) | typechecks `component-docs/**` via `tsconfig.json` `include` |
-| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts` | local gate |
+| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill` | local gate |
 
 **Why not a `zfb` plugin.** `@takazudo/zfb/plugins` does expose a supported
 composition seam (`setup` / `preBuild` / `postBuild` / `devMiddleware` /
@@ -561,24 +561,43 @@ Cloudflare credential skips the deploy, never a check.
 | Component generator tests | `pnpm test:components` | matrix / branded-type / adapter / renderer regressions, as assertions rather than as a diff |
 | Build site | `pnpm build` | — (log captured, see below) |
 | Hand-authored links resolve | `component-docs/scripts/check-zfb-link-warnings.sh` | a broken link in a **hand-authored** page — `pnpm build` exits 0 on those |
-| Generated docs are up to date | `git diff --exit-code -- doc/src/content/docs` | committed `components/` **and** `claude*/` gone stale |
-| Component projection has no drift | `pnpm check:components` | `doc/component-docs/preflight.json`, which the diff cannot see |
+| Generated output is committed and up to date | `git add -N` + `git diff --exit-code` over `doc/src/content/docs` and `doc/component-docs/preflight.json` | committed `components/`, `claude*/` or `preflight.json` gone stale, **and** a generated page that was never committed at all |
+| Component generation is deterministic | `pnpm check:components` | run-to-run nondeterminism, which would otherwise surface as an intermittent diff on an unrelated PR |
 | Denied-value scan over the built site | `pnpm scan:artifacts` | a denied value surviving the MDX compiler, minifier, indexer or `llms.txt` writer |
 | Denied-value scan over the docs-to-agent corpus | `pnpm scan:doc-skill` | the same, in what an agent reads back through `setup:doc-skill` |
 
 Then the credential-gated tail: readiness → `.assetsignore` → preview deploy →
 route smoke test → sticky comment.
 
-This is the same sequence as `pnpm b4push`, so a green local gate predicts a
-green CI run. Four things about it are load-bearing:
+This is `pnpm b4push` plus two steps b4push cannot express as one command — the
+drift check needs a clean git index rather than a script, and the link check
+needs the build's captured log. Their local equivalents:
+
+```sh
+pnpm b4push
+git add --intent-to-add -A -- src/content/docs component-docs/preflight.json  # from doc/
+git diff --exit-code -- src/content/docs component-docs/preflight.json
+```
+
+Five things about the sequence are load-bearing:
 
 - Because `build` runs `generate:components` first, **generated component pages
-  must be committed** or the diff step fails. That is the intended contract, and
-  the step diffs *all* of `doc/src/content/docs`, not just `components/` —
+  must be committed** or the drift step fails. That is the intended contract, and
+  the step covers *all* of `doc/src/content/docs`, not just `components/` —
   editing `doc/CLAUDE.md` also regenerates `doc/src/content/docs/claude-md/doc.mdx`.
-- `build` + `check:components` **are** the two-run idempotency check: the first
-  writes the tree, the second re-projects from the evidence and proves the output
-  byte-identical, `preflight.json` included.
+- That step is the drift authority for **everything** generated, and two details
+  in it are not tidiness. `--intent-to-add` is what makes a *newly generated,
+  never-committed* page visible — `git diff` alone cannot see untracked files, so
+  a PR adding a record without committing its page would pass clean. And
+  `preflight.json` has to be named explicitly: it sits outside
+  `doc/src/content/docs`, and `build` rewrites it before any later step looks at
+  it, so a stale committed copy is invisible to every other gate in the job.
+  Both holes were verified by construction, not assumed.
+- `build` + `check:components` are the two generation runs: the first writes the
+  tree, the second re-projects from the evidence and proves the result
+  byte-identical. Its job is **determinism**, not staleness — after `build` has
+  run, the tree on disk is fresh by construction, so it cannot see a stale
+  commit. That is the drift step's job, above.
 - `scan:artifacts` must run **after** `build`, because `dist/` is its input; it
   has no skip path, so a missing `dist/` is a failure rather than a silent pass.
 - `scan:doc-skill` runs `setup:doc-skill` with `HOME` pointed at a throwaway
