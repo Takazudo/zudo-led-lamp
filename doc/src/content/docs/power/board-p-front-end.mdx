@@ -48,29 +48,29 @@ Board P schematic.
 ## Block diagram
 
 ```mermaid
-flowchart TD
-  J1["J1 USB-C receptacle\nCC1/CC2 plain copper, no external Rd"] -->|"CC1 / CC2"| U1["U1 STUSB4500QTR\nPD sink controller"]
-  J1 -->|"VBUS_IN"| U1
+flowchart TD;
+  J1["J1 USB-C receptacle\nCC1/CC2 plain copper, no external Rd"] -->|"CC1 / CC2"| U1["U1 STUSB4500QTR\nPD sink controller"];
+  J1 -->|"VBUS_IN"| U1;
 
-  DB["R19 / R20 (0 ohm)\nCC1DB<->CC1, CC2DB<->CC2 bridges"] --- U1
-  RD["R17 / R18 5.1k ext Rd\nDNP (rework insurance only)"] -.-> J1
-  CCESD["D6 / D7 PESD24VS1UB\nDNP (enclosed/production builds only)"] -.-> U1
+  DB["R19 / R20 (0 ohm)\nCC1DB<->CC1, CC2DB<->CC2 bridges"] --- U1;
+  RD["R17 / R18 5.1k ext Rd\nDNP (rework insurance only)"] -.-> J1;
+  CCESD["D6 / D7 PESD24VS1UB\nDNP (enclosed/production builds only)"] -.-> U1;
 
-  U1 -->|"VBUS_VS_DISCH via R14 470R"| P18["Pin-18 sense/discharge"]
-  U1 -->|"VBEN (active-low OD)"| GATE["Q1 gate node\nR11 100k pull-up, R12 150k series, C35 100n to VBUS_IN"]
-  GATE --> Q1["Q1 AO3401A P-FET\nload switch"]
+  U1 -->|"VBUS_VS_DISCH via R14 470R"| P18["Pin-18 sense/discharge"];
+  U1 -->|"VBEN (active-low OD)"| GATE["Q1 gate node\nR11 100k pull-up, R12 150k series, C35 100n to VBUS_IN"];
+  GATE --> Q1["Q1 AO3401A P-FET\nload switch"];
 
-  D5["D5 SMAJ20A\nVBUS clamp"] --- U1
-  D5 --- J1
+  D5["D5 SMAJ20A\nVBUS clamp"] --- U1;
+  D5 --- J1;
 
-  Q1 -->|"VBUS_OUT (switched 15V)"| JOUT["Downstream interface connector\nVBUS_OUT x2, GND x2, ATT, PDOK"]
-  U1 -->|"ATT (open-drain)"| JOUT
-  U1 -->|"PDOK (open-drain)"| JOUT
+  Q1 -->|"VBUS_OUT (switched 15V)"| JOUT["Downstream interface connector\nVBUS_OUT x2, GND x2, ATT, PDOK"];
+  U1 -->|"ATT (open-drain)"| JOUT;
+  U1 -->|"PDOK (open-drain)"| JOUT;
 
-  J2["J2 pogo pads (1x4)\nNVM I2C programming + reset"] --- U1
-  J3["J3 pogo pads (1x8)\ndebug: CC1DB CC2DB VREG_2V7 VBUS_IN GND ATT PDOK VBEN"] --- U1
+  J2["J2 pogo pads (1x4)\nNVM I2C programming + reset"] --- U1;
+  J3["J3 pogo pads (1x8)\ndebug: CC1DB CC2DB VREG_2V7 VBUS_IN GND ATT PDOK VBEN"] --- U1;
 
-  JOUT -->|"switched 15V + GND"| DOWNSTREAM["Downstream board(s)\n(LED power stage / control — TBD by wave-3 architecture decision)"]
+  JOUT -->|"switched 15V + GND"| DOWNSTREAM["Downstream board(s)\n(LED power stage / control — TBD by wave-3 architecture decision)"];
 ```
 
 ## Net-connectivity table

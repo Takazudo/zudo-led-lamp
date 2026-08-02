@@ -11,51 +11,51 @@ the switched 15 V rail from [Board P](./board-p.mdx) and nothing else.
 ## Block diagram
 
 ```mermaid
-flowchart LR
-  J2["J2 B6B-XH-A 6P\n15V x2, GND x2, ATT, PDOK"]
-  F1["F1 PPTC\n750mA hold / 30V"]
-  V15["V15 rail\nD10 SMAJ20A\nC10 C11 10uF"]
-  RS1["RS1 200mR 2512\nhigh-side sense"]
-  U2["U2 AL8860MP-13\nVIN pin 8"]
-  SETN["SET node\nU2 pin 1"]
-  L1["L1 33uH\n2.5A sat"]
-  LEDP["LED_P\narray anode rail"]
-  BAL["R30..R37\n8x 33R 2512 ballast"]
-  STR["8 strings x 3 series\n24x HL-AM-2835H421W\n3000K, 62.5mA each"]
-  LEDN["LED_N = switching node\nU2 SW pins 5,6"]
-  D11["D11 SS26 60V\ncatch diode"]
-  U4["U4 AP63203WU-7\n3.3V sync buck"]
-  V33["V3P3 rail\nC16 C17 22uF"]
-  U3["U3 STM32G031F8P6"]
-  SW1["SW1 EC11 encoder"]
-  RT1["RT1 NTC 10k\nin the LED array"]
-  RCF["R20 10k / R21 33k / C21 100n\nRC low-pass, 0 to 2.53V DC"]
-  CTRL["U2 CTRL pin 4\nanalog dimming"]
-  J3["J3 SWD pads"]
-  J4["J4 UART pads"]
+flowchart LR;
+  J2["J2 B6B-XH-A 6P\n15V x2, GND x2, ATT, PDOK"];
+  F1["F1 PPTC\n750mA hold / 30V"];
+  V15["V15 rail\nD10 SMAJ20A\nC10 C11 10uF"];
+  RS1["RS1 200mR 2512\nhigh-side sense"];
+  U2["U2 AL8860MP-13\nVIN pin 8"];
+  SETN["SET node\nU2 pin 1"];
+  L1["L1 33uH\n2.5A sat"];
+  LEDP["LED_P\narray anode rail"];
+  BAL["R30..R37\n8x 33R 2512 ballast"];
+  STR["8 strings x 3 series\n24x HL-AM-2835H421W\n3000K, 62.5mA each"];
+  LEDN["LED_N = switching node\nU2 SW pins 5,6"];
+  D11["D11 SS26 60V\ncatch diode"];
+  U4["U4 AP63203WU-7\n3.3V sync buck"];
+  V33["V3P3 rail\nC16 C17 22uF"];
+  U3["U3 STM32G031F8P6"];
+  SW1["SW1 EC11 encoder"];
+  RT1["RT1 NTC 10k\nin the LED array"];
+  RCF["R20 10k / R21 33k / C21 100n\nRC low-pass, 0 to 2.53V DC"];
+  CTRL["U2 CTRL pin 4\nanalog dimming"];
+  J3["J3 SWD pads"];
+  J4["J4 UART pads"];
 
-  J2 --> F1
-  F1 --> V15
-  V15 --> RS1
-  V15 --> U2
-  RS1 --> SETN
-  SETN --> L1
-  L1 --> LEDP
-  LEDP --> BAL
-  BAL --> STR
-  STR --> LEDN
-  D11 --- LEDN
-  D11 --- V15
-  V15 --> U4
-  U4 --> V33
-  V33 --> U3
-  SW1 -->|"A/B quadrature\nPA0 / PA1, TIM2"| U3
-  RT1 -->|"PA4 ADC_IN4"| U3
-  J2 -->|"ATT / PDOK"| U3
-  U3 -->|"PA6 TIM3_CH1\n20kHz PWM"| RCF
-  RCF --> CTRL
-  J3 --- U3
-  J4 --- U3
+  J2 --> F1;
+  F1 --> V15;
+  V15 --> RS1;
+  V15 --> U2;
+  RS1 --> SETN;
+  SETN --> L1;
+  L1 --> LEDP;
+  LEDP --> BAL;
+  BAL --> STR;
+  STR --> LEDN;
+  D11 --- LEDN;
+  D11 --- V15;
+  V15 --> U4;
+  U4 --> V33;
+  V33 --> U3;
+  SW1 -->|"A/B quadrature\nPA0 / PA1, TIM2"| U3;
+  RT1 -->|"PA4 ADC_IN4"| U3;
+  J2 -->|"ATT / PDOK"| U3;
+  U3 -->|"PA6 TIM3_CH1\n20kHz PWM"| RCF;
+  RCF --> CTRL;
+  J3 --- U3;
+  J4 --- U3;
 ```
 
 ## LED array and the brightness number
