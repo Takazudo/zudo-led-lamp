@@ -42,7 +42,7 @@
       "expected_trigger_skill": "circuit-spec-integration",
       "expected_loaded_skills": ["component-spec-audit","circuit-spec-integration","component-al8860mp-13","component-honglitronic-hl-am-2835h421w-s1-08-hr3","component-murata-ncp18xh103f03rb","component-stm32g031f8p6","component-project-passives"],
       "routing_queries": [{"query":"STM32G031F8P6 C529334","expected_line_ids":["line-c529334"]},{"query":"AL8860MP-13 C500782","expected_line_ids":["line-c500782"]},{"query":"FRC2512F33R0TS C2934070","expected_line_ids":["line-c2934070"]},{"query":"NCP18XH103F03RB C13564","expected_line_ids":["line-c13564"]}],
-      "direct_record_ids": ["rec-al8860mp-13", "rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c210315", "rec-c2934070", "rec-c4216", "rec-c13564", "rec-c529334", "rec-c17414"],
+      "direct_record_ids": ["rec-al8860mp-13", "rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c210315", "rec-c2934070", "rec-c4216", "rec-c13564", "rec-c529334", "rec-c25803"],
       "subordinate_record_ids": ["rec-rlp25feer200", "rec-fxl0630-330-m", "rec-ro-ss26", "rec-c2934070"],
       "required_source_ids": ["src-al8860-ds39014", "src-c210315-spec", "src-c2934070-spec", "src-c2934070-generator", "src-c13564-current", "src-c529334-ds"],
       "rule_ids": ["rule-al8860-led-stage", "rule-ntc-adc-firmware"],
