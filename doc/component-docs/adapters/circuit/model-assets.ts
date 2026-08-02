@@ -83,7 +83,16 @@ export async function syncModelAssets(
     }
     const target = containedPublicTarget(outputRoot, entry.name);
     const sourceBytes = await readFile(entry.source);
-    const targetBytes = await readFile(target).catch(() => null);
+    const targetStat = await lstat(target).catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return null;
+      throw error;
+    });
+    if (targetStat !== null && (!targetStat.isFile() || targetStat.isSymbolicLink())) {
+      fail("PATH_CONTAINMENT", "published model must be a regular non-symlink file", {
+        path: entry.name,
+      });
+    }
+    const targetBytes = targetStat === null ? null : await readFile(target);
     if (targetBytes !== null && targetBytes.equals(sourceBytes)) {
       unchanged.push(entry.name);
     } else if (dryRun) {

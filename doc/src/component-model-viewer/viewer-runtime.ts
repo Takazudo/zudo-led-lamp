@@ -59,6 +59,7 @@ export function createOnDemandInvalidator(render: () => void): {
 export async function mountModelViewer(
   root: HTMLElement,
   descriptor: ModelViewerDescriptor,
+  signal: AbortSignal,
 ): Promise<MountedModelViewer> {
   const viewport = root.querySelector<HTMLElement>("[data-model-viewer-viewport]");
   if (viewport === null) throw new Error("Model viewer viewport is missing");
@@ -71,7 +72,6 @@ export async function mountModelViewer(
     return { dispose() {} };
   }
 
-  const abort = new AbortController();
   let renderer: WebGLRenderer | undefined;
   let model: Object3D | undefined;
   let controls: OrbitControls | undefined;
@@ -81,6 +81,7 @@ export async function mountModelViewer(
   let disposed = false;
 
   try {
+    if (signal.aborted) throw new DOMException("Viewer disposed", "AbortError");
     if (new URLSearchParams(location.search).get("model-viewer-model") === "fail") {
       throw new Error("Forced model load failure");
     }
@@ -121,13 +122,13 @@ export async function mountModelViewer(
     controls.addEventListener("change", invalidator.invalidate);
 
     const response = await fetch(descriptor.modelUrl, {
-      signal: abort.signal,
+      signal,
       credentials: "same-origin",
       cache: "force-cache",
     });
     if (!response.ok) throw new Error(`Model request failed with ${response.status}`);
     const source = await response.text();
-    if (disposed) throw new DOMException("Viewer disposed", "AbortError");
+    if (disposed || signal.aborted) throw new DOMException("Viewer disposed", "AbortError");
     model = new VRMLLoader().parse(source, descriptor.modelUrl);
     applyModelTransform(model, descriptor.offset, descriptor.rotation, descriptor.scale);
     scene.add(model);
@@ -149,7 +150,6 @@ export async function mountModelViewer(
       dispose() {
         if (disposed) return;
         disposed = true;
-        abort.abort();
         invalidator.cancel();
         resizeObserver?.disconnect();
         removeWindowResize?.();
@@ -164,7 +164,6 @@ export async function mountModelViewer(
       },
     };
   } catch (error) {
-    abort.abort();
     controls?.stopListenToKeyEvents();
     controls?.dispose();
     if (model !== undefined) disposeObject(model);

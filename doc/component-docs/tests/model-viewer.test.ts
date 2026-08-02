@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, symlink, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { afterEach, describe, it } from "node:test";
@@ -75,6 +75,10 @@ describe("model asset publication", () => {
     await writeFile(join(output, "extra.wrl"), "extra");
     assert.deepEqual((await syncModelAssets(plan, output, true)).drift, ["changed: source.wrl", "extra: extra.wrl"]);
     await assert.rejects(() => syncModelAssets([{ name: "source.step", source }], output, true));
+
+    await unlink(join(output, "source.wrl"));
+    await symlink(source, join(output, "source.wrl"));
+    await assert.rejects(() => syncModelAssets(plan, output, true));
   });
 });
 

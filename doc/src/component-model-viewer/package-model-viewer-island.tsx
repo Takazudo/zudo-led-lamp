@@ -20,10 +20,14 @@ export function PackageModelViewerIsland({ descriptor: encoded }: PackageModelVi
 
     let disposed = false;
     let cleanup: (() => void) | undefined;
+    const abort = new AbortController();
     setViewerState(root, "loading", "Loading interactive package model…");
 
     void import("./viewer-runtime.ts")
-      .then(({ mountModelViewer }) => mountModelViewer(root, descriptor))
+      .then(({ mountModelViewer }) => {
+        if (disposed) throw new DOMException("Viewer disposed", "AbortError");
+        return mountModelViewer(root, descriptor, abort.signal);
+      })
       .then((mounted) => {
         if (disposed) mounted.dispose();
         else cleanup = () => mounted.dispose();
@@ -40,6 +44,7 @@ export function PackageModelViewerIsland({ descriptor: encoded }: PackageModelVi
 
     return () => {
       disposed = true;
+      abort.abort();
       cleanup?.();
     };
   }, [encoded]);
