@@ -86,14 +86,37 @@ export default defineConfig(
         categoryMatch: "how-to",
       },
       // Took the sixth slot from `Claude` rather than adding a seventh — the
-      // header is capped at 6. The raw agent-resource routes stay generated,
-      // linked and indexed; only their header slot moved. /docs/components/
-      // links back to /docs/claude/, and every record page links to its own
-      // owning bundle, so the hub is still reachable by navigation.
+      // header is capped at 6 — but as a dropdown over BOTH categories, not a
+      // plain swap. `categoryMatch` is a PREFIX test
+      // (`topCategory.startsWith(cm)` in zudo-doc's `getNavSectionForSlug`),
+      // so the single old `claude` entry was what sectioned `claude/`,
+      // `claude-md/` AND `claude-skills/`. Dropping it left every one of those
+      // pages with `navSection === undefined` and therefore an EMPTY sidebar —
+      // a link from elsewhere still reached them, but there was no way to
+      // browse between them once you arrived.
+      //
+      // `getCategoryOrder` reads `categoryMatch` off children too, so listing
+      // both here restores the claude sidebar while keeping six top-level
+      // items. The two belong under one heading on the merits: the component
+      // pages are a projection of exactly the bundles the claude pages publish
+      // raw. The parent carries no `categoryMatch` of its own — a child
+      // claiming the active category already highlights it, and repeating
+      // `components` would duplicate it in the prefix list.
       {
         label: "Components",
         path: "/docs/components",
-        categoryMatch: "components",
+        children: [
+          {
+            label: "Catalog & Records",
+            path: "/docs/components",
+            categoryMatch: "components",
+          },
+          {
+            label: "Raw Agent Resources",
+            path: "/docs/claude",
+            categoryMatch: "claude",
+          },
+        ],
       },
     ],
     headerRightItems: [
