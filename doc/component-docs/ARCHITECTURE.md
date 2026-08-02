@@ -146,6 +146,39 @@ new dev dependency. This constrains how it may be written:
 types unflagged, older 22.x needs the flag, and the flag is accepted (harmless) on
 both. CI pins `node-version: 22`.
 
+### Footprint preview assets
+
+The 22 package-level SVG previews under
+`public/assets/component-previews/footprints/` are generated assets, shared by
+all 32 record aliases. Their `manifest.json` locks each canonical footprint
+hash, output hash, record mapping, renderer, and export options. Catalog data
+therefore carries a stable asset path rather than duplicating SVG bytes per
+record.
+
+Regeneration is containerized and network-disabled:
+
+```sh
+pnpm generate:footprint-previews
+```
+
+It uses the digest-pinned official KiCad image recorded in the manifest. The
+generator copies only the selected canonical `.kicad_mod` files into a
+temporary export-only `.pretty` library, removes all `fp_text` forms from those
+copies, exports the reviewed copper/silkscreen/fabrication/courtyard layer set,
+then strips volatile SVG metadata and validates the normalized result. It
+hashes the canonical files before and after export and fails if their bytes
+move.
+
+The ordinary CI/local gate needs neither Docker nor KiCad:
+
+```sh
+pnpm check:footprint-previews
+```
+
+It resolves the current 32-record reference contract and fails closed on a
+changed selection, stale input or output hash, missing/extra asset, unsafe SVG
+markup, degenerate view box, surviving footprint text, or alias reuse error.
+
 ## 4. Validation — one validator, in Python, fatal on failure
 
 `adapters/circuit/validate.ts` runs
