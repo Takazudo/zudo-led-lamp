@@ -50,9 +50,13 @@ Lookup-verified, DB date 2026-06-27. Package: SMD 13.4×13.4mm.
 
 :::warning
 **All three CXA1304 SKUs show zero current stock** in this DB snapshot. JLCPCB restocks COB parts irregularly — treat this as a real sourcing risk to flag for the architecture pass, not just a note. Re-verify at order time regardless of what's chosen.
-
-Also note: this same CXA1304 family is sold in **18V/200mA and 36V/~lm-matched bins** (e.g. C510500, C510507 — not tabulated above) that are electrically incompatible with a straight buck topology on a 15V rail (see headroom analysis below). Only the **9V bin** is usable here without a boost or buck-boost stage — picking the wrong voltage bin off a parametric search would be a real mistake.
 :::
+
+Also note: this same CXA1304 family is sold in **18V/200mA and 36V/~lm-matched bins**
+(e.g. C510500, C510507 — not tabulated above) that are electrically incompatible with a
+straight buck topology on a 15V rail (see headroom analysis below). Only the **9V bin**
+is usable here without a boost or buck-boost stage — picking the wrong voltage bin off a
+parametric search would be a real mistake.
 
 **Alternate (currently in stock, specs unverified):** HL-LM002H384W-7B1C18 (C22398559), SMD 13.5×13.5mm, 3000K, Stock 108, [partdetail](https://jlcpcb.com/partdetail/C22398559). Lookup-verified (DB date 2026-05-23) for existence/stock only — its datasheet is a scanned/image PDF that did not yield machine-readable Vf/current/lumen data in this research pass. Usable as a stock-available fallback, but Vf and thermal specs must be confirmed from the manufacturer directly before any headroom or thermal math is done against it.
 

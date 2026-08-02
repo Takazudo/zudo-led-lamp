@@ -94,6 +94,44 @@ const MINIMUM_SITE_CANARIES = 100;
 const MINIMUM_SITE_FILES = 150;
 
 /**
+ * How many canaries the SITE tier is allowed to drop because another content
+ * source already publishes them. Four today, each verified by hand:
+ *
+ *   SMAJ20A C571370                 only the claude-skills mirror
+ *   AO3401A C347476                 only the claude-skills mirror
+ *   JST B6B-XH-A(LF)(SN)            mirror + power/board-p-front-end + ratings-matrix
+ *   UMW (Youtai Semiconductor) …    mirror + architecture/decisions + ratings-matrix
+ *
+ * The subtraction corpus includes `claude-skills/*`, the generated mirror of
+ * each `SKILL.md` — and two of the four rest on that mirror ALONE. `SKILL.md`
+ * bodies are hand-editable, and the raw file is outside the canary harvest, so
+ * a sentence added to one could retire a canary sitewide, invisibly from both
+ * directions.
+ *
+ * Asserting the count makes both directions a decision instead of a silent
+ * change: prose that retires a canary stops the build and someone reads the
+ * added line; prose that legitimately names a new part stops the build and
+ * someone bumps this number with a reason in the diff. Deliberately NOT solved
+ * by narrowing the corpus to frontmatter — that would trade this silent failure
+ * for a noisy one, firing on component-audit skills whose bodies name parts
+ * constantly, and a canary that cries wolf gets suppressed.
+ */
+const EXPECTED_WITHHELD = 4;
+
+function assertWithheldCount(withheld: number): void {
+  if (withheld === EXPECTED_WITHHELD) return;
+  throw new ComponentDocsError(
+    "PUBLICATION_POLICY",
+    "the number of canaries withheld from the SITE tier changed",
+    {
+      expected: EXPECTED_WITHHELD,
+      actual: withheld,
+      why: "another content source started or stopped publishing a denied-only value; review the change, then update EXPECTED_WITHHELD",
+    },
+  );
+}
+
+/**
  * Route fragments the docs-to-agent corpus must contain when `--agent-skill`
  * names one.
  *
@@ -515,6 +553,7 @@ async function main(): Promise<void> {
     (target) => !target.label.startsWith("content/components/"),
   );
   const siteCanaries = subtractPublishedElsewhere(canaries, contentTargets);
+  assertWithheldCount(canaries.length - siteCanaries.length);
   const siteResult = scanTargets([...distTargets, ...agentTargets], siteCanaries);
   assertNoLeaks(siteResult, {
     canaries: MINIMUM_SITE_CANARIES,
