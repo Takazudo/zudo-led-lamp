@@ -177,6 +177,19 @@ evidence.
 declares `supportedViewModelVersions` and the pipeline refuses to run on a mismatch,
 so a core/adapter skew is a startup error rather than a subtly wrong page.
 
+**v1 stays v1 for the whole of epic #57, including through incompatible shape
+changes.** #59 both widened `PublicFact["value"]` and added a required
+`PublicRecordIdentity.ownerSkill`, and neither bumped the number. That is
+deliberate, and it is the one place the version rule is suspended: the core and
+the only adapter are compiled together from one repository, so a skew between
+them is a *compile* error long before the runtime check sees it, and package
+extraction is explicitly deferred (§12). Nothing outside this repository has ever
+consumed v1, so there is no consumer a bump could protect — it would only churn
+`preflight.json` and imply a compatibility boundary that never existed. The
+number becomes a real boundary the moment `core/**` is extracted; from then on,
+the rule in the `VIEW_MODEL_VERSION` doc comment applies literally and any
+incompatible change bumps it.
+
 Population ownership:
 
 | Field | Owner |

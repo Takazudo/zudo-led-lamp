@@ -21,7 +21,14 @@ import type { Anchor, Slug } from "./ids.ts";
 import type { SafeText } from "./text.ts";
 import type { SafeUrl } from "./url.ts";
 
-/** Bumped only when the shape changes incompatibly; adapters negotiate on it. */
+/**
+ * Bumped only when the shape changes incompatibly; adapters negotiate on it.
+ *
+ * Suspended for the duration of epic #57 — see ARCHITECTURE.md §5. Core and the
+ * only adapter compile together from one repository, so a skew is a compile
+ * error before this number is ever read, and nothing outside the repository has
+ * consumed v1. The number becomes a real boundary once `core/**` is extracted.
+ */
 export const VIEW_MODEL_VERSION = 1;
 
 export type ViewModelVersion = typeof VIEW_MODEL_VERSION;
