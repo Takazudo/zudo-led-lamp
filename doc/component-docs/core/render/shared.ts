@@ -459,6 +459,16 @@ export function ownerSkillOf(record: PublicRecord): SafeText | null {
 /** The index of every published agent resource — the owner-skill fallback. */
 export const AGENT_RESOURCES_ROUTE: Route = route("/docs/claude-skills/");
 
+/**
+ * The hub above `/docs/claude-skills/` and `/docs/claude-md/`.
+ *
+ * #61 gave the sixth header slot to `Components`, so this hub no longer has a
+ * header entry of its own. The landing page links to it to keep the raw
+ * agent-resource tree reachable by navigation and not only by search or a
+ * remembered URL.
+ */
+export const AGENT_RESOURCES_HUB_ROUTE: Route = route("/docs/claude/");
+
 /** Where a record's raw evidence bundle is published, as precisely as we know. */
 export function agentResourceDestination(record: PublicRecord): Route {
   const ownerSkill = ownerSkillOf(record);

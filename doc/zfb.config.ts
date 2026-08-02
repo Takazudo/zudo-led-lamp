@@ -38,11 +38,16 @@ export default defineConfig(
       claudeDir: "../.claude",
       scanRoot: "..",
     },
+    // Generated trees have no translated counterpart and never will — the
+    // generators write only into the default-locale content dir. Listing them
+    // keeps a future locale from advertising a translation that cannot exist.
     defaultLocaleOnlyPrefixes: [
+      "/docs/claude/",
       "/docs/claude-md/",
       "/docs/claude-skills/",
       "/docs/claude-agents/",
       "/docs/claude-commands/",
+      "/docs/components/",
     ],
     footer: {
       links: [],
@@ -80,10 +85,15 @@ export default defineConfig(
         path: "/docs/how-to",
         categoryMatch: "how-to",
       },
+      // Took the sixth slot from `Claude` rather than adding a seventh — the
+      // header is capped at 6. The raw agent-resource routes stay generated,
+      // linked and indexed; only their header slot moved. /docs/components/
+      // links back to /docs/claude/, and every record page links to its own
+      // owning bundle, so the hub is still reachable by navigation.
       {
-        label: "Claude",
-        path: "/docs/claude",
-        categoryMatch: "claude",
+        label: "Components",
+        path: "/docs/components",
+        categoryMatch: "components",
       },
     ],
     headerRightItems: [

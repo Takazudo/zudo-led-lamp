@@ -5,9 +5,9 @@
  * category navigation. It states what the reader is looking at and what the
  * data does NOT mean; it never aggregates verdicts.
  *
- * Sibling renderers land here in later waves: `catalog.ts` (#60),
- * `record.ts` (#60), `integration.ts` (#63). They share the builders in
- * `../mdx.ts` and must not introduce a second serialisation path.
+ * Sibling renderers: `catalog.ts` and `record.ts` (#60), `integration.ts`
+ * (#63, still to come). They share the builders in `../mdx.ts` and must not
+ * introduce a second serialisation path.
  */
 
 import {
@@ -16,6 +16,7 @@ import {
   evidenceAnchor,
   heading,
   paragraph,
+  routeLink,
   space,
   strong,
   table,
@@ -23,6 +24,7 @@ import {
   type TableRow,
 } from "../mdx.ts";
 import { anchor } from "../ids.ts";
+import { AGENT_RESOURCES_HUB_ROUTE } from "./shared.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
 import { literal, safeText } from "../text.ts";
 import type { PublicationPolicy } from "../publication.ts";
@@ -113,6 +115,21 @@ export function renderLanding(
         countRow("DNP or hand-fit lines", counts.dnpOrHandFitLines),
       ],
     ),
+
+    heading(2, literal("Raw agent resources")),
+    paragraph([
+      text(
+        literal(
+          "Every page in this section is projected from a stored evidence bundle and does " +
+            "not restate it. The bundles are the source of truth: where the two disagree, " +
+            "the bundle is right and the projected page is stale. Each record page links to " +
+            "its own owning bundle; the whole published set starts here.",
+        ),
+      ),
+    ]),
+    paragraph([
+      routeLink(AGENT_RESOURCES_HUB_ROUTE, literal("Browse the raw agent resources")),
+    ]),
 
     heading(2, literal("Sections")),
     component("CategoryNav", { category: "components" }),
