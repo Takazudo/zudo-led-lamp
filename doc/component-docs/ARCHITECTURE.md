@@ -52,8 +52,9 @@ core/                       provider-neutral; no Python, no `.claude`, no fs pat
   adapter.ts                ComponentDataAdapter + ValidationRunner interfaces
   pipeline.ts               the one generation path
   render/landing.ts         /docs/components/          (Wave 1)
-  render/catalog.ts         /docs/components/catalog/  (#60 — not yet written)
-  render/record.ts          /docs/components/records/… (#60 — not yet written)
+  render/catalog.ts         /docs/components/catalog/  (#60)
+  render/record.ts          /docs/components/records/… (#60)
+  render/shared.ts          routes, glosses and orderings both pages share (#60)
   render/integration.ts     /docs/components/integration/ (#63 — not yet written)
 adapters/circuit/           this repository's evidence provider
   paths.ts                  every path the adapter may touch
@@ -65,7 +66,10 @@ adapters/circuit/           this repository's evidence provider
   index.ts                  the adapter itself; `projectIndex` is the pure projection
 cli/                        run.ts (shared body), generate.ts, check.ts, watch.ts
 ui/evidence-anchor.tsx      the one MDX component the generator emits
-tests/                      node:test suites; fixtures.ts is the fixture corpus
+tests/                      node:test suites, plus two fixture modules:
+                            fixtures.ts (a finished PublicViewModel, for the
+                            renderers) and projection-fixtures.ts (raw provider
+                            JSON, for the adapter and the denied-field canaries)
 ```
 
 `evidence.ts` and `projectIndex` are pure functions over parsed JSON, so every
@@ -390,8 +394,8 @@ touched.
 | Route | Source | Wave |
 |---|---|---|
 | `/docs/components/` | `render/landing.ts` → `index.mdx` | 1 (done) |
-| `/docs/components/catalog/` | `render/catalog.ts` | #60 / #61 |
-| `/docs/components/records/<slug>/` | `render/record.ts` | #60 / #61 |
+| `/docs/components/catalog/` | `render/catalog.ts` | #60 (done) |
+| `/docs/components/records/<slug>/` | `render/record.ts` | #60 (done) |
 | `/docs/components/integration/` | `render/integration.ts` | #63 |
 
 - **Header nav `Claude` → `Components` is #61's change**, not Wave 1's. Wave 1
