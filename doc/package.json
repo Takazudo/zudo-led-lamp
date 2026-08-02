@@ -18,6 +18,8 @@
     "dev:history": "doc-history-server --port 4322 --content-dir src/content/docs",
     "generate:components": "node --experimental-strip-types component-docs/cli/generate.ts",
     "check:components": "node --experimental-strip-types component-docs/cli/check.ts",
+    "scan:artifacts": "node --experimental-strip-types component-docs/cli/scan-artifacts.ts",
+    "scan:doc-skill": "bash component-docs/scripts/scan-doc-skill.sh",
     "test:components": "node --experimental-strip-types --test \"component-docs/tests/*.test.ts\"",
     "dev:components": "node --experimental-strip-types component-docs/cli/generate.ts --watch",
     "setup:doc-skill": "bash scripts/setup-doc-skill.sh",
@@ -25,7 +27,7 @@
     "setup:doc-skill:claude": "bash scripts/setup-doc-skill.sh --target claude",
     "setup:doc-skill:codex": "bash scripts/setup-doc-skill.sh --target codex",
     "setup:doc-skill:both": "bash scripts/setup-doc-skill.sh --target both",
-    "b4push": "pnpm check && pnpm test:components && pnpm build && pnpm check:components"
+    "b4push": "pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts"
   },
   "dependencies": {
     "@takazudo/zdtp": "0.4.9",

@@ -39,14 +39,25 @@ export const INTEGRATION_SKILL_NAME = "circuit-spec-integration";
 export const INTEGRATION_SKILL = join(SKILLS_ROOT, INTEGRATION_SKILL_NAME);
 export const INTEGRATION_RULES_FILE = join(INTEGRATION_SKILL, "references", "rules.json");
 
+/** Every page source the site publishes, this feature's tree included. */
+export const CONTENT_ROOT = join(DOC_ROOT, "src", "content", "docs");
+
 /**
  * The exclusively-owned generated tree. Nothing outside it is ever written,
  * and everything inside it is regenerated from evidence.
  */
-export const GENERATED_ROOT = join(DOC_ROOT, "src", "content", "docs", "components");
+export const GENERATED_ROOT = join(CONTENT_ROOT, "components");
 
 /** Committed, deterministic publication preflight report. */
 export const PREFLIGHT_FILE = join(DOC_ROOT, "component-docs", "preflight.json");
+
+/**
+ * The built site. Not written by this feature — it is the artifact the
+ * publication-safety scan reads, because everything between the view model and
+ * these bytes (MDX compiler, HTML minifier, search indexer, llms.txt writer) is
+ * owned by the site framework rather than by this generator.
+ */
+export const DIST_ROOT = join(DOC_ROOT, "dist");
 
 /** Per-record bundle files, in the order a record page consumes them. */
 export const BUNDLE_FILES = [

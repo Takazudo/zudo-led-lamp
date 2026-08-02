@@ -90,12 +90,14 @@ adapter directory and no change under `core/`.
 |---|---|---|
 | `generate:components` | `node --experimental-strip-types component-docs/cli/generate.ts` | validate → project → render → emit |
 | `check:components` | `node --experimental-strip-types component-docs/cli/check.ts` | dry-run; nonzero on drift |
+| `scan:artifacts` | `node --experimental-strip-types component-docs/cli/scan-artifacts.ts` | denied-value scan of the BUILT site (§6.1) |
+| `scan:doc-skill` | `bash component-docs/scripts/scan-doc-skill.sh` | same scan over an isolated docs-to-agent corpus |
 | `test:components` | `node --experimental-strip-types --test "component-docs/tests/*.test.ts"` | unit + integration |
 | `dev:components` | `… component-docs/cli/generate.ts --watch` | debounced regeneration |
 | `build` | `pnpm generate:components && zfb build` | generation precedes the content snapshot |
 | `dev` | `pnpm generate:components && run-p dev:zfb dev:history dev:components` | seeded, then watched |
 | `check` | `zfb check` (unchanged) | typechecks `component-docs/**` via `tsconfig.json` `include` |
-| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components` | local gate |
+| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts` | local gate |
 
 **Why not a `zfb` plugin.** `@takazudo/zfb/plugins` does expose a supported
 composition seam (`setup` / `preBuild` / `postBuild` / `devMiddleware` /
@@ -358,6 +360,80 @@ repository anyway. Counts come from what the run actually did, not from what the
 declares — so a field marked `PUBLISH` that nothing reads shows `emitted: 0` and the
 drift is visible. `check:components` compares it byte-for-byte.
 
+### 6.1 Artifact-level proof (`scan:artifacts`, #64)
+
+Everything above proves the **view model** is clean. It cannot prove the built
+site is, because between the view model and `dist/` sit an MDX compiler, an HTML
+minifier, a search indexer and an `llms.txt` writer — none of which this feature
+owns. `scan:artifacts` scans the bytes.
+
+Canaries are harvested from the **raw** `.claude/skills/**` JSON, not through the
+adapter's provider types: those types name only the fields the projection
+consumes, so `sha256`, `evidence_extract` and `reviewed_by` are absent from them
+by design and a harvest through them would find nothing. `DENIED_PROVIDER_KEYS`
+in `adapters/circuit/canaries.ts` lists the key **names**, which also covers the
+retrieval bookkeeping (`request_headers`, `refresh_policy`, …) that has no
+`FieldKey` for the matrix to deny.
+
+**Comparison is on whole values with output escaping normalised, never on raw
+substrings.** Four false-positive modes are live in this corpus, and a scanner
+that hits any of them fails on clean builds — after which it gets suppressed,
+and a suppressed canary masks the leak it exists to catch:
+
+1. a denied value that is a **substring of a published one** (an alternate URL
+   that is a prefix of the citation URL) — subtracted before searching;
+2. **output escaping mutates published values** (`…%E7%AE%A1\&type2=…`) — both
+   sides fold character references, backslashes and whitespace through
+   `normalizeForScan`. Backslashes are **deleted** rather than unescaped,
+   because one level of unescaping cannot tell a literal backslash from an
+   escape and the canary would stop matching its own leak;
+3. **degenerate values** — a placeholder `sha256` of 64 zeros matches any zero
+   run in any file (it hit a `.wasm`). Single-character repeats and all-digit
+   values are not canaries, and binary assets are counted but never
+   text-searched. `source.physicalPdfPageIndex` is a small integer, so it has no
+   value-level canary at all; its absence is proven structurally, by the matrix,
+   the missing view-model leaf and `emitted: 0` in preflight;
+4. a denied value **published by a channel this feature does not own** — four
+   routing prompts are in the hand-authored narrative docs and in the
+   `claudeResources` mirror of each `SKILL.md`.
+
+Mode 4 is why the scan has **two tiers**. Artifacts this feature writes — the
+generated MDX, `preflight.json`, `dist/docs/components/**`, and the component
+slices of the search index and `llms.txt` — are scanned with the **full** canary
+set, where any hit is unambiguously this generator's. The rest of `dist/` is
+scanned with the canaries no other content source publishes, re-derived from the
+content tree every run rather than kept as a list of excused strings.
+
+The scan fails closed on three things, not one: a hit, too few canaries, or too
+few artifacts. Failure messages name the artifact and the denied **field**, never
+the value — the message lands in CI logs, and reprinting a denied value to prove
+it leaked would publish it again somewhere with a longer memory.
+
+**Positive controls run per surface**, so an empty projection cannot pass: an
+all-empty site satisfies every negative scan. Full-text surfaces carry all 18
+(identity, unit, conditions, provenance, verdict, locator, coverage status and
+reason, source title/availability/locator/link, and one `EvidenceDetails`-wrapped
+pin row — a container may change how content is *presented*, never whether it
+exists). Discovery surfaces carry the 4 a reader searches by; the search index
+truncates `body` to 300 characters and `llms.txt` holds only titles and
+descriptions, so neither can be expected to hold a locator. `llms-full.txt`
+carries the **full** set, because an agent reading it instead of the pages must
+not silently lose the pin assignments.
+
+Also asserted against the built site: no hydration payload carries an
+evidence-model key (published identifiers *do* legitimately reach `data-props`
+through page descriptions and heading text — what must never be hydrated is the
+evidence graph); no deploy artifact matches a credential shape; `sitemap.xml`
+stays an empty `urlset`; one built page per record and no page the projection did
+not produce; every record present in `search-index.json`.
+
+**The docs-to-agent scan (`scan:doc-skill`) runs `setup:doc-skill` with `HOME`
+pointed at a throwaway directory and verifies afterwards that the real
+`$HOME/.claude/skills` and `$HOME/.codex/skills` were not touched.** It never
+passes `--target auto`, because auto probes `$HOME`. The corpus is assembled in
+the sandbox rather than read through the skill's own `docs` symlink, which
+resolves to the main worktree by design.
+
 ## 7. Safe generation — three layers
 
 1. **Build.** Content is constructed only through the builders in `core/mdx.ts`
@@ -379,6 +455,18 @@ drift is visible. `check:components` compares it byte-for-byte.
    backslashes (so `\\<` is correctly treated as live), any JSX name outside
    `ALLOWED_COMPONENT_ATTRIBUTES`, any attribute not listed **for that
    component**, and any attribute value outside `^[a-z0-9][a-z0-9-]*$`.
+
+**The HTML-comment check is deliberately not escape-aware** — it refuses `\<!--`
+too, and that is the settled decision (#64), not an oversight #60 worked around.
+MDX has no HTML comment syntax: `<!--` is a *parse error* there rather than a
+comment, so unlike `\<` it has no well-defined inert form, and accepting the
+escaped spelling would mean betting on backslash handling staying identical
+across future remark/MDX majors — which is precisely where comment handling has
+moved before. The cost is a build that stops with a file, a line and a reason, on
+a corpus where nothing triggers it; the remedy is an evidence decision by the
+evidence owner. The alternative failure — a page whose meaning depends on the
+compiler version — is silent. **Relaxing it is a publication decision, not a
+refactor.**
 
 Consequences that downstream code must not weaken:
 
@@ -477,11 +565,14 @@ dependency: `pr-checks.yml` and `main-deploy.yml` now run
 to the validator, and depending on whichever Python the runner image happens to
 ship would let CI and `component-spec-skills.yml` silently disagree.
 
-**#65 still owns** adding `pnpm test:components` and `pnpm check:components` to
-`pr-checks.yml` (the paths filter needs nothing new — `doc/component-docs/**` is
-already covered by `doc/**`). `check:components` covers
-`doc/component-docs/preflight.json`, which the existing `git diff` step does not
-see.
+**#65 still owns** adding `pnpm test:components`, `pnpm check:components` and
+`pnpm scan:artifacts` to `pr-checks.yml` (the paths filter needs nothing new —
+`doc/component-docs/**` is already covered by `doc/**`). `check:components`
+covers `doc/component-docs/preflight.json`, which the existing `git diff` step
+does not see. `scan:artifacts` must run **after** `build`, because `dist/` is its
+input; it has no skip path, so a missing `dist/` is a failure rather than a
+silent pass. `scan:doc-skill` is safe to run in CI — it sandboxes `HOME` — but it
+is a slower superset and adding it is #65's call.
 
 ## 11. Direct dependencies added
 
@@ -550,3 +641,36 @@ Additionally proven:
 - denied-value canaries (a source SHA-256, an evidence extract, a routing prompt, a
   `reviewedBy` string) appear in **zero** files under `doc/dist/`;
 - the sitemap remains an empty `urlset`.
+
+### Re-verified at #64 (Wave 4)
+
+```
+pnpm --dir doc run test:components   371 tests, 0 failures
+pnpm --dir doc run scan:artifacts    OWNED 226 canaries x 73 artifacts, 0 hits
+                                     SITE  222 canaries x 195 artifacts, 0 hits
+pnpm --dir doc run scan:doc-skill    isolated corpus, 0 hits; real $HOME untouched
+```
+
+Zero leaks, on every surface swept: generated MDX, `preflight.json`, all 84 built
+HTML pages, client bundles and island payloads, `_worker.js` / `_zfb_inner.mjs`,
+theme packs, `search-index.json`, `llms.txt`, `llms-full.txt`, `sitemap.xml`,
+`robots.txt`, `__zfb/routes.json`, and an isolated docs-to-agent corpus. 161
+binary artifacts were counted and deliberately not text-searched.
+
+Two things measured here that the prose above could be read as denying:
+
+- **Published identifiers do reach browser hydration data.** 427 `data-props`
+  payloads on the built component pages carry `rec-`, `int-`, `pinmap-` and
+  `fact-` ids, because the site chrome hydrates page *descriptions* and TOC
+  heading text and #61 put identifiers in descriptions. §7's "no evidence in
+  hydration data" is accurate as written — it is about generated data modules
+  reaching a browser JS asset, and none do — but the artifact-level truth is
+  narrower: what must never be hydrated is the evidence GRAPH, and that is now
+  asserted by key name rather than assumed.
+- **`zfb`'s link validation reports ~4,300 broken-link warnings** on the
+  generated pages. They are false positives with a known cause (`core/links.ts`
+  documents it: the validator resolves fragments against heading-derived anchors
+  and cannot see `<EvidenceAnchor id="…" />`), and the anchors are present in the
+  built HTML. The generator proves its own links fatally instead. The volume is
+  the risk, not the warnings: a real broken link in a hand-authored page would be
+  invisible in that noise.
