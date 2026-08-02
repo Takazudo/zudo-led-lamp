@@ -57,6 +57,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    env:
+      # Written by "Build site", read by "Hand-authored links resolve". Outside
+      # the workspace on purpose — a stray log file inside it would be one more
+      # thing the generated-output drift check has to not trip over.
+      BUILD_LOG: ${{ runner.temp }}/doc-build.log
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
@@ -108,8 +114,6 @@ jobs:
       # whole log is printed, so nothing is lost when it matters.
       - name: Build site
         working-directory: doc
-        env:
-          BUILD_LOG: ${{ runner.temp }}/doc-build.log
         run: |
           if pnpm build >"$BUILD_LOG" 2>&1; then
             status=0
@@ -150,8 +154,6 @@ jobs:
       # page leaves `pnpm build` at exit 0 and makes this step exit 1.
       - name: Hand-authored links resolve
         working-directory: doc
-        env:
-          BUILD_LOG: ${{ runner.temp }}/doc-build.log
         run: bash component-docs/scripts/check-zfb-link-warnings.sh "$BUILD_LOG"
 
       # THE drift authority for every committed generated file. The
@@ -203,8 +205,11 @@ jobs:
       # directory and then verifies the real $HOME/.claude/skills and
       # $HOME/.codex/skills were not touched — never writing to a user-global
       # skill directory is a hard rule, on a runner as much as on a laptop.
-      # PR-only: on `main` the corpus is a copy of the same content tree that
-      # `scan:artifacts` already scans at full canary strength there.
+      # PR-only, for cost: the corpus is assembled locally by a developer, never
+      # deployed by these workflows, and its component slice is byte-identical
+      # to the generated MDX that `scan:artifacts` already scans at full canary
+      # strength on `main` too. What only this step adds is the generated
+      # SKILL.md wrapper — worth a gate before merge, not on every deploy.
       - name: Denied-value scan over the docs-to-agent corpus
         working-directory: doc
         run: pnpm scan:doc-skill
