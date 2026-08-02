@@ -22,14 +22,19 @@ routes, 33 pin maps, 140 pins**, plus **6 cross-component rules** in
 `circuit-spec-integration`; 29 inventory lines fitted, 3 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
 fails the build.
+They are current reviewed corpus assertions and must be refreshed together when the
+selection changes. The dated measurements under §14 are historical verification notes,
+not a second runtime count gate; update one only when repeating that stated baseline.
 
 ## 2. Directory ownership
 
 | Path | Owner | Rule |
 |---|---|---|
 | `doc/component-docs/` | this feature | all generator code, tests, this document |
-| `doc/src/content/docs/components/` | **generator, exclusively** | never hand-edit; every file is rewritten from evidence |
+| `doc/src/content/docs/components/` | **generator, exclusively** | committed; never hand-edit; every file is rewritten from evidence |
 | `doc/component-docs/preflight.json` | generator | committed, deterministic, reviewable |
+| `doc/public/assets/component-previews/footprints/` | footprint-preview generator | committed SVG assets and manifest; never hand-edit |
+| `doc/public/assets/component-previews/models/` | model generator | committed selected WRL assets; never hand-edit |
 | `doc/src/chrome-bindings.tsx` | this feature | MDX component registry |
 | `doc/src/styles/global.css` | site | an appended presentation block for the generated pages (`.zld-evidence-anchor`, plus the `.zld-evidence-table` scroll container and its long-token wrapping, added by #62) |
 | `doc/zfb.config.ts` | site | `chromeBindingsModule`, `docHistoryExclude` |
@@ -94,10 +99,10 @@ adapter directory and no change under `core/`.
 | `scan:doc-skill` | `bash component-docs/scripts/scan-doc-skill.sh` | same scan over an isolated docs-to-agent corpus |
 | `test:components` | `node --experimental-strip-types --test "component-docs/tests/*.test.ts"` | unit + integration |
 | `dev:components` | `… component-docs/cli/generate.ts --watch` | debounced regeneration |
-| `build` | `pnpm generate:components && zfb build` | generation precedes the content snapshot |
+| `build` | `pnpm generate:models && pnpm generate:components && zfb build` | public models and component generation precede the content snapshot |
 | `dev` | `pnpm generate:components && run-p dev:zfb dev:history dev:components` | seeded, then watched |
 | `check` | `zfb check` (unchanged) | typechecks `component-docs/**` via `tsconfig.json` `include` |
-| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill` | local gate |
+| `b4push` | `pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill` | local credential-free gate; CI deploy follows only after its extra drift/link checks |
 
 **Why not a `zfb` plugin.** `@takazudo/zfb/plugins` does expose a supported
 composition seam (`setup` / `preBuild` / `postBuild` / `devMiddleware` /
@@ -145,6 +150,39 @@ new dev dependency. This constrains how it may be written:
 `--experimental-strip-types` is passed explicitly: Node 22.18+ and Node 24 strip
 types unflagged, older 22.x needs the flag, and the flag is accepted (harmless) on
 both. CI pins `node-version: 22`.
+
+### Footprint preview assets
+
+The 22 package-level SVG previews under
+`public/assets/component-previews/footprints/` are generated assets, shared by
+all 32 record aliases. Their `manifest.json` locks each canonical footprint
+hash, output hash, record mapping, renderer, and export options. Catalog data
+therefore carries a stable asset path rather than duplicating SVG bytes per
+record.
+
+Regeneration is containerized and network-disabled:
+
+```sh
+pnpm generate:footprint-previews
+```
+
+It uses the digest-pinned official KiCad image recorded in the manifest. The
+generator copies only the selected canonical `.kicad_mod` files into a
+temporary export-only `.pretty` library, removes all `fp_text` forms from those
+copies, exports the reviewed copper/silkscreen/fabrication/courtyard layer set,
+then strips volatile SVG metadata and validates the normalized result. It
+hashes the canonical files before and after export and fails if their bytes
+move.
+
+The ordinary CI/local gate needs neither Docker nor KiCad:
+
+```sh
+pnpm check:footprint-previews
+```
+
+It resolves the current 32-record reference contract and fails closed on a
+changed selection, stale input or output hash, missing/extra asset, unsafe SVG
+markup, degenerate view box, surviving footprint text, or alias reuse error.
 
 ## 4. Validation — one validator, in Python, fatal on failure
 
@@ -705,7 +743,7 @@ adoption guide is #66's deliverable.
 - No change to component selections, schematic connectivity, firmware behaviour, or
   the frozen evidence contract. The evidence schema is **not** adjusted for
   presentation convenience.
-- No PDFs, no skill assets, no browser-side raw JSON viewer.
+- No retained/evidence PDF binaries, no broad skill assets, no browser-side raw JSON viewer.
 - No component-wide PASS/FAIL verdict, ever. Coverage is per-domain; an absent open
   domain is not a safety claim.
 - No replacement of narrative design rationale with generated tables.
@@ -716,7 +754,7 @@ adoption guide is #66's deliverable.
 python3 .claude/skills/component-spec-audit/scripts/validate.py     PASS: 32 lines; offline=True
 python3 -m unittest discover -s .claude/skills/component-spec-audit/scripts -p 'test_*.py'
 python3 .claude/skills/circuit-spec-integration/scripts/check_forward_tests.py
-pnpm --dir doc run test:components        113 tests, 0 failures
+pnpm --dir doc run test:components        457 tests, 0 failures
 pnpm --dir doc run generate:components    32/32 records, 81/81 sources, 1 page
 pnpm --dir doc run check:components       generated output is up to date
 pnpm --dir doc run check                  tsc — no errors
@@ -737,7 +775,7 @@ Additionally proven:
 ### Re-verified at #64 (Wave 4)
 
 ```
-pnpm --dir doc run test:components   371 tests, 0 failures
+pnpm --dir doc run test:components   457 tests, 0 failures
 pnpm --dir doc run scan:artifacts    OWNED 226 canaries x 73 artifacts, 0 hits
                                      SITE  222 canaries x 195 artifacts, 0 hits
 pnpm --dir doc run scan:doc-skill    isolated corpus, 0 hits; real $HOME untouched
@@ -766,3 +804,48 @@ Two things measured here that the prose above could be read as denying:
   built HTML. The generator proves its own links fatally instead. The volume is
   the risk, not the warnings: a real broken link in a hand-authored page would be
   invisible in that noise.
+
+## 15. Reviewed component reference assets (#83)
+
+The catalog reference seam is intentionally narrower than either the evidence
+source list or the repository's asset tree. `InstanceSelection.documentSelections`
+names exactly one source and one explicit `documentKind` for each of the 32
+selected records. That selection is a curated shortcut; `records[].sources`
+remains complete and unchanged.
+
+Document order cannot express kind: the first source may be an identity mirror,
+a reference manual, a generator, or an unsuccessful retrieval. A `.pdf` suffix
+cannot express it either: Samsung and Murata return PDF bytes from download/ASHX
+endpoints, query-bearing LCSC endpoints are PDFs, and a `.pdf` URL may return an
+HTML denial. The 32 choices were live-audited on 2026-08-03 by following redirects
+and inspecting response/content behavior. The audit is locked in selection and
+normal generation performs no network access. `SOURCE UNAVAILABLE` remains the
+evidence's historical availability label; the STM32 selection qualifies because
+the current audit reached the actual ST PDF content, not because the label is
+ignored or because a product-page exception exists.
+
+Each selected record also resolves its existing pin-map footprint against the
+canonical `zudo-led-lamp.pretty` library. Before projection, the adapter requires:
+
+- exactly one distinct footprint name per record and one model node per footprint;
+- a regular, non-symlink WRL contained in `zudo-led-lamp.3dshapes`, plus an
+  existing same-basename `.step` audit pair;
+- the exact KiCad offset, rotation, and scale, including non-zero Z rotations;
+- VRML 2.0 containing only `Shape`, `Appearance`, `Material`, `IndexedFaceSet`,
+  and `Coordinate`, with resource-loading/executable nodes and URL-bearing live
+  content rejected;
+- 512 KiB per footprint, 2 MiB per WRL, and 8 MiB for the selected aggregate.
+
+The 32 record mappings collapse to a reviewed 22-package manifest while retaining
+record-level lookup. Public paths identify only those manifest-selected footprint
+and WRL files. Same-basename STEP is validation evidence and is not published:
+browser preview loaders use WRL, while exposing both formats would double the
+binary surface without adding a supported rendering path. `asset.binary` remains
+`DENY`; the only new positive decisions are the explicit datasheet-PDF link,
+footprint-preview, and model-preview capabilities and their named descriptor
+fields.
+
+Whole-board rendering is deferred. The checked-in PCB layouts are placeholders,
+so a board viewer would turn provisional placement into a misleading design
+claim. Package previews are useful and bounded now; board rendering becomes valid
+only after the layouts themselves become authoritative.

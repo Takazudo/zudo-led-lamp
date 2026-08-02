@@ -148,9 +148,32 @@ export const CIRCUIT_PUBLICATION_MATRIX: PublicationMatrix = {
   // bookkeeping that reads as a quality claim out of context.
   "pinMap.reviewedBy": "DENY",
 
+  // Curated shortcuts only. These do not widen the complete evidence-source
+  // list and do not publish arbitrary repository binaries.
+  "reference.document.sourceId": "PUBLISH",
+  "reference.document.documentTitle": "PUBLISH",
+  "reference.document.label": "PUBLISH",
+  "reference.document.authorityClass": "PUBLISH",
+  "reference.document.url": "PUBLISH",
+  "reference.document.availability": "PUBLISH",
+  "reference.document.documentKind": "PUBLISH",
+  "reference.footprint.packageId": "PUBLISH",
+  "reference.footprint.name": "PUBLISH",
+  "reference.footprint.path": "PUBLISH",
+  "reference.model.path": "PUBLISH",
+  "reference.model.offset": "PUBLISH",
+  "reference.model.rotation": "PUBLISH",
+  "reference.model.scale": "PUBLISH",
+  "reference.package.recordIds": "PUBLISH",
+
   "corpus.counts": "PUBLISH",
 
-  // V1 publishes no PDFs and no skill assets. This entry exists so the
-  // decision is recorded rather than merely unimplemented.
+  // Narrow capabilities used by the reference contract. The PDF is an
+  // outbound audited URL; footprint/model preview paths are restricted by the
+  // 22-package manifest and validated before projection.
+  "asset.datasheetPdf": "PUBLISH",
+  "asset.footprintPreview": "PUBLISH",
+  "asset.modelPreview": "PUBLISH",
+  // No catch-all binary publication is permitted.
   "asset.binary": "DENY",
 };

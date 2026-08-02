@@ -38,6 +38,7 @@ import type {
   PublicIntegrationRule,
   PublicInteraction,
   PublicPinMap,
+  PublicRecordReference,
   PublicRecord,
   PublicRecordIdentity,
   PublicSource,
@@ -201,6 +202,30 @@ function source(input: SourceInput): PublicSource {
   };
 }
 
+function referenceFor(recordId: string): PublicRecordReference {
+  const packageId = `pkg-${recordId.replace(/^rec-/u, "")}`;
+  return {
+    document: {
+      sourceId: t(`src-${recordId.replace(/^rec-/u, "")}-reference`),
+      documentTitle: t("Fixture datasheet"),
+      label: t("Datasheet PDF"),
+      authorityClass: t("MANUFACTURER_PRIMARY"),
+      url: assertSafeUrl("https://example.invalid/reference.pdf", "fixture reference"),
+      availability: t("AVAILABLE"),
+      documentKind: "datasheet",
+    },
+    footprint: {
+      packageId: t(packageId),
+      footprintName: t(packageId),
+      footprintPath: t(`footprints/${packageId}.kicad_mod`),
+      modelPath: t(`models/${packageId}.wrl`),
+      offset: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+    },
+  };
+}
+
 type CoverageInput = {
   readonly coverageId: string;
   readonly recordId: string;
@@ -293,6 +318,10 @@ function model(
     provider: { id: t("fixture-provider"), contractVersion: 1 },
     corpus: corpus(records),
     records,
+    packagePreviews: records.map((record) => ({
+      ...record.reference.footprint,
+      recordIds: [record.identity.recordId],
+    })),
     integration,
   };
 }
@@ -415,6 +444,7 @@ export const FIXTURE_IDS = {
  */
 function driverRecord(): PublicRecord {
   return {
+    reference: referenceFor(FIXTURE_IDS.driverRecord),
     identity: identity({
       recordId: FIXTURE_IDS.driverRecord,
       kind: "standalone",
@@ -651,6 +681,7 @@ function driverRecord(): PublicRecord {
 /** The subordinate: owns the fact the driver's calculation reaches for. */
 function senseRecord(): PublicRecord {
   return {
+    reference: referenceFor(FIXTURE_IDS.senseRecord),
     identity: identity({
       recordId: FIXTURE_IDS.senseRecord,
       kind: "subordinate",
@@ -717,6 +748,7 @@ function senseRecord(): PublicRecord {
  */
 function hostileRecord(): PublicRecord {
   return {
+    reference: referenceFor(FIXTURE_IDS.hostileRecord),
     identity: identity({
       recordId: FIXTURE_IDS.hostileRecord,
       kind: "standalone",
@@ -779,6 +811,7 @@ export function fixtureModel(): PublicViewModel {
  */
 export function emptyArraysModel(): PublicViewModel {
   const stripped: PublicRecord = {
+    reference: referenceFor("rec-fixture-bare"),
     identity: identity({
       recordId: "rec-fixture-bare",
       kind: "standalone",
@@ -805,6 +838,7 @@ export function denseModel(recordCount = 64): PublicViewModel {
   for (let n = 0; n < recordCount; n += 1) {
     const recordId = `rec-fixture-dense-${n}`;
     records.push({
+      reference: referenceFor(recordId),
       identity: identity({
         recordId,
         kind: n % 4 === 3 ? "subordinate" : "standalone",

@@ -218,8 +218,11 @@ def expected_mpn(symbol, value, lcsc):
 
 def validate_inventory(data):
     required_keys(data, ("schema_version", "generator_specs", "assertions", "exclusions", "lines"), "inventory")
+    assertions = data["assertions"]
+    required_keys(assertions, ("orderable_lines", "fitted_lines", "dnp_or_hand_fit_lines"), "inventory assertions")
+    require(all(isinstance(assertions[key], int) and assertions[key] >= 0 for key in assertions), "inventory assertions: counts must be non-negative integers")
     lines = data["lines"]
-    require(len(lines) == 32, "inventory: expected exactly 32 orderable lines")
+    require(len(lines) == assertions["orderable_lines"], "inventory: orderable line count differs from reviewed assertion")
     require(len({line["line_id"] for line in lines}) == len(lines), "inventory: duplicate line_id ownership")
     require(len({line["lcsc"] for line in lines}) == len(lines), "inventory: duplicate LCSC ownership")
     generated, blank = generator_inventory()
@@ -236,8 +239,8 @@ def validate_inventory(data):
         want_places = {(x["board"], x["refdes"], x["dnp"]) for x in expected["placements"]}
         got_places = {(x["board"], x["refdes"], line["dnp"]) for x in line["placements"]}
         require(got_places == want_places, f"{line['line_id']}: board/refdes or DNP mismatch")
-    require(sum(not line["dnp"] for line in lines) == 29, "inventory: expected 29 fitted lines")
-    require(sum(line["dnp"] for line in lines) == 3, "inventory: expected 3 DNP/hand-fit lines")
+    require(sum(not line["dnp"] for line in lines) == assertions["fitted_lines"], "inventory: fitted line count differs from reviewed assertion")
+    require(sum(line["dnp"] for line in lines) == assertions["dnp_or_hand_fit_lines"], "inventory: DNP/hand-fit line count differs from reviewed assertion")
     exclusions = {(x["board"], x["refdes"]) for x in data["exclusions"]}
     require(exclusions == set(blank), "inventory: bare-copper exclusions differ from blank-LCSC generator entries")
     return lines
@@ -358,7 +361,7 @@ def resolve(query, lines):
 def validate_routing(lines, fixtures=None):
     fixtures = fixtures or load(FIXTURES / "direct-routing.json")
     cases = fixtures["cases"]
-    require(len(cases) == 32 and {x["line_id"] for x in cases} == {x["line_id"] for x in lines}, "routing: all 32 lines need one fixture")
+    require(len(cases) == len(lines) and {x["line_id"] for x in cases} == {x["line_id"] for x in lines}, "routing: every inventory line needs one fixture")
     by_id = {line["line_id"]: line for line in lines}
     for case in cases:
         line = by_id[case["line_id"]]
@@ -941,7 +944,7 @@ def validate_local_skills(schema, inventory, skills_root=None):
             aggregate[key].extend(bundle[key])
     expected_line_ids = {line["line_id"] for line in inventory}
     actual_line_ids = [record["line_id"] for record in aggregate["records"]]
-    require(len(actual_line_ids) == 32 and set(actual_line_ids) == expected_line_ids, "owner skills: exact global 32-record parity required")
+    require(len(actual_line_ids) == len(inventory) and set(actual_line_ids) == expected_line_ids, "owner skills: exact global inventory-record parity required")
     return aggregate
 
 
@@ -979,6 +982,14 @@ def set_target(data, target, value):
 
 def template_bundle():
     return load_skill_bundle(TEMPLATE)
+
+
+def validate_template_skill():
+    template_skill = TEMPLATE / "SKILL.md"
+    frontmatter(template_skill, "component-example")
+    text = template_skill.read_text(encoding="utf-8")
+    closing = text.find("---\n", 4)
+    require(closing >= 0 and text.find("## Human component reference", closing + 4) >= 0, "component template: missing Human component reference section")
 
 
 def run_seeded_fixtures(schema, inventory):
@@ -1055,6 +1066,7 @@ def validate_all(online=False, refresh_source_ids=None):
     inventory = validate_inventory(load(REFS / "inventory.json"))
     validate_routing(inventory)
     aggregate = validate_local_skills(schema, inventory)
+    validate_template_skill()
     validate_bundle(template_bundle(), schema, True)
     run_seeded_fixtures(schema, inventory)
     validate_real_pin_locks(aggregate, load(FIXTURES / "golden/real-pin-maps.json"))

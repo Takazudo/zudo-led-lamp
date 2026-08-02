@@ -22,11 +22,16 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         self.lines = validator.validate_inventory(self.inventory_data)
 
     def test_full_offline_contract(self):
-        self.assertEqual(validator.validate_all(), 32)
+        self.assertEqual(validator.validate_all(), self.inventory_data["assertions"]["orderable_lines"])
+
+    def test_template_has_human_component_reference(self):
+        validator.validate_template_skill()
 
     def test_inventory_counts_and_exclusions(self):
-        self.assertEqual(sum(not line["dnp"] for line in self.lines), 29)
-        self.assertEqual(sum(line["dnp"] for line in self.lines), 3)
+        assertions = self.inventory_data["assertions"]
+        self.assertEqual(len(self.lines), assertions["orderable_lines"])
+        self.assertEqual(sum(not line["dnp"] for line in self.lines), assertions["fitted_lines"])
+        self.assertEqual(sum(line["dnp"] for line in self.lines), assertions["dnp_or_hand_fit_lines"])
         self.assertEqual(len(self.inventory_data["exclusions"]), 4)
 
     def test_all_routing_cases_are_direct(self):

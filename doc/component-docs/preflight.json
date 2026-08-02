@@ -606,9 +606,117 @@
       "withheld": 33
     },
     {
+      "key": "reference.document.sourceId",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.document.documentTitle",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.document.label",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.document.authorityClass",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.document.url",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.document.availability",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.document.documentKind",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "reference.footprint.packageId",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.footprint.name",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.footprint.path",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.model.path",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.model.offset",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.model.rotation",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.model.scale",
+      "decision": "PUBLISH",
+      "emitted": 54,
+      "withheld": 0
+    },
+    {
+      "key": "reference.package.recordIds",
+      "decision": "PUBLISH",
+      "emitted": 22,
+      "withheld": 0
+    },
+    {
       "key": "corpus.counts",
       "decision": "PUBLISH",
       "emitted": 1,
+      "withheld": 0
+    },
+    {
+      "key": "asset.datasheetPdf",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "asset.footprintPreview",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "asset.modelPreview",
+      "decision": "PUBLISH",
+      "emitted": 32,
       "withheld": 0
     },
     {

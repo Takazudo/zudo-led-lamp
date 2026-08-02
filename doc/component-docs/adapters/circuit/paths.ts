@@ -59,6 +59,11 @@ export const PREFLIGHT_FILE = join(DOC_ROOT, "component-docs", "preflight.json")
  */
 export const DIST_ROOT = join(DOC_ROOT, "dist");
 
+/** Master footprint files and the mirrored KiCad library used by previews. */
+export const FOOTPRINT_MASTER_ROOT = join(REPO_ROOT, "footprints", "kicad");
+export const FOOTPRINT_ROOT = join(REPO_ROOT, "footprints", "kicad", "zudo-led-lamp.pretty");
+export const MODEL_ROOT = join(REPO_ROOT, "footprints", "kicad", "zudo-led-lamp.3dshapes");
+
 /** Per-record bundle files, in the order a record page consumes them. */
 export const BUNDLE_FILES = [
   "manifest.json",

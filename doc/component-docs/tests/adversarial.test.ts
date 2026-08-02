@@ -29,17 +29,21 @@ import { safeText } from "../core/text.ts";
 import { classifyUrl } from "../core/url.ts";
 import { buildRecordIndex } from "../core/render/shared.ts";
 import { renderRecord } from "../core/render/record.ts";
-import { indexEvidence } from "../adapters/circuit/evidence.ts";
+import { indexEvidence as rawIndexEvidence } from "../adapters/circuit/evidence.ts";
 import { projectIndex, createCircuitAdapter } from "../adapters/circuit/index.ts";
 import { createPythonValidator } from "../adapters/circuit/validate.ts";
 import {
   ALL_CANARY_STRINGS,
   FIXTURE_MATRIX,
   FIXTURE_SELECTION,
+  withFixtureReferences,
   fixtureBundle,
   fixtureIntegrationRules,
   fixtureInventory,
 } from "./provider-fixtures.ts";
+
+const indexEvidence = (...args: Parameters<typeof rawIndexEvidence>) =>
+  withFixtureReferences(rawIndexEvidence(...args));
 import { GUARD_REJECTED_TEXT, HOSTILE_TEXT, fixtureModel } from "./fixtures.ts";
 
 let scratch = "";

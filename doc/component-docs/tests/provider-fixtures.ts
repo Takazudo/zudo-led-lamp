@@ -10,6 +10,7 @@
  */
 
 import type {
+  EvidenceIndex,
   Inventory,
   InventoryLine,
   ProviderBundle,
@@ -21,6 +22,7 @@ import type {
   ProviderRoute,
   ProviderSource,
 } from "../adapters/circuit/evidence.ts";
+import type { CircuitPackageReference, CircuitReferenceContract } from "../adapters/circuit/references.ts";
 import type { ProviderIntegrationRule } from "../adapters/circuit/integration.ts";
 import type { InstanceSelection, PublicationMatrix } from "../core/publication.ts";
 import { CIRCUIT_PUBLICATION_MATRIX } from "../adapters/circuit/matrix.ts";
@@ -383,11 +385,51 @@ export const FIXTURE_SELECTION: InstanceSelection = {
     "src-sense-primary",
     "src-handfit-distributor",
   ],
+  documentSelections: [
+    { recordId: "rec-driver", sourceId: "src-driver-primary", documentKind: "datasheet" },
+    { recordId: "rec-sense", sourceId: "src-sense-primary", documentKind: "specification" },
+    { recordId: "rec-handfit", sourceId: "src-handfit-distributor", documentKind: "drawing" },
+  ],
   expect: { records: 3, sources: 4, integrationRules: 3 },
 };
 
 /** The real committed decisions — the fixtures must clear the same matrix. */
 export const FIXTURE_MATRIX: PublicationMatrix = CIRCUIT_PUBLICATION_MATRIX;
+
+/** Attach already-reviewed logical descriptors to pure projection fixtures. */
+export function withFixtureReferences(index: EvidenceIndex): EvidenceIndex {
+  const documentsByRecordId = new Map();
+  for (const selected of FIXTURE_SELECTION.documentSelections) {
+    const source = index.recordById
+      .get(selected.recordId)
+      ?.sources.find((entry) => entry.source_id === selected.sourceId);
+    if (source !== undefined) {
+      documentsByRecordId.set(selected.recordId, {
+        recordId: selected.recordId,
+        source,
+        documentKind: selected.documentKind,
+      });
+    }
+  }
+  const packages: CircuitPackageReference[] = index.records.map((entry) => {
+    const footprintName = entry.pinMaps[0]?.footprint ?? `fixture-${entry.record.record_id}`;
+    return {
+      packageId: footprintName,
+      footprintName,
+      footprintPath: `footprints/${footprintName}.kicad_mod`,
+      modelPath: `models/${footprintName}.wrl`,
+      offset: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      recordIds: [entry.record.record_id],
+    };
+  });
+  const packageByRecordId = new Map(
+    packages.map((entry) => [entry.recordIds[0] as string, entry]),
+  );
+  const references: CircuitReferenceContract = { documentsByRecordId, packages, packageByRecordId };
+  return { ...index, references };
+}
 
 /** The seven bundle files as `parseBundle` expects them, from one bundle. */
 export function bundleFiles(bundle: ProviderBundle, schemaVersion = 1) {

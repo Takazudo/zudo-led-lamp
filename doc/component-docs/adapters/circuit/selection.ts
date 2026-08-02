@@ -4,8 +4,8 @@
  * Default-zero means this list, not a filter: a record or source that does not
  * appear here is never read into the view model, whatever the repository makes
  * visible. Every ID is spelled out so that adding a component to the project
- * does NOT silently add a public page — the build keeps working and the new
- * part stays unpublished until someone appends it here.
+ * does NOT silently add a public page — the reviewed `expect` assertions fail
+ * the build until someone explicitly updates this selection and its counts.
  *
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
@@ -22,6 +22,35 @@
  */
 
 import type { InstanceSelection } from "../../core/publication.ts";
+
+/**
+ * Committed evidence that the selection below was based on content behavior,
+ * not URL spelling. This is intentionally not consumed by generation: a docs
+ * build must stay offline. Re-auditing means repeating the external retrieval
+ * and updating both this artifact and the selection in one review.
+ */
+export const CIRCUIT_DOCUMENT_VERIFICATION = {
+  checkedOn: "2026-08-03",
+  expectedContent: "PDF",
+  downloadedPdfSourceIds: [
+    "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
+    "src-rd-uniroyal-smd-sp-001", "src-umw-ao3401a", "src-high-diode-primary",
+    "src-c13585-page", "src-c14663-yageo", "src-c15849-page",
+    "src-c25803-uniroyal", "src-c22807-uniroyal", "src-c23179-uniroyal",
+    "src-c23162-uniroyal", "src-c21189-uniroyal", "src-c17414-uniroyal",
+    "src-c4216-uniroyal", "src-c22775-uniroyal", "src-jst-xh",
+    "src-bhfuse-1206", "src-al8860-ds39014", "src-rlp25-spec",
+    "src-fxl-series-mirror", "src-ro-ss26-mirror", "src-ap6320x-ds41326",
+    "src-fnr-series-mirror", "src-samsung-cl21-product", "src-c492404-drawing",
+    "src-c2991196-spec", "src-c13564-current", "src-c210315-spec",
+    "src-c2934070-spec",
+  ],
+  // The official ST URL was independently parsed as the STM32G031x4/x6/x8
+  // PDF during the same live audit. It remains separate because curl from the
+  // audit host repeatedly hit an HTTP/2 transport error; classifying it from
+  // the historical SOURCE UNAVAILABLE label alone would be forbidden.
+  officialPdfContentSourceIds: ["src-c529334-ds"],
+} as const;
 
 export const CIRCUIT_SELECTION: InstanceSelection = {
   recordIds: [
@@ -252,6 +281,49 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c210315-generator",
     "src-c2934070-spec",
     "src-c2934070-generator",
+  ],
+
+  // Audited 2026-08-03 by following each endpoint and inspecting response
+  // behavior plus PDF content. URL suffixes and source order were not used as
+  // classification: several valid downloads are query/ASHX endpoints, while
+  // several .pdf endpoints require redirects or browser-compatible requests.
+  // The STM32 entry deliberately retains its evidence availability string;
+  // current retrieval reached the PDF even though the historical audit said
+  // SOURCE UNAVAILABLE. Normal generation is offline and trusts this committed
+  // review decision; it never re-fetches these URLs.
+  documentSelections: [
+    { recordId: "rec-type-c-31-m-17", sourceId: "src-type-c-c283540", documentKind: "drawing" },
+    { recordId: "rec-stusb4500qtr", sourceId: "src-stusb-ds12499", documentKind: "datasheet" },
+    { recordId: "rec-pesd24vs1ub", sourceId: "src-pesd24vs1ub", documentKind: "datasheet" },
+    { recordId: "rec-rd-0603waf5101t5e", sourceId: "src-rd-uniroyal-smd-sp-001", documentKind: "specification" },
+    { recordId: "rec-umw-ao3401a", sourceId: "src-umw-ao3401a", documentKind: "datasheet" },
+    { recordId: "rec-high-diode-smaj20a", sourceId: "src-high-diode-primary", documentKind: "datasheet" },
+    { recordId: "rec-c13585", sourceId: "src-c13585-page", documentKind: "specification" },
+    { recordId: "rec-c14663", sourceId: "src-c14663-yageo", documentKind: "specification" },
+    { recordId: "rec-c15849", sourceId: "src-c15849-page", documentKind: "specification" },
+    { recordId: "rec-c25803", sourceId: "src-c25803-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c22807", sourceId: "src-c22807-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c23179", sourceId: "src-c23179-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c23162", sourceId: "src-c23162-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c21189", sourceId: "src-c21189-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c17414", sourceId: "src-c17414-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c4216", sourceId: "src-c4216-uniroyal", documentKind: "specification" },
+    { recordId: "rec-c22775", sourceId: "src-c22775-uniroyal", documentKind: "specification" },
+    { recordId: "rec-jst-b6b-xh-a", sourceId: "src-jst-xh", documentKind: "specification" },
+    { recordId: "rec-bsmd1206-075-30v", sourceId: "src-bhfuse-1206", documentKind: "datasheet" },
+    { recordId: "rec-al8860mp-13", sourceId: "src-al8860-ds39014", documentKind: "datasheet" },
+    { recordId: "rec-rlp25feer200", sourceId: "src-rlp25-spec", documentKind: "specification" },
+    { recordId: "rec-fxl0630-330-m", sourceId: "src-fxl-series-mirror", documentKind: "specification" },
+    { recordId: "rec-ro-ss26", sourceId: "src-ro-ss26-mirror", documentKind: "datasheet" },
+    { recordId: "rec-ap63203wu-7", sourceId: "src-ap6320x-ds41326", documentKind: "datasheet" },
+    { recordId: "rec-fnr4030s4r7mt", sourceId: "src-fnr-series-mirror", documentKind: "specification" },
+    { recordId: "rec-cl21a226maqnnne", sourceId: "src-samsung-cl21-product", documentKind: "specification" },
+    { recordId: "rec-c529334", sourceId: "src-c529334-ds", documentKind: "datasheet" },
+    { recordId: "rec-c492404", sourceId: "src-c492404-drawing", documentKind: "drawing" },
+    { recordId: "rec-c2991196", sourceId: "src-c2991196-spec", documentKind: "specification" },
+    { recordId: "rec-c13564", sourceId: "src-c13564-current", documentKind: "specification" },
+    { recordId: "rec-c210315", sourceId: "src-c210315-spec", documentKind: "specification" },
+    { recordId: "rec-c2934070", sourceId: "src-c2934070-spec", documentKind: "specification" },
   ],
 
   expect: {

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "pnpm generate:components && run-p dev:zfb dev:history dev:components",
-    "build": "pnpm generate:components && zfb build",
+    "build": "pnpm generate:models && pnpm generate:components && zfb build",
     "preview": "zfb preview",
     "check": "zfb check",
     "dev:zfb": "zfb dev",
@@ -17,17 +17,23 @@
     "dev:network": "pnpm generate:components && run-p dev:zfb:network dev:history dev:components",
     "dev:history": "doc-history-server --port 4322 --content-dir src/content/docs",
     "generate:components": "node --experimental-strip-types component-docs/cli/generate.ts",
+    "generate:models": "node --experimental-strip-types component-docs/cli/models.ts",
     "check:components": "node --experimental-strip-types component-docs/cli/check.ts",
+    "check:models": "node --experimental-strip-types component-docs/cli/models.ts --check",
+    "check:built-component-references": "node component-docs/scripts/check-built-component-references.mjs",
+    "generate:footprint-previews": "node --experimental-strip-types component-docs/footprint-previews/generate.ts",
+    "check:footprint-previews": "node --experimental-strip-types component-docs/footprint-previews/check.ts",
     "scan:artifacts": "node --experimental-strip-types component-docs/cli/scan-artifacts.ts",
     "scan:doc-skill": "bash component-docs/scripts/scan-doc-skill.sh",
     "test:components": "node --experimental-strip-types --test \"component-docs/tests/*.test.ts\"",
+    "test:model-viewer:browser": "node component-docs/scripts/model-viewer-browser-smoke.mjs",
     "dev:components": "node --experimental-strip-types component-docs/cli/generate.ts --watch",
     "setup:doc-skill": "bash scripts/setup-doc-skill.sh",
     "setup:doc-skill-silent": "bash scripts/setup-doc-skill.sh --silent",
     "setup:doc-skill:claude": "bash scripts/setup-doc-skill.sh --target claude",
     "setup:doc-skill:codex": "bash scripts/setup-doc-skill.sh --target codex",
     "setup:doc-skill:both": "bash scripts/setup-doc-skill.sh --target both",
-    "b4push": "pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill"
+    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm build && pnpm check:built-component-references && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill"
   },
   "dependencies": {
     "@takazudo/zdtp": "0.4.9",
@@ -49,6 +55,7 @@
     "preact-render-to-string": "^6.6.6",
     "remark-cjk-friendly": "^2.0.1",
     "remark-directive": "^3.0.0",
+    "three": "0.185.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -56,6 +63,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
+    "@types/three": "0.185.3",
     "npm-run-all2": "^7.0.2",
     "pagefind": "^1.4.0",
     "tailwindcss": "^4.2.0",

@@ -12,17 +12,21 @@ import { describe, it } from "node:test";
 
 import { ComponentDocsError } from "../core/errors.ts";
 import { PublicationPolicy, type InstanceSelection } from "../core/publication.ts";
-import { indexEvidence } from "../adapters/circuit/evidence.ts";
+import { indexEvidence as rawIndexEvidence } from "../adapters/circuit/evidence.ts";
 import { projectIndex } from "../adapters/circuit/index.ts";
 import { VIEW_MODEL_VERSION, type PublicViewModel } from "../core/view-model.ts";
 import {
   ALL_CANARY_STRINGS,
   FIXTURE_MATRIX,
   FIXTURE_SELECTION,
+  withFixtureReferences,
   fixtureBundle,
   fixtureIntegrationRules,
   fixtureInventory,
 } from "./provider-fixtures.ts";
+
+const indexEvidence = (...args: Parameters<typeof rawIndexEvidence>) =>
+  withFixtureReferences(rawIndexEvidence(...args));
 
 function project(selection: InstanceSelection = FIXTURE_SELECTION): {
   model: PublicViewModel;
@@ -425,7 +429,7 @@ describe("URL publication", () => {
     assert.equal(JSON.stringify(report).includes("fixture.example.com"), false);
   });
 
-  it("denies a URL policy refuses, without publishing it", () => {
+  it("fails closed when the curated document URL is unsafe", () => {
     const index = indexEvidence(fixtureInventory(), [
       fixtureBundle({
         sources: (sources) =>
@@ -436,25 +440,13 @@ describe("URL publication", () => {
           ),
       }),
     ], fixtureIntegrationRules());
-    const policy = new PublicationPolicy(FIXTURE_MATRIX, FIXTURE_SELECTION);
-    const model = projectIndex(index, policy);
-
-    const source = recordOf(model, "driver").sources[0];
-    assert.equal(source.url, null);
-
-    const report = policy.buildReport({
-      viewModelVersion: VIEW_MODEL_VERSION,
-      providerId: "fixture",
-      providerContractVersion: 1,
-      availableRecords: 3,
-      availableSources: 4,
-      selectedSlugs: [],
-      counts: {},
-    });
-    const denied = report.urls.find((entry) => entry.sourceId === "src-driver-primary");
-    assert.equal(denied?.decision, "DENY");
-    assert.equal(denied?.reason, "SCHEME_NOT_ALLOWED");
-    assert.equal(JSON.stringify(report).includes("javascript:"), false);
+    assert.throws(
+      () => projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, FIXTURE_SELECTION)),
+      (error: unknown) =>
+        error instanceof ComponentDocsError &&
+        error.code === "UNSAFE_VALUE" &&
+        error.detail.sourceId === "src-driver-primary",
+    );
   });
 });
 
@@ -481,6 +473,9 @@ describe("selection stays closed under published links", () => {
     const selection: InstanceSelection = {
       ...FIXTURE_SELECTION,
       recordIds: ["rec-sense", "rec-handfit"],
+      documentSelections: FIXTURE_SELECTION.documentSelections.filter(
+        (entry) => entry.recordId !== "rec-driver",
+      ),
     };
     assert.throws(
       () => projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, selection)),
@@ -494,6 +489,10 @@ describe("selection stays closed under published links", () => {
     const selection: InstanceSelection = {
       ...FIXTURE_SELECTION,
       recordIds: [...FIXTURE_SELECTION.recordIds, "rec-gone"],
+      documentSelections: [
+        ...FIXTURE_SELECTION.documentSelections,
+        { recordId: "rec-gone", sourceId: "src-driver-primary", documentKind: "datasheet" },
+      ],
     };
     assert.throws(
       () => projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, selection)),
