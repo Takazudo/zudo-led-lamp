@@ -218,4 +218,19 @@ describe("the stylesheet declares what the components emit", () => {
   it("gives the tables a min-width so the container can overflow at all", () => {
     assert.match(stylesheet, /\.zld-evidence-table table\s*\{[^}]*min-width:/u);
   });
+
+  it("gives component references an auto-fit grid and contained preview media", () => {
+    assert.match(
+      stylesheet,
+      /\.zld-component-references__grid\s*\{[^}]*grid-template-columns:\s*repeat\(auto-fit, minmax\(min\(18rem, 100%\), 1fr\)\)/u,
+    );
+    assert.match(
+      stylesheet,
+      /\.zld-component-references__footprint > a\s*\{[^}]*aspect-ratio:\s*16 \/ 9/u,
+    );
+    assert.match(
+      stylesheet,
+      /\.zld-component-references__footprint img\s*\{[^}]*object-fit:\s*contain/u,
+    );
+  });
 });

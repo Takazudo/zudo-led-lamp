@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { ALLOWED_COMPONENT_ATTRIBUTES } from "../core/mdx.ts";
+import { decodeComponentReferencesDescriptor } from "../core/reference-descriptor.ts";
 import { CATALOG_INDEX_ANCHOR, renderCatalog } from "../core/render/catalog.ts";
 import { renderRecord, renderRecordsIndex } from "../core/render/record.ts";
 import { buildRecordIndex } from "../core/render/shared.ts";
@@ -36,6 +37,10 @@ const hostilePage = pageFor(model, FIXTURE_IDS.hostileRecord);
 const catalogPage = renderCatalog(model).contents;
 
 describe("catalog", () => {
+  it("keeps the catalog index free of reference islands and model viewers", () => {
+    assert.doesNotMatch(catalogPage, /<(?:ComponentReferences|PackageModelViewer)\b/u);
+  });
+
   it("routes and names every record exactly once in the index", () => {
     for (const record of model.records) {
       const { identity } = record;
@@ -127,6 +132,44 @@ describe("catalog", () => {
 });
 
 describe("record page — structure", () => {
+  it("renders one reviewed component-reference descriptor for every record, before evidence tables", () => {
+    for (const record of model.records) {
+      const page = pageFor(model, record.identity.recordId);
+      const descriptors = [...page.matchAll(/<ComponentReferences descriptor="([0-9a-f]+)"/gu)];
+      assert.equal(descriptors.length, 1, `${record.identity.recordId} needs one component references block`);
+      const encoded = descriptors[0]?.[1];
+      assert.ok(encoded);
+      const reference = decodeComponentReferencesDescriptor(encoded);
+      assert.equal(reference.document.label, record.reference.document.label);
+      assert.equal(reference.document.title, record.reference.document.documentTitle);
+      assert.equal(reference.document.authority, record.reference.document.authorityClass);
+      assert.equal(reference.document.availability, record.reference.document.availability);
+      assert.equal(reference.document.url, record.reference.document.url);
+      assert.equal(reference.footprint.name, record.reference.footprint.footprintName);
+      assert.equal(
+        reference.footprint.assetUrl,
+        `/assets/component-previews/footprints/${record.reference.footprint.footprintName}.svg`,
+      );
+      assert.ok(page.indexOf("<ComponentReferences") < page.indexOf("## Placements"));
+      assert.ok(page.indexOf("## Sources") > page.indexOf("<ComponentReferences"));
+    }
+  });
+
+  it("passes the reviewed PDF label through without deriving it from document kind", () => {
+    const record = recordOf(model, FIXTURE_IDS.driverRecord);
+    const altered = {
+      ...record,
+      reference: {
+        ...record.reference,
+        document: { ...record.reference.document, label: safeText("Mechanical drawing PDF", { field: "label" }) },
+      },
+    };
+    const page = renderRecord(altered, buildRecordIndex(model)).contents;
+    const encoded = /<ComponentReferences descriptor="([0-9a-f]+)"/u.exec(page)?.[1];
+    assert.ok(encoded);
+    assert.equal(decodeComponentReferencesDescriptor(encoded).document.label, "Mechanical drawing PDF");
+  });
+
   it("renders every section, in the locked reading order", () => {
     const order = [
       "## Identity",

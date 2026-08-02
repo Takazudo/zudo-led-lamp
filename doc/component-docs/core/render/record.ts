@@ -54,7 +54,8 @@ import {
   text,
   type TableRow,
 } from "../mdx.ts";
-import { encodeModelDescriptor, MODEL_ASSET_BASE } from "../model-descriptor.ts";
+import { MODEL_ASSET_BASE } from "../model-descriptor.ts";
+import { createComponentReferencesDescriptor, encodeComponentReferencesDescriptor } from "../reference-descriptor.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
 import { joinSafe, literal, safeText, type SafeText } from "../text.ts";
 import {
@@ -111,7 +112,7 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
     ...orientation(record),
     ...subordinateSection(record),
     ...identitySection(record),
-    ...packageModelSection(record),
+    ...componentReferencesSection(record),
     ...placementSection(record),
     ...coverageSection(record, index),
     ...factsSection(record, index),
@@ -156,22 +157,32 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
   );
 }
 
-function packageModelSection(record: PublicRecord): RootContent[] {
+function componentReferencesSection(record: PublicRecord): RootContent[] {
   const footprint = record.reference.footprint;
   const modelName = String(footprint.modelPath).split("/").at(-1);
   if (modelName === undefined) throw new Error("Published model path has no basename");
-  const descriptor = encodeModelDescriptor({
-    version: 1,
-    packageId: footprint.packageId,
-    packageLabel: footprint.footprintName,
-    modelUrl: `${MODEL_ASSET_BASE}${modelName}`,
-    offset: footprint.offset,
-    rotation: footprint.rotation,
-    scale: footprint.scale,
-  });
+  const document = record.reference.document;
+  const descriptor = encodeComponentReferencesDescriptor(createComponentReferencesDescriptor({
+    document: {
+      label: document.label,
+      title: document.documentTitle,
+      authority: document.authorityClass,
+      availability: document.availability,
+      url: document.url,
+    },
+    footprintName: footprint.footprintName,
+    model: {
+      version: 1,
+      packageId: footprint.packageId,
+      packageLabel: footprint.footprintName,
+      modelUrl: `${MODEL_ASSET_BASE}${modelName}`,
+      offset: footprint.offset,
+      rotation: footprint.rotation,
+      scale: footprint.scale,
+    },
+  }));
   return [
-    heading(2, literal("Package model")),
-    component("PackageModelViewer", { descriptor }),
+    component("ComponentReferences", { descriptor }),
   ];
 }
 

@@ -42,6 +42,7 @@ export const ALLOWED_COMPONENT_ATTRIBUTES = {
   EvidenceAnchor: ["id"],
   EvidenceDetails: ["label"],
   EvidenceTable: ["label"],
+  ComponentReferences: ["descriptor"],
   PackageModelViewer: ["descriptor"],
   CategoryNav: ["category"],
 } as const satisfies Record<string, readonly string[]>;
@@ -224,8 +225,8 @@ function assertComponentAttributes(
         attribute: key,
       });
     }
-    const safeValue = name === "PackageModelViewer" && key === "descriptor"
-      ? /^(?:[0-9a-f]{2})+$/u.test(value) && value.length <= 4096
+    const safeValue = (name === "PackageModelViewer" || name === "ComponentReferences") && key === "descriptor"
+      ? /^(?:[0-9a-f]{2})+$/u.test(value) && value.length <= 8192
       : ATTRIBUTE_VALUE_PATTERN.test(value);
     if (!safeValue) {
       fail("UNSAFE_MDX", `attribute ${key} has an unpublishable value`, {
