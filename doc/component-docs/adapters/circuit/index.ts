@@ -362,6 +362,12 @@ function projectSourceUrl(source: ProviderSource, policy: PublicationPolicy): Sa
     return null;
   };
 
+  // The field gate comes first. If the matrix ever denies outbound links, no
+  // URL is considered at all — so none can reach the committed report either.
+  if (policy.decision("source.authoritativeUrl") === "DENY") {
+    recordWithheld(policy, "source.authoritativeUrl");
+    return deny("FIELD_DENIED");
+  }
   if (!policy.isSourceLinkable(source.source_id)) {
     return deny("SOURCE_NOT_LINKABLE");
   }
@@ -377,7 +383,7 @@ function projectSourceUrl(source: ProviderSource, policy: PublicationPolicy): Sa
     decision: "ALLOW",
     reason: "ABSOLUTE_HTTP_URL",
   });
-  return policy.publish("source.authoritativeUrl", classified.url) ?? null;
+  return policy.publishRequired("source.authoritativeUrl", classified.url);
 }
 
 function projectFact(fact: ProviderFact, policy: PublicationPolicy): PublicFact {

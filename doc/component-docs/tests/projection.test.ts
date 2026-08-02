@@ -376,6 +376,36 @@ describe("URL publication", () => {
     });
   });
 
+  it("considers no URL at all when the field itself is denied", () => {
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const policy = new PublicationPolicy(
+      { ...FIXTURE_MATRIX, "source.authoritativeUrl": "DENY" },
+      FIXTURE_SELECTION,
+    );
+    const model = projectIndex(index, policy);
+    assert.equal(
+      model.records.flatMap((entry) => entry.sources).every((source) => source.url === null),
+      true,
+    );
+
+    const report = policy.buildReport({
+      viewModelVersion: VIEW_MODEL_VERSION,
+      providerId: "fixture",
+      providerContractVersion: 1,
+      availableRecords: 3,
+      availableSources: 4,
+      selectedSlugs: [],
+      counts: {},
+    });
+    assert.equal(report.urls.every((entry) => entry.url === ""), true);
+    assert.equal(report.urls.every((entry) => entry.reason === "FIELD_DENIED"), true);
+    assert.equal(
+      report.fields.find((field) => field.key === "source.authoritativeUrl")?.emitted,
+      0,
+    );
+    assert.equal(JSON.stringify(report).includes("fixture.example.com"), false);
+  });
+
   it("denies a URL policy refuses, without publishing it", () => {
     const index = indexEvidence(fixtureInventory(), [
       fixtureBundle({
