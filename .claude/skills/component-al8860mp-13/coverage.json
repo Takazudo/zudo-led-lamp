@@ -19,7 +19,7 @@
       "record_id": "rec-al8860mp-13",
       "domain": "limits-control-timing-faults",
       "status": "COVERED",
-      "reason": "fact-al8860-vin-recommended-max through fact-al8860-faults",
+      "reason": "fact-al8860-vin-recommended-max through fact-al8860-faults, plus fact-al8860-duty-band (DS39014 Rev 8-2, Electrical Characteristics table row DSW Recommended Duty Cycle Range, re-verified 2026-08-02 against the currently live diodes.com PDF, hash-matched to the retained mirror)",
       "fact_ids": [
         "fact-al8860-vin-recommended-max",
         "fact-al8860-vin-absolute-max",
@@ -34,7 +34,8 @@
         "fact-al8860-max-frequency",
         "fact-al8860-inductance-min",
         "fact-al8860-inductance-max",
-        "fact-al8860-faults"
+        "fact-al8860-faults",
+        "fact-al8860-duty-band"
       ],
       "blocking_fact_ids": []
     },
@@ -93,7 +94,7 @@
       "record_id": "rec-fxl0630-330-m",
       "domain": "inductance-dcr-current-package",
       "status": "OPEN",
-      "reason": "fact-fxl-inductance through fact-fxl-isat-margin. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "A direct cjiang.com.cn primary-retrieval attempt on 2026-08-02 (src-fxl-series-official) confirmed manufacturer identity, inductance, tolerance, DCR max, absolute-maximum voltage, temperature range, and package against the manufacturer's own site, and its typical Isat/Irms figures (2.5 A / 2 A) match the mirror's typical column exactly. However, that document shows only a single typical-labeled Isat/Irms column, not the mirror's separate max-design column, so the mirror's max-design fact-fxl-isat-max (2.1 A) and fact-fxl-irated-max (1.8 A) remain unsourced at primary, and fact-fxl-isat-margin (which depends on fact-fxl-isat-max) and fact-fxl-rating-definitions stay open.",
       "fact_ids": [
         "fact-fxl-inductance",
         "fact-fxl-tolerance",
@@ -109,16 +110,9 @@
         "fact-fxl-isat-margin"
       ],
       "blocking_fact_ids": [
-        "fact-fxl-inductance",
-        "fact-fxl-tolerance",
-        "fact-fxl-inductance-min",
-        "fact-fxl-dcr-max",
         "fact-fxl-isat-max",
         "fact-fxl-irated-max",
         "fact-fxl-rating-definitions",
-        "fact-fxl-voltage-max",
-        "fact-fxl-temperature",
-        "fact-fxl-package",
         "fact-fxl-isat-margin"
       ]
     },
@@ -136,7 +130,7 @@
       "record_id": "rec-ro-ss26",
       "domain": "polarity-voltage-current-leakage-package",
       "status": "OPEN",
-      "reason": "fact-ss26-polarity through fact-ss26-current-margin. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "fact-ss26-polarity through fact-ss26-current-margin. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED. A direct primary-retrieval attempt on 2026-08-02 (src-ss26-primary-attempt) identified the exact R+O manufacturer (Zhuhai Hongjiacheng Technology Co., Ltd.) and reached its official site, but no SS26-specific datasheet could be located there (dynamic product listing, not independently indexed); no other vendor's SS26 datasheet may substitute for this exact part.",
       "fact_ids": [
         "fact-ss26-polarity",
         "fact-ss26-reverse-voltage",

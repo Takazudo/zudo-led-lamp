@@ -67,8 +67,8 @@
       "coverage_id": "cov-fnr-spec",
       "record_id": "rec-fnr4030s4r7mt",
       "domain": "inductance-dcr-srf-current-package",
-      "status": "OPEN",
-      "reason": "fact-fnr-inductance through fact-fnr-package. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "status": "COVERED",
+      "reason": "A direct cjiang.com.cn primary-retrieval attempt on 2026-08-02 (src-fnr-series-official) exactly matched every electrical parameter in fact-fnr-inductance through fact-fnr-package against the manufacturer's own FNR4030S series table (inductance, tolerance, DCR max, SRF min, Isat max, Irms max, temperature, package all confirmed). fact-fnr-rating-definitions stays NEEDS BENCH/mirror-sourced only because the *3/*4 footnote text was not located on the pages checked, not because any value is unconfirmed.",
       "fact_ids": [
         "fact-fnr-inductance",
         "fact-fnr-tolerance",
@@ -81,18 +81,7 @@
         "fact-fnr-temperature",
         "fact-fnr-package"
       ],
-      "blocking_fact_ids": [
-        "fact-fnr-inductance",
-        "fact-fnr-tolerance",
-        "fact-fnr-inductance-min",
-        "fact-fnr-dcr-max",
-        "fact-fnr-srf-min",
-        "fact-fnr-isat-max",
-        "fact-fnr-irated-max",
-        "fact-fnr-rating-definitions",
-        "fact-fnr-temperature",
-        "fact-fnr-package"
-      ]
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-fnr-project",

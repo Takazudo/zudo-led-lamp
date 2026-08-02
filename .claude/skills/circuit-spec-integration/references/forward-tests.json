@@ -31,7 +31,7 @@
       "rule_ids": ["rule-ap63203-logic-stage"],
       "required_fact_ids": ["fact-fnr-isat-margin", "fact-fnr-irated-margin", "fact-ap63203-min-off-time", "fact-cl21-effective-capacitance-status"],
       "required_calculation_ids": [],
-      "expected_observed_conditions": ["V15 transients, EN-open startup, switching timing, actual 3V3 load steps, inductor heat/saturation, effective capacitance, layout and MCU state", "mirror-only FNR evidence", "unavailable min-off-time", "no guaranteed effective installed capacitance"],
+      "expected_observed_conditions": ["V15 transients, EN-open startup, switching timing, actual 3V3 load steps, inductor heat/saturation, effective capacitance, layout and MCU state", "FNR isat/irated margin now primary-confirmed; irated margin remains negative (2.7 A target vs 2.0 A primary Irms max)", "unavailable min-off-time", "no guaranteed effective installed capacitance"],
       "expected_verdicts": ["UNSOURCED"],
       "must_refuse": true
     },
