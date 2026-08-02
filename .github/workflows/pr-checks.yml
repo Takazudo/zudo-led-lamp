@@ -1,8 +1,9 @@
 # Pull request quality checks and preview deployment for the doc/ site.
 #
 # Triggered on PRs targeting `main` or any `base/**` worktree base branch (so
-# topic PRs that target a base branch also get a preview), when the PR
-# touches doc/ or this workflow. Pipeline: type check -> build -> deploy
+# topic PRs that target a base branch also get a preview), when the PR touches
+# doc/, the repo-root Claude resources the site publishes, or this workflow.
+# Pipeline: type check -> build -> generated-docs drift check -> deploy
 # preview (wrangler versions upload --preview-alias) -> sticky PR comment.
 #
 # Secret gating: same readiness-step pattern as main-deploy.yml — the
@@ -24,6 +25,12 @@ on:
       - "base/**"
     paths:
       - "doc/**"
+      # The site publishes repo-root Claude resources — doc/zfb.config.ts sets
+      # claudeResources.claudeDir "../.claude" and scanRoot "..", so these
+      # inputs change the built site despite living outside doc/.
+      - ".claude/skills/**"
+      - "CLAUDE.md"
+      - "**/CLAUDE.md"
       - ".github/workflows/pr-checks.yml"
 
 concurrency:
@@ -71,6 +78,14 @@ jobs:
       - name: Build site
         working-directory: doc
         run: pnpm build
+
+      # The claude-resources generator rewrites doc/src/content/docs/claude*/
+      # on every build, and that output is committed. A source edit under
+      # .claude/skills/ or a CLAUDE.md that lands without a rebuild would leave
+      # the committed pages stale; this fails the PR instead. Same contract as
+      # the boards regen-idempotency check in component-spec-skills.yml.
+      - name: Generated Claude docs are up to date
+        run: git diff --exit-code -- doc/src/content/docs
 
       - name: Check secret readiness
         id: readiness
