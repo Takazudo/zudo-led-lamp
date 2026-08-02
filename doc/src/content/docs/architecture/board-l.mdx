@@ -114,9 +114,12 @@ something the JLCPCB catalog can guarantee.
 
 The design review moved this line from a 250 mW 1206
 ([C2907384](https://jlcpcb.com/partdetail/C2907384)) to a 1 W 2512. Resistor dissipation
-goes as I², so at the datasheet-worst-case 90 mA string the 1206 sat at **107% of its
-rating** (0.267 W) — over-rated at exactly the imbalance bound this page accepts below.
-The 2512 runs at 27% there, and its larger copper helps spread the array's heat.
+goes as I², so the upsize is headroom against *peak* branch current, not nominal. At the
+worst-case branch peak derived below — 88.19 mA, at the locked 0.30 V Vf spread — the
+1206 would sit at **103% of its rating** (0.257 W);
+at the LED's own 90 mA absolute-maximum forward current it would sit at 107% (0.267 W).
+The 2512 runs at 26% of rating at that same 88.19 mA, and its larger copper helps spread
+the array's heat.
 
 | Quantity | Value |
 |---|---|
@@ -126,12 +129,14 @@ The 2512 runs at 27% there, and its larger copper helps spread the array's heat.
 
 Current sharing across the eight strings is bounded by an **assembled-string Vf
 spread** — `max(string total Vf) − min(string total Vf)` across the eight 3-LED
-strings, not a ±-from-centre figure. And the driver's own guaranteed worst case already
+strings, not a ±-from-centre figure. And the driver's own datasheet worst case already
 consumes most of the LED's headroom before any Vf mismatch exists: total peak current
 is **0.6303 A** (the 0.5253 A maximum mean current at the AL8860's maximum sense
 threshold over the sense resistor's minimum initial resistance, raised by half the
 40% coil ripple the driver sets internally), against ballast of 33 Ω ±1% and a 90 mA
-absolute-maximum LED forward current:
+absolute-maximum LED forward current. Each input is a manufacturer-primary datasheet
+limit, but the composed 0.6303 A is a calculated stack-up carrying a `NEEDS BENCH`
+verdict — a datasheet worst case, not a measured or guaranteed one:
 
 | Assembled-string Vf spread | Hottest branch, peak | vs the 90 mA absolute maximum |
 |---|---|---|
@@ -141,7 +146,7 @@ absolute-maximum LED forward current:
 | 1.80 V (full retained 2.6–3.2 V window, unmitigated) | 128.27 mA | 142.5% |
 
 **Even with perfectly matched strings the design sits at 89% of the LED's
-absolute-maximum forward current on a peak basis.** The driver's own guaranteed worst
+absolute-maximum forward current on a peak basis.** The driver's own datasheet worst
 case — maximum sense threshold, minimum sense resistor, full ripple peak — consumes 89%
 of the limit before any Vf mismatch exists; the entire Vf-matching budget is the
 remaining 9.8 mA. At the full retained 2.6–3.2 V window, unmitigated, the hottest LED
@@ -517,7 +522,7 @@ rail tolerance cancels out of the threshold. Rail tolerance still matters for th
 *current* envelope above, because that math is not ratiometric; that is why the
 threshold table carries no rail-tolerance column while the current figures do. The
 derate function is
-[control-safety's](/docs/research/control-safety/#over-temperature-derating-hook)
+[control-safety's](/docs/research/control-safety/#fault-handling-sketch-over-temperature-derating-hook)
 unchanged.
 
 ## Net-connectivity table
@@ -728,8 +733,8 @@ at it deliberately.
 | Site | Count | Each | vs limit |
 |---|---|---|---|
 | LED (nominal) | 24 | 0.19 W | 62% of the 306 mW package rating; ~19% of the ~1 W/site FR-4 guideline |
-| LED (hot branch, mean, at the locked 0.30 V spread limit) | up to 8 | 0.195 W | 64% of the package rating — comfortable on this thermal/mean basis |
-| Ballast resistor, 2512 1 W | 8 | 0.129 W | 13% nominal; 27% at the worst-case 90 mA string |
+| LED (hot branch, mean, at the locked 0.30 V spread limit) | 3 | 0.195 W | 64% of the 306 mW package rating — comfortable on this thermal/mean basis |
+| Ballast resistor, 2512 1 W | 8 | 0.129 W | 13% nominal; 26% at the 88.19 mA worst-case branch peak, 27% at the LED's 90 mA absolute-maximum rating |
 | L1 (33 µH, 310 mΩ) | 1 | 0.078 W | — |
 | D11 SS26 | 1 | 0.059 W | — |
 | RS1 (200 mΩ, 2 W) | 1 | 0.050 W | 2.5% |
@@ -739,8 +744,8 @@ at it deliberately.
 No site exceeds its rating on this thermal (mean) basis, and the two ICs barely warm.
 The number to watch is not in this table: it is the **peak-current** comparison in
 [current sharing](#led-array-and-the-brightness-number-ballast-and-current-sharing) — even at zero Vf spread the hot
-branch's guaranteed peak sits at 89.1% of the LED's 90 mA absolute-maximum forward
-current, rising to 98.0% at the locked 0.30 V acceptance limit. That is a
+branch's datasheet worst-case peak sits at 89.1% of the LED's 90 mA absolute-maximum
+forward current, rising to 98.0% at the locked 0.30 V acceptance limit. That is a
 driver-headroom finding, not a thermal one; see
 [#52](https://github.com/Takazudo/zudo-led-lamp/issues/52). If a built board shows
 visibly uneven strings, the assembly-time acceptance gate is what catches it, not a

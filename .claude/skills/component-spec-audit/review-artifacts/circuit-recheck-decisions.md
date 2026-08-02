@@ -439,6 +439,70 @@ No CTRL calculation is encoded: it would require pulling `rec-ap63203wu-7` and `
 
 ---
 
+## Corrections (post-review, same session, 2026-08-02)
+
+Two defects found in review of the text above. The original wording is left intact; these entries supersede
+it. Both concern Decision 3.
+
+### Correction 1 — "Inputs, all from PASS facts" is wrong; the peak-current chain is `NEEDS BENCH`
+
+Decision 3's *Model* section introduces its inputs as "all from PASS facts". That is not true of the first
+one. `fact-al8860-peak-current` (0.6303030303 A) carries verdict **`NEEDS BENCH`**, and so do both facts it
+depends on:
+
+| Fact | Verdict | Provenance |
+|---|---|---|
+| `fact-al8860-peak-current` | **NEEDS BENCH** | CALCULATED from `fact-al8860-current-max` × (1 + `fact-al8860-ripple-fraction`/2) |
+| `fact-al8860-current-max` | **NEEDS BENCH** | CALCULATED from `fact-al8860-sense-max` / `fact-rlp25-resistance-min` |
+| `fact-rlp25-resistance-min` | **NEEDS BENCH** | CALCULATED from `fact-rlp25-resistance` × (1 − `fact-rlp25-tolerance`) |
+
+The four *leaf* facts underneath (`fact-al8860-sense-max`, `fact-al8860-ripple-fraction`,
+`fact-rlp25-resistance`, `fact-rlp25-tolerance`) are all `PASS - primary-source confirmed` against
+`MANUFACTURER_PRIMARY`, `AVAILABLE` sources. What is unverified is the *composition*: each derived fact's own
+`conditions` field records "TCR and self-heating unresolved", so stacking maximum sense threshold onto minimum
+initial sense resistance onto full ripple peak produces a datasheet worst case that no bench measurement has
+confirmed.
+
+Consequence: every number in Decision 3 that flows from `fact-al8860-peak-current` — the 80.18 / 88.19 /
+90.00 / 128.27 mA hot-branch peaks, the 89.1 % / 98.0 % / 100.0 % / 142.5 % readings against the LED
+absolute maximum, and the 0.4229 / 0.3677 / 0.3539 / 0.3125 V spread bounds — is a **datasheet worst case,
+bench-unverified**, not a guaranteed value. The conclusions do not change; the confidence label does.
+
+Note the phrase to avoid is "guaranteed", **not** "mirror-derived": these sources are manufacturer-primary,
+not mirrors. Doc wording corrected accordingly in `architecture/board-l.mdx` and `architecture/decisions.mdx`.
+
+### Correction 2 — the guard-band narrative was self-inconsistent; the operative bound is 0.3677 V
+
+Decision 3's *Result* section says the locked 0.30 V limit "sits inside the tightest computed bound
+(0.3125 V) and 18 % inside the ±1 % bound, leaving 54–68 mV of guard band". Those clauses do not describe the
+same bound: 0.3125 V leaves 12.5 mV, not 54–68 mV. The 54 mV and 68 mV figures come from the ±1.25 % and
+±1 % rows respectively. Step 4 of the measurement protocol then assesses the ≤10 mV instrument budget against
+"the 54 mV guard band", a third choice again.
+
+The fitted ballast is **FOJAN FRC2512F33R0TS** (`line-c2934070`), whose `F` suffix is **±1 %** — confirmed in
+`src-c2934070-spec`'s evidence extract ("FRC2512F33R0TS decodes 2512, +/-1%, 33 ohm"). The ±1 % row is
+therefore the operative bound for the part actually on the BOM:
+
+| Row from the Result table | Bound | Guard vs the adopted 0.30 V | Status |
+|---|---|---|---|
+| ideal (identical resistors) | 0.4229 V | 122.9 mV | not physical |
+| **±1 % initial tolerance — the fitted part** | **0.3677 V** | **67.7 mV** | **operative** |
+| ±1.25 % (initial + realistic differential TCR) | 0.3539 V | 53.9 mV | sensitivity case |
+| ±2 % (initial + worst-case differential TCR over 60 °C) | 0.3125 V | 12.5 mV | sensitivity case |
+
+**Corrected narrative:** the adopted 0.30 V limit sits 18.4 % inside the operative ±1 % bound of 0.3677 V,
+leaving **≈68 mV of guard band**. The 0.3539 V and 0.3125 V rows are differential-TCR sensitivity cases, not
+the bound the fitted part imposes; the 0.3125 V figure in particular rests on the worst-case differential TCR
+over a 60 °C excursion — the row's own stated condition — and should not be cited as "the tightest computed
+bound" in a way that implies it governs.
+
+**Protocol step 4 restated:** the ≤10 mV differential instrument-uncertainty budget is assessed against the
+≈68 mV guard, which it consumes 14.8 % of (and 3.3 % of the 0.30 V limit itself). Both readings are
+comfortable. Even against the pathological ±2 % sensitivity case the 10 mV budget fits inside the 12.5 mV
+guard, though with no margin to spare — which is a reason to hold the ≤10 mV requirement, not to relax it.
+
+---
+
 ## Decision summary
 
 | # | Domain | Outcome | Key number |
