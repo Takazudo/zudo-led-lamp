@@ -61,6 +61,18 @@ describe("reviewed document shortcuts", () => {
     assert.equal(drawing?.reference.document.label, "Mechanical drawing PDF");
   });
 
+  it("uses the public exact-part PDF for TYPE-C instead of the referer-gated manufacturer asset", () => {
+    const typeC = model.records.find((record) => record.identity.recordId === "rec-type-c-31-m-17");
+    assert.equal(typeC?.reference.document.sourceId, "src-type-c-c283540");
+    assert.equal(typeC?.reference.document.documentKind, "drawing");
+    assert.equal(typeC?.reference.document.label, "Mechanical drawing PDF");
+    assert.equal(
+      typeC?.reference.document.url,
+      "https://datasheet.lcsc.com/datasheet/pdf/26d9c5bff410f020782d77a1fd4062b2.pdf?productCode=C283540",
+    );
+    assert.doesNotMatch(typeC?.reference.document.url ?? "", /thefastfile\.com/u);
+  });
+
   it("retains STM32's audited availability without inventing an exception label", () => {
     const stm = model.records.find((record) => record.identity.recordId === "rec-c529334");
     assert.equal(stm?.reference.document.sourceId, "src-c529334-ds");
