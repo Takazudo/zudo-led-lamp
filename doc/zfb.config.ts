@@ -19,8 +19,15 @@ export default defineConfig(
       docHistory: true,
       viewSourceLink: false,
     },
+    // Publish the REPO-ROOT .claude, not doc/.claude. The component-audit
+    // skills that document this circuit live at the repo root; doc/.claude
+    // holds only tooling for editing this site and is deliberately unpublished.
+    // Both paths resolve against the doc-site project root (doc/), so ".."
+    // reaches the repo root. `scanRoot` widens CLAUDE.md discovery only —
+    // generated pages still land in doc/src/content/docs (zudolab/zudo-doc#2558).
     claudeResources: {
-      claudeDir: ".claude",
+      claudeDir: "../.claude",
+      scanRoot: "..",
     },
     defaultLocaleOnlyPrefixes: [
       "/docs/claude-md/",
