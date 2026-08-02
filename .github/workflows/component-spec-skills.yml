@@ -1,3 +1,11 @@
+# Offline validation of the frozen component contract: the canonical Python
+# validator, its unit tests, the cross-component routing/refusal forward tests,
+# and schematic regen-idempotency. No credentials, no network, no KiCad.
+#
+# The four checks below are the source of truth for component evidence; the two
+# doc workflows depend on the first of them because `pnpm build` shells out to
+# validate.py. That is why all three pin the same Python 3.12.
+
 name: Component spec skills
 
 on:
@@ -28,15 +36,28 @@ on:
       - 'footprints/**/*.kicad_mod'
       - 'firmware/**'
 
+concurrency:
+  group: component-spec-skills-${{ github.ref }}
+  # Superseded runs on a topic branch or PR carry no information. On main they
+  # do — that run is the record for a commit that is already merged.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 permissions:
   contents: read
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      # SHA-pinned to the exact pins the two doc workflows already use — a
+      # mutable tag is a supply-chain hole, and three workflows on one runner
+      # image should not disagree about which checkout they get. Both SHAs
+      # verified against the real tags (checkout v5.0.1, setup-python v5.6.0);
+      # checkout moves v4 -> v5 to match, which changes only the action's own
+      # Node runtime, not what these four steps do.
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
       - name: Validate frozen component contract (offline)

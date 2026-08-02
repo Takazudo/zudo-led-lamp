@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Gate a captured `zfb build` log on link warnings.
+#
+# ## Why this exists instead of `failOnBroken: true`
+#
+# zfb's `linkValidation` resolves `#fragment` targets against HEADING-derived
+# anchors only. Every anchor the component-docs generator emits is an
+# `<EvidenceAnchor>` component id, and all three markup forms were probed
+# directly: a heading anchor validates, a raw-HTML `id` warns, an MDX component
+# id warns. No markup this generator can emit satisfies the checker, so every
+# one of those warnings is false — the links do resolve in the built HTML.
+#
+# That leaves two obvious options, and both are wrong:
+#
+#   `failOnBroken: true`   fails every build on thousands of false positives;
+#   ignore the log         means a genuinely broken HAND-AUTHORED link never
+#                          surfaces, which is the failure mode that matters.
+#
+# What already covers the generated pages is `assertLinkIntegrity`, which runs
+# on the VIEW MODEL inside the pipeline and is fatal there — it does not care
+# what markup the renderers emit. That independence is also why the warning
+# COUNT carries no signal: wrapping the evidence tables in a component dropped
+# it from 4324 to 2536 with no change in link health, because zfb does not
+# descend into JSX flow elements. Nothing here gates on a count, or on any
+# expected number.
+#
+# ## What this suppresses, and what it refuses to
+#
+# Exactly one class is suppressed: a same-page `#fragment` reported against a
+# file in the generated tree. Everything else fails — including a `zfb warn:`
+# line whose SHAPE is not recognised. That last part is deliberate: if zfb
+# changes its warning format, an unrecognised line has to turn CI red rather
+# than silently switch this gate off.
+#
+# Usage: bash check-zfb-link-warnings.sh <build-log>
+#   Locally:  pnpm build 2>&1 | tee /tmp/doc-build.log
+#             bash component-docs/scripts/check-zfb-link-warnings.sh /tmp/doc-build.log
+
+LOG="${1:-}"
+if [ -z "$LOG" ] || [ ! -f "$LOG" ]; then
+  echo "usage: check-zfb-link-warnings.sh <build-log>" >&2
+  exit 2
+fi
+
+# The generated tree, as it appears in zfb's absolute warning paths.
+GENERATED_TREE='/src/content/docs/components/'
+
+WORK="$(mktemp -d "${TMPDIR:-/tmp}/zfb-link-warnings-XXXXXX")"
+cleanup() {
+  case "$WORK" in
+    */zfb-link-warnings-*) rm -rf "$WORK" ;;
+    *) echo "refusing to clean an unexpected work path: $WORK" >&2 ;;
+  esac
+}
+trap cleanup EXIT
+
+KNOWN="$WORK/known-false.txt"
+UNEXPECTED="$WORK/unexpected.txt"
+: >"$KNOWN"
+: >"$UNEXPECTED"
+
+awk -v known="$KNOWN" -v unexpected="$UNEXPECTED" -v tree="$GENERATED_TREE" '
+  BEGIN { prefix = "zfb warn: "; sep = ": broken link: " }
+  index($0, prefix) != 1 { next }
+  {
+    rest = substr($0, length(prefix) + 1)
+    at = index(rest, sep)
+    if (at > 0) {
+      path = substr(rest, 1, at - 1)
+      target = substr(rest, at + length(sep))
+      if (index(path, tree) > 0 && substr(target, 1, 1) == "#") {
+        print > known
+        next
+      }
+    }
+    print > unexpected
+  }
+' "$LOG"
+
+known_count=$(wc -l <"$KNOWN")
+unexpected_count=$(wc -l <"$UNEXPECTED")
+
+if [ "$unexpected_count" -ne 0 ]; then
+  echo "$unexpected_count zfb warning(s) outside the known-false class:" >&2
+  cat "$UNEXPECTED" >&2
+  if [ -n "${GITHUB_ACTIONS:-}" ]; then
+    echo "::error::${unexpected_count} zfb link warning(s) are not the known-false generated-anchor class — a hand-authored link is broken, or zfb changed its warning format."
+  fi
+  exit 1
+fi
+
+echo "link check: no zfb warning outside the known-false generated-anchor class"
+echo "  suppressed  $known_count same-page fragment warning(s) in $GENERATED_TREE"
+echo "              (false by construction — zfb resolves fragments against heading"
+echo "               anchors only; assertLinkIntegrity proves these fatally on the"
+echo "               view model. The count tracks markup choices, not link health.)"
+if [ "$known_count" -gt 0 ]; then
+  echo "  sample:"
+  head -5 "$KNOWN" | sed 's/^/    /'
+fi
