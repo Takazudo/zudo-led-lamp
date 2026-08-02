@@ -25,10 +25,12 @@ This is a subordinate record. It is a component in its own right, with its own o
 - **Orderable ID:** `C45783`
 - **Package:** `C0805`
 - **Inventory line:** `line-c45783`
+- **Also known as:** `AP63203 output capacitor`
+- **Owner skill:** `component-ap63203wu-7`
 - **Fit:** Fitted
 - **Identity state:** UNRESOLVED
 - **Source state:** SOURCE UNAVAILABLE
-- **Coverage:** no coverage domains published
+- **Coverage:** 1 open of 2 published
 
 ## Placements
 
@@ -43,35 +45,209 @@ Every position this exact line occupies in the as-built design. One line may be 
 
 Coverage is stated one domain at a time and is never rolled up. A domain marked open is a question that has not been answered; it is not a finding that the part is unsuitable. A record with no open domains has not thereby been declared safe.
 
-No coverage domain is published for this record.
+### identity-capacitance-voltage-temperature-package
+
+<EvidenceAnchor id="cov-cl21-spec" />
+
+- **Coverage ID:** `cov-cl21-spec`
+- **Status:** COVERED
+
+**Reason:** fact-cl21-manufacturer through fact-cl21-package
+
+**Facts in this domain:**
+
+- [`fact-cl21-manufacturer`](#fact-cl21-manufacturer)
+- [`fact-cl21-capacitance`](#fact-cl21-capacitance)
+- [`fact-cl21-tolerance`](#fact-cl21-tolerance)
+- [`fact-cl21-voltage`](#fact-cl21-voltage)
+- [`fact-cl21-dielectric`](#fact-cl21-dielectric)
+- [`fact-cl21-temperature`](#fact-cl21-temperature)
+- [`fact-cl21-package`](#fact-cl21-package)
+
+### guaranteed-effective-capacitance
+
+<EvidenceAnchor id="cov-cl21-bias" />
+
+- **Coverage ID:** `cov-cl21-bias`
+- **Status:** OPEN
+
+**Reason:** The locked Samsung PDF requires evaluation of Class II capacitance under DC voltage but does not provide an exact 3.3 V curve or a guaranteed minimum including tolerance, temperature, aging, and lot spread.
+
+**Facts in this domain:** none are recorded against it.
+
+**Blocked by:** no blocking fact is recorded. What is missing has not been reduced to a specific recorded fact, so the reason above is the whole of what is known.
 
 ## Facts
 
 Each fact keeps its value, its unit, the conditions it holds under, where it came from and how far it has been confirmed as separate fields, because they are separate claims. A value without its conditions is not the same fact, and a verdict is about the evidence for the value, not about the part.
 
-No fact is published for this record.
+### RECOMMENDED\_OPERATION
+
+The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
+
+| Fact                                                                 | Value                                                                                                              | Unit   | Conditions                                                                                                 | Verdict                         | Provenance   | Evidence                                                                                                                           |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-cl21-voltage" />`fact-cl21-voltage`         | 25                                                                                                                 | `Vdc`  | rated DC voltage with Samsung application guidance                                                         | PASS - primary-source confirmed | PRIMARY-SPEC | [src-samsung-cl21-product: Product characteristics table row rated voltage](#src-samsung-cl21-product)                             |
+| <EvidenceAnchor id="fact-cl21-temperature" />`fact-cl21-temperature` | -55 to +85 C; capacitance change within X5R envelope under stated test                                             | `NONE` | component temperature including self-heating                                                               | PASS - primary-source confirmed | PRIMARY-SPEC | [src-samsung-cl21-product: Product characteristics table row X5R temperature](#src-samsung-cl21-product)                           |
+| <EvidenceAnchor id="fact-cl21-dc-bias" />`fact-cl21-dc-bias`         | Class II capacitance changes under applied DC voltage; evaluate the effective capacitance at the operating voltage | `NONE` | 3.3 V output rail; exact effective-capacitance curve or guaranteed minimum is not stated in the locked PDF | NEEDS BENCH                     | PRIMARY-SPEC | [src-samsung-cl21-product: Product Manual sections 2-1-3 and 2-7, Class II capacitance-change guidance](#src-samsung-cl21-product) |
+
+### GUARANTEED\_ELECTRICAL
+
+A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
+
+| Fact                                                                 | Value        | Unit    | Conditions                                                                         | Verdict                         | Provenance   | Evidence                                                                                                            |
+| -------------------------------------------------------------------- | ------------ | ------- | ---------------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-cl21-capacitance" />`fact-cl21-capacitance` | 22           | `uF`    | 120 Hz, 0.5 Vrms nominal measurement; DC bias not specified for this nominal value | PASS - primary-source confirmed | PRIMARY-SPEC | [src-samsung-cl21-product: Reference Sheet page 1 rows Capacitance and Test condition](#src-samsung-cl21-product)   |
+| <EvidenceAnchor id="fact-cl21-tolerance" />`fact-cl21-tolerance`     | 0.2          | `ratio` | nominal capacitance tolerance                                                      | PASS - primary-source confirmed | PRIMARY-SPEC | [src-samsung-cl21-product: Product characteristics table row tolerance](#src-samsung-cl21-product)                  |
+| <EvidenceAnchor id="fact-cl21-dielectric" />`fact-cl21-dielectric`   | X5R Class II | `NONE`  | part dielectric                                                                    | PASS - primary-source confirmed | PRIMARY-SPEC | [src-samsung-cl21-product: Product characteristics table row temperature characteristic](#src-samsung-cl21-product) |
+
+### PROJECT\_STATE
+
+A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
+
+| Fact                                                                                                   | Value                                                                                                                                          | Unit     | Conditions                               | Verdict                         | Provenance     | Evidence                                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------- | ------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-cl21-manufacturer" />`fact-cl21-manufacturer`                                 | Samsung Electro-Mechanics                                                                                                                      | `NONE`   | exact CL21A226MAQNNNE orderable identity | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-samsung-cl21-product: product title block and packaging table row E](#src-samsung-cl21-product)                                          |
+| <EvidenceAnchor id="fact-cl21-package" />`fact-cl21-package`                                           | 0805/2012, 2.00x1.25x1.25 mm nominal, nonpolar                                                                                                 | `NONE`   | exact E embossed 7-inch reel suffix      | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-samsung-cl21-product: Size table rows dimensions and packaging table row E](#src-samsung-cl21-product)                                   |
+| <EvidenceAnchor id="fact-cl21-project-count" />`fact-cl21-project-count`                               | 2                                                                                                                                              | `pieces` | C16 and C17 in parallel                  | NOT APPLICABLE                  | PROJECT-CHOICE | [src-cl21-generator: COMPONENTS table rows C16 and C17](#src-cl21-generator)                                                                  |
+| <EvidenceAnchor id="fact-cl21-project-nets" />`fact-cl21-project-nets`                                 | C16/C17 pin 1=V3P3; pin 2=GND                                                                                                                  | `NONE`   | current generated Board L source         | NOT APPLICABLE                  | PROJECT-CHOICE | [src-cl21-generator: NETS rows V3P3 and GND for C16/C17](#src-cl21-generator)                                                                 |
+| <EvidenceAnchor id="fact-cl21-effective-capacitance-status" />`fact-cl21-effective-capacitance-status` | not locked; two nominal 22 uF parts cannot establish a guaranteed effective pair value without DC-bias, temperature, tolerance, and aging data | `NONE`   | C16 and C17 in parallel on V3P3          | NEEDS BENCH                     | PRIMARY-SPEC   | [src-samsung-cl21-product: Reference Sheet nominal/tolerance rows and Product Manual Class II DC-voltage guidance](#src-samsung-cl21-product) |
 
 ## Pin maps
 
 The mapping between the schematic symbol's pins and the footprint's pads, as recorded. A record may carry more than one map when the same part is documented in more than one context.
 
-No pin map is published for this record.
+### pinmap-cl21a226
+
+<EvidenceAnchor id="pinmap-cl21a226" />
+
+- **Symbol:** `CL21A226MAQNNNE`
+- **Footprint:** `C0805`
+- **Pins:** 2
+
+<EvidenceDetails label="pin-assignments">
+  | Symbol pin | Name   | Footprint pad | Function              |
+  | ---------- | ------ | ------------- | --------------------- |
+  | `1`        | `V3P3` | `1`           | output rail; C16/C17  |
+  | `2`        | `GND`  | `2`           | power ground; C16/C17 |
+</EvidenceDetails>
 
 ## Interactions
 
 Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction is published against one record; the other records it names are linked from here.
 
-No interaction is published for this record.
+### int-cl21-output-filter
+
+<EvidenceAnchor id="int-cl21-output-filter" />
+
+- **Records involved:** `rec-cl21a226maqnnne` (this record)
+- **Conditions:** 3.3 V DC bias plus tolerance, temperature, aging, and transient requirement
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-cl21-dc-bias`](#fact-cl21-dc-bias)
+- [`fact-cl21-project-count`](#fact-cl21-project-count)
+- [`fact-cl21-project-nets`](#fact-cl21-project-nets)
+- [`fact-cl21-effective-capacitance-status`](#fact-cl21-effective-capacitance-status)
+
+### int-ap63203-power-stage
+
+<EvidenceAnchor id="int-ap63203-power-stage" />
+
+- **Records involved:** [`rec-ap63203wu-7`](/docs/components/records/ap63203wu-7/), [`rec-fnr4030s4r7mt`](/docs/components/records/fnr4030s4r7mt/), `rec-cl21a226maqnnne` (this record)
+- **Conditions:** full input/load/temperature envelope and PCB layout; nominal capacitance cannot establish guaranteed stability
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-ap63203-required-inductor-current`](/docs/components/records/ap63203wu-7/#fact-ap63203-required-inductor-current) on AP63203WU-7
+- [`fact-ap63203-reference-l`](/docs/components/records/ap63203wu-7/#fact-ap63203-reference-l) on AP63203WU-7
+- [`fact-ap63203-reference-cap`](/docs/components/records/ap63203wu-7/#fact-ap63203-reference-cap) on AP63203WU-7
+- [`fact-fnr-isat-margin`](/docs/components/records/fnr4030s4r7mt/#fact-fnr-isat-margin) on FNR4030S4R7MT
+- [`fact-fnr-irated-margin`](/docs/components/records/fnr4030s4r7mt/#fact-fnr-irated-margin) on FNR4030S4R7MT
+- [`fact-cl21-effective-capacitance-status`](#fact-cl21-effective-capacitance-status)
 
 ## Sources
 
 Every document cited above, with its identification, when it was retrieved, and what kind of authority it carries. Sources that could not be retrieved are listed too, with their unavailability stated, so a gap in the evidence is visible rather than absent.
 
-No source is published for this record.
+### Samsung CL21A226MAQNNNE Specification Reference Sheet and MLCC Product Manual
+
+<EvidenceAnchor id="src-samsung-cl21-product" />
+
+- **Source ID:** `src-samsung-cl21-product`
+- **Document number:** CL21A226MAQNNNE
+- **Revision:** not stated
+- **Document date:** 2024-05-09
+- **Retrieved:** 2026-08-02
+- **Authority:** MANUFACTURER\_PRIMARY
+- **Availability:** AVAILABLE
+- **Locator:** Reference Sheet page 1 exact-part characteristics and dimensions; Product Manual sections 2-1-3 and 2-7 Class II capacitance-change guidance
+- **Printed page:** Reference Sheet page 1
+- **Document URL:** [https://product.samsungsem.com/part/download.do?masterKey=CL21A226MAQNNN\&type=specsheet](https://product.samsungsem.com/part/download.do?masterKey=CL21A226MAQNNN\&type=specsheet)
+
+### Board L generated schematic specification
+
+<EvidenceAnchor id="src-cl21-generator" />
+
+- **Source ID:** `src-cl21-generator`
+- **Document number:** scripts/schgen/board\_l\_spec.py
+- **Revision:** 410bc1a342286dd6c205d6dcec0f248b8a963987
+- **Document date:** 2026-08-02
+- **Retrieved:** 2026-08-02
+- **Authority:** PROJECT\_GENERATOR
+- **Availability:** AVAILABLE
+- **Locator:** COMPONENTS table rows C16/C17 and NETS rows V3P3 and GND
+- **Printed page:** source file
+- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py)
 
 ## Legend
 
 What the recorded terms on this page mean, in ordinary words. The exact terms above are the ones that count; these descriptions explain them and never replace them.
+
+### Verdict
+
+| Recorded term                     | What it means                                                                                       |
+| --------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `NEEDS BENCH`                     | Cannot be settled from documents. It needs measurement on real hardware before it can be relied on. |
+| `NOT APPLICABLE`                  | The parameter does not apply to this part as it is used here.                                       |
+| `PASS - primary-source confirmed` | Confirmed against the manufacturer's own document for this exact part.                              |
+
+### Provenance
+
+| Recorded term    | What it means                                             |
+| ---------------- | --------------------------------------------------------- |
+| `PRIMARY-SPEC`   | Taken from the manufacturer's own specification document. |
+| `PROJECT-CHOICE` | A decision made by this project. No vendor asserts it.    |
+
+### Fact class
+
+| Recorded term           | What it means                                                                                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GUARANTEED_ELECTRICAL` | A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.                                              |
+| `PROJECT_STATE`         | A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification. |
+| `RECOMMENDED_OPERATION` | The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.                                                              |
+
+### Coverage status
+
+| Recorded term | What it means                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `COVERED`     | Every question this domain asks is answered by the facts listed against it.                                                 |
+| `OPEN`        | Unresolved. Open means the question has not been answered, not that the part is unsafe — the reason states what is missing. |
+
+### Source availability
+
+| Recorded term | What it means                                |
+| ------------- | -------------------------------------------- |
+| `AVAILABLE`   | The document was retrieved and is on record. |
+
+### Source authority
+
+| Recorded term          | What it means                                                             |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `MANUFACTURER_PRIMARY` | The manufacturer's own document for this exact part.                      |
+| `PROJECT_GENERATOR`    | A document this project generated, such as a schematic or netlist export. |
 
 ### Identity state
 
@@ -85,8 +261,14 @@ What the recorded terms on this page mean, in ordinary words. The exact terms ab
 | -------------------- | ------------------------------------------------- |
 | `SOURCE UNAVAILABLE` | No document backing this line could be retrieved. |
 
+### Unit
+
+| Recorded term | What it means                                                                      |
+| ------------- | ---------------------------------------------------------------------------------- |
+| `NONE`        | The value is not a physical quantity, so it carries no unit. Recorded as \`NONE\`. |
+
 ## Raw agent resource
 
 This page is generated from a stored evidence bundle and does not restate it. The bundle is the source of truth: where the two ever disagree, the bundle is right and this page is stale.
 
-[Browse the published agent resources](/docs/claude-skills/)
+[Open the owning bundle](/docs/claude-skills/component-ap63203wu-7/) `component-ap63203wu-7`

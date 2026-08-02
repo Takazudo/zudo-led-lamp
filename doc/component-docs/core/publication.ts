@@ -36,6 +36,7 @@ export const FIELD_KEYS = [
   "record.kind",
   "record.parentRecordId",
   "record.lineId",
+  "record.ownerSkill",
   "record.mpn",
   "record.manufacturer",
   "record.lcsc",

@@ -22,6 +22,10 @@ export const CIRCUIT_PUBLICATION_MATRIX: PublicationMatrix = {
   "record.kind": "PUBLISH",
   "record.parentRecordId": "PUBLISH",
   "record.lineId": "PUBLISH",
+  // The owner bundle's name. Already public: `/docs/claude-skills/<name>/` is
+  // generated for every bundle and is on the live site, so this publishes a
+  // route that exists rather than a new fact about the project.
+  "record.ownerSkill": "PUBLISH",
   "record.mpn": "PUBLISH",
   "record.manufacturer": "PUBLISH",
   "record.lcsc": "PUBLISH",

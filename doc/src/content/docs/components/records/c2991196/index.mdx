@@ -21,10 +21,12 @@ This record in the catalog: [EC11L1525G01](/docs/components/catalog/#rec-c299119
 - **Orderable ID:** `C2991196`
 - **Package:** `SW-TH_ALPS_EC11L1525G01`
 - **Inventory line:** `line-c2991196`
+- **Also known as:** `Board L rotary encoder`
+- **Owner skill:** `component-alps-ec11l1525g01`
 - **Fit:** Fitted
 - **Identity state:** UNRESOLVED
 - **Source state:** SOURCE UNAVAILABLE
-- **Coverage:** no coverage domains published
+- **Coverage:** 6 open of 6 published
 
 ## Placements
 
@@ -38,35 +40,389 @@ Every position this exact line occupies in the as-built design. One line may be 
 
 Coverage is stated one domain at a time and is never rolled up. A domain marked open is a question that has not been answered; it is not a finding that the part is unsuitable. A record with no open domains has not thereby been declared safe.
 
-No coverage domain is published for this record.
+### phase-detent-switch-mechanical-and-process-context
+
+<EvidenceAnchor id="cov-c2991196-spec" />
+
+- **Coverage ID:** `cov-c2991196-spec`
+- **Status:** OPEN
+
+**Reason:** facts retain exact mirror-spec locators, lower-authority UNSOURCED status, and project pin topology. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.
+
+**Facts in this domain:**
+
+- [`fact-c2991196-label-conflict`](#fact-c2991196-label-conflict)
+
+**Blocked by:** these facts must be resolved before the domain can close. Each is listed in full under Facts.
+
+- [`fact-c2991196-label-conflict`](#fact-c2991196-label-conflict)
+
+### current-lifecycle-and-approved-replacement
+
+<EvidenceAnchor id="cov-c2991196-lifecycle" />
+
+- **Coverage ID:** `cov-c2991196-lifecycle`
+- **Status:** OPEN
+
+**Reason:** fact-c2991196-lifecycle: current manufacturer page unavailable
+
+**Facts in this domain:**
+
+- [`fact-c2991196-lifecycle`](#fact-c2991196-lifecycle)
+
+**Blocked by:** these facts must be resolved before the domain can close. Each is listed in full under Facts.
+
+- [`fact-c2991196-lifecycle`](#fact-c2991196-lifecycle)
+
+### firmware-debounce-and-ui-direction
+
+<EvidenceAnchor id="cov-c2991196-fw" />
+
+- **Coverage ID:** `cov-c2991196-fw`
+- **Status:** OPEN
+
+**Reason:** contact timing does not establish firmware debounce or user-facing direction
+
+**Facts in this domain:** none are recorded against it.
+
+**Blocked by:** no blocking fact is recorded. What is missing has not been reduced to a specific recorded fact, so the reason above is the whole of what is known.
+
+### installed-panel-knob-load-and-life
+
+<EvidenceAnchor id="cov-c2991196-load" />
+
+- **Coverage ID:** `cov-c2991196-load`
+- **Status:** OPEN
+
+**Reason:** fact-c2991196-mechanical and fact-c2991196-life require installed mechanical validation
+
+**Facts in this domain:**
+
+- [`fact-c2991196-mechanical`](#fact-c2991196-mechanical)
+- [`fact-c2991196-life`](#fact-c2991196-life)
+
+**Blocked by:** these facts must be resolved before the domain can close. Each is listed in full under Facts.
+
+- [`fact-c2991196-mechanical`](#fact-c2991196-mechanical)
+- [`fact-c2991196-life`](#fact-c2991196-life)
+
+### installed-switch-and-bench-state
+
+<EvidenceAnchor id="cov-c2991196-switch" />
+
+- **Coverage ID:** `cov-c2991196-switch`
+- **Status:** OPEN
+
+**Reason:** fact-c2991196-topology leaves D/E unused and provides no bench result
+
+**Facts in this domain:**
+
+- [`fact-c2991196-topology`](#fact-c2991196-topology)
+
+**Blocked by:** these facts must be resolved before the domain can close. Each is listed in full under Facts.
+
+- [`fact-c2991196-topology`](#fact-c2991196-topology)
+
+### encoder-real-operating-point-bench-gate
+
+<EvidenceAnchor id="cov-c2991196-real-operating-point" />
+
+- **Coverage ID:** `cov-c2991196-real-operating-point`
+- **Status:** OPEN
+
+**Reason:** The design's real operating point differs from every retained spec test condition. V3P3's 10 kOhm pull-up gives roughly 0.33 mA closed-contact current versus the retained 5 V/5 kOhm chatter-bounce test circuit. The only retained minimum-current spec, 500 uA, belongs to the unused D/E push switch, not the A/B/C rotary contacts, so no retained wetting-current minimum covers the rotary path. C22/C23 100 nF at ENC\_A/ENC\_B discharge through R27/R28 100 Ohm at roughly 33 mA peak with no retained contact-current rating for that transient. Bench debounce and contact verification at the real 3.3 V/10k operating point is required before this domain can close.
+
+**Facts in this domain:**
+
+- [`fact-c2991196-real-topology`](#fact-c2991196-real-topology)
+- [`fact-c2991196-real-rail`](#fact-c2991196-real-rail)
+- [`fact-c2991196-real-pullup`](#fact-c2991196-real-pullup)
+- [`fact-c2991196-real-series-r`](#fact-c2991196-real-series-r)
+- [`fact-c2991196-real-current`](#fact-c2991196-real-current)
+- [`fact-c2991196-real-discharge-peak`](#fact-c2991196-real-discharge-peak)
+- [`fact-c2991196-switch`](#fact-c2991196-switch)
+- [`fact-c2991196-contact-timing`](#fact-c2991196-contact-timing)
+
+**Blocked by:** these facts must be resolved before the domain can close. Each is listed in full under Facts.
+
+- [`fact-c2991196-real-current`](#fact-c2991196-real-current)
+- [`fact-c2991196-real-discharge-peak`](#fact-c2991196-real-discharge-peak)
+- [`fact-c2991196-switch`](#fact-c2991196-switch)
+- [`fact-c2991196-contact-timing`](#fact-c2991196-contact-timing)
 
 ## Facts
 
 Each fact keeps its value, its unit, the conditions it holds under, where it came from and how far it has been confirmed as separate fields, because they are separate claims. A value without its conditions is not the same fact, and a verdict is about the evidence for the value, not about the part.
 
-No fact is published for this record.
+### ABSOLUTE\_MAXIMUM
+
+A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
+
+| Fact                                                               | Value                                                                            | Unit   | Conditions                                            | Verdict   | Provenance | Evidence                                                                               |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------- | ------ | ----------------------------------------------------- | --------- | ---------- | -------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-c2991196-solder" />`fact-c2991196-solder` | Manual solder at most 350 C for 3 s; dip 260 plus/minus 5 C for 5 plus/minus 1 s | `NONE` | specified process counts and cooling conditions apply | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical page 7, soldering conditions](#src-c2991196-spec) |
+
+### RECOMMENDED\_OPERATION
+
+The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
+
+| Fact                                                                       | Value                                                                                                          | Unit     | Conditions                                           | Verdict   | Provenance | Evidence                                                                              |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------- | --------- | ---------- | ------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-c2991196-mechanical" />`fact-c2991196-mechanical` | 18 mm shaft projection, 6 mm D-shaft, detent torque 10 plus/minus 7 mN m; panel/light-pipe support is required | `NONE`   | exact LE2115L02G drawing and mechanical instructions | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical pages 4, 5 and 8](#src-c2991196-spec)            |
+| <EvidenceAnchor id="fact-c2991196-life" />`fact-c2991196-life`             | 15,000 rotational cycles at no load, 500 cycles per hour                                                       | `cycles` | one cycle is 360 degrees CCW plus 360 degrees CW     | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical page 5, rotational life row](#src-c2991196-spec) |
+
+### GUARANTEED\_ELECTRICAL
+
+A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
+
+| Fact                                                                               | Value                                                                                                                  | Unit   | Conditions                                  | Verdict   | Provenance | Evidence                                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------ | ------------------------------------------- | --------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-c2991196-phases" />`fact-c2991196-phases`                 | A and B are phase signals referenced to common C; clockwise A changes before B and counterclockwise B changes before A | `NONE` | rotation waveform in specification          | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical page 2, output signal waveform](#src-c2991196-spec)        |
+| <EvidenceAnchor id="fact-c2991196-detents" />`fact-c2991196-detents`               | 15 pulses and 30 detents per 360 degrees; detent step 12 plus/minus 3 degrees                                          | `NONE` | each phase and mechanical detent system     | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical pages 3-4, resolution and detent rows](#src-c2991196-spec) |
+| <EvidenceAnchor id="fact-c2991196-contact-timing" />`fact-c2991196-contact-timing` | Encoder chatter t1/t3 at most 3 ms and bounce t2 at most 2 ms                                                          | `NONE` | 5 V, 5 kohm test circuit                    | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical page 3, chattering and bouncing rows](#src-c2991196-spec)  |
+| <EvidenceAnchor id="fact-c2991196-switch" />`fact-c2991196-switch`                 | D/E SPST push-on switch, 5 VDC 0.1 A, 4 plus/minus 2 N, 1.5 plus/minus 0.5 mm stroke, 20,000 cycles                    | `NONE` | push-switch section; minimum current 500 uA | UNSOURCED | UNVERIFIED | [src-c2991196-spec: section physical page 6, push switch characteristics](#src-c2991196-spec)   |
+
+### PROJECT\_STATE
+
+A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
+
+| Fact                                                                                         | Value                                                                                                                                                                                                                            | Unit   | Conditions                                                                                                                                                                 | Verdict        | Provenance     | Evidence                                                                                                                                                    |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-c2991196-manufacturer" />`fact-c2991196-manufacturer`               | Alps Alpine                                                                                                                                                                                                                      | `NONE` | exact EC11L1525G01 specification                                                                                                                                           | UNSOURCED      | UNVERIFIED     | [src-c2991196-spec: section cover title block](#src-c2991196-spec)                                                                                          |
+| <EvidenceAnchor id="fact-c2991196-lifecycle" />`fact-c2991196-lifecycle`                     | current lifecycle status is not established                                                                                                                                                                                      | `NONE` | manufacturer page inaccessible on retrieval date                                                                                                                           | UNSOURCED      | UNVERIFIED     | [src-c2991196-page: section inaccessible product response](#src-c2991196-page)                                                                              |
+| <EvidenceAnchor id="fact-c2991196-topology" />`fact-c2991196-topology`                       | A/B feed ENC\_A\_SW/ENC\_B\_SW; C/6/7 are GND; D/E are unused                                                                                                                                                                    | `NONE` | generated Board L netlist                                                                                                                                                  | UNSOURCED      | PROJECT-CHOICE | [src-c2991196-generator: section NETS and NO\_CONNECTS](#src-c2991196-generator)                                                                            |
+| <EvidenceAnchor id="fact-c2991196-label-conflict" />`fact-c2991196-label-conflict`           | Generator display text says 15-detent while the lower-authority mirror says 30 detents and 15 pulses                                                                                                                             | `NONE` | documentation discrepancy depends on UNSOURCED fact-c2991196-detents; no deterministic design conclusion                                                                   | UNSOURCED      | PROJECT-CHOICE | [src-c2991196-generator: section PARTS SW1; compare fact-c2991196-detents](#src-c2991196-generator)                                                         |
+| <EvidenceAnchor id="fact-c2991196-real-topology" />`fact-c2991196-real-topology`             | V3P3 (project's 3.3 V rail label) feeds R22/R23 10 kOhm pull-ups into ENC\_A/ENC\_B; R27/R28 100 Ohm series resistors sit between ENC\_A/ENC\_B and SW1.A/SW1.B contacts; C22/C23 100 nF load ENC\_A/ENC\_B at the MCU-side node | `NONE` | current generated Board L netlist; real encoder A/B bias and debounce network around SW1, distinct from the retained 5 V/5 kOhm spec test circuit                          | NOT APPLICABLE | PROJECT-CHOICE | [src-c2991196-encoder-rc: section COMPONENTS rows R22/R23/R27/R28/C22/C23 and NETS rows V3P3/ENC\_A/ENC\_A\_SW/ENC\_B/ENC\_B\_SW](#src-c2991196-encoder-rc) |
+| <EvidenceAnchor id="fact-c2991196-real-rail" />`fact-c2991196-real-rail`                     | 3.3                                                                                                                                                                                                                              | `V`    | V3P3 net; project voltage-rail naming convention, corroborated by the AP63203 fixed 3.3 V output topology fact in the sibling converter skill                              | NOT APPLICABLE | PROJECT-CHOICE | [src-c2991196-encoder-rc: section NETS row V3P3](#src-c2991196-encoder-rc)                                                                                  |
+| <EvidenceAnchor id="fact-c2991196-real-pullup" />`fact-c2991196-real-pullup`                 | 10000                                                                                                                                                                                                                            | `Ohm`  | R22/R23 0805W8F1002T5E 10k pull-up per generator display value; matches project-passives' primary-sourced resistance for the same exact part                               | NOT APPLICABLE | PROJECT-CHOICE | [src-c2991196-encoder-rc: section COMPONENTS row R22/R23 value field](#src-c2991196-encoder-rc)                                                             |
+| <EvidenceAnchor id="fact-c2991196-real-series-r" />`fact-c2991196-real-series-r`             | 100                                                                                                                                                                                                                              | `Ohm`  | R27/R28 0603WAF1000T5E 100R series per generator display value; matches project-passives' primary-sourced resistance for the same exact part                               | NOT APPLICABLE | PROJECT-CHOICE | [src-c2991196-encoder-rc: section COMPONENTS row R27/R28 value field](#src-c2991196-encoder-rc)                                                             |
+| <EvidenceAnchor id="fact-c2991196-real-current" />`fact-c2991196-real-current`               | 0.33                                                                                                                                                                                                                             | `mA`   | closed-contact current at the real 3.3 V/10k operating point; series 100 Ohm neglected as under 1 percent of the pull-up; versus the retained 5 V/5 kOhm spec test circuit | NEEDS BENCH    | CALCULATED     | [`src-c2991196-encoder-rc`](#src-c2991196-encoder-rc) — calculated: fact-c2991196-real-rail divided by fact-c2991196-real-pullup, converted to mA           |
+| <EvidenceAnchor id="fact-c2991196-real-discharge-peak" />`fact-c2991196-real-discharge-peak` | 33                                                                                                                                                                                                                               | `mA`   | instantaneous peak discharge current of C22/C23 100 nF through R27/R28 100 Ohm at contact closure; no retained contact-current rating covers this transient                | NEEDS BENCH    | CALCULATED     | [`src-c2991196-encoder-rc`](#src-c2991196-encoder-rc) — calculated: fact-c2991196-real-rail divided by fact-c2991196-real-series-r, converted to mA         |
+
+## Calculation dependencies
+
+These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
+
+| Fact                                                                      | Expression                                                       | Depends on                                                                                                           |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [`fact-c2991196-real-current`](#fact-c2991196-real-current)               | `(fact_c2991196_real_rail / fact_c2991196_real_pullup) * 1000`   | [`fact-c2991196-real-rail`](#fact-c2991196-real-rail), [`fact-c2991196-real-pullup`](#fact-c2991196-real-pullup)     |
+| [`fact-c2991196-real-discharge-peak`](#fact-c2991196-real-discharge-peak) | `(fact_c2991196_real_rail / fact_c2991196_real_series_r) * 1000` | [`fact-c2991196-real-rail`](#fact-c2991196-real-rail), [`fact-c2991196-real-series-r`](#fact-c2991196-real-series-r) |
 
 ## Pin maps
 
 The mapping between the schematic symbol's pins and the footprint's pads, as recorded. A record may carry more than one map when the same part is documented in more than one context.
 
-No pin map is published for this record.
+### pinmap-c2991196
+
+<EvidenceAnchor id="pinmap-c2991196" />
+
+- **Symbol:** `EC11L1525G01`
+- **Footprint:** `SW-TH_ALPS_EC11L1525G01`
+- **Pins:** 7
+
+<EvidenceDetails label="pin-assignments">
+  | Symbol pin | Name        | Footprint pad | Function                  |
+  | ---------- | ----------- | ------------- | ------------------------- |
+  | `A`        | `phase-A`   | `A`           | quadrature phase A        |
+  | `B`        | `phase-B`   | `B`           | quadrature phase B        |
+  | `C`        | `common`    | `C`           | encoder common            |
+  | `D`        | `switch-D`  | `D`           | momentary switch terminal |
+  | `E`        | `switch-E`  | `E`           | momentary switch terminal |
+  | `6`        | `support-6` | `6`           | grounded support lug      |
+  | `7`        | `support-7` | `7`           | grounded support lug      |
+</EvidenceDetails>
 
 ## Interactions
 
 Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction is published against one record; the other records it names are linked from here.
 
-No interaction is published for this record.
+### int-c2991196-interface
+
+<EvidenceAnchor id="int-c2991196-interface" />
+
+- **Records involved:** `rec-c2991196` (this record)
+- **Conditions:** Verify firmware edge convention and debounce against the installed series/RC network and contact behavior
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-c2991196-phases`](#fact-c2991196-phases)
+- [`fact-c2991196-contact-timing`](#fact-c2991196-contact-timing)
+- [`fact-c2991196-topology`](#fact-c2991196-topology)
+
+### int-c2991196-mechanical
+
+<EvidenceAnchor id="int-c2991196-mechanical" />
+
+- **Records involved:** `rec-c2991196` (this record)
+- **Conditions:** Panel support, knob load, torque and installed environmental stress determine achieved life
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-c2991196-mechanical`](#fact-c2991196-mechanical)
+- [`fact-c2991196-life`](#fact-c2991196-life)
+
+### int-c2991196-label
+
+<EvidenceAnchor id="int-c2991196-label" />
+
+- **Records involved:** `rec-c2991196` (this record)
+- **Conditions:** Generator text and lower-authority mirror disagree; recover manufacturer-primary evidence before treating either detent count as deterministic
+- **Verdict:** UNSOURCED
+
+**Facts this rests on:**
+
+- [`fact-c2991196-detents`](#fact-c2991196-detents)
+- [`fact-c2991196-label-conflict`](#fact-c2991196-label-conflict)
+
+### int-c2991196-real-operating-point
+
+<EvidenceAnchor id="int-c2991196-real-operating-point" />
+
+- **Records involved:** `rec-c2991196` (this record)
+- **Conditions:** Bench debounce and rotary-contact verification is required at the real 3.3 V/10k operating point; no retained spec condition (5 V/5 kOhm chatter-bounce test circuit; 500 uA push-switch minimum) matches the installed bias
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-c2991196-real-topology`](#fact-c2991196-real-topology)
+- [`fact-c2991196-real-rail`](#fact-c2991196-real-rail)
+- [`fact-c2991196-real-pullup`](#fact-c2991196-real-pullup)
+- [`fact-c2991196-real-series-r`](#fact-c2991196-real-series-r)
+- [`fact-c2991196-real-current`](#fact-c2991196-real-current)
+- [`fact-c2991196-real-discharge-peak`](#fact-c2991196-real-discharge-peak)
+- [`fact-c2991196-switch`](#fact-c2991196-switch)
+- [`fact-c2991196-contact-timing`](#fact-c2991196-contact-timing)
 
 ## Sources
 
 Every document cited above, with its identification, when it was retrieved, and what kind of authority it carries. Sources that could not be retrieved are listed too, with their unavailability stated, so a gap in the evidence is visible rather than absent.
 
-No source is published for this record.
+### ALPS EC11L1525G01 specification
+
+<EvidenceAnchor id="src-c2991196-spec" />
+
+- **Source ID:** `src-c2991196-spec`
+- **Document number:** KK-2010-9648
+- **Revision:** 2010-07-13
+- **Document date:** 2010-07-13
+- **Retrieved:** 2026-08-02
+- **Authority:** MANUFACTURER\_MIRROR
+- **Availability:** AVAILABLE
+- **Locator:** Title block; specification pages 1/4 through 4/4; push-switch page; drawing LE2115L02G
+- **Printed page:** cover
+- **Document URL:** [https://datasheet.lcsc.com/datasheet/pdf/e0a93036a66b5d2cacdda7d8f30bdea7.pdf?productCode=C2991196](https://datasheet.lcsc.com/datasheet/pdf/e0a93036a66b5d2cacdda7d8f30bdea7.pdf?productCode=C2991196)
+
+### ALPS Alpine EC11L1525G01 product page
+
+<EvidenceAnchor id="src-c2991196-page" />
+
+- **Source ID:** `src-c2991196-page`
+- **Document number:** EC11L1525G01
+- **Revision:** web retrieval
+- **Document date:** 2026-08-02
+- **Retrieved:** 2026-08-02
+- **Authority:** MANUFACTURER\_PRIMARY
+- **Availability:** SOURCE UNAVAILABLE
+- **Locator:** Product-page identity section HTTP response
+- **Printed page:** web response
+- **Document URL:** [https://tech.alpsalpine.com/e/products/detail/EC11L1525G01/](https://tech.alpsalpine.com/e/products/detail/EC11L1525G01/)
+
+### Board L generated schematic specification
+
+<EvidenceAnchor id="src-c2991196-generator" />
+
+- **Source ID:** `src-c2991196-generator`
+- **Document number:** board-l-spec
+- **Revision:** 410bc1a342286dd6c205d6dcec0f248b8a963987
+- **Document date:** 2026-08-01
+- **Retrieved:** 2026-08-02
+- **Authority:** PROJECT\_GENERATOR
+- **Availability:** AVAILABLE
+- **Locator:** Source section PARTS SW1; NETS ENC\_A\_SW/ENC\_B\_SW/GND; NO\_CONNECTS
+- **Printed page:** source
+- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py)
+
+### ALPS Alpine EC11L1525G01 product detail retrieval retry (issue #42)
+
+<EvidenceAnchor id="src-c2991196-primary-retry" />
+
+- **Source ID:** `src-c2991196-primary-retry`
+- **Document number:** EC11L1525G01
+- **Revision:** web retrieval retry
+- **Document date:** 2026-08-02
+- **Retrieved:** 2026-08-02
+- **Authority:** MANUFACTURER\_PRIMARY
+- **Availability:** SOURCE UNAVAILABLE
+- **Locator:** Product-detail HTTP response; EC11 series category listing rows sub/01 through sub/04; control-test row for sibling EC11E15244G1 detail page
+- **Printed page:** web response
+- **Document URL:** [https://tech.alpsalpine.com/e/products/detail/EC11L1525G01/](https://tech.alpsalpine.com/e/products/detail/EC11L1525G01/)
+
+### Board L generated schematic specification
+
+<EvidenceAnchor id="src-c2991196-encoder-rc" />
+
+- **Source ID:** `src-c2991196-encoder-rc`
+- **Document number:** board-l-spec
+- **Revision:** f91665d6447e0bb47a982c587618deca796cc583
+- **Document date:** 2026-08-02
+- **Retrieved:** 2026-08-02
+- **Authority:** PROJECT\_GENERATOR
+- **Availability:** AVAILABLE
+- **Locator:** Section COMPONENTS rows R22/R23/R27/R28/C22/C23; NETS rows V3P3/ENC\_A/ENC\_A\_SW/ENC\_B/ENC\_B\_SW
+- **Printed page:** source
+- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/f91665d6447e0bb47a982c587618deca796cc583/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/f91665d6447e0bb47a982c587618deca796cc583/scripts/schgen/board_l_spec.py)
 
 ## Legend
 
 What the recorded terms on this page mean, in ordinary words. The exact terms above are the ones that count; these descriptions explain them and never replace them.
+
+### Verdict
+
+| Recorded term    | What it means                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| `NEEDS BENCH`    | Cannot be settled from documents. It needs measurement on real hardware before it can be relied on. |
+| `NOT APPLICABLE` | The parameter does not apply to this part as it is used here.                                       |
+| `UNSOURCED`      | No accepted source backs this value yet. Treat it as a claim, not a fact.                           |
+
+### Provenance
+
+| Recorded term    | What it means                                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CALCULATED`     | Derived arithmetically from other facts listed here. The expression and every input are shown, so the number can be recomputed rather than trusted. |
+| `PROJECT-CHOICE` | A decision made by this project. No vendor asserts it.                                                                                              |
+| `UNVERIFIED`     | Recorded, but not yet backed by an accepted source.                                                                                                 |
+
+### Fact class
+
+| Recorded term           | What it means                                                                                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ABSOLUTE_MAXIMUM`      | A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.                                         |
+| `GUARANTEED_ELECTRICAL` | A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.                                              |
+| `PROJECT_STATE`         | A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification. |
+| `RECOMMENDED_OPERATION` | The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.                                                              |
+
+### Coverage status
+
+| Recorded term | What it means                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `OPEN`        | Unresolved. Open means the question has not been answered, not that the part is unsafe — the reason states what is missing. |
+
+### Source availability
+
+| Recorded term        | What it means                                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `AVAILABLE`          | The document was retrieved and is on record.                                                                          |
+| `SOURCE UNAVAILABLE` | The document could not be retrieved. It stays listed so the gap is visible; anything resting on it remains unsourced. |
+
+### Source authority
+
+| Recorded term          | What it means                                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- |
+| `MANUFACTURER_MIRROR`  | A copy of a manufacturer document hosted elsewhere. Usable, but weaker than the manufacturer's own copy. |
+| `MANUFACTURER_PRIMARY` | The manufacturer's own document for this exact part.                                                     |
+| `PROJECT_GENERATOR`    | A document this project generated, such as a schematic or netlist export.                                |
 
 ### Identity state
 
@@ -80,8 +436,14 @@ What the recorded terms on this page mean, in ordinary words. The exact terms ab
 | -------------------- | ------------------------------------------------- |
 | `SOURCE UNAVAILABLE` | No document backing this line could be retrieved. |
 
+### Unit
+
+| Recorded term | What it means                                                                      |
+| ------------- | ---------------------------------------------------------------------------------- |
+| `NONE`        | The value is not a physical quantity, so it carries no unit. Recorded as \`NONE\`. |
+
 ## Raw agent resource
 
 This page is generated from a stored evidence bundle and does not restate it. The bundle is the source of truth: where the two ever disagree, the bundle is right and this page is stale.
 
-[Browse the published agent resources](/docs/claude-skills/)
+[Open the owning bundle](/docs/claude-skills/component-alps-ec11l1525g01/) `component-alps-ec11l1525g01`

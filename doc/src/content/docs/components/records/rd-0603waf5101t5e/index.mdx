@@ -25,10 +25,12 @@ This is a subordinate record. It is a component in its own right, with its own o
 - **Orderable ID:** `C23186`
 - **Package:** `R0603`
 - **Inventory line:** `line-c23186`
+- **Also known as:** `external Rd`
+- **Owner skill:** `component-stusb4500qtr`
 - **Fit:** DNP or hand-fit
 - **Identity state:** UNRESOLVED
 - **Source state:** SOURCE UNAVAILABLE
-- **Coverage:** no coverage domains published
+- **Coverage:** 1 open of 3 published
 
 ## Placements
 
@@ -43,35 +45,247 @@ Every position this exact line occupies in the as-built design. One line may be 
 
 Coverage is stated one domain at a time and is never rolled up. A domain marked open is a question that has not been answered; it is not a finding that the part is unsuitable. A record with no open domains has not thereby been declared safe.
 
-No coverage domain is published for this record.
+### exact orderable identity and project placement
+
+<EvidenceAnchor id="cov-rd-identity" />
+
+- **Coverage ID:** `cov-rd-identity`
+- **Status:** COVERED
+
+**Reason:** UNI-ROYAL part-number system confirms the exact MPN and ratings; immutable project generator confirms C23186 placements and DNP state
+
+**Facts in this domain:**
+
+- [`fact-rd-manufacturer`](#fact-rd-manufacturer)
+- [`fact-rd-value`](#fact-rd-value)
+- [`fact-rd-tolerance`](#fact-rd-tolerance)
+- [`fact-rd-power`](#fact-rd-power)
+- [`fact-rd-tcr`](#fact-rd-tcr)
+- [`fact-rd-voltage-cap`](#fact-rd-voltage-cap)
+- [`fact-rd-rcwv-squared`](#fact-rd-rcwv-squared)
+- [`fact-rd-pinout`](#fact-rd-pinout)
+- [`fact-rd-fit-state`](#fact-rd-fit-state)
+
+### manufacturer-primary electrical and mechanical specification
+
+<EvidenceAnchor id="cov-rd-primary" />
+
+- **Coverage ID:** `cov-rd-primary`
+- **Status:** COVERED
+
+**Reason:** UNI-ROYAL SMD-SP-001 V.7 confirms 0603 size, 5.1 kOhm, 1%, 0.1 W, TCR and voltage ratings
+
+**Facts in this domain:**
+
+- [`fact-rd-manufacturer`](#fact-rd-manufacturer)
+- [`fact-rd-value`](#fact-rd-value)
+- [`fact-rd-tolerance`](#fact-rd-tolerance)
+- [`fact-rd-power`](#fact-rd-power)
+- [`fact-rd-tcr`](#fact-rd-tcr)
+- [`fact-rd-voltage-cap`](#fact-rd-voltage-cap)
+- [`fact-rd-rcwv-squared`](#fact-rd-rcwv-squared)
+- [`fact-rd-pinout`](#fact-rd-pinout)
+- [`fact-rd-fit-state`](#fact-rd-fit-state)
+
+### as-built fit state and external-Rd interaction
+
+<EvidenceAnchor id="cov-rd-fit" />
+
+- **Coverage ID:** `cov-rd-fit`
+- **Status:** OPEN
+
+**Reason:** Generator marks R17/R18 DNP and selects fitted CCDB bridges, but the assembled fit state and parallel-termination behavior require inspection/bench confirmation
+
+**Facts in this domain:** none are recorded against it.
+
+**Blocked by:** no blocking fact is recorded. What is missing has not been reduced to a specific recorded fact, so the reason above is the whole of what is known.
 
 ## Facts
 
 Each fact keeps its value, its unit, the conditions it holds under, where it came from and how far it has been confirmed as separate fields, because they are separate claims. A value without its conditions is not the same fact, and a verdict is about the evidence for the value, not about the part.
 
-No fact is published for this record.
+### ABSOLUTE\_MAXIMUM
+
+A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
+
+| Fact                                                             | Value | Unit | Conditions                                                                                                         | Verdict                         | Provenance   | Evidence                                                                                                         |
+| ---------------------------------------------------------------- | ----- | ---- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-rd-voltage-cap" />`fact-rd-voltage-cap` | 75    | `V`  | 0603 package-family maximum-working-voltage cap only; exact-part RCWV is the lower of this cap and sqrt(P times R) | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 5, Ratings table, 0603 row and RCWV note](#src-rd-uniroyal-smd-sp-001) |
+
+### RECOMMENDED\_OPERATION
+
+The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
+
+| Fact                                                               | Value | Unit | Conditions                                                                                        | Verdict                         | Provenance   | Evidence                                                                                                                                                       |
+| ------------------------------------------------------------------ | ----- | ---- | ------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-rd-power" />`fact-rd-power`               | 0.1   | `W`  | 0603 WA normal-size rating, ambient at or below 70 C; derate above 70 C                           | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed pages 2 and 4, Part No. System and resistance-range table](#src-rd-uniroyal-smd-sp-001)                                   |
+| <EvidenceAnchor id="fact-rd-rcwv-squared" />`fact-rd-rcwv-squared` | 510   | `V2` | P times R for the exact 0.1 W, 5.1 kOhm part; sqrt gives about 22.6 V, below the 75 V package cap | PASS - primary-source confirmed | CALCULATED   | [src-rd-uniroyal-smd-sp-001: printed page 5, RCWV equation and 0603 ratings row; calculated from fact-rd-power and fact-rd-value](#src-rd-uniroyal-smd-sp-001) |
+
+### GUARANTEED\_ELECTRICAL
+
+A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
+
+| Fact                                                         | Value | Unit    | Conditions                                                           | Verdict                         | Provenance   | Evidence                                                                                                           |
+| ------------------------------------------------------------ | ----- | ------- | -------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| <EvidenceAnchor id="fact-rd-value" />`fact-rd-value`         | 5.1   | `kOhm`  | 5101 code: 510 times 10 to power 1                                   | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 2, Section 2.4 resistance-value code](#src-rd-uniroyal-smd-sp-001)       |
+| <EvidenceAnchor id="fact-rd-tolerance" />`fact-rd-tolerance` | 1     | `%`     | F tolerance code                                                     | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 2, Section 2.3 tolerance code](#src-rd-uniroyal-smd-sp-001)              |
+| <EvidenceAnchor id="fact-rd-tcr" />`fact-rd-tcr`             | 100   | `ppm/C` | 0603 resistance above 10 Ohm, measured from 25 C to test temperature | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 6, Temperature Coefficient table, 0603 row](#src-rd-uniroyal-smd-sp-001) |
+
+### PROJECT\_STATE
+
+A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
+
+| Fact                                                               | Value                                                                              | Unit   | Conditions                                                                                      | Verdict                         | Provenance     | Evidence                                                                                                         |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------- | ------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| <EvidenceAnchor id="fact-rd-manufacturer" />`fact-rd-manufacturer` | UNI-ROYAL                                                                          | `NONE` | exact 0603WAF5101T5E part-number decode                                                         | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-rd-uniroyal-smd-sp-001: title block and Section 2 Part No. System](#src-rd-uniroyal-smd-sp-001)             |
+| <EvidenceAnchor id="fact-rd-pinout" />`fact-rd-pinout`             | two-terminal non-polar resistor; pads 1 and 2                                      | `NONE` | project symbol and R0603 footprint                                                              | NOT APPLICABLE                  | PROJECT-CHOICE | [src-rd-board-p-generator: COMPONENTS rows R17/R18 and R0603 footprint selection](#src-rd-board-p-generator)     |
+| <EvidenceAnchor id="fact-rd-fit-state" />`fact-rd-fit-state`       | DNP at R17/R18; internal dead-battery Rd path selected through fitted CCDB bridges | `NONE` | current generator connectivity; do not fit external Rd without re-auditing parallel termination | NEEDS BENCH                     | PROJECT-CHOICE | [src-rd-board-p-generator: COMPONENTS rows R17/R18 and NETS CC1/CC2 with CC1DB/CC2DB](#src-rd-board-p-generator) |
+
+## Calculation dependencies
+
+These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
+
+| Fact                                            | Expression                             | Depends on                                                           |
+| ----------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------- |
+| [`fact-rd-rcwv-squared`](#fact-rd-rcwv-squared) | `fact_rd_power * fact_rd_value * 1000` | [`fact-rd-power`](#fact-rd-power), [`fact-rd-value`](#fact-rd-value) |
 
 ## Pin maps
 
 The mapping between the schematic symbol's pins and the footprint's pads, as recorded. A record may carry more than one map when the same part is documented in more than one context.
 
-No pin map is published for this record.
+### pinmap-rd-0603waf5101t5e
+
+<EvidenceAnchor id="pinmap-rd-0603waf5101t5e" />
+
+- **Symbol:** `0603WAF5101T5E`
+- **Footprint:** `R0603`
+- **Pins:** 2
+
+<EvidenceDetails label="pin-assignments">
+  | Symbol pin | Name | Footprint pad | Function            |
+  | ---------- | ---- | ------------- | ------------------- |
+  | `1`        | `1`  | `1`           | CC1/CC2 when fitted |
+  | `2`        | `2`  | `2`           | ground when fitted  |
+</EvidenceDetails>
 
 ## Interactions
 
 Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction is published against one record; the other records it names are linked from here.
 
-No interaction is published for this record.
+### int-stusb-external-rd
+
+<EvidenceAnchor id="int-stusb-external-rd" />
+
+- **Records involved:** [`rec-stusb4500qtr`](/docs/components/records/stusb4500qtr/), `rec-rd-0603waf5101t5e` (this record)
+- **Conditions:** R17/R18 are DNP CC-to-GND external Rd options while R19/R20 fit CCDB bridges; fitting both may parallel Rd and is prohibited until the exact intended topology and resistance tolerance are re-audited
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-stusb-ccdb`](/docs/components/records/stusb4500qtr/#fact-stusb-ccdb) on STUSB4500QTR
+- [`fact-rd-value`](#fact-rd-value)
+- [`fact-rd-tolerance`](#fact-rd-tolerance)
+- [`fact-rd-fit-state`](#fact-rd-fit-state)
 
 ## Sources
 
 Every document cited above, with its identification, when it was retrieved, and what kind of authority it carries. Sources that could not be retrieved are listed too, with their unavailability stated, so a gap in the evidence is visible rather than absent.
 
-No source is published for this record.
+### UNI-ROYAL Thick Film Chip Resistors
+
+<EvidenceAnchor id="src-rd-uniroyal-smd-sp-001" />
+
+- **Source ID:** `src-rd-uniroyal-smd-sp-001`
+- **Document number:** SMD-SP-001
+- **Revision:** V.7
+- **Document date:** 2022-10-13
+- **Retrieved:** 2026-08-02
+- **Authority:** MANUFACTURER\_PRIMARY
+- **Availability:** AVAILABLE
+- **Locator:** Section 2, Part No. System codes 2.1 through 2.5; ratings table row 0603; temperature-coefficient table row 0603
+- **Printed page:** 2
+- **Document URL:** [https://www.uni-royal.cn/en/images/userfile/file/1668661899c56505e6d9ab55c7.pdf](https://www.uni-royal.cn/en/images/userfile/file/1668661899c56505e6d9ab55c7.pdf)
+
+### Board P generated schematic specification
+
+<EvidenceAnchor id="src-rd-board-p-generator" />
+
+- **Source ID:** `src-rd-board-p-generator`
+- **Document number:** board-p-spec
+- **Revision:** 410bc1a342286dd6c205d6dcec0f248b8a963987
+- **Document date:** 2026-08-01
+- **Retrieved:** 2026-08-02
+- **Authority:** PROJECT\_GENERATOR
+- **Availability:** AVAILABLE
+- **Locator:** COMPONENTS rows R17/R18 and NETS rows CC1/CC2 with CC1DB/CC2DB
+- **Printed page:** source
+- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_p\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_p_spec.py)
+
+### LCSC manufacturer-attributed mirror for C23186
+
+<EvidenceAnchor id="src-rd-c23186" />
+
+- **Source ID:** `src-rd-c23186`
+- **Document number:** C23186
+- **Revision:** undated
+- **Document date:** UNSOURCED
+- **Retrieved:** 2026-08-02
+- **Authority:** DISTRIBUTOR\_IDENTITY
+- **Availability:** SOURCE UNAVAILABLE
+- **Locator:** Document title block and distributor orderable row C23186
+- **Printed page:** 1
+- **Document URL:** [https://www.lcsc.com/datasheet/C23186.pdf](https://www.lcsc.com/datasheet/C23186.pdf)
 
 ## Legend
 
 What the recorded terms on this page mean, in ordinary words. The exact terms above are the ones that count; these descriptions explain them and never replace them.
+
+### Verdict
+
+| Recorded term                     | What it means                                                                                       |
+| --------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `NEEDS BENCH`                     | Cannot be settled from documents. It needs measurement on real hardware before it can be relied on. |
+| `NOT APPLICABLE`                  | The parameter does not apply to this part as it is used here.                                       |
+| `PASS - primary-source confirmed` | Confirmed against the manufacturer's own document for this exact part.                              |
+
+### Provenance
+
+| Recorded term    | What it means                                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CALCULATED`     | Derived arithmetically from other facts listed here. The expression and every input are shown, so the number can be recomputed rather than trusted. |
+| `PRIMARY-SPEC`   | Taken from the manufacturer's own specification document.                                                                                           |
+| `PROJECT-CHOICE` | A decision made by this project. No vendor asserts it.                                                                                              |
+
+### Fact class
+
+| Recorded term           | What it means                                                                                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ABSOLUTE_MAXIMUM`      | A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.                                         |
+| `GUARANTEED_ELECTRICAL` | A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.                                              |
+| `PROJECT_STATE`         | A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification. |
+| `RECOMMENDED_OPERATION` | The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.                                                              |
+
+### Coverage status
+
+| Recorded term | What it means                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `COVERED`     | Every question this domain asks is answered by the facts listed against it.                                                 |
+| `OPEN`        | Unresolved. Open means the question has not been answered, not that the part is unsafe — the reason states what is missing. |
+
+### Source availability
+
+| Recorded term        | What it means                                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `AVAILABLE`          | The document was retrieved and is on record.                                                                          |
+| `SOURCE UNAVAILABLE` | The document could not be retrieved. It stays listed so the gap is visible; anything resting on it remains unsourced. |
+
+### Source authority
+
+| Recorded term          | What it means                                                             |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `DISTRIBUTOR_IDENTITY` | A distributor listing. Establishes which part this is, nothing more.      |
+| `MANUFACTURER_PRIMARY` | The manufacturer's own document for this exact part.                      |
+| `PROJECT_GENERATOR`    | A document this project generated, such as a schematic or netlist export. |
 
 ### Identity state
 
@@ -85,8 +299,14 @@ What the recorded terms on this page mean, in ordinary words. The exact terms ab
 | -------------------- | ------------------------------------------------- |
 | `SOURCE UNAVAILABLE` | No document backing this line could be retrieved. |
 
+### Unit
+
+| Recorded term | What it means                                                                      |
+| ------------- | ---------------------------------------------------------------------------------- |
+| `NONE`        | The value is not a physical quantity, so it carries no unit. Recorded as \`NONE\`. |
+
 ## Raw agent resource
 
 This page is generated from a stored evidence bundle and does not restate it. The bundle is the source of truth: where the two ever disagree, the bundle is right and this page is stale.
 
-[Browse the published agent resources](/docs/claude-skills/)
+[Open the owning bundle](/docs/claude-skills/component-stusb4500qtr/) `component-stusb4500qtr`

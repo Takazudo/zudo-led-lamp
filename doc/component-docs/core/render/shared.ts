@@ -251,9 +251,30 @@ export function aliasTerms(record: PublicRecord): SafeText[] {
 
 /** A fact's value and its unit, kept as two fields because they are two fields. */
 export function factValue(fact: PublicFact): SafeText {
-  return typeof fact.value === "number"
-    ? safeText(String(fact.value), { field: `${fact.factId} value` })
-    : fact.value;
+  if (typeof fact.value === "number") {
+    return safeText(String(fact.value), { field: `${fact.factId} value` });
+  }
+  if (typeof fact.value === "string") return fact.value;
+
+  // A structured JSON value — 3 in this corpus, all orderable-identity bindings
+  // ({lcsc, manufacturer, mpn, variant}). The adapter keeps them as key/value pairs
+  // rather than coercing to a string, so render them as legible pairs instead of
+  // collapsing them into one opaque blob. Entries arrive sorted byCodeUnit and both
+  // halves are already SafeText, so this is safe composition, not re-sanitising.
+  return joinSafe(
+    fact.value.map((entry) =>
+      joinSafe(
+        [
+          entry.key,
+          typeof entry.value === "number"
+            ? safeText(String(entry.value), { field: `${fact.factId} value` })
+            : entry.value,
+        ],
+        "=",
+      ),
+    ),
+    "; ",
+  );
 }
 
 // --- fact classes ----------------------------------------------------------
