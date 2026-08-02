@@ -21,6 +21,7 @@
     "check:components": "node --experimental-strip-types component-docs/cli/check.ts",
     "check:models": "node --experimental-strip-types component-docs/cli/models.ts --check",
     "check:built-component-references": "node component-docs/scripts/check-built-component-references.mjs",
+    "check:mermaid": "node component-docs/scripts/check-mermaid.mjs",
     "generate:footprint-previews": "node --experimental-strip-types component-docs/footprint-previews/generate.ts",
     "check:footprint-previews": "node --experimental-strip-types component-docs/footprint-previews/check.ts",
     "scan:artifacts": "node --experimental-strip-types component-docs/cli/scan-artifacts.ts",
@@ -33,7 +34,7 @@
     "setup:doc-skill:claude": "bash scripts/setup-doc-skill.sh --target claude",
     "setup:doc-skill:codex": "bash scripts/setup-doc-skill.sh --target codex",
     "setup:doc-skill:both": "bash scripts/setup-doc-skill.sh --target both",
-    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm build && pnpm check:built-component-references && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill"
+    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm check:mermaid && pnpm build && pnpm check:built-component-references && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill"
   },
   "dependencies": {
     "@takazudo/zdtp": "0.4.9",
@@ -49,7 +50,7 @@
     "mdast-util-gfm-table": "^2.0.0",
     "mdast-util-mdx": "^3.0.0",
     "mdast-util-to-markdown": "^2.1.2",
-    "mermaid": "^11.12.3",
+    "mermaid": "11.15.0",
     "minisearch": "^7.2.0",
     "preact": "^10.29.1",
     "preact-render-to-string": "^6.6.6",

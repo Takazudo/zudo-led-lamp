@@ -39,53 +39,53 @@ Treat the first build as the first real test, and follow the bring-up gates in
 ## System block diagram
 
 ```mermaid
-flowchart TD
-  CHG["USB-C PD charger\n15V PDO required"]
+flowchart TD;
+  CHG["USB-C PD charger\n15V PDO required"];
 
-  subgraph BP["Board P — USB-PD front end (existing spec)"]
-    J1["J1 TYPE-C-31-M-17\nreceptacle"]
-    U1["U1 STUSB4500QTR\nPD sink controller"]
-    Q1["Q1 AO3401A\nload switch"]
-    D5["D5 SMAJ20A\n20V standoff, 32.4V clamp"]
-    J2P["J2/J3 pogo pads\nNVM I2C + debug"]
-    JOUT["JOUT B6B-XH-A 6P"]
-    J1 --> U1
-    U1 -->|"VBEN"| Q1
-    D5 --- U1
-    J2P --- U1
-    Q1 --> JOUT
-    U1 -->|"ATT / PDOK"| JOUT
-  end
+  subgraph BP["Board P — USB-PD front end (existing spec)"];
+    J1["J1 TYPE-C-31-M-17\nreceptacle"];
+    U1["U1 STUSB4500QTR\nPD sink controller"];
+    Q1["Q1 AO3401A\nload switch"];
+    D5["D5 SMAJ20A\n20V standoff, 32.4V clamp"];
+    J2P["J2/J3 pogo pads\nNVM I2C + debug"];
+    JOUT["JOUT B6B-XH-A 6P"];
+    J1 --> U1;
+    U1 -->|"VBEN"| Q1;
+    D5 --- U1;
+    J2P --- U1;
+    Q1 --> JOUT;
+    U1 -->|"ATT / PDOK"| JOUT;
+  end;
 
-  subgraph BL["Board L — driver + control + LED array"]
-    J2L["J2 B6B-XH-A 6P"]
-    F1["F1 PPTC 750mA/30V"]
-    V15["15V rail\nD10 SMAJ20A + bulk caps"]
-    U2["U2 AL8860MP-13\nCC buck, Rs=200mR"]
-    ARR["LED array\n8 strings x 3s\n8x 33R ballast\n24x HL-AM-2835H421W"]
-    U4["U4 AP63203WU-7\n3.3V synchronous buck"]
-    V33["3.3V logic rail"]
-    U3["U3 STM32G031F8P6\nCortex-M0+"]
-    SW1["SW1 EC11 encoder\nquadrature A/B"]
-    RC["R20 10k + R21 33k + C21 100n\nRC low-pass, 0 to 2.53V"]
-    J3L["J3 SWD pads\nJ4 UART pads"]
-    J2L --> F1
-    F1 --> V15
-    V15 --> U2
-    U2 -->|"L1 33uH + D11 SS26"| ARR
-    ARR -->|"NTC RT1 10k"| U3
-    V15 --> U4
-    U4 --> V33
-    V33 --> U3
-    SW1 --> U3
-    U3 -->|"PA6 PWM 20kHz"| RC
-    RC -->|"analog CTRL"| U2
-    J3L --- U3
-    J2L -->|"ATT / PDOK"| U3
-  end
+  subgraph BL["Board L — driver + control + LED array"];
+    J2L["J2 B6B-XH-A 6P"];
+    F1["F1 PPTC 750mA/30V"];
+    V15["15V rail\nD10 SMAJ20A + bulk caps"];
+    U2["U2 AL8860MP-13\nCC buck, Rs=200mR"];
+    ARR["LED array\n8 strings x 3s\n8x 33R ballast\n24x HL-AM-2835H421W"];
+    U4["U4 AP63203WU-7\n3.3V synchronous buck"];
+    V33["3.3V logic rail"];
+    U3["U3 STM32G031F8P6\nCortex-M0+"];
+    SW1["SW1 EC11 encoder\nquadrature A/B"];
+    RC["R20 10k + R21 33k + C21 100n\nRC low-pass, 0 to 2.53V"];
+    J3L["J3 SWD pads\nJ4 UART pads"];
+    J2L --> F1;
+    F1 --> V15;
+    V15 --> U2;
+    U2 -->|"L1 33uH + D11 SS26"| ARR;
+    ARR -->|"NTC RT1 10k"| U3;
+    V15 --> U4;
+    U4 --> V33;
+    V33 --> U3;
+    SW1 --> U3;
+    U3 -->|"PA6 PWM 20kHz"| RC;
+    RC -->|"analog CTRL"| U2;
+    J3L --- U3;
+    J2L -->|"ATT / PDOK"| U3;
+  end;
 
-  CHG -->|"USB-C cable"| J1
-  JOUT -->|"switched 15V x2, GND x2, ATT, PDOK"| J2L
+  CHG -->|"USB-C cable"| J1;
+  JOUT -->|"switched 15V x2, GND x2, ATT, PDOK"| J2L;
 ```
 
 ## Board split
