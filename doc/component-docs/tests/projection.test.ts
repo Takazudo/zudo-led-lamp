@@ -20,6 +20,7 @@ import {
   FIXTURE_MATRIX,
   FIXTURE_SELECTION,
   fixtureBundle,
+  fixtureIntegrationRules,
   fixtureInventory,
 } from "./provider-fixtures.ts";
 
@@ -27,7 +28,7 @@ function project(selection: InstanceSelection = FIXTURE_SELECTION): {
   model: PublicViewModel;
   policy: PublicationPolicy;
 } {
-  const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+  const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
   const policy = new PublicationPolicy(FIXTURE_MATRIX, selection);
   return { model: projectIndex(index, policy), policy };
 }
@@ -223,7 +224,7 @@ describe("fact values keep their JSON shape", () => {
               entry.fact_id === "fact-driver-vin-max" ? { ...entry, value } : entry,
             ),
         }),
-      ]);
+      ], fixtureIntegrationRules());
       assert.throws(
         () => projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, FIXTURE_SELECTION)),
         (error: unknown) =>
@@ -395,7 +396,7 @@ describe("URL publication", () => {
   });
 
   it("considers no URL at all when the field itself is denied", () => {
-    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
     const policy = new PublicationPolicy(
       { ...FIXTURE_MATRIX, "source.authoritativeUrl": "DENY" },
       FIXTURE_SELECTION,
@@ -434,7 +435,7 @@ describe("URL publication", () => {
               : source,
           ),
       }),
-    ]);
+    ], fixtureIntegrationRules());
     const policy = new PublicationPolicy(FIXTURE_MATRIX, FIXTURE_SELECTION);
     const model = projectIndex(index, policy);
 
@@ -459,14 +460,14 @@ describe("URL publication", () => {
 
 describe("selection stays closed under published links", () => {
   it("refuses to publish a record whose source is not selected", () => {
-    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
     const selection: InstanceSelection = {
       ...FIXTURE_SELECTION,
       sourceIds: FIXTURE_SELECTION.sourceIds.filter((id) => id !== "src-driver-gone"),
       linkableSourceIds: FIXTURE_SELECTION.linkableSourceIds.filter(
         (id) => id !== "src-driver-gone",
       ),
-      expect: { records: 3, sources: 4 },
+      expect: { records: 3, sources: 4, integrationRules: 3 },
     };
     assert.throws(
       () => projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, selection)),
@@ -476,7 +477,7 @@ describe("selection stays closed under published links", () => {
   });
 
   it("refuses to publish a subordinate whose parent is not selected", () => {
-    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
     const selection: InstanceSelection = {
       ...FIXTURE_SELECTION,
       recordIds: ["rec-sense", "rec-handfit"],
@@ -489,7 +490,7 @@ describe("selection stays closed under published links", () => {
   });
 
   it("refuses when the selection names a record the provider lost", () => {
-    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
     const selection: InstanceSelection = {
       ...FIXTURE_SELECTION,
       recordIds: [...FIXTURE_SELECTION.recordIds, "rec-gone"],
@@ -502,10 +503,10 @@ describe("selection stays closed under published links", () => {
   });
 
   it("refuses when the corpus size moved under a still-valid selection", () => {
-    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
     const selection: InstanceSelection = {
       ...FIXTURE_SELECTION,
-      expect: { records: 4, sources: 4 },
+      expect: { records: 4, sources: 4, integrationRules: 3 },
     };
     assert.throws(
       () => projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, selection)),

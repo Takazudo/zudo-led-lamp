@@ -38,12 +38,13 @@ import type {
 } from "../../core/view-model.ts";
 import { CIRCUIT_PUBLICATION_MATRIX } from "./matrix.ts";
 import { CIRCUIT_SELECTION } from "./selection.ts";
-import { INTEGRATION_RULES_FILE, INVENTORY_FILE } from "./paths.ts";
-import { readProviderJson } from "./read.ts";
+import { INTEGRATION_RULES_FILE, INTEGRATION_SKILL_NAME, INVENTORY_FILE } from "./paths.ts";
+import { projectIntegrationRules } from "./integration.ts";
 import { createPythonValidator } from "./validate.ts";
 import {
   indexEvidence,
   readBundle,
+  readIntegrationRules,
   readInventory,
   type EvidenceIndex,
   type IndexedRecord,
@@ -74,19 +75,21 @@ export function createCircuitAdapter(): ComponentDataAdapter {
 }
 
 async function project(context: ProjectionContext): Promise<PublicViewModel> {
-  const index = await readEvidenceIndex();
-  const model = projectIndex(index, context.policy);
-  // Read so a missing integration bundle fails now rather than in #63.
-  await readProviderJson(INTEGRATION_RULES_FILE);
-  return model;
+  return projectIndex(await readEvidenceIndex(), context.policy);
 }
 
-/** The adapter's only I/O: the inventory plus every bundle it names. */
+/**
+ * The adapter's only I/O: the inventory, every bundle it names, and the
+ * cross-component ruleset.
+ */
 export async function readEvidenceIndex(): Promise<EvidenceIndex> {
   const inventory = await readInventory(INVENTORY_FILE);
   const ownerSkills = uniqueInOrder(inventory.lines.map((line) => line.owner_skill));
-  const bundles = await Promise.all(ownerSkills.map(readBundle));
-  return indexEvidence(inventory, bundles);
+  const [bundles, rules] = await Promise.all([
+    Promise.all(ownerSkills.map(readBundle)),
+    readIntegrationRules(INTEGRATION_RULES_FILE),
+  ]);
+  return indexEvidence(inventory, bundles, rules.rules);
 }
 
 /**
@@ -102,6 +105,7 @@ export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): P
   policy.assertSelectionFresh(
     index.records.map((entry) => entry.record.record_id),
     index.sourceIds,
+    index.integrationRules.length,
   );
 
   const selected = index.records.filter((entry) => policy.isRecordSelected(entry.record.record_id));
@@ -114,6 +118,22 @@ export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): P
 
   const records: PublicRecord[] = ordered.map((entry) =>
     projectRecord(entry, index, slugByRecordId, policy),
+  );
+
+  // The rules are projected against what was actually published, not against
+  // what the provider holds: a rule naming a deselected record would render a
+  // dead cross-link, and that is a selection mistake rather than something to
+  // drop the reference over.
+  const integration = projectIntegrationRules(
+    index.integrationRules,
+    {
+      publishedRecordIds: new Set(slugByRecordId.keys()),
+      recordIdByFactId: new Map(
+        [...index.factById].map(([factId, fact]) => [factId, fact.record_id]),
+      ),
+      ownerSkill: INTEGRATION_SKILL_NAME,
+    },
+    policy,
   );
 
   const corpus: CorpusSummary = {
@@ -142,7 +162,7 @@ export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): P
     },
     corpus,
     records,
-    integration: [],
+    integration,
   };
 }
 

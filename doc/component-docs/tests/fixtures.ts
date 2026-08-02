@@ -35,6 +35,7 @@ import type {
   CorpusSummary,
   PublicCoverage,
   PublicFact,
+  PublicIntegrationRule,
   PublicInteraction,
   PublicPinMap,
   PublicRecord,
@@ -283,14 +284,102 @@ function corpus(records: readonly PublicRecord[]): CorpusSummary {
   };
 }
 
-function model(records: readonly PublicRecord[]): PublicViewModel {
+function model(
+  records: readonly PublicRecord[],
+  integration: readonly PublicIntegrationRule[] = [],
+): PublicViewModel {
   return {
     version: VIEW_MODEL_VERSION,
     provider: { id: t("fixture-provider"), contractVersion: 1 },
     corpus: corpus(records),
     records,
-    integration: [],
+    integration,
   };
+}
+
+/**
+ * Cross-component rules covering every shape the integration page renders.
+ *
+ * The three between them exercise: a calculation evaluated at several inputs, a
+ * calculation with a single bare result and no varied input, an evidence chain
+ * containing a stage with no facts at all, a rule with neither calculations nor
+ * a chain, and a rule whose free text is MDX-active throughout — the last one
+ * matters because a refusal is the longest untrusted string on the page and is
+ * the one thing the page may never fail to render.
+ */
+export function fixtureIntegration(): PublicIntegrationRule[] {
+  return [
+    {
+      ruleId: t("rule-fixture-power-stage"),
+      anchor: anchor("rule-fixture-power-stage"),
+      ownerSkill: t("circuit-fixture-integration"),
+      domain: t("fixture-power-stage"),
+      recordIds: [t(FIXTURE_IDS.driverRecord), t(FIXTURE_IDS.senseRecord)],
+      factIds: [t("fact-fixture-current-max"), t("fact-fixture-sense-resistance")],
+      conditions: t("sense tolerance, driver hysteresis and the assembled thermal path"),
+      verdict: t("NEEDS BENCH"),
+      refusal: t("Do not promote nominal arithmetic to a guaranteed assembled-stage PASS."),
+      calculations: [
+        {
+          calculationId: t("calc-fixture-current"),
+          anchor: anchor("calc-fixture-current"),
+          factIds: [t("fact-fixture-sense-resistance")],
+          expression: t("0.096 / r_sense_ohm"),
+          resultKey: t("current_a"),
+          conditions: t("nominal division only; excludes hysteresis, TCR and self-heating"),
+          cases: [
+            { inputs: [{ key: t("r_sense_ohm"), value: 0.198 }], value: 0.48484848484848486 },
+            { inputs: [{ key: t("r_sense_ohm"), value: 0.21 }], value: 0.45714285714285713 },
+          ],
+        },
+        {
+          calculationId: t("calc-fixture-margin"),
+          anchor: anchor("calc-fixture-margin"),
+          factIds: [],
+          expression: t("fact_fixture_vin_max - 32.4"),
+          resultKey: t("margin_v"),
+          conditions: t("conditioned subtraction at one table point; not a waveform measurement"),
+          cases: [{ inputs: [], value: 9.6 }],
+        },
+      ],
+      evidenceChain: [],
+    },
+    {
+      ruleId: t("rule-fixture-chain"),
+      anchor: anchor("rule-fixture-chain"),
+      ownerSkill: t("circuit-fixture-integration"),
+      domain: t("fixture-source-to-bench-chain"),
+      recordIds: [t(FIXTURE_IDS.driverRecord)],
+      // A fact the model does not publish: the reference must still be printed,
+      // marked as unpublished, rather than silently dropped or linked to a 404.
+      factIds: [t("fact-fixture-current-max"), t("fact-fixture-absent")],
+      conditions: t("trace each claim from the vendor document through to a measurement"),
+      verdict: t("NEEDS BENCH"),
+      refusal: t("A completed upstream stage never implies a later measured stage."),
+      calculations: [],
+      evidenceChain: [
+        {
+          stage: t("official-source"),
+          status: t("MIXED"),
+          factIds: [t("fact-fixture-current-max")],
+        },
+        { stage: t("bench"), status: t("OPEN"), factIds: [] },
+      ],
+    },
+    {
+      ruleId: t("rule-fixture-hostile"),
+      anchor: anchor("rule-fixture-hostile"),
+      ownerSkill: t("circuit-fixture-integration"),
+      domain: t(HOSTILE_TEXT),
+      recordIds: [t(FIXTURE_IDS.hostileRecord)],
+      factIds: [],
+      conditions: t(HOSTILE_TEXT),
+      verdict: t("UNSOURCED"),
+      refusal: t(HOSTILE_TEXT),
+      calculations: [],
+      evidenceChain: [],
+    },
+  ];
 }
 
 // --- the records -----------------------------------------------------------
@@ -680,7 +769,7 @@ function hostileRecord(): PublicRecord {
 
 /** The main fixture: driver, its subordinate, and the hostile-text record. */
 export function fixtureModel(): PublicViewModel {
-  return model([driverRecord(), senseRecord(), hostileRecord()]);
+  return model([driverRecord(), senseRecord(), hostileRecord()], fixtureIntegration());
 }
 
 /**

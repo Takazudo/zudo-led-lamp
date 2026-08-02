@@ -95,12 +95,22 @@ export const FIELD_KEYS = [
   "interaction.verdict",
   // --- integration rules ---------------------------------------------------
   "integration.ruleId",
+  "integration.ownerSkill",
   "integration.domain",
   "integration.recordIds",
   "integration.factIds",
   "integration.conditions",
   "integration.verdict",
   "integration.refusal",
+  "integration.calculationId",
+  "integration.calculationFactIds",
+  "integration.calculationExpression",
+  "integration.calculationResultKey",
+  "integration.calculationResults",
+  "integration.calculationConditions",
+  "integration.evidenceChainStage",
+  "integration.evidenceChainStatus",
+  "integration.evidenceChainFactIds",
   // --- pin maps ------------------------------------------------------------
   "pinMap.pinMapId",
   "pinMap.symbol",
@@ -137,6 +147,14 @@ export type InstanceSelection = {
   readonly expect: {
     readonly records: number;
     readonly sources: number;
+    /**
+     * Cross-component rules. Not instance-selected — the rules live outside
+     * every record and each one spans several — but the count is asserted for
+     * the same reason as the other two: a rule appearing or vanishing changes
+     * what the integration page claims about the whole design, and that must be
+     * a reviewed change rather than a diff nobody looked at.
+     */
+    readonly integrationRules: number;
   };
 };
 
@@ -278,6 +296,7 @@ export class PublicationPolicy {
   assertSelectionFresh(
     availableRecordIds: readonly string[],
     availableSourceIds: readonly string[],
+    availableIntegrationRules: number,
   ): void {
     const records = new Set(availableRecordIds);
     const sources = new Set(availableSourceIds);
@@ -300,6 +319,12 @@ export class PublicationPolicy {
       fail("STALE_SELECTION", "provider source count does not match the asserted corpus", {
         expected: this.#selection.expect.sources,
         actual: availableSourceIds.length,
+      });
+    }
+    if (this.#selection.expect.integrationRules !== availableIntegrationRules) {
+      fail("STALE_SELECTION", "integration rule count does not match the asserted corpus", {
+        expected: this.#selection.expect.integrationRules,
+        actual: availableIntegrationRules,
       });
     }
     this.#selectionChecked = true;

@@ -27,7 +27,16 @@ export const INVENTORY_FILE = join(AUDIT_SKILL, "references", "inventory.json");
 export const SCHEMA_FILE = join(AUDIT_SKILL, "references", "schema.json");
 export const VALIDATOR_SCRIPT = join(AUDIT_SKILL, "scripts", "validate.py");
 
-export const INTEGRATION_SKILL = join(SKILLS_ROOT, "circuit-spec-integration");
+/**
+ * The bundle directory the cross-component rules live in.
+ *
+ * Also the last segment of the raw agent route the integration page links back
+ * to (`/docs/claude-skills/circuit-spec-integration/`), which is why it is a
+ * named constant rather than an inline string inside the path join.
+ */
+export const INTEGRATION_SKILL_NAME = "circuit-spec-integration";
+
+export const INTEGRATION_SKILL = join(SKILLS_ROOT, INTEGRATION_SKILL_NAME);
 export const INTEGRATION_RULES_FILE = join(INTEGRATION_SKILL, "references", "rules.json");
 
 /**

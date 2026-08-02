@@ -17,7 +17,12 @@ import {
   type ProviderBundle,
 } from "../adapters/circuit/evidence.ts";
 import { BUNDLE_FILES, type BundleFile } from "../adapters/circuit/paths.ts";
-import { bundleFiles, fixtureBundle, fixtureInventory } from "./provider-fixtures.ts";
+import {
+  bundleFiles,
+  fixtureBundle,
+  fixtureIntegrationRules,
+  fixtureInventory,
+} from "./provider-fixtures.ts";
 
 type Overrides = Parameters<typeof fixtureBundle>[0];
 
@@ -40,12 +45,17 @@ function rejects(
 }
 
 function indexing(overrides: Overrides = {}, inventoryOverrides = {}): () => unknown {
-  return () => indexEvidence(fixtureInventory(inventoryOverrides), [fixtureBundle(overrides)]);
+  return () =>
+    indexEvidence(
+      fixtureInventory(inventoryOverrides),
+      [fixtureBundle(overrides)],
+      fixtureIntegrationRules(),
+    );
 }
 
 describe("the fixture corpus indexes cleanly", () => {
   it("resolves every relationship", () => {
-    const index = indexEvidence(fixtureInventory(), [fixtureBundle()]);
+    const index = indexEvidence(fixtureInventory(), [fixtureBundle()], fixtureIntegrationRules());
     assert.equal(index.records.length, 3);
     assert.deepEqual(index.totals, {
       sources: 4,
@@ -104,7 +114,7 @@ describe("schema versions", () => {
   it("refuses an inventory that declares an unsupported version", () => {
     const inventory = { ...fixtureInventory(), schema_version: PROVIDER_SCHEMA_VERSION + 1 };
     rejects(
-      () => indexEvidence(inventory, [fixtureBundle()]),
+      () => indexEvidence(inventory, [fixtureBundle()], fixtureIntegrationRules()),
       "ADAPTER_CONTRACT",
       /inventory schema_version/u,
     );
@@ -158,7 +168,7 @@ describe("duplicate ids", () => {
       interactions: fixtureBundle().interactions,
     };
     rejects(
-      () => indexEvidence(fixtureInventory(), [fixtureBundle(), other]),
+      () => indexEvidence(fixtureInventory(), [fixtureBundle(), other], fixtureIntegrationRules()),
       "ADAPTER_CONTRACT",
       /duplicate interaction id/u,
     );
@@ -298,7 +308,7 @@ describe("unresolved and orphaned ids", () => {
       ],
     };
     rejects(
-      () => indexEvidence(fixtureInventory(), [fixtureBundle(), other]),
+      () => indexEvidence(fixtureInventory(), [fixtureBundle(), other], fixtureIntegrationRules()),
       "ADAPTER_CONTRACT",
       /held by a bundle that does not own its record/u,
     );
@@ -518,7 +528,7 @@ describe("calculated dependencies", () => {
               : entry,
           ),
       }),
-    ]);
+    ], fixtureIntegrationRules());
     assert.equal(index.factById.get("fact-driver-vin-max")?.depends_on.length, 1);
   });
 

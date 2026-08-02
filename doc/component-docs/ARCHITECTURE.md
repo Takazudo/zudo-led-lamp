@@ -18,7 +18,8 @@ prose, never repairs a value, and never synthesises a component-wide verdict.
 
 Corpus as of this contract: **13 owner bundles, 32 records (23 standalone, 9
 subordinate), 81 sources, 369 facts, 109 coverage domains, 50 interactions, 32
-routes, 33 pin maps, 140 pins**; 29 inventory lines fitted, 3 DNP/hand-fit.
+routes, 33 pin maps, 140 pins**, plus **6 cross-component rules** in
+`circuit-spec-integration`; 29 inventory lines fitted, 3 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
 fails the build.
 
@@ -55,13 +56,14 @@ core/                       provider-neutral; no Python, no `.claude`, no fs pat
   render/catalog.ts         /docs/components/catalog/  (#60)
   render/record.ts          /docs/components/records/… (#60)
   render/shared.ts          routes, glosses and orderings both pages share (#60)
-  render/integration.ts     /docs/components/integration/ (#63 — not yet written)
+  render/integration.ts     /docs/components/integration/ (#63)
 adapters/circuit/           this repository's evidence provider
   paths.ts                  every path the adapter may touch
   validate.ts               python3 validate.py subprocess
   read.ts                   contained, symlink-refusing JSON reads
   selection.ts              committed instance allowlist (32 records / 81 sources)
   matrix.ts                 committed per-field decisions
+  integration.ts            cross-component rules: shapes, projection, closure
   evidence.ts               provider shapes, bundle reads, the joins (pure)
   index.ts                  the adapter itself; `projectIndex` is the pure projection
 cli/                        run.ts (shared body), generate.ts, check.ts, watch.ts
@@ -179,7 +181,8 @@ so a core/adapter skew is a startup error rather than a subtly wrong page.
 
 **v1 stays v1 for the whole of epic #57, including through incompatible shape
 changes.** #59 both widened `PublicFact["value"]` and added a required
-`PublicRecordIdentity.ownerSkill`, and neither bumped the number. That is
+`PublicRecordIdentity.ownerSkill`; #63 added `calculations`, `evidenceChain` and
+`ownerSkill` to `PublicIntegrationRule`. None of them bumped the number. That is
 deliberate, and it is the one place the version rule is suspended: the core and
 the only adapter are compiled together from one repository, so a skew between
 them is a *compile* error long before the runtime check sees it, and package
@@ -196,7 +199,7 @@ Population ownership:
 |---|---|
 | `corpus`, `records[].identity` | Wave 1 (done) |
 | `records[].aliases/sources/facts/coverage/interactions/pinMaps` | #59 (done) |
-| `integration` | #63 |
+| `integration` | #63 (done) |
 
 Rules the shape enforces:
 
@@ -260,10 +263,17 @@ fatal `ADAPTER_CONTRACT` — there is no fourth shape to guess at.
   per page (see above): the same `#int-…` fragment appears on up to four pages,
   each time denoting the same interaction, which is what an HTML id has to mean.
 - **Selection is closed under published links.** A published record whose source is
-  unselected, a published fact whose dependency is on an unpublished record, and a
-  published interaction naming an unpublished record are each a fatal
-  `STALE_SELECTION`. Dropping the evidence instead would publish an unprovenanced
-  number or a dead link.
+  unselected, a published fact whose dependency is on an unpublished record, a
+  published interaction naming an unpublished record, and an integration rule
+  naming an unpublished record or fact are each a fatal `STALE_SELECTION`.
+  Dropping the evidence instead would publish an unprovenanced number or a dead
+  link.
+- **Integration rules are NOT instance-selected.** They live in one file outside
+  every owner bundle and each spans records rather than belonging to one, so
+  there is no rule allowlist and no per-rule link opt-in. What is asserted is
+  `expect.integrationRules`, alongside the record and source counts: a rule
+  appearing or vanishing changes what the integration page claims about the
+  whole design and must be a reviewed change.
 - **Errors** are `ComponentDocsError` with a closed `ErrorCode` union:
   `VALIDATION_FAILED`, `ADAPTER_CONTRACT`, `PATH_CONTAINMENT`, `STALE_SELECTION`,
   `PUBLICATION_POLICY`, `UNSAFE_VALUE`, `UNSAFE_MDX`, `IDENTITY_COLLISION`,
@@ -295,7 +305,7 @@ Default-zero is structural, not conventional:
 
 ### V1 field decisions
 
-`DENY` (8 of 70 keys):
+`DENY` (8 of 80 keys):
 
 | Field | Why |
 |---|---|
@@ -309,7 +319,18 @@ Default-zero is structural, not conventional:
 
 Everything else is `PUBLISH`, including the full fact shape (value, unit, class,
 conditions, provenance, verdict, locator, `dependsOn`, expression), coverage
-`reason` and `blockingFactIds`, and the integration `refusal` text.
+`reason` and `blockingFactIds`, and every part of an integration rule.
+
+**The ten integration keys #63 added are all `PUBLISH`, and the reasoning is the
+same for each.** A cross-component rule's whole point is its `refusal` — the
+exact statement of what may NOT be concluded — and the conditioned calculations
+and the source-to-bench evidence chain are what the refusal is about. Publishing
+a rule while withholding any of them produces the one page this feature must
+never produce: conditions, arithmetic and a verdict, with nothing saying what
+none of it proves. The evidence chain in particular is mostly `OPEN`, and
+withholding it would leave the settled upstream stages on the page implying a
+downstream closure that has not happened. Nothing in the group names a reviewer,
+a ticket or a machine path — the `pinMap.reviewedBy` reasoning does not apply.
 
 ### URL policy
 
@@ -409,7 +430,7 @@ touched.
 | `/docs/components/` | `render/landing.ts` → `index.mdx` | 1 (done) |
 | `/docs/components/catalog/` | `render/catalog.ts` | #60 (done) |
 | `/docs/components/records/<slug>/` | `render/record.ts` | #60 (done) |
-| `/docs/components/integration/` | `render/integration.ts` | #63 |
+| `/docs/components/integration/` | `render/integration.ts` | #63 (done) |
 
 - **Header nav `Claude` → `Components` is #61's change**, not Wave 1's. Wave 1
   leaves `headerNav` untouched; the landing page is reachable via URL, sidebar,

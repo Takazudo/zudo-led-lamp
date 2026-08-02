@@ -12,6 +12,9 @@
  *   - `records[].facts/sources/coverage/interactions/pinMaps` — issue #59.
  *   - `integration` — issue #63.
  * The TYPES are frozen here in Wave 1 so #59/#60/#63 code against one shape.
+ * `PublicIntegrationRule` gained `calculations` and `evidenceChain` in #63 —
+ * both are provider data the rules carry and the integration route is required
+ * to publish; see ARCHITECTURE.md §5 for why that did not bump the version.
  *
  * Every leaf below has exactly one `FieldKey` in `publication.ts`. Adding a
  * leaf without adding its key is a compile error.
@@ -220,16 +223,80 @@ export type PublicRecord = {
   readonly pinMaps: readonly PublicPinMap[];
 };
 
+/**
+ * One evaluated case of a conditioned calculation.
+ *
+ * The provider records a calculation either as a single result or as a list of
+ * cases evaluated at different inputs — `calc-q1-steady-vgs` is evaluated at
+ * 15 V, 20 V and 32.4 V, and the three answers are the substance of the rule.
+ * Both forms normalise to this: `inputs` are the varied parameters of the case
+ * (empty when the calculation has none) and `value` is the result the provider
+ * recorded under the calculation's `resultKey`.
+ *
+ * Values are carried, never recomputed. The expression is published so a reader
+ * can redo the arithmetic themselves; the generator evaluating it would make
+ * the page a second, disagreeing calculator.
+ */
+export type PublicRuleCalculationCase = {
+  readonly inputs: readonly PublicFactValueEntry[];
+  readonly value: number | SafeText;
+};
+
+/**
+ * One conditioned calculation belonging to an integration rule.
+ *
+ * `conditions` is load-bearing and is never abridged: every one of these in the
+ * corpus says in words what the number is NOT proof of ("ideal steady
+ * VBEN-low divider only", "not proof of the real installed sharing"). A
+ * calculation published without it is exactly the friendly implied PASS this
+ * section refuses to make.
+ */
+export type PublicRuleCalculation = {
+  readonly calculationId: SafeText;
+  readonly anchor: Anchor;
+  readonly factIds: readonly SafeText[];
+  readonly expression: SafeText;
+  /** Which key of each case carries the result, e.g. `margin_v`. */
+  readonly resultKey: SafeText;
+  readonly conditions: SafeText;
+  readonly cases: readonly PublicRuleCalculationCase[];
+};
+
+/**
+ * One stage of a rule's source-to-bench evidence chain.
+ *
+ * `status` is per-stage and verbatim. A completed upstream stage never implies
+ * a later one, so these are published as the ordered list the provider recorded
+ * and are never reduced to a single "how far along" figure.
+ */
+export type PublicRuleEvidenceStage = {
+  readonly stage: SafeText;
+  readonly status: SafeText;
+  readonly factIds: readonly SafeText[];
+};
+
 /** One cross-component rule, published on the integration page. */
 export type PublicIntegrationRule = {
   readonly ruleId: SafeText;
   readonly anchor: Anchor;
+  /**
+   * The bundle this rule's evidence lives in, e.g. `circuit-spec-integration`.
+   *
+   * The same role `PublicRecordIdentity.ownerSkill` plays for a record: it is
+   * what lets the integration page link back to the raw agent resource it is a
+   * projection of, without `core/` knowing any provider's directory names.
+   */
+  readonly ownerSkill: SafeText;
   readonly domain: SafeText;
   readonly recordIds: readonly SafeText[];
   readonly factIds: readonly SafeText[];
   readonly conditions: SafeText;
   readonly verdict: SafeText;
   readonly refusal: SafeText;
+  /** Empty for a rule the provider records no conditioned arithmetic for. */
+  readonly calculations: readonly PublicRuleCalculation[];
+  /** Empty for every rule but the one that tracks the chain explicitly. */
+  readonly evidenceChain: readonly PublicRuleEvidenceStage[];
 };
 
 export type PublicViewModel = {

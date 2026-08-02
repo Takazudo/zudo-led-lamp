@@ -15,7 +15,7 @@ const selection: InstanceSelection = {
   recordIds: ["rec-a"],
   sourceIds: ["src-a"],
   linkableSourceIds: ["src-a"],
-  expect: { records: 1, sources: 1 },
+  expect: { records: 1, sources: 1, integrationRules: 0 },
 };
 
 function matrixOf(overrides: Partial<PublicationMatrix> = {}): PublicationMatrix {
@@ -67,7 +67,7 @@ describe("selection freshness", () => {
   it("fails when the selection names a record the provider lost", () => {
     const policy = new PublicationPolicy(matrixOf(), selection);
     assert.throws(
-      () => policy.assertSelectionFresh(["rec-other"], ["src-a"]),
+      () => policy.assertSelectionFresh(["rec-other"], ["src-a"], 0),
       (error: unknown) =>
         error instanceof ComponentDocsError && error.code === "STALE_SELECTION",
     );
@@ -76,7 +76,16 @@ describe("selection freshness", () => {
   it("fails when the corpus grew", () => {
     const policy = new PublicationPolicy(matrixOf(), selection);
     assert.throws(
-      () => policy.assertSelectionFresh(["rec-a", "rec-new"], ["src-a"]),
+      () => policy.assertSelectionFresh(["rec-a", "rec-new"], ["src-a"], 0),
+      (error: unknown) =>
+        error instanceof ComponentDocsError && error.code === "STALE_SELECTION",
+    );
+  });
+
+  it("fails when the integration ruleset changed size", () => {
+    const policy = new PublicationPolicy(matrixOf(), selection);
+    assert.throws(
+      () => policy.assertSelectionFresh(["rec-a"], ["src-a"], 1),
       (error: unknown) =>
         error instanceof ComponentDocsError && error.code === "STALE_SELECTION",
     );
@@ -85,7 +94,7 @@ describe("selection freshness", () => {
   it("records that the check ran", () => {
     const policy = new PublicationPolicy(matrixOf(), selection);
     assert.equal(policy.selectionChecked, false);
-    policy.assertSelectionFresh(["rec-a"], ["src-a"]);
+    policy.assertSelectionFresh(["rec-a"], ["src-a"], 0);
     assert.equal(policy.selectionChecked, true);
   });
 });

@@ -34,6 +34,12 @@ import { byCodeUnit } from "../../core/ids.ts";
 import { fail } from "../../core/errors.ts";
 import { BUNDLE_FILES, SKILLS_ROOT, type BundleFile } from "./paths.ts";
 import { readProviderJson } from "./read.ts";
+// Type-only, so it is erased at run time: `integration.ts` imports nothing from
+// here, and the two modules never form a runtime cycle.
+import type {
+  ProviderIntegrationRule,
+  ProviderIntegrationRules,
+} from "./integration.ts";
 
 /** The only provider schema version this adapter knows how to read. */
 export const PROVIDER_SCHEMA_VERSION = 1;
@@ -177,6 +183,14 @@ export type IndexedRecord = {
 export type EvidenceIndex = {
   readonly inventory: Inventory;
   readonly ownerSkills: readonly string[];
+  /**
+   * The cross-component rules, in file order.
+   *
+   * They live in their own skill rather than in an owner bundle, so they hang
+   * off the index rather than off a record: one rule spans up to twelve records
+   * and belongs to none of them.
+   */
+  readonly integrationRules: readonly ProviderIntegrationRule[];
   /** Every record the provider has, in bundle order. */
   readonly records: readonly IndexedRecord[];
   readonly recordById: ReadonlyMap<string, IndexedRecord>;
@@ -210,6 +224,77 @@ export async function readInventory(path: string): Promise<Inventory> {
   // The version itself is checked in `indexEvidence`, where it is testable
   // without a filesystem.
   return raw as Inventory;
+}
+
+/** Relative label for the integration rules, used in failure messages. */
+const INTEGRATION_RULES_LABEL = "circuit-spec-integration/references/rules.json";
+
+export async function readIntegrationRules(path: string): Promise<ProviderIntegrationRules> {
+  return parseIntegrationRules(await readProviderJson(path));
+}
+
+/**
+ * Version-check and shape-check the integration ruleset. Pure, like
+ * `parseBundle`, so every failure case is constructed from a plain object.
+ *
+ * Rule and calculation IDs must be unique because both become HTML `id`s on the
+ * integration route, so a duplicate would send two deep links to one target.
+ *
+ * The reference lists are checked more closely here than a bundle's are, for
+ * one reason: `rules.json` is the only provider file `validate.py` does not
+ * cover — the Python side owns the component-spec contract, and the forward
+ * tests exercise routing rather than shape. A missing array would otherwise
+ * surface as a `TypeError` from a `.map` deep in the projection instead of a
+ * fail-closed error naming the rule, and a record listed twice inside one rule
+ * would render twice on the page and twice again on that record's own page.
+ */
+export function parseIntegrationRules(raw: unknown): ProviderIntegrationRules {
+  assertSchemaVersion(raw, INTEGRATION_RULES_LABEL);
+  const rules = expectArray(raw, INTEGRATION_RULES_LABEL, "rules") as ProviderIntegrationRule[];
+
+  uniqueById("integration rule", rules, (rule) => rule.rule_id, (rule) => rule);
+  uniqueById(
+    "conditioned calculation",
+    rules.flatMap((rule) => rule.conditioned_calculations ?? []),
+    (calculation) => calculation.calculation_id,
+    (calculation) => calculation,
+  );
+
+  for (const rule of rules) {
+    const at = `${INTEGRATION_RULES_LABEL}:${rule.rule_id}`;
+    assertDistinctIds(rule.record_ids, `${at}.record_ids`);
+    assertDistinctIds(rule.fact_ids, `${at}.fact_ids`);
+    assertOptionalArray(rule.conditioned_calculations, `${at}.conditioned_calculations`);
+    assertOptionalArray(rule.evidence_chain, `${at}.evidence_chain`);
+    for (const calculation of rule.conditioned_calculations ?? []) {
+      assertDistinctIds(calculation.fact_ids, `${at}.${calculation.calculation_id}.fact_ids`);
+    }
+    for (const stage of rule.evidence_chain ?? []) {
+      assertDistinctIds(stage.fact_ids, `${at}.${stage.stage}.fact_ids`);
+    }
+  }
+
+  return { schema_version: PROVIDER_SCHEMA_VERSION, rules };
+}
+
+/** An ID list that is present, an array, and free of repeats. */
+function assertDistinctIds(value: unknown, where: string): void {
+  if (!Array.isArray(value)) {
+    fail("ADAPTER_CONTRACT", "integration rule field is not an id array", { where });
+  }
+  const duplicates = value.filter((id, position) => value.indexOf(id) !== position);
+  if (duplicates.length > 0) {
+    fail("ADAPTER_CONTRACT", "integration rule lists the same id twice", {
+      where,
+      ids: [...new Set(duplicates.map(String))].sort(byCodeUnit),
+    });
+  }
+}
+
+function assertOptionalArray(value: unknown, where: string): void {
+  if (value !== undefined && !Array.isArray(value)) {
+    fail("ADAPTER_CONTRACT", "integration rule field is present but not an array", { where });
+  }
 }
 
 export async function readBundle(skill: string): Promise<ProviderBundle> {
@@ -265,6 +350,7 @@ export function parseBundle(
 export function indexEvidence(
   inventory: Inventory,
   bundles: readonly ProviderBundle[],
+  integrationRules: readonly ProviderIntegrationRule[],
 ): EvidenceIndex {
   if (inventory.schema_version !== PROVIDER_SCHEMA_VERSION) {
     fail("ADAPTER_CONTRACT", "inventory schema_version is not the contract this adapter reads", {
@@ -371,6 +457,7 @@ export function indexEvidence(
   return {
     inventory,
     ownerSkills: bundles.map((bundle) => bundle.skill),
+    integrationRules,
     records,
     recordById,
     factById: facts.byId,

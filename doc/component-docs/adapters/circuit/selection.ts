@@ -10,7 +10,10 @@
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
  * of quietly publishing a different set. They are the same corpus figures the
- * epic states (32 records, 81 sources).
+ * epic states (32 records, 81 sources), plus the six cross-component rules —
+ * those are not instance-selected, but their number is asserted for the same
+ * reason, because a rule appearing or vanishing changes what the integration
+ * page claims about the whole design.
  *
  * `linkableSourceIds` is a SEPARATE, narrower opt-in: selecting a source
  * publishes its title, revision, locator and availability; it does not by
@@ -254,5 +257,6 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   expect: {
     records: 32,
     sources: 81,
+    integrationRules: 6,
   },
 };
