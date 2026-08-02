@@ -58,6 +58,7 @@ import { PublicationPolicy } from "../core/publication.ts";
 import {
   assertNoLeaks,
   assertPositiveControls,
+  assertRequiredRoutes,
   readScanTargets,
   scanTargets,
   subtractPublishedElsewhere,
@@ -91,6 +92,29 @@ const MINIMUM_OWNED_CANARIES = 100;
 const MINIMUM_OWNED_FILES = 60;
 const MINIMUM_SITE_CANARIES = 100;
 const MINIMUM_SITE_FILES = 150;
+
+/**
+ * Route fragments the docs-to-agent corpus must contain when `--agent-skill`
+ * names one.
+ *
+ * Without this the surface can come up empty — a corpus assembled from the
+ * wrong directory, or before generation ran — and nothing notices: the
+ * per-surface positive controls below skip an empty surface as "not present",
+ * and the four non-agent owned surfaces alone clear `MINIMUM_OWNED_FILES`. So
+ * `scan:doc-skill` would exit 0 while proving nothing about what an agent
+ * actually reads back, which is the one thing it exists to prove.
+ *
+ * Named routes rather than a file count, because the acceptance criterion is
+ * that catalog, integration and record content are each discoverable — not
+ * that some number of files exist. A count would also make this a second place
+ * the corpus figures are asserted, which the floors above deliberately avoid.
+ */
+const REQUIRED_AGENT_ROUTES = [
+  "/docs/components/index.",
+  "/docs/components/catalog/",
+  "/docs/components/integration/",
+  "/docs/components/records/",
+] as const;
 
 type Surface = {
   readonly name: string;
@@ -452,6 +476,9 @@ async function main(): Promise<void> {
   const distTargets = await readScanTargets(DIST_ROOT, "dist");
   const agentTargets =
     agentSkillRoot === null ? [] : await readScanTargets(agentSkillRoot, "agent-skill");
+  if (agentSkillRoot !== null) {
+    assertRequiredRoutes(agentTargets, REQUIRED_AGENT_ROUTES, `docs-to-agent corpus at ${agentSkillRoot}`);
+  }
 
   // --- OWNED tier: full canary set, artifacts this feature writes -----------
   const owned = await ownedSurfaces(distTargets, agentTargets);

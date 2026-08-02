@@ -486,6 +486,32 @@ export function assertNoLeaks(result: ScanResult, minimums: {
  * positive controls; without them "nothing leaked" and "nothing shipped" are
  * indistinguishable.
  */
+/**
+ * Fails unless every named route fragment appears in at least one target label.
+ *
+ * A positive control proves the right *content* is present; this proves the
+ * right *files* are, which is the weaker claim a positive control cannot make
+ * on its own — `assertPositiveControls` is skipped for an empty surface, so a
+ * corpus assembled from the wrong directory passes every content check
+ * vacuously. Routes are a parameter: which ones matter is the caller's
+ * decision, and this file stays free of any particular route shape.
+ */
+export function assertRequiredRoutes(
+  targets: readonly ScanTarget[],
+  routes: readonly string[],
+  where: string,
+): void {
+  const missing = routes.filter(
+    (route) => !targets.some((target) => target.label.includes(route)),
+  );
+  if (missing.length > 0) {
+    fail("PUBLICATION_POLICY", `${where} is missing ${missing.length} required route(s)`, {
+      where,
+      missing: missing.slice(0, REPORTED_LIMIT),
+    });
+  }
+}
+
 export function assertPositiveControls(
   targets: readonly ScanTarget[],
   controls: readonly { readonly label: string; readonly value: string }[],

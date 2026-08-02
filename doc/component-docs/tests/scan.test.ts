@@ -22,6 +22,7 @@ import { ComponentDocsError } from "../core/errors.ts";
 import {
   assertNoLeaks,
   assertPositiveControls,
+  assertRequiredRoutes,
   harvestCanaries,
   isBinaryContent,
   isBinaryPath,
@@ -313,6 +314,48 @@ describe("the scan fails closed rather than passing vacuously", () => {
       () => assertNoLeaks(result, { canaries: 1, files: 1 }),
       (error: unknown) =>
         error instanceof ComponentDocsError && error.code === "PUBLICATION_POLICY",
+    );
+  });
+
+  it("refuses an agent corpus that carries none of the required routes", () => {
+    // The hole this closes: an empty surface makes assertPositiveControls a
+    // no-op, and the other owned surfaces alone clear the file floor — so
+    // `scan:doc-skill` exited 0 while proving nothing about what an agent
+    // reads back. Measured on the real build before the fix.
+    const routes = ["/docs/components/catalog/", "/docs/components/records/"];
+    assert.throws(
+      () => assertRequiredRoutes([{ label: "agent-skill/SKILL.md", text: "x" }], routes, "corpus"),
+      (error: unknown) => {
+        assert.ok(error instanceof ComponentDocsError);
+        assert.equal(error.code, "PUBLICATION_POLICY");
+        assert.match(error.message, /2 required route/u);
+        return true;
+      },
+    );
+  });
+
+  it("accepts an agent corpus once every required route is present", () => {
+    assert.doesNotThrow(() =>
+      assertRequiredRoutes(
+        [
+          { label: "agent-skill/docs/components/catalog/index.mdx", text: "x" },
+          { label: "agent-skill/docs/components/records/al8860mp-13/index.mdx", text: "x" },
+        ],
+        ["/docs/components/catalog/", "/docs/components/records/"],
+        "corpus",
+      ),
+    );
+  });
+
+  it("names the missing routes without needing the files to be readable", () => {
+    // Labels alone decide this, so a binary or unreadable file still counts as
+    // present — the claim is about what the corpus contains, not what it says.
+    assert.doesNotThrow(() =>
+      assertRequiredRoutes(
+        [{ label: "agent-skill/docs/components/records/x/index.mdx", text: null }],
+        ["/docs/components/records/"],
+        "corpus",
+      ),
     );
   });
 
