@@ -40,6 +40,7 @@ import type {
   ProviderIntegrationRule,
   ProviderIntegrationRules,
 } from "./integration.ts";
+import type { CircuitReferenceContract } from "./references.ts";
 
 /** The only provider schema version this adapter knows how to read. */
 export const PROVIDER_SCHEMA_VERSION = 1;
@@ -181,6 +182,8 @@ export type IndexedRecord = {
 };
 
 export type EvidenceIndex = {
+  /** Present only after the adapter has validated the local reference assets. */
+  readonly references?: CircuitReferenceContract;
   readonly inventory: Inventory;
   readonly ownerSkills: readonly string[];
   /**

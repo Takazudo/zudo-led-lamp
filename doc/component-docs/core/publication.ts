@@ -117,9 +117,28 @@ export const FIELD_KEYS = [
   "pinMap.footprint",
   "pinMap.pins",
   "pinMap.reviewedBy",
+  // --- curated component references --------------------------------------
+  "reference.document.sourceId",
+  "reference.document.documentTitle",
+  "reference.document.label",
+  "reference.document.authorityClass",
+  "reference.document.url",
+  "reference.document.availability",
+  "reference.document.documentKind",
+  "reference.footprint.packageId",
+  "reference.footprint.name",
+  "reference.footprint.path",
+  "reference.model.path",
+  "reference.model.offset",
+  "reference.model.rotation",
+  "reference.model.scale",
+  "reference.package.recordIds",
   // --- corpus aggregates ---------------------------------------------------
   "corpus.counts",
   // --- assets --------------------------------------------------------------
+  "asset.datasheetPdf",
+  "asset.footprintPreview",
+  "asset.modelPreview",
   "asset.binary",
 ] as const;
 
@@ -143,6 +162,16 @@ export type InstanceSelection = {
    * itself publish an outbound link.
    */
   readonly linkableSourceIds: readonly string[];
+  /**
+   * One reviewed PDF-representing source for every selected record. This is an
+   * audit decision, not a URL heuristic or a request to perform network I/O at
+   * generation time.
+   */
+  readonly documentSelections: readonly {
+    readonly recordId: string;
+    readonly sourceId: string;
+    readonly documentKind: "datasheet" | "specification" | "drawing";
+  }[];
   /** Asserted corpus counts; a mismatch means the selection went stale. */
   readonly expect: {
     readonly records: number;
@@ -234,6 +263,39 @@ export class PublicationPolicy {
           { sourceId: id },
         );
       }
+    }
+    const documentRecords = new Set<string>();
+    for (const document of selection.documentSelections) {
+      if (!this.#recordIds.has(document.recordId) || !this.#sourceIds.has(document.sourceId)) {
+        fail("PUBLICATION_POLICY", "document selection is outside the selected corpus", {
+          recordId: document.recordId,
+          sourceId: document.sourceId,
+        });
+      }
+      if (!this.#linkableSourceIds.has(document.sourceId)) {
+        fail("PUBLICATION_POLICY", `document source ${document.sourceId} is not linkable`, {
+          recordId: document.recordId,
+          sourceId: document.sourceId,
+        });
+      }
+      if (!["datasheet", "specification", "drawing"].includes(document.documentKind)) {
+        fail("PUBLICATION_POLICY", `document source ${document.sourceId} has an invalid kind`, {
+          recordId: document.recordId,
+          sourceId: document.sourceId,
+        });
+      }
+      if (documentRecords.has(document.recordId)) {
+        fail("PUBLICATION_POLICY", `record ${document.recordId} has multiple document selections`, {
+          recordId: document.recordId,
+        });
+      }
+      documentRecords.add(document.recordId);
+    }
+    const recordsWithoutDocument = selection.recordIds.filter((id) => !documentRecords.has(id));
+    if (recordsWithoutDocument.length > 0 || documentRecords.size !== selection.recordIds.length) {
+      fail("PUBLICATION_POLICY", "every selected record must have exactly one document selection", {
+        recordsWithoutDocument: recordsWithoutDocument.sort(byCodeUnit),
+      });
     }
   }
 
