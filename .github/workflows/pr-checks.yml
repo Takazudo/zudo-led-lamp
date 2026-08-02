@@ -3,14 +3,24 @@
 # Triggered on PRs targeting `main` or any `base/**` worktree base branch (so
 # topic PRs that target a base branch also get a preview), when the PR touches
 # doc/, the repo-root Claude resources the site publishes, or this workflow.
-# Pipeline: type check -> build -> generated-docs drift check -> deploy
-# preview (wrangler versions upload --preview-alias) -> sticky PR comment.
+# Pipeline: type check -> component generator tests -> build -> link check ->
+# generated-docs drift check -> component projection drift check -> denied-value
+# scans over the built bytes and the docs-to-agent corpus -> deploy preview
+# (wrangler versions upload --preview-alias) -> route smoke test -> sticky PR
+# comment.
+#
+# Everything up to and including the scans is CREDENTIAL-FREE and mandatory,
+# and it is `pnpm b4push` plus two steps b4push cannot express as one command:
+# the generated-output drift check (it needs a clean git index, not a script)
+# and the link check (it needs the build's captured log). Both have a two-line
+# local equivalent in doc/component-docs/ARCHITECTURE.md §10. Only the last
+# three steps need Cloudflare secrets.
 #
 # Secret gating: same readiness-step pattern as main-deploy.yml — the
 # `secrets` context is not available in job-level `if:` expressions. Until
 # CLOUDFLARE_API_TOKEN is set, the preview deploy is skipped with an explicit
 # notice and the sticky comment falls back to "preview pending" text; the job
-# stays GREEN, never red.
+# stays GREEN, never red. A missing credential never skips a gate above it.
 #
 # Secrets:
 #   CLOUDFLARE_API_TOKEN  — Workers: Edit scope (user sets this manually)
@@ -46,6 +56,12 @@ jobs:
     name: Check and Preview Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
+    env:
+      # Written by "Build site", read by "Hand-authored links resolve". Outside
+      # the workspace on purpose — a stray log file inside it would be one more
+      # thing the generated-output drift check has to not trip over.
+      BUILD_LOG: ${{ runner.temp }}/doc-build.log
 
     steps:
       - name: Checkout repository
@@ -84,17 +100,119 @@ jobs:
         working-directory: doc
         run: pnpm check
 
+      # The component-docs generator's own suites: publication matrix, branded
+      # types, adapter joins, renderers, denied-field canaries. They run before
+      # the build because a matrix regression is easier to read as a failing
+      # assertion than as a diff in generated MDX.
+      - name: Component generator tests
+        working-directory: doc
+        run: pnpm test:components
+
+      # The build log is written to a file rather than the console: it carries
+      # ~2500 zfb link warnings that are all false (see the next step), and
+      # 2500 false lines is exactly what a real one hides in. On failure the
+      # whole log is printed, so nothing is lost when it matters.
       - name: Build site
         working-directory: doc
-        run: pnpm build
+        run: |
+          if pnpm build >"$BUILD_LOG" 2>&1; then
+            status=0
+          else
+            status=$?
+          fi
+          grep -v '^zfb warn: ' "$BUILD_LOG" || true
+          if [ "$status" -ne 0 ]; then
+            echo "::group::full build log"
+            cat "$BUILD_LOG"
+            echo "::endgroup::"
+            exit "$status"
+          fi
 
-      # The claude-resources generator rewrites doc/src/content/docs/claude*/
-      # on every build, and that output is committed. A source edit under
-      # .claude/skills/ or a CLAUDE.md that lands without a rebuild would leave
-      # the committed pages stale; this fails the PR instead. Same contract as
+      # LINK INTEGRITY — the decision, because neither obvious option is right.
+      #
+      # zfb's `linkValidation` resolves `#fragment` targets against
+      # HEADING-derived anchors only. Every anchor the component generator emits
+      # is an `<EvidenceAnchor>` component id, and all three markup forms were
+      # probed: a heading anchor validates, a raw-HTML id warns, an MDX
+      # component id warns. No markup the generator can emit satisfies it, so
+      # those warnings are all false — the links do resolve in the built HTML.
+      # Upstream: #69/#70.
+      #
+      # So `failOnBroken: true` would fail every build on false positives, and
+      # ignoring the log would mean a genuinely broken HAND-AUTHORED link never
+      # surfaces. Neither is acceptable, and the count is not a gate either:
+      # `assertLinkIntegrity` runs on the VIEW MODEL and is already fatal in the
+      # pipeline regardless of emitted markup, which is why wrapping the
+      # evidence tables in a component dropped the count 4324 -> 2536 with no
+      # change in link health. The number tracks presentation, not link health.
+      #
+      # This step therefore suppresses exactly one class — a same-page
+      # `#fragment` against a file in the generated tree — and fails on
+      # everything else, including a warning whose shape it does not recognise,
+      # so a zfb format change turns CI red instead of silently disarming the
+      # gate. Proven both ways locally: a real broken link in a hand-authored
+      # page leaves `pnpm build` at exit 0 and makes this step exit 1.
+      - name: Hand-authored links resolve
+        working-directory: doc
+        run: bash component-docs/scripts/check-zfb-link-warnings.sh "$BUILD_LOG"
+
+      # THE drift authority for every committed generated file. The
+      # claude-resources generator rewrites doc/src/content/docs/claude*/ on
+      # every build, and `pnpm build` runs `generate:components` first, which
+      # rewrites doc/src/content/docs/components/ AND
+      # doc/component-docs/preflight.json. A source edit under .claude/skills/,
+      # a CLAUDE.md, or the generator itself that lands without a rebuild leaves
+      # the committed output stale; this fails the PR instead. Same contract as
       # the boards regen-idempotency check in component-spec-skills.yml.
-      - name: Generated Claude docs are up to date
-        run: git diff --exit-code -- doc/src/content/docs
+      #
+      # Two details are load-bearing, and both were holes that CI would have
+      # passed clean over:
+      #
+      #   `--intent-to-add`  a newly generated page arrives UNTRACKED, and
+      #                      `git diff` cannot see untracked files. A PR adding
+      #                      a record without committing its page would pass.
+      #   preflight.json     lives outside doc/src/content/docs, so it needs
+      #                      naming here. Nothing else in this job can catch it:
+      #                      `build` rewrites it before any later step looks, so
+      #                      a stale committed copy is invisible downstream.
+      - name: Generated output is committed and up to date
+        run: |
+          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json
+          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json
+
+      # The SECOND generation run, which makes this pair the two-run
+      # idempotency check: `build` projected and wrote the tree, this
+      # re-projects from the evidence and proves the result byte-identical.
+      # Run-to-run nondeterminism would otherwise surface as an intermittent
+      # diff on some unrelated PR; here it fails where it is caused, naming the
+      # files that moved.
+      - name: Component generation is deterministic
+        working-directory: doc
+        run: pnpm check:components
+
+      # Denied-value scan over the BUILT bytes — after the MDX compiler, the
+      # HTML minifier, the search indexer and the llms.txt writer have each had
+      # a turn. It runs here, after `build`, because `dist/` is its input, and
+      # it has no skip path: a missing `dist/` fails rather than passing
+      # silently.
+      - name: Denied-value scan over the built site
+        working-directory: doc
+        run: pnpm scan:artifacts
+
+      # The same scan over the docs-to-agent corpus, which is a publication
+      # surface an agent reads as reference material rather than as a web page.
+      # The harness runs `setup:doc-skill` with HOME pointed at a throwaway
+      # directory and then verifies the real $HOME/.claude/skills and
+      # $HOME/.codex/skills were not touched — never writing to a user-global
+      # skill directory is a hard rule, on a runner as much as on a laptop.
+      # PR-only, for cost: the corpus is assembled locally by a developer, never
+      # deployed by these workflows, and its component slice is byte-identical
+      # to the generated MDX that `scan:artifacts` already scans at full canary
+      # strength on `main` too. What only this step adds is the generated
+      # SKILL.md wrapper — worth a gate before merge, not on every deploy.
+      - name: Denied-value scan over the docs-to-agent corpus
+        working-directory: doc
+        run: pnpm scan:doc-skill
 
       - name: Check secret readiness
         id: readiness
@@ -149,16 +267,74 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      # Gated on a returned URL, not on the deploy step succeeding: the upload
+      # can succeed without printing a preview-alias URL, and "verified" must
+      # mean a request was actually made and answered. One representative route
+      # per generated page kind. Retried because a fresh worker version can take
+      # a few seconds to answer on the alias.
+      - name: Smoke-test component routes on the preview
+        id: smoke
+        if: steps.cf-deploy.outputs.deploy_url != ''
+        env:
+          DEPLOY_URL: ${{ steps.cf-deploy.outputs.deploy_url }}
+        run: |
+          # No trailing slash — that is the canonical form the pages link to
+          # each other by, and [assets] html_handling defaults to
+          # auto-trailing-slash, so `/docs/components/` would answer with a
+          # redirect rather than a 200. `-L` follows one anyway, so this stays
+          # a content check and not an assertion about URL normalisation.
+          routes="/docs/components /docs/components/catalog /docs/components/records/al8860mp-13 /docs/components/integration"
+          for route in $routes; do
+            url="${DEPLOY_URL}${route}"
+            code=""
+            for attempt in 1 2 3 4 5; do
+              code=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 20 "$url" || true)
+              if [ "$code" = "200" ]; then break; fi
+              echo "attempt ${attempt}: ${url} -> ${code:-no response}"
+              sleep 5
+            done
+            if [ "$code" != "200" ]; then
+              echo "::error::${url} returned ${code:-no response}"
+              exit 1
+            fi
+            echo "200  ${url}"
+          done
+          # A status code alone would still pass if the worker answered with a
+          # rendered shell carrying no evidence. One exact MPN from the record
+          # route makes the check non-vacuous; it is the same identity string
+          # scan:artifacts asserts in the built page.
+          # Captured into a variable rather than piped into `grep -q`: under
+          # this shell's `pipefail`, grep exiting on the first match kills curl
+          # with SIGPIPE and the pipeline reports failure on a SUCCESSFUL match.
+          record="${DEPLOY_URL}/docs/components/records/al8860mp-13"
+          body=$(curl -sSL --max-time 20 "$record" || true)
+          case "$body" in
+            *AL8860MP-13*) echo "content  AL8860MP-13 present on ${record}" ;;
+            *)
+              echo "::error::${record} answered 200 but does not carry the record's MPN"
+              exit 1
+              ;;
+          esac
+          echo "verified=true" >> "$GITHUB_OUTPUT"
+
       - name: Comment preview URL on PR
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           DEPLOY_URL: ${{ steps.cf-deploy.outputs.deploy_url }}
+          ROUTES_VERIFIED: ${{ steps.smoke.outputs.verified }}
         with:
           script: |
             const deployUrl = process.env.DEPLOY_URL;
+            const routesVerified = process.env.ROUTES_VERIFIED === 'true';
             const prNumber = context.issue.number;
             const marker = '<!-- cf-preview-pr -->';
             const sha = context.sha.substring(0, 7);
+
+            // Only the smoke step's own output may claim verification — an
+            // upload that returned a URL is not evidence the routes answer.
+            const routeLine = routesVerified
+              ? 'Component landing, catalog, record and integration routes answered 200 on this preview.'
+              : 'Component routes were **not** smoke-tested on this preview.';
 
             const body = deployUrl
               ? [
@@ -170,6 +346,8 @@ jobs:
                   `| | URL |`,
                   `|---|---|`,
                   `| Preview | ${deployUrl} |`,
+                  '',
+                  routeLine,
                   '',
                   `Built from commit: \`${sha}\``,
                 ].join('\n')

@@ -97,7 +97,7 @@ adapter directory and no change under `core/`.
 | `build` | `pnpm generate:components && zfb build` | generation precedes the content snapshot |
 | `dev` | `pnpm generate:components && run-p dev:zfb dev:history dev:components` | seeded, then watched |
 | `check` | `zfb check` (unchanged) | typechecks `component-docs/**` via `tsconfig.json` `include` |
-| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts` | local gate |
+| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill` | local gate |
 
 **Why not a `zfb` plugin.** `@takazudo/zfb/plugins` does expose a supported
 composition seam (`setup` / `preBuild` / `postBuild` / `devMiddleware` /
@@ -550,29 +550,105 @@ touched.
 
 ## 10. CI
 
-- `.github/workflows/pr-checks.yml` — `pnpm check` → `pnpm build` →
-  `git diff --exit-code -- doc/src/content/docs`. Because `build` now runs
-  `generate:components` first, **generated component pages must be committed** or
-  this step fails. That is the intended contract. Note the step diffs *all* of
-  `doc/src/content/docs`, not just `components/` — editing `doc/CLAUDE.md` also
-  regenerates `doc/src/content/docs/claude-md/doc.mdx`.
-- `.github/workflows/component-spec-skills.yml` — the Python validator, its unit
-  tests, the forward tests, and schematic regen-idempotency. Unchanged.
+Wired by #65. Every gate below is **credential-free and mandatory**; a missing
+Cloudflare credential skips the deploy, never a check.
 
-One workflow change was made here, because this work is what introduced the
-dependency: `pr-checks.yml` and `main-deploy.yml` now run
-`actions/setup-python@v5` with `python-version: '3.12'`. `pnpm build` shells out
-to the validator, and depending on whichever Python the runner image happens to
-ship would let CI and `component-spec-skills.yml` silently disagree.
+`.github/workflows/pr-checks.yml`, in order:
 
-**#65 still owns** adding `pnpm test:components`, `pnpm check:components` and
-`pnpm scan:artifacts` to `pr-checks.yml` (the paths filter needs nothing new —
-`doc/component-docs/**` is already covered by `doc/**`). `check:components`
-covers `doc/component-docs/preflight.json`, which the existing `git diff` step
-does not see. `scan:artifacts` must run **after** `build`, because `dist/` is its
-input; it has no skip path, so a missing `dist/` is a failure rather than a
-silent pass. `scan:doc-skill` is safe to run in CI — it sandboxes `HOME` — but it
-is a slower superset and adding it is #65's call.
+| Step | Command | What only this step catches |
+|---|---|---|
+| Type check | `pnpm check` | — |
+| Component generator tests | `pnpm test:components` | matrix / branded-type / adapter / renderer regressions, as assertions rather than as a diff |
+| Build site | `pnpm build` | — (log captured, see below) |
+| Hand-authored links resolve | `component-docs/scripts/check-zfb-link-warnings.sh` | a broken link in a **hand-authored** page — `pnpm build` exits 0 on those |
+| Generated output is committed and up to date | `git add -N` + `git diff --exit-code` over `doc/src/content/docs` and `doc/component-docs/preflight.json` | committed `components/`, `claude*/` or `preflight.json` gone stale, **and** a generated page that was never committed at all |
+| Component generation is deterministic | `pnpm check:components` | run-to-run nondeterminism, which would otherwise surface as an intermittent diff on an unrelated PR |
+| Denied-value scan over the built site | `pnpm scan:artifacts` | a denied value surviving the MDX compiler, minifier, indexer or `llms.txt` writer |
+| Denied-value scan over the docs-to-agent corpus | `pnpm scan:doc-skill` | the same, in what an agent reads back through `setup:doc-skill` |
+
+Then the credential-gated tail: readiness → `.assetsignore` → preview deploy →
+route smoke test → sticky comment.
+
+This is `pnpm b4push` plus two steps b4push cannot express as one command — the
+drift check needs a clean git index rather than a script, and the link check
+needs the build's captured log. Their local equivalents:
+
+```sh
+pnpm b4push
+git add --intent-to-add -A -- src/content/docs component-docs/preflight.json  # from doc/
+git diff --exit-code -- src/content/docs component-docs/preflight.json
+```
+
+Five things about the sequence are load-bearing:
+
+- Because `build` runs `generate:components` first, **generated component pages
+  must be committed** or the drift step fails. That is the intended contract, and
+  the step covers *all* of `doc/src/content/docs`, not just `components/` —
+  editing `doc/CLAUDE.md` also regenerates `doc/src/content/docs/claude-md/doc.mdx`.
+- That step is the drift authority for **everything** generated, and two details
+  in it are not tidiness. `--intent-to-add` is what makes a *newly generated,
+  never-committed* page visible — `git diff` alone cannot see untracked files, so
+  a PR adding a record without committing its page would pass clean. And
+  `preflight.json` has to be named explicitly: it sits outside
+  `doc/src/content/docs`, and `build` rewrites it before any later step looks at
+  it, so a stale committed copy is invisible to every other gate in the job.
+  Both holes were verified by construction, not assumed.
+- `build` + `check:components` are the two generation runs: the first writes the
+  tree, the second re-projects from the evidence and proves the result
+  byte-identical. Its job is **determinism**, not staleness — after `build` has
+  run, the tree on disk is fresh by construction, so it cannot see a stale
+  commit. That is the drift step's job, above.
+- `scan:artifacts` must run **after** `build`, because `dist/` is its input; it
+  has no skip path, so a missing `dist/` is a failure rather than a silent pass.
+- `scan:doc-skill` runs `setup:doc-skill` with `HOME` pointed at a throwaway
+  directory and then verifies the real `$HOME/.claude/skills` and
+  `$HOME/.codex/skills` were untouched. Never writing to a user-global skill
+  directory is a hard rule on a runner as much as on a laptop.
+
+The paths filter needed nothing new: `doc/component-docs/**` is already covered
+by `doc/**`, and `.claude/skills/**` plus `**/CLAUDE.md` are already listed.
+
+### The link decision
+
+`check-zfb-link-warnings.sh` exists because neither obvious option is right.
+zfb's `linkValidation` resolves fragments against heading-derived anchors only,
+so it cannot see an `<EvidenceAnchor>` id and every one of its warnings on a
+generated page is false. `failOnBroken: true` would therefore fail every build;
+ignoring the log would mean a genuinely broken hand-authored link never surfaces.
+The count is not a gate either — `assertLinkIntegrity` runs on the **view model**
+and is already fatal in the pipeline regardless of emitted markup, which is why
+wrapping the evidence tables in a component moved the count 4324 → 2536 with no
+change in link health.
+
+So the script suppresses exactly one class — a same-page `#fragment` reported
+against a file in the generated tree — and fails on everything else, including a
+warning whose *shape* it does not recognise, so a zfb format change turns CI red
+instead of silently disarming the gate. Locally:
+
+```sh
+pnpm build 2>&1 | tee /tmp/doc-build.log
+bash component-docs/scripts/check-zfb-link-warnings.sh /tmp/doc-build.log
+```
+
+`.github/workflows/main-deploy.yml` runs the same gates minus the two
+agent-corpus/link steps, all **before** the deploy: type check →
+`test:components` → `build` → `git diff --exit-code` → `check:components` →
+`scan:artifacts`. The drift steps close a real gap — the job used to build fresh
+output without ever comparing it to what was committed, so a direct push carrying
+stale generated pages deployed a rebuilt site while the repository claimed
+otherwise. The link check is deliberately *not* there: after a merge, refusing to
+publish over a broken link in prose is a worse outcome than publishing it, while
+stale or leaky bytes genuinely must not ship.
+
+`.github/workflows/component-spec-skills.yml` — the Python validator, its unit
+tests, the forward tests, and schematic regen-idempotency. The four checks are
+unchanged; #65 only pinned its two actions by SHA and added `timeout-minutes`
+and `concurrency`.
+
+All three workflows run `actions/setup-python@a26af69…` (v5) with
+`python-version: '3.12'`, added to the two doc workflows by #58 because
+`pnpm build` shells out to the validator — depending on whichever Python the
+runner image happens to ship would let them silently disagree.
 
 ## 11. Direct dependencies added
 

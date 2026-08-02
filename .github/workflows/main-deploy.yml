@@ -4,6 +4,11 @@
 # Builds the zfb static site and deploys it to Cloudflare Workers static
 # assets.
 #
+# Every gate before the deploy is credential-free and mandatory: type check,
+# component generator tests, build, generated-doc drift, component projection
+# drift, denied-value scan over the built bytes. A missing deployment
+# credential skips the deploy, never a gate.
+#
 # The custom domain (zudo-led-lamp.takazudomodular.com) and the workers.dev
 # subdomain are both attached declaratively via doc/wrangler.toml
 # (workers_dev = true, [[routes]] custom_domain = true) — `wrangler deploy`
@@ -88,9 +93,47 @@ jobs:
         working-directory: doc
         run: pnpm check
 
+      - name: Component generator tests
+        working-directory: doc
+        run: pnpm test:components
+
       - name: Build site
         working-directory: doc
         run: pnpm build
+
+      # The gap this closes: the job built fresh output but never compared it
+      # to what was committed, so a direct push carrying stale generated pages
+      # deployed a rebuilt site while the repository kept claiming otherwise.
+      # Every committed generated file is covered — claude*/ from the
+      # claude-resources generator, components/ and preflight.json from
+      # `generate:components`, which `pnpm build` runs first. See pr-checks.yml
+      # for why `--intent-to-add` and the explicit preflight.json path are both
+      # required rather than tidy.
+      - name: Generated output is committed and up to date
+        run: |
+          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json
+          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json
+
+      # The second generation run: build wrote the tree, this re-projects from
+      # the evidence and proves the result byte-identical.
+      - name: Component generation is deterministic
+        working-directory: doc
+        run: pnpm check:components
+
+      # Last check on the exact bytes about to go live: no value reachable only
+      # through a denied provider key reaches a published artifact, and the
+      # fields the contract promises a reader are all still there. After
+      # `build` because `dist/` is its input, and before the deploy because
+      # that is the point.
+      - name: Denied-value scan over the built site
+        working-directory: doc
+        run: pnpm scan:artifacts
+
+      # Not run here: the zfb link check (pr-checks.yml carries the reasoning
+      # and the gate). It is a pre-merge concern — after a merge, refusing to
+      # publish the site over a broken link in prose is a worse outcome than
+      # publishing it. The gates above are different: they guard whether the
+      # deployed bytes are correct and safe, so they do block the deploy.
 
       - name: Check secret readiness
         id: readiness
