@@ -1047,11 +1047,11 @@
     }
   ],
   "counts": {
-    "generatedPages": 1,
+    "generatedPages": 35,
     "publishedCoverageDomains": 109,
     "publishedFacts": 369,
     "publishedIntegrationRules": 0,
-    "publishedInteractions": 59,
+    "publishedInteractions": 50,
     "publishedPinMaps": 33,
     "publishedRecords": 32,
     "publishedSources": 81

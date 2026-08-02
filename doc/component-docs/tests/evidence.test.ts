@@ -17,7 +17,7 @@ import {
   type ProviderBundle,
 } from "../adapters/circuit/evidence.ts";
 import { BUNDLE_FILES, type BundleFile } from "../adapters/circuit/paths.ts";
-import { bundleFiles, fixtureBundle, fixtureInventory } from "./fixtures.ts";
+import { bundleFiles, fixtureBundle, fixtureInventory } from "./projection-fixtures.ts";
 
 type Overrides = Parameters<typeof fixtureBundle>[0];
 

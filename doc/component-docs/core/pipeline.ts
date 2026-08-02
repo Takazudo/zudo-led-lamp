@@ -17,7 +17,10 @@ import { diffAgainstDisk, emit, type EmitResult } from "./emit.ts";
 import { fail } from "./errors.ts";
 import { assertUnique } from "./ids.ts";
 import { PublicationPolicy, type PreflightReport } from "./publication.ts";
+import { renderCatalog } from "./render/catalog.ts";
 import { renderLanding } from "./render/landing.ts";
+import { renderRecord, renderRecordsIndex } from "./render/record.ts";
+import { buildRecordIndex } from "./render/shared.ts";
 import { VIEW_MODEL_VERSION, type PublicViewModel } from "./view-model.ts";
 import type { ComponentDataAdapter } from "./adapter.ts";
 import type { GeneratedPage } from "./page.ts";
@@ -132,7 +135,18 @@ export async function runPipeline(
   assertUnique("record slug", slugs);
   assertAnchorIntegrity(model);
 
-  const pages: GeneratedPage[] = [renderLanding(model, policy)];
+  // One index built once and handed to every record page. The evidence graph
+  // crosses records — a calculated fact cites a fact owned by another part, an
+  // interaction spans several — so a page cannot resolve its own links from its
+  // own record alone.
+  const recordIndex = buildRecordIndex(model);
+
+  const pages: GeneratedPage[] = [
+    renderLanding(model, policy),
+    renderCatalog(model),
+    renderRecordsIndex(model.records),
+    ...model.records.map((record) => renderRecord(record, recordIndex)),
+  ];
   assertUnique("generated path", pages.map((page) => page.relativePath));
 
   const plan = { root: options.generatedRoot, pages };
@@ -155,10 +169,15 @@ export async function runPipeline(
         (sum, record) => sum + record.coverage.length,
         0,
       ),
-      publishedInteractions: model.records.reduce(
-        (sum, record) => sum + record.interactions.length,
-        0,
-      ),
+      // Distinct interactions, not attachments. Every other node type carries a
+      // singular recordId and so is attached once, but an interaction is published on
+      // each of its participating records — summing lengths would report this corpus's
+      // 50 interactions as 59 and break the epic's asserted count.
+      publishedInteractions: new Set(
+        model.records.flatMap((record) =>
+          record.interactions.map((entry) => entry.interactionId),
+        ),
+      ).size,
       publishedPinMaps: model.records.reduce((sum, record) => sum + record.pinMaps.length, 0),
       publishedIntegrationRules: model.integration.length,
     },

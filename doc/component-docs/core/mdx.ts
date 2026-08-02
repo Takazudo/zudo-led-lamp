@@ -40,6 +40,7 @@ import type { SafeUrl } from "./url.ts";
  */
 export const ALLOWED_COMPONENT_ATTRIBUTES = {
   EvidenceAnchor: ["id"],
+  EvidenceDetails: ["label"],
   CategoryNav: ["category"],
 } as const satisfies Record<string, readonly string[]>;
 
@@ -88,6 +89,53 @@ export function link(url: SafeUrl, label: SafeText): PhrasingContent {
   return { type: "link", url, children: [{ type: "text", value: label }] };
 }
 
+declare const routeBrand: unique symbol;
+
+/**
+ * An internal destination on this site: a generated route, an in-page
+ * fragment, or a route plus fragment.
+ *
+ * Deliberately NOT a `SafeUrl`. `classifyUrl` exists to decide whether an
+ * evidence-supplied absolute URL may be published, and it rejects everything
+ * relative — correctly, because a relative URL from evidence would be a path
+ * traversal waiting to happen. Internal destinations are the opposite kind of
+ * value: this generator composes them from a slug it derived itself, and they
+ * must never be reachable from provider data. Giving them their own brand
+ * keeps the two apart, so an evidence string can never arrive where a route is
+ * expected and vice versa.
+ */
+export type Route = string & { readonly [routeBrand]: true };
+
+/** `/a/b/` — leading and trailing slash, slug segments only. */
+const ROUTE_PATH_PATTERN = /^\/(?:[a-z0-9][a-z0-9-]*\/)+$/u;
+
+/**
+ * A site route, optionally targeting one anchor inside it. `fragment` is an
+ * `Anchor`, so it has already passed `SLUG_PATTERN` and is a provider ID used
+ * verbatim — the same value the matching `<EvidenceAnchor>` carries.
+ */
+export function route(path: string, fragment?: Anchor): Route {
+  if (!ROUTE_PATH_PATTERN.test(path)) {
+    fail("UNSAFE_VALUE", `route ${path} is not a permitted internal path`, { path });
+  }
+  return (fragment === undefined ? path : `${path}#${fragment}`) as Route;
+}
+
+/** A destination inside the page being rendered. */
+export function fragmentRoute(fragment: Anchor): Route {
+  return `#${fragment}` as Route;
+}
+
+/** A link to an internal destination. The label may be evidence text. */
+export function routeLink(target: Route, label: SafeText): PhrasingContent {
+  return { type: "link", url: target, children: [{ type: "text", value: label }] };
+}
+
+/** A link whose label is an exact identifier, so it renders as code. */
+export function routeCodeLink(target: Route, label: SafeText): PhrasingContent {
+  return { type: "link", url: target, children: [{ type: "inlineCode", value: label }] };
+}
+
 export function paragraph(children: readonly PhrasingContent[]): RootContent {
   return { type: "paragraph", children: [...children] };
 }
@@ -134,11 +182,15 @@ export function table(header: readonly SafeText[], rows: readonly TableRow[]): R
   };
 }
 
-/** A void JSX element from the whitelist. Attribute values are re-checked here. */
-export function component(
+/**
+ * Re-check a component's attributes at build time. The guard checks the same
+ * thing again on the final text; this one exists so the failure names the
+ * calling renderer instead of a byte offset.
+ */
+function assertComponentAttributes(
   name: AllowedComponent,
-  attributes: Readonly<Record<string, string>> = {},
-): RootContent {
+  attributes: Readonly<Record<string, string>>,
+): void {
   const allowed = allowedAttributesFor(name);
   if (allowed === null) {
     fail("UNSAFE_MDX", `component ${name} is not on the allow-list`, { name });
@@ -158,23 +210,82 @@ export function component(
       });
     }
   }
+}
+
+function jsxAttributes(attributes: Readonly<Record<string, string>>) {
+  return Object.entries(attributes).map(([key, value]) => ({
+    type: "mdxJsxAttribute" as const,
+    name: key,
+    value,
+  }));
+}
+
+/** A void JSX element from the whitelist. Attribute values are re-checked here. */
+export function component(
+  name: AllowedComponent,
+  attributes: Readonly<Record<string, string>> = {},
+): RootContent {
+  assertComponentAttributes(name, attributes);
   // `mdxJsxFlowElement` is an MDX node, not core mdast, so it is not a member
   // of mdast's `RootContent` union; `mdast-util-mdx` is what serialises it.
   return {
     type: "mdxJsxFlowElement",
     name,
-    attributes: Object.entries(attributes).map(([key, value]) => ({
-      type: "mdxJsxAttribute" as const,
-      name: key,
-      value,
-    })),
+    attributes: jsxAttributes(attributes),
     children: [],
+  } as unknown as RootContent;
+}
+
+/**
+ * The same element in an inline position — inside a paragraph or a table cell.
+ *
+ * A table cell takes phrasing content, so the flow builder above cannot put an
+ * anchor next to a fact ID in a row. Without this, evidence rendered as a table
+ * could not be deep-linked at all, and the alternative (one heading per fact,
+ * 59 of them on the largest record) would bury the page's real structure.
+ */
+export function inlineComponent(
+  name: AllowedComponent,
+  attributes: Readonly<Record<string, string>> = {},
+): PhrasingContent {
+  assertComponentAttributes(name, attributes);
+  return {
+    type: "mdxJsxTextElement",
+    name,
+    attributes: jsxAttributes(attributes),
+    children: [],
+  } as unknown as PhrasingContent;
+}
+
+/**
+ * A JSX element that wraps generated blocks.
+ *
+ * The wrapped content is ordinary markdown and stays in the serialized file, so
+ * it reaches the built HTML and the search index either way — a container may
+ * change how content is presented, never whether it exists.
+ */
+export function containerComponent(
+  name: AllowedComponent,
+  attributes: Readonly<Record<string, string>>,
+  children: readonly RootContent[],
+): RootContent {
+  assertComponentAttributes(name, attributes);
+  return {
+    type: "mdxJsxFlowElement",
+    name,
+    attributes: jsxAttributes(attributes),
+    children: [...children],
   } as unknown as RootContent;
 }
 
 /** An anchor target that survives heading-text edits. */
 export function evidenceAnchor(id: Anchor): RootContent {
   return component("EvidenceAnchor", { id });
+}
+
+/** The same anchor target, for a table cell or a run of inline content. */
+export function inlineEvidenceAnchor(id: Anchor): PhrasingContent {
+  return inlineComponent("EvidenceAnchor", { id });
 }
 
 // --- serialize -------------------------------------------------------------
@@ -210,7 +321,15 @@ export function serializeBody(children: readonly RootContent[]): string {
     fence: "`",
     fences: true,
     rule: "-",
-    resourceLink: false,
+    // Always `[text](url)`, never the autolink form `<url>`.
+    //
+    // The serializer prefers an autolink whenever a link's text equals its URL,
+    // which is exactly what a citation looks like — and an autolink opens with
+    // a bare `<`, which `assertNoActiveDelimiters` rejects because it cannot
+    // tell one from the start of live JSX. Left at `false`, publishing a source
+    // link labelled with its own URL fails the build. The two layers have to
+    // agree, and they agree here rather than by loosening the guard.
+    resourceLink: true,
   });
 }
 

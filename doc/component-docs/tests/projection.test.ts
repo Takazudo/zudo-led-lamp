@@ -21,7 +21,7 @@ import {
   FIXTURE_SELECTION,
   fixtureBundle,
   fixtureInventory,
-} from "./fixtures.ts";
+} from "./projection-fixtures.ts";
 
 function project(selection: InstanceSelection = FIXTURE_SELECTION): {
   model: PublicViewModel;
