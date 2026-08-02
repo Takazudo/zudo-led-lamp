@@ -58,10 +58,20 @@ jobs:
     timeout-minutes: 15
 
     env:
-      # Written by "Build site", read by "Hand-authored links resolve". Outside
-      # the workspace on purpose — a stray log file inside it would be one more
+      # Written by "Build site", read by "Hand-authored links resolve". Just the
+      # filename: the steps put it under $RUNNER_TEMP themselves, which keeps it
+      # outside the workspace — a stray log file inside it would be one more
       # thing the generated-output drift check has to not trip over.
-      BUILD_LOG: ${{ runner.temp }}/doc-build.log
+      #
+      # The directory cannot be baked in here. `${{ runner.temp }}` does not
+      # resolve in job-level `env` (the `runner` context does not exist yet), and
+      # it does not merely fail the step — GitHub rejects the entire workflow
+      # file, so no job runs and the failure surfaces as the bare filename with
+      # no logs to read. A literal `$RUNNER_TEMP/...` here would not work either:
+      # the shell expands `$BUILD_LOG` once and does not re-expand what comes out
+      # of it. `RUNNER_TEMP` is an ordinary environment variable in every `run:`
+      # step, so the steps below join the two at the point of use.
+      BUILD_LOG_NAME: doc-build.log
 
     steps:
       - name: Checkout repository
@@ -115,6 +125,7 @@ jobs:
       - name: Build site
         working-directory: doc
         run: |
+          BUILD_LOG="$RUNNER_TEMP/$BUILD_LOG_NAME"
           if pnpm build >"$BUILD_LOG" 2>&1; then
             status=0
           else
@@ -154,7 +165,7 @@ jobs:
       # page leaves `pnpm build` at exit 0 and makes this step exit 1.
       - name: Hand-authored links resolve
         working-directory: doc
-        run: bash component-docs/scripts/check-zfb-link-warnings.sh "$BUILD_LOG"
+        run: bash component-docs/scripts/check-zfb-link-warnings.sh "$RUNNER_TEMP/$BUILD_LOG_NAME"
 
       # THE drift authority for every committed generated file. The
       # claude-resources generator rewrites doc/src/content/docs/claude*/ on
