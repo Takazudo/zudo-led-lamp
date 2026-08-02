@@ -76,6 +76,7 @@ import {
   openDomainSummary,
   orderedFactClasses,
   ownerSkillOf,
+  placementSummary,
   presentTerms,
   recordRoute,
   samePage,
@@ -117,8 +118,23 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
     `records/${identity.slug}/index.mdx`,
     {
       title: identity.mpn,
+      // Carries the exact identifiers on purpose. The site's search index
+      // stores `title` and `description` whole but caps `body` at 300
+      // characters (`MAX_BODY_LENGTH` in zudo-doc, not configurable), and
+      // matching is plain case-insensitive substring — so a term is findable
+      // only where it literally appears in one of these two fields. The
+      // orderable ID and the board/refdes placements are exactly the terms a
+      // reader searches by and they sit far past the body cut-off, so they go
+      // here. Keep this line short enough to still read as a description: it
+      // is also the meta description and the search-result subtitle.
       description: joinSafe(
-        [identity.function, identity.manufacturer, identity.recordId],
+        [
+          identity.function,
+          identity.manufacturer,
+          identity.lcsc,
+          placementSummary(identity.placements),
+          identity.recordId,
+        ],
         " — ",
       ),
       // Ordering inside `records/` is inventory order, which the model already

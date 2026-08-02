@@ -522,6 +522,22 @@ export function ownerSkillOf(record: PublicRecord): SafeText | null {
   return record.identity.ownerSkill;
 }
 
+/**
+ * The hub above `/docs/claude-skills/` and `/docs/claude-md/`.
+ *
+ * #61 gave the sixth header slot to `Components`, so this hub no longer has a
+ * header entry of its own. The landing page links to it to keep the raw
+ * agent-resource tree reachable by navigation and not only by search or a
+ * remembered URL.
+ *
+ * This is a page-level "browse everything" destination, which is why it exists
+ * while a per-record fallback deliberately does not: a hub link on the landing
+ * page promises nothing about any particular record, whereas a record page
+ * falling back to the resource index would read as *that record's* bundle and
+ * lead somewhere else.
+ */
+export const AGENT_RESOURCES_HUB_ROUTE: Route = route("/docs/claude/");
+
 /** Where a record's raw evidence bundle is published, when the owner is known. */
 export function agentResourceDestination(record: PublicRecord): Route | null {
   const ownerSkill = ownerSkillOf(record);
