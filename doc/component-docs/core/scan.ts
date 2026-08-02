@@ -126,8 +126,7 @@ const NAMED_ENTITIES: Readonly<Record<string, string>> = {
  * function, it cannot introduce a false positive.
  */
 export function normalizeForScan(value: string): string {
-  return collapseWhitespace(unescapeBackslashes(decodeReferences(value.normalize("NFC"))))
-    .toLowerCase();
+  return collapseWhitespace(foldBackslashes(decodeReferences(value.normalize("NFC")))).toLowerCase();
 }
 
 function decodeReferences(value: string): string {
@@ -153,19 +152,33 @@ function decodeReferences(value: string): string {
 }
 
 /**
- * Drop one level of backslash escaping, left to right so `\\&` yields `\&` and
- * not `&`. `\uXXXX` is decoded as the JSON escape it is — `search-index.json`
- * and `routes.json` are JSON, and a non-ASCII denied value would arrive that way
- * from some serializers.
+ * Decode the backslash escapes that carry information, then delete every
+ * remaining backslash.
+ *
+ * Deleting rather than unescaping is deliberate, and it is what makes the
+ * comparison symmetric. One level of unescaping cannot tell a literal backslash
+ * from an escape character without knowing the encoding — so a value that
+ * contains a real backslash normalises one way when read raw from the evidence
+ * (`\ ` → ` `) and another way when read back out of JSON (`\\` → `\`), and the
+ * canary silently stops matching its own leak. Deleting all of them collapses
+ * both spellings onto the same string.
+ *
+ * The cost is that two values differing only in backslashes compare equal. That
+ * only ever makes the scan match MORE, never less, and both the subtraction and
+ * the search run through this same function — so it cannot manufacture a false
+ * positive, only a redundant one.
+ *
+ * `\uXXXX` is decoded first because it encodes a character rather than escaping
+ * one, and `\n`/`\t`/`\r` become spaces so that whitespace collapsing sees them.
  */
-function unescapeBackslashes(value: string): string {
+function foldBackslashes(value: string): string {
   let result = "";
   for (let index = 0; index < value.length; index += 1) {
-    if (value[index] !== "\\" || index + 1 >= value.length) {
+    if (value[index] !== "\\") {
       result += value[index];
       continue;
     }
-    const next = value[index + 1] as string;
+    const next = index + 1 < value.length ? (value[index + 1] as string) : "";
     if (next === "u" && /^[0-9A-Fa-f]{4}$/u.test(value.slice(index + 2, index + 6))) {
       result += String.fromCharCode(Number.parseInt(value.slice(index + 2, index + 6), 16));
       index += 5;
@@ -176,8 +189,8 @@ function unescapeBackslashes(value: string): string {
       index += 1;
       continue;
     }
-    result += next;
-    index += 1;
+    // Drop the backslash itself and keep looking at the next character on its
+    // own terms — `\\<` must fold to the same thing `<` does.
   }
   return result;
 }
