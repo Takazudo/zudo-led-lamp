@@ -13,10 +13,10 @@ pins get no_connect markers. Connectivity is verified separately by
 verify_netlist.py diffing a kicad-cli netlist export against the same spec.
 
 All node UUIDs are derived deterministically from stable identity strings
-(project + ref/net/pin), not random — CI regenerates both boards and diffs
-the result against the checked-in .kicad_sch (scripts/schgen/verify.sh calls
-this "regen-idempotency"); random UUIDs would make that diff non-empty on
-every run regardless of whether the spec actually changed.
+(project + ref/net/pin), not random — the "Regen-idempotency check" step in
+.github/workflows/component-spec-skills.yml regenerates both boards and diffs
+the result against the checked-in .kicad_sch; random UUIDs would make that
+diff non-empty on every run regardless of whether the spec actually changed.
 """
 import math
 import os
