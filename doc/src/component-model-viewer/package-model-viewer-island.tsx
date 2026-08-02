@@ -37,7 +37,7 @@ export function PackageModelViewerIsland({ descriptor: encoded }: PackageModelVi
           setViewerState(
             root,
             "error",
-            "The interactive package model could not be displayed. The package reference below is still available.",
+            "The interactive package model could not be displayed. The package reference on this page is still available.",
           );
         }
       });

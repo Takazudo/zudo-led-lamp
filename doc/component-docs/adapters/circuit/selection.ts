@@ -33,7 +33,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
   checkedOn: "2026-08-03",
   expectedContent: "PDF",
   downloadedPdfSourceIds: [
-    "src-type-c-primary-drawing", "src-stusb-ds12499", "src-pesd24vs1ub",
+    "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
     "src-rd-uniroyal-smd-sp-001", "src-umw-ao3401a", "src-high-diode-primary",
     "src-c13585-page", "src-c14663-yageo", "src-c15849-page",
     "src-c25803-uniroyal", "src-c22807-uniroyal", "src-c23179-uniroyal",
@@ -292,7 +292,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   // SOURCE UNAVAILABLE. Normal generation is offline and trusts this committed
   // review decision; it never re-fetches these URLs.
   documentSelections: [
-    { recordId: "rec-type-c-31-m-17", sourceId: "src-type-c-primary-drawing", documentKind: "drawing" },
+    { recordId: "rec-type-c-31-m-17", sourceId: "src-type-c-c283540", documentKind: "drawing" },
     { recordId: "rec-stusb4500qtr", sourceId: "src-stusb-ds12499", documentKind: "datasheet" },
     { recordId: "rec-pesd24vs1ub", sourceId: "src-pesd24vs1ub", documentKind: "datasheet" },
     { recordId: "rec-rd-0603waf5101t5e", sourceId: "src-rd-uniroyal-smd-sp-001", documentKind: "specification" },

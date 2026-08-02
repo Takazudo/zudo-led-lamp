@@ -152,6 +152,10 @@ jobs:
             exit "$status"
           fi
 
+      - name: Built component references are complete and minimal
+        working-directory: doc
+        run: pnpm check:built-component-references
+
       - name: Package model viewer browser smoke
         working-directory: doc
         run: pnpm test:model-viewer:browser

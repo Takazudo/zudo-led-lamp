@@ -20,6 +20,7 @@
     "generate:models": "node --experimental-strip-types component-docs/cli/models.ts",
     "check:components": "node --experimental-strip-types component-docs/cli/check.ts",
     "check:models": "node --experimental-strip-types component-docs/cli/models.ts --check",
+    "check:built-component-references": "node component-docs/scripts/check-built-component-references.mjs",
     "generate:footprint-previews": "node --experimental-strip-types component-docs/footprint-previews/generate.ts",
     "check:footprint-previews": "node --experimental-strip-types component-docs/footprint-previews/check.ts",
     "scan:artifacts": "node --experimental-strip-types component-docs/cli/scan-artifacts.ts",
@@ -32,7 +33,7 @@
     "setup:doc-skill:claude": "bash scripts/setup-doc-skill.sh --target claude",
     "setup:doc-skill:codex": "bash scripts/setup-doc-skill.sh --target codex",
     "setup:doc-skill:both": "bash scripts/setup-doc-skill.sh --target both",
-    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill"
+    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm build && pnpm check:built-component-references && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill"
   },
   "dependencies": {
     "@takazudo/zdtp": "0.4.9",

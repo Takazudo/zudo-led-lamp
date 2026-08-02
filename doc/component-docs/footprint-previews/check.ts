@@ -7,6 +7,7 @@ import {
 } from "./config.ts";
 import { aggregateHash, sha256 } from "./hash.ts";
 import type { FootprintPreviewManifest, FootprintSelection } from "./manifest.ts";
+import { assertFootprintLibraryParity } from "./parity.ts";
 import { readFootprintSelections } from "./selection.ts";
 import { validateSvg } from "./svg.ts";
 
@@ -14,7 +15,9 @@ export async function checkFootprintPreviews(
   requestedSelections?: readonly FootprintSelection[],
   root = PREVIEW_ROOT,
   footprintRoot = FOOTPRINT_ROOT,
+  masterRoot?: string,
 ): Promise<void> {
+  await assertFootprintLibraryParity(masterRoot, footprintRoot);
   const selections = requestedSelections ?? await readFootprintSelections();
   const manifestPath = root === PREVIEW_ROOT ? PREVIEW_MANIFEST : join(root, "manifest.json");
   const rootStat = await lstat(root);

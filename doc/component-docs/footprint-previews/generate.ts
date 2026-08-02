@@ -18,6 +18,7 @@ import {
 import { suppressFootprintText } from "./footprint.ts";
 import { aggregateHash, sha256 } from "./hash.ts";
 import type { FootprintPreviewEntry, FootprintPreviewManifest, FootprintSelection } from "./manifest.ts";
+import { assertFootprintLibraryParity } from "./parity.ts";
 import { readFootprintSelections } from "./selection.ts";
 import { normalizeSvg } from "./svg.ts";
 
@@ -26,6 +27,7 @@ const execFileAsync = promisify(execFile);
 export async function generateFootprintPreviews(
   requestedSelections?: readonly FootprintSelection[],
 ): Promise<FootprintPreviewManifest> {
+  await assertFootprintLibraryParity();
   const selections = requestedSelections ?? await readFootprintSelections();
   assertSelection(selections);
   const temporaryRoot = await mkdtemp(join(tmpdir(), "zld-footprint-previews-"));
