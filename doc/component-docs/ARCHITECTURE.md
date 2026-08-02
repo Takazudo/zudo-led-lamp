@@ -382,19 +382,26 @@ touched.
 
 ## 10. CI
 
-Existing gates, unchanged by this work:
-
 - `.github/workflows/pr-checks.yml` — `pnpm check` → `pnpm build` →
   `git diff --exit-code -- doc/src/content/docs`. Because `build` now runs
   `generate:components` first, **generated component pages must be committed** or
-  this step fails. That is the intended contract.
+  this step fails. That is the intended contract. Note the step diffs *all* of
+  `doc/src/content/docs`, not just `components/` — editing `doc/CLAUDE.md` also
+  regenerates `doc/src/content/docs/claude-md/doc.mdx`.
 - `.github/workflows/component-spec-skills.yml` — the Python validator, its unit
-  tests, the forward tests, and schematic regen-idempotency.
+  tests, the forward tests, and schematic regen-idempotency. Unchanged.
 
-**#65 must add** `pnpm test:components` and `pnpm check:components` to
-`pr-checks.yml` (and to the paths filter: `doc/component-docs/**` is already covered
-by `doc/**`). `check:components` covers `doc/component-docs/preflight.json`, which
-the existing `git diff` step does not see.
+One workflow change was made here, because this work is what introduced the
+dependency: `pr-checks.yml` and `main-deploy.yml` now run
+`actions/setup-python@v5` with `python-version: '3.12'`. `pnpm build` shells out
+to the validator, and depending on whichever Python the runner image happens to
+ship would let CI and `component-spec-skills.yml` silently disagree.
+
+**#65 still owns** adding `pnpm test:components` and `pnpm check:components` to
+`pr-checks.yml` (the paths filter needs nothing new — `doc/component-docs/**` is
+already covered by `doc/**`). `check:components` covers
+`doc/component-docs/preflight.json`, which the existing `git diff` step does not
+see.
 
 ## 11. Direct dependencies added
 
