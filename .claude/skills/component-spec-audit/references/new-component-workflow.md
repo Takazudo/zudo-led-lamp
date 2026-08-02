@@ -117,7 +117,7 @@ make the workflow progress; stop and obtain the missing design or review decisio
    ```
 
 2. Regenerate component MDX and its committed preflight report, review the exact
-   corpus counts, then run the complete checks:
+   corpus counts, then run the focused pre-build checks:
 
    ```sh
    pnpm --dir doc generate:components
@@ -127,14 +127,15 @@ make the workflow progress; stop and obtain the missing design or review decisio
    pnpm --dir doc check
    pnpm --dir doc test:components
    pnpm --dir doc check:components
-   pnpm --dir doc scan:artifacts
-   pnpm --dir doc scan:doc-skill
    ```
 
-3. Run `pnpm --dir doc b4push` before delivery. Commit reviewed generated component
-   MDX, `component-docs/preflight.json`, footprint previews, public WRL previews, and
-   every changed generator-owned `doc/src/content/docs/claude*` projection with their
-   authored source changes; never hand-edit generated files. Inspect them with:
+3. Run `pnpm --dir doc b4push` before delivery. It builds the current site before
+   running the built-reference, artifact, and isolated doc-skill scans, so those gates
+   never inspect missing or stale `doc/dist` output. Commit reviewed generated
+   component MDX, `component-docs/preflight.json`, footprint previews, public WRL
+   previews, and every changed generator-owned `doc/src/content/docs/claude*`
+   projection with their authored source changes; never hand-edit generated files.
+   Inspect them with:
 
    ```sh
    git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews
