@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, it } from "node:test";
@@ -142,6 +142,68 @@ describe("emit", () => {
   it("writes nested pages", async () => {
     const result = await emit({ root, pages: [page("records/al8860mp-13.mdx", "x")] });
     assert.deepEqual(result.written, ["records/al8860mp-13.mdx"]);
+  });
+
+  /**
+   * These assert on the OUTSIDE directory, not on the rejection.
+   *
+   * Before the path-walk guard, both cases already rejected — but from the
+   * pruning walk at the very end of `emit`, which runs after the page has been
+   * written. So "it throws PATH_CONTAINMENT" passed while the bytes had already
+   * landed in the link target. The escape is only actually closed if the
+   * outside directory stays empty.
+   */
+  describe("a symlink on the path out of the owned tree", () => {
+    it("writes nothing outside when an intermediate directory is a symlink", async () => {
+      const outside = await mkdtemp(join(tmpdir(), "component-docs-outside-"));
+      try {
+        await symlink(outside, join(root, "records"));
+
+        await assert.rejects(
+          emit({ root, pages: [page("records/escaped.mdx", "payload")] }),
+          (error: unknown) =>
+            error instanceof ComponentDocsError && error.code === "PATH_CONTAINMENT",
+        );
+        assert.deepEqual(await readdir(outside), [], "a page was written outside the owned root");
+      } finally {
+        await rm(outside, { recursive: true, force: true });
+      }
+    });
+
+    it("writes nothing outside when the root itself is a symlink", async () => {
+      const outside = await mkdtemp(join(tmpdir(), "component-docs-outside-"));
+      const linkedRoot = join(root, "linked-root");
+      try {
+        await symlink(outside, linkedRoot);
+
+        await assert.rejects(
+          emit({ root: linkedRoot, pages: [page("index.mdx", "payload")] }),
+          (error: unknown) =>
+            error instanceof ComponentDocsError && error.code === "PATH_CONTAINMENT",
+        );
+        assert.deepEqual(await readdir(outside), [], "a page was written outside the owned root");
+      } finally {
+        await rm(outside, { recursive: true, force: true });
+      }
+    });
+
+    it("refuses a drift check that would read through a symlinked parent", async () => {
+      // `check:components` decides whether committed output is stale. Reading
+      // through a symlink would compare against a file this generator does not
+      // own and could report "up to date" for content it never wrote.
+      const outside = await mkdtemp(join(tmpdir(), "component-docs-outside-"));
+      try {
+        await symlink(outside, join(root, "records"));
+
+        await assert.rejects(
+          diffAgainstDisk({ root, pages: [page("records/escaped.mdx", "payload")] }),
+          (error: unknown) =>
+            error instanceof ComponentDocsError && error.code === "PATH_CONTAINMENT",
+        );
+      } finally {
+        await rm(outside, { recursive: true, force: true });
+      }
+    });
   });
 });
 

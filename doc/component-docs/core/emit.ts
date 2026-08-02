@@ -66,6 +66,33 @@ export async function assertNotSymlink(path: string): Promise<void> {
   }
 }
 
+/**
+ * Refuse a symlink anywhere on the walk from `root` down to `target`.
+ *
+ * `assertContained` is **lexical**: it proves the resolved string sits under the
+ * root, not that walking there stays inside it. `mkdir -p`, `writeFile` and
+ * `lstat` all follow an intermediate symlink, so checking only the leaf lets a
+ * symlinked `records/` redirect a write outside the owned tree entirely — and
+ * the pruning walk at the end of `emit` notices only *after* the bytes have
+ * landed. Reproduced before this was added: a symlinked `records/` wrote its
+ * page into the link target and then raised PATH_CONTAINMENT, i.e. the error
+ * arrived one write too late.
+ *
+ * Segments that do not exist yet are fine (`assertNotSymlink` no-ops on ENOENT)
+ * — `mkdir` will create them as real directories.
+ */
+export async function assertPathNotSymlinked(root: string, target: string): Promise<void> {
+  const resolvedRoot = resolve(root);
+  await assertNotSymlink(resolvedRoot);
+
+  let current = resolvedRoot;
+  for (const segment of relative(resolvedRoot, resolve(target)).split(sep)) {
+    if (segment === "") continue;
+    current = join(current, segment);
+    await assertNotSymlink(current);
+  }
+}
+
 export async function emit(plan: EmitPlan): Promise<EmitResult> {
   const root = resolve(plan.root);
   await mkdir(root, { recursive: true });
@@ -78,6 +105,10 @@ export async function emit(plan: EmitPlan): Promise<EmitResult> {
     const target = assertContained(root, join(root, page.relativePath), page.relativePath);
     owned.add(target);
 
+    // Before mkdir, not after: mkdir -p happily traverses an existing symlinked
+    // parent, so a check that runs afterwards has already let the directory be
+    // created outside the owned tree.
+    await assertPathNotSymlinked(root, target);
     await mkdir(dirname(target), { recursive: true });
     await assertNotSymlink(target);
 
@@ -108,6 +139,10 @@ export async function diffAgainstDisk(plan: EmitPlan): Promise<readonly string[]
   for (const page of plan.pages) {
     const target = assertContained(root, join(root, page.relativePath), page.relativePath);
     owned.add(target);
+    // A symlinked parent would point the drift read at a file outside the owned
+    // tree, so `check:components` could report "up to date" against content this
+    // generator does not own. Same guard as the write path, same reason.
+    await assertPathNotSymlinked(root, target);
     const existing = await readIfPresent(target);
     if (existing === null) drift.push(`missing: ${page.relativePath}`);
     else if (existing !== page.contents) drift.push(`changed: ${page.relativePath}`);
