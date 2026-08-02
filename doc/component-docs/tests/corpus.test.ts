@@ -66,29 +66,65 @@ describe("the corpus normalizes to the figures the epic states", () => {
     assert.equal(sum(model.records, (entry) => entry.sources.length), 81);
     assert.equal(sum(model.records, (entry) => entry.facts.length), 369);
     assert.equal(sum(model.records, (entry) => entry.coverage.length), 109);
-    assert.equal(sum(model.records, (entry) => entry.interactions.length), 50);
     assert.equal(sum(model.records, (entry) => entry.pinMaps.length), 33);
     assert.equal(
       sum(model.records, (entry) => sum(entry.pinMaps, (map) => map.pins.length)),
       140,
     );
+
+    // Interactions are the one relation that fans out: 50 distinct interactions
+    // land on 59 record pages, because six of them name a standalone and its
+    // subordinates and every participant must show its own involvement.
+    const interactions = model.records.flatMap((entry) => entry.interactions);
+    assert.equal(interactions.length, 59);
+    assert.equal(new Set(interactions.map((entry) => entry.interactionId)).size, 50);
   });
 
-  it("gives every record a unique, route-safe slug and a unique anchor", () => {
+  it("gives every record a unique, route-safe slug and page-unique anchors", () => {
     const slugs = model.records.map((entry) => entry.identity.slug);
     assert.equal(new Set(slugs).size, 32);
     for (const slug of slugs) assert.match(slug, SLUG_PATTERN);
 
-    const anchors = model.records.flatMap((entry) => [
+    // Anchors become HTML ids, so uniqueness is a per-document invariant.
+    let total = 0;
+    for (const entry of model.records) {
+      const anchors = [
+        entry.identity.anchor,
+        ...entry.sources.map((value) => value.anchor),
+        ...entry.facts.map((value) => value.anchor),
+        ...entry.coverage.map((value) => value.anchor),
+        ...entry.interactions.map((value) => value.anchor),
+        ...entry.pinMaps.map((value) => value.anchor),
+      ];
+      assert.equal(new Set(anchors).size, anchors.length, entry.identity.slug);
+      total += anchors.length;
+    }
+    assert.equal(total, 32 + 81 + 369 + 109 + 59 + 33);
+
+    // Record-scoped anchors stay globally unique — each belongs to one page.
+    const scoped = model.records.flatMap((entry) => [
       entry.identity.anchor,
       ...entry.sources.map((value) => value.anchor),
       ...entry.facts.map((value) => value.anchor),
       ...entry.coverage.map((value) => value.anchor),
-      ...entry.interactions.map((value) => value.anchor),
       ...entry.pinMaps.map((value) => value.anchor),
     ]);
-    assert.equal(new Set(anchors).size, anchors.length);
-    assert.equal(anchors.length, 32 + 81 + 369 + 109 + 50 + 33);
+    assert.equal(new Set(scoped).size, scoped.length);
+  });
+
+  it("names the owner bundle on every record", () => {
+    const owners = new Set(model.records.map((entry) => entry.identity.ownerSkill));
+    assert.equal(owners.size, 13);
+    assert.equal(record("al8860mp-13").identity.ownerSkill, "component-al8860mp-13");
+    assert.equal(record("ro-ss26").identity.ownerSkill, "component-al8860mp-13");
+    assert.equal(record("c13585").identity.ownerSkill, "component-project-passives");
+    // It is the bundle the evidence really came from, not a guess from the ID.
+    for (const entry of index.records) {
+      assert.equal(
+        record(entry.record.record_id.replace(/^rec-/u, "")).identity.ownerSkill,
+        entry.skill,
+      );
+    }
   });
 
   it("orders each standalone record immediately before its own subordinates", () => {
@@ -247,11 +283,8 @@ describe("the real records the epic calls out", () => {
     ]);
   });
 
-  it("publishes an interaction on exactly one page while naming every participant", () => {
+  it("publishes an interaction on every record it names", () => {
     const interactions = model.records.flatMap((entry) => entry.interactions);
-    assert.equal(interactions.length, 50);
-    assert.equal(new Set(interactions.map((entry) => entry.interactionId)).size, 50);
-
     const powerStage = interactions.find(
       (entry) => entry.interactionId === "int-al8860-power-stage",
     );
@@ -262,17 +295,30 @@ describe("the real records the epic calls out", () => {
       "rec-fxl0630-330-m",
       "rec-ro-ss26",
     ]);
-    // Canonical home is the standalone parent, and only the parent.
+    // All four participants carry it, the subordinates included.
+    for (const slug of ["al8860mp-13", "rlp25feer200", "fxl0630-330-m", "ro-ss26"]) {
+      assert.ok(
+        record(slug).interactions.some(
+          (entry) => entry.interactionId === "int-al8860-power-stage",
+        ),
+        `${slug} does not carry int-al8860-power-stage`,
+      );
+    }
     assert.deepEqual(
       record("al8860mp-13").interactions.map((entry) => entry.interactionId),
       ["int-al8860-control", "int-al8860-power-stage"],
     );
-    assert.equal(
-      record("ro-ss26").interactions.some(
-        (entry) => entry.interactionId === "int-al8860-power-stage",
-      ),
-      false,
-    );
+
+    // A record carries exactly the interactions its manifest lists — the
+    // projection never invents an attachment and never drops one.
+    for (const entry of index.records) {
+      assert.deepEqual(
+        record(entry.record.record_id.replace(/^rec-/u, "")).interactions.map(
+          (value) => value.interactionId,
+        ),
+        entry.record.interaction_ids,
+      );
+    }
 
     // Every participant of every published interaction is itself published.
     const published = new Set<string>(model.records.map((entry) => entry.identity.recordId));

@@ -190,6 +190,14 @@ Rules the shape enforces:
   stay separate fields;
 - no file paths, no provider identifiers, no raw JSON blobs.
 
+**`PublicRecordIdentity.ownerSkill`** was added in #59: the owner bundle's name
+(`component-al8860mp-13`) is what lets a record page link back to its raw agent
+resource at `/docs/claude-skills/<name>/`, and it is not derivable — 13 owners
+cover 32 records and `component-project-passives` owns eleven of them.
+`FIELD_KEYS` gained `record.ownerSkill` and the matrix publishes it; those bundle
+routes are already on the live site, so it publishes a route rather than a new
+fact.
+
 **One shape change since Wave 1.** `PublicFact["value"]` was frozen as
 `number | SafeText`. Three facts in the corpus record a distributor identity
 binding as a JSON object (`{lcsc, manufacturer, mpn, variant}`), and #59 forbids
@@ -215,7 +223,12 @@ fatal `ADAPTER_CONTRACT` — there is no fourth shape to guess at.
 - **Anchors** are provider IDs verbatim (`#fact-al8860-vin-absolute-max`,
   `#src-al8860-ds39014`). They are emitted by `<EvidenceAnchor id="…" />` rather
   than derived from heading text, so rewording a heading never breaks an external
-  deep link. Global uniqueness is asserted every run.
+  deep link. Uniqueness is asserted every run, **per page** — an anchor becomes an
+  HTML id, and that is the document-scoped invariant. Record-scoped nodes
+  (sources, facts, coverage, pin maps) each carry a single `recordId` and so stay
+  globally unique anyway; interactions legitimately repeat across the pages of the
+  records they name, and a separate assertion proves one anchor never denotes two
+  different interactions.
 - **Ordering** is inventory-line order, each standalone record immediately followed
   by its own subordinates. The inventory is generated identity truth, so its order
   is already stable. Sorting is `byCodeUnit`, never `localeCompare` — ICU-dependent
@@ -223,13 +236,12 @@ fatal `ADAPTER_CONTRACT` — there is no fourth shape to guess at.
   check. Within a record, sources and facts follow the manifest's own order, which
   is curated (primary source first); coverage, pin maps and routes follow file
   order.
-- **An interaction is published on exactly one page.** Six of the 50 interactions
-  name a standalone record *and* its subordinates. Because anchors are globally
-  unique, the canonical home is the **first participant in publication order** —
-  the standalone parent in every current case. `interaction.recordIds` still names
-  every participant, so a subordinate's page can link to the one anchor that
-  exists. Attaching each interaction to every record it names would emit 59
-  attachments and nine duplicate anchors.
+- **An interaction is published on every record it names.** Six of the 50
+  interactions name a standalone record *and* its subordinates, so 50 interactions
+  land on 59 record pages; a reader on `rec-fxl0630-330-m` has to see that it
+  participates in the AL8860 power stage. This is why anchor uniqueness is scoped
+  per page (see above): the same `#int-…` fragment appears on up to four pages,
+  each time denoting the same interaction, which is what an HTML id has to mean.
 - **Selection is closed under published links.** A published record whose source is
   unselected, a published fact whose dependency is on an unpublished record, and a
   published interaction naming an unpublished record are each a fatal

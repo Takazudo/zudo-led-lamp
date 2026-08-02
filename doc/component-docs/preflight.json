@@ -162,6 +162,12 @@
       "withheld": 0
     },
     {
+      "key": "record.ownerSkill",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
       "key": "record.mpn",
       "decision": "PUBLISH",
       "emitted": 32,
@@ -440,31 +446,31 @@
     {
       "key": "interaction.interactionId",
       "decision": "PUBLISH",
-      "emitted": 50,
+      "emitted": 59,
       "withheld": 0
     },
     {
       "key": "interaction.recordIds",
       "decision": "PUBLISH",
-      "emitted": 50,
+      "emitted": 59,
       "withheld": 0
     },
     {
       "key": "interaction.factIds",
       "decision": "PUBLISH",
-      "emitted": 50,
+      "emitted": 59,
       "withheld": 0
     },
     {
       "key": "interaction.conditions",
       "decision": "PUBLISH",
-      "emitted": 50,
+      "emitted": 59,
       "withheld": 0
     },
     {
       "key": "interaction.verdict",
       "decision": "PUBLISH",
-      "emitted": 50,
+      "emitted": 59,
       "withheld": 0
     },
     {
@@ -1045,7 +1051,7 @@
     "publishedCoverageDomains": 109,
     "publishedFacts": 369,
     "publishedIntegrationRules": 0,
-    "publishedInteractions": 50,
+    "publishedInteractions": 59,
     "publishedPinMaps": 33,
     "publishedRecords": 32,
     "publishedSources": 81

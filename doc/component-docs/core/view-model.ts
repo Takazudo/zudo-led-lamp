@@ -70,6 +70,13 @@ export type PublicRecordIdentity = {
   readonly parentRecordId: SafeText | null;
   readonly parentSlug: Slug | null;
   readonly lineId: SafeText;
+  /**
+   * The owner bundle that holds this record's evidence, e.g.
+   * `component-al8860mp-13`. Not derivable from anything else here — 13 owners
+   * cover 32 records and one of them owns eleven — and it is what lets a record
+   * page link back to its raw agent resource at `/docs/claude-skills/<name>/`.
+   */
+  readonly ownerSkill: SafeText;
   readonly mpn: SafeText;
   readonly manufacturer: SafeText;
   readonly lcsc: SafeText;

@@ -234,39 +234,57 @@ describe("fact values keep their JSON shape", () => {
   });
 });
 
-describe("interactions have exactly one canonical page", () => {
-  it("attaches a multi-record interaction to the first participant in publication order", () => {
+describe("interactions reach every record they name", () => {
+  it("attaches a multi-record interaction to each participant", () => {
     const { model } = project();
-    assert.deepEqual(
-      recordOf(model, "driver").interactions.map((entry) => entry.interactionId),
-      ["int-power-stage"],
-    );
-    // The subordinate participates but does not duplicate the anchor.
-    assert.deepEqual(recordOf(model, "sense").interactions, []);
+    for (const slug of ["driver", "sense"]) {
+      assert.deepEqual(
+        recordOf(model, slug).interactions.map((entry) => entry.interactionId),
+        ["int-power-stage"],
+        `${slug} is a participant and must carry the interaction`,
+      );
+    }
+    // A record that participates in nothing carries nothing.
+    assert.deepEqual(recordOf(model, "handfit").interactions, []);
   });
 
-  it("still publishes the full participant list, so the other pages can link in", () => {
+  it("publishes the same participant list on every page it lands on", () => {
     const { model } = project();
-    const interaction = recordOf(model, "driver").interactions[0];
-    assert.deepEqual(interaction.recordIds, ["rec-driver", "rec-sense"]);
-    assert.deepEqual(interaction.factIds, [
-      "fact-driver-current-min",
-      "fact-sense-resistance-max",
-    ]);
-    assert.equal(interaction.verdict, "NEEDS BENCH");
+    for (const slug of ["driver", "sense"]) {
+      const interaction = recordOf(model, slug).interactions[0];
+      assert.deepEqual(interaction.recordIds, ["rec-driver", "rec-sense"]);
+      assert.deepEqual(interaction.factIds, [
+        "fact-driver-current-min",
+        "fact-sense-resistance-max",
+      ]);
+      assert.equal(interaction.verdict, "NEEDS BENCH");
+      assert.equal(interaction.anchor, "int-power-stage");
+    }
   });
 
-  it("emits every anchor exactly once across the whole model", () => {
+  it("emits every anchor exactly once within each page", () => {
     const { model } = project();
-    const anchors = model.records.flatMap((record) => [
-      record.identity.anchor,
-      ...record.sources.map((entry) => entry.anchor),
-      ...record.facts.map((entry) => entry.anchor),
-      ...record.coverage.map((entry) => entry.anchor),
-      ...record.interactions.map((entry) => entry.anchor),
-      ...record.pinMaps.map((entry) => entry.anchor),
-    ]);
-    assert.equal(new Set(anchors).size, anchors.length);
+    for (const record of model.records) {
+      const anchors = [
+        record.identity.anchor,
+        ...record.sources.map((entry) => entry.anchor),
+        ...record.facts.map((entry) => entry.anchor),
+        ...record.coverage.map((entry) => entry.anchor),
+        ...record.interactions.map((entry) => entry.anchor),
+        ...record.pinMaps.map((entry) => entry.anchor),
+      ];
+      assert.equal(new Set(anchors).size, anchors.length, record.identity.slug);
+    }
+  });
+
+  it("never lets one anchor denote two different interactions", () => {
+    const { model } = project();
+    const byAnchor = new Map<string, string>();
+    for (const interaction of model.records.flatMap((record) => record.interactions)) {
+      const seen = byAnchor.get(interaction.anchor);
+      if (seen !== undefined) assert.equal(seen, interaction.interactionId);
+      byAnchor.set(interaction.anchor, interaction.interactionId);
+    }
   });
 });
 

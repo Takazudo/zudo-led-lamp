@@ -112,30 +112,8 @@ export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): P
     ordered.map((entry) => [entry.record.record_id, recordSlug(entry.record.record_id)]),
   );
 
-  /**
-   * An interaction is published on exactly one page.
-   *
-   * `core/pipeline.ts` asserts anchor uniqueness across the whole site, and
-   * that is the right rule: an anchor is a provider ID verbatim, so a reader
-   * holding an interaction ID must be able to build one URL for it. Six of the
-   * interactions name a standalone record and its subordinates; publishing all
-   * of them on every participant's page would put the same fragment on four
-   * pages. The canonical home is the first participant in publication order,
-   * which is the standalone parent in every case. The full participant list
-   * stays on the interaction itself, so a subordinate page can still link to
-   * it.
-   */
-  const canonicalInteractionRecord = new Map<string, string>();
-  for (const entry of ordered) {
-    for (const interactionId of entry.interactionIds) {
-      if (!canonicalInteractionRecord.has(interactionId)) {
-        canonicalInteractionRecord.set(interactionId, entry.record.record_id);
-      }
-    }
-  }
-
   const records: PublicRecord[] = ordered.map((entry) =>
-    projectRecord(entry, index, slugByRecordId, canonicalInteractionRecord, policy),
+    projectRecord(entry, index, slugByRecordId, policy),
   );
 
   const corpus: CorpusSummary = {
@@ -174,22 +152,21 @@ function projectRecord(
   entry: IndexedRecord,
   index: EvidenceIndex,
   slugByRecordId: ReadonlyMap<string, Slug>,
-  canonicalInteractionRecord: ReadonlyMap<string, string>,
   policy: PublicationPolicy,
 ): PublicRecord {
-  const recordId = entry.record.record_id;
-
   return {
     identity: buildIdentity(entry, slugByRecordId, policy),
     aliases: projectAliases(entry, policy),
     sources: entry.sources.map((source) => projectSource(source, policy)),
     facts: entry.facts.map((fact) => projectFact(fact, policy)),
     coverage: entry.coverage.map((domain) => projectCoverage(domain, policy)),
-    interactions: entry.interactionIds
-      .filter((interactionId) => canonicalInteractionRecord.get(interactionId) === recordId)
-      .map((interactionId) =>
-        projectInteraction(interactionOf(index, interactionId), policy),
-      ),
+    // Every record the interaction names carries it, in the manifest's own
+    // order. Six interactions span a standalone and its subordinates, and a
+    // reader on the subordinate's page has to see that it participates —
+    // `pipeline.ts` scopes anchor uniqueness to a page for exactly this.
+    interactions: entry.interactionIds.map((interactionId) =>
+      projectInteraction(interactionOf(index, interactionId), policy),
+    ),
     pinMaps: entry.pinMaps.map((pinMap) => projectPinMap(pinMap, policy)),
   };
 }
@@ -234,6 +211,10 @@ function buildIdentity(
         : safeText(parentRecordId, { field: "parent_record_id" }),
     parentSlug,
     lineId: policy.publishRequired("record.lineId", safeText(line.line_id, { field: "line_id" })),
+    ownerSkill: policy.publishRequired(
+      "record.ownerSkill",
+      safeText(line.owner_skill, { field: "owner_skill" }),
+    ),
     mpn: policy.publishRequired("record.mpn", safeText(line.mpn, { field: "mpn" })),
     manufacturer: policy.publishRequired(
       "record.manufacturer",
