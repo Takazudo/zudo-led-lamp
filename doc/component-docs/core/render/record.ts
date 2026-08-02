@@ -13,6 +13,7 @@
  *   Calculations  which numbers were derived, from what?
  *   Pin maps      how does the symbol map to the footprint?
  *   Interactions  what does this part's behaviour depend on elsewhere?
+ *   Rules         which cross-component rules is this part named in?
  *   Sources       what documents is any of this resting on?
  *   Legend        what do the recorded terms mean?
  *
@@ -64,15 +65,18 @@ import {
   UNIT_NONE_GLOSS,
   VERDICT_GLOSS,
   CATALOG_ROUTE,
+  INTEGRATION_ROUTE,
   agentResourceDestination,
   aliasTerms,
+  INTEGRATION_DOMAIN_GLOSS,
   catalogEntryRoute,
   entryValue,
-  factDestination,
+  factReference as sharedFactReference,
   factValue,
   factValueEntries,
   fitLabel,
   glossFor,
+  integrationRoute,
   openDomainSummary,
   orderedFactClasses,
   ownerSkillOf,
@@ -85,6 +89,7 @@ import {
 import type {
   PublicCoverage,
   PublicFact,
+  PublicIntegrationRule,
   PublicInteraction,
   PublicPinMap,
   PublicRecord,
@@ -109,6 +114,7 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
     ...calculationSection(record, index),
     ...pinMapSection(record),
     ...interactionSection(record, index),
+    ...ruleSection(record, index),
     ...sourceSection(record),
     ...legendSection(record),
     ...agentResourceSection(record),
@@ -561,31 +567,18 @@ function dependencyCell(
 }
 
 /**
- * A reference to a fact by ID, linked wherever the fact is published.
+ * A reference to a fact by ID, from this record's page.
  *
- * A dependency that lives on another record is named as well as linked — the ID
- * alone does not tell a reader they are about to leave the page, and the whole
- * point of publishing the chain is that it can be followed.
+ * The rendering itself lives in `shared.ts`: the integration page cites the
+ * same facts, and a dependency has to look and link the same way wherever it is
+ * printed. This wrapper only supplies "the page we are on".
  */
 function factReference(
   factId: SafeText,
   record: PublicRecord,
   index: RecordIndex,
 ): PhrasingContent[] {
-  const destination = factDestination(index, factId, record.identity.recordId);
-  if (destination === null) {
-    return [code(factId), space(), text(literal("(not published)"))];
-  }
-
-  const reference: PhrasingContent[] = [routeCodeLink(destination, factId)];
-  const ownerRecordId = index.recordIdByFactId.get(factId);
-  if (ownerRecordId !== undefined && ownerRecordId !== record.identity.recordId) {
-    const mpn = index.mpnByRecordId.get(ownerRecordId);
-    if (mpn !== undefined) {
-      reference.push(space(), text(literal("on")), space(), text(mpn));
-    }
-  }
-  return reference;
+  return sharedFactReference(index, factId, record.identity.recordId);
 }
 
 /**
@@ -737,6 +730,77 @@ function recordReferences(
     cell.push(slug === undefined ? code(recordId) : routeCodeLink(recordRoute(slug), recordId));
   }
   return cell;
+}
+
+/**
+ * The cross-component rules this record is named in.
+ *
+ * Deliberately a list of links and not a copy. The rules live on the
+ * integration page, where each one carries its conditions, its conditioned
+ * arithmetic, its evidence chain and — the part that matters most — the exact
+ * statement of what may not be concluded from any of it. Restating a rule here
+ * would create a second place a reader could form a judgement, and the shorter
+ * of the two would always be the one that dropped the refusal.
+ *
+ * The domain and verdict are printed because they are what a reader needs to
+ * decide whether to follow the link, and both are the rule's own recorded
+ * strings. Neither is a verdict about this part: a record can be named in a
+ * rule purely as the component whose limit another part must stay under.
+ */
+function ruleSection(record: PublicRecord, index: RecordIndex): RootContent[] {
+  const head = [
+    heading(2, literal("Cross-component rules")),
+    paragraph([
+      text(
+        literal(
+          "Rules that span several parts at once and are published in full on the integration " +
+            "page. Each rule's verdict below is that rule's own — it is a statement about the " +
+            "cross-component question, not about this part — and the exact wording of what the " +
+            "rule refuses to conclude is published with the rule itself.",
+        ),
+      ),
+    ]),
+  ];
+
+  const rules = index.rulesByRecordId.get(record.identity.recordId) ?? [];
+  if (rules.length === 0) {
+    return [
+      ...head,
+      paragraph([text(literal("No cross-component rule names this record."))]),
+    ];
+  }
+
+  return [
+    ...head,
+    bulletList(rules.map((rule) => ruleReference(rule))),
+    paragraph([
+      routeLink(INTEGRATION_ROUTE, literal("All cross-component rules")),
+    ]),
+  ];
+}
+
+function ruleReference(rule: PublicIntegrationRule): PhrasingContent[] {
+  const reference: PhrasingContent[] = [
+    routeCodeLink(integrationRoute(rule.anchor), rule.ruleId),
+    space(),
+    text(literal("—")),
+    space(),
+    text(rule.domain),
+    space(),
+    text(literal("—")),
+    space(),
+    strong(literal("rule verdict:")),
+    space(),
+    text(rule.verdict),
+  ];
+  // The gloss goes last because it is the longest part: the identifier, the
+  // domain and the verdict are what a reader scans for, and burying them behind
+  // a sentence would make a list of three rules unscannable.
+  const gloss = INTEGRATION_DOMAIN_GLOSS[rule.domain];
+  if (gloss !== undefined) {
+    reference.push(space(), text(literal("—")), space(), text(literal(gloss)));
+  }
+  return reference;
 }
 
 /**

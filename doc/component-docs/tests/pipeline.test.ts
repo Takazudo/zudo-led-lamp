@@ -39,14 +39,19 @@ describe("the real circuit adapter", () => {
     assert.equal(result.report.viewModelVersion, VIEW_MODEL_VERSION);
     assert.equal(result.report.provider.id, "circuit-component-spec");
 
-    // The landing page, the catalog, the records index, and one page per
-    // selected record. A change in this count means a renderer was added or a
-    // record stopped being published — both worth failing on.
+    // Six cross-component rules, the same way: the ruleset lives outside every
+    // owner bundle, so nothing else in this report would notice it shrinking.
+    assert.equal(result.report.counts.publishedIntegrationRules, 6);
+
+    // The landing page, the catalog, the records index, the integration page,
+    // and one page per selected record. A change in this count means a renderer
+    // was added or a record stopped being published — both worth failing on.
     const paths = result.pages.map((page) => page.relativePath);
-    assert.equal(paths.length, result.report.records.selected + 3);
+    assert.equal(paths.length, result.report.records.selected + 4);
     assert.ok(paths.includes("index.mdx"));
     assert.ok(paths.includes("catalog/index.mdx"));
     assert.ok(paths.includes("records/index.mdx"));
+    assert.ok(paths.includes("integration/index.mdx"));
     assert.ok(paths.includes("records/al8860mp-13/index.mdx"));
     // `emit` reports in path order; the renderers produce inventory order.
     assert.deepEqual([...(result.emitted?.written ?? [])].sort(), [...paths].sort());

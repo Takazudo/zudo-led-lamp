@@ -476,43 +476,103 @@
     {
       "key": "integration.ruleId",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
+      "withheld": 0
+    },
+    {
+      "key": "integration.ownerSkill",
+      "decision": "PUBLISH",
+      "emitted": 6,
       "withheld": 0
     },
     {
       "key": "integration.domain",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
       "withheld": 0
     },
     {
       "key": "integration.recordIds",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
       "withheld": 0
     },
     {
       "key": "integration.factIds",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
       "withheld": 0
     },
     {
       "key": "integration.conditions",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
       "withheld": 0
     },
     {
       "key": "integration.verdict",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
       "withheld": 0
     },
     {
       "key": "integration.refusal",
       "decision": "PUBLISH",
-      "emitted": 0,
+      "emitted": 6,
+      "withheld": 0
+    },
+    {
+      "key": "integration.calculationId",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.calculationFactIds",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.calculationExpression",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.calculationResultKey",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.calculationResults",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.calculationConditions",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.evidenceChainStage",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.evidenceChainStatus",
+      "decision": "PUBLISH",
+      "emitted": 9,
+      "withheld": 0
+    },
+    {
+      "key": "integration.evidenceChainFactIds",
+      "decision": "PUBLISH",
+      "emitted": 9,
       "withheld": 0
     },
     {
@@ -1047,10 +1107,10 @@
     }
   ],
   "counts": {
-    "generatedPages": 35,
+    "generatedPages": 36,
     "publishedCoverageDomains": 109,
     "publishedFacts": 369,
-    "publishedIntegrationRules": 0,
+    "publishedIntegrationRules": 6,
     "publishedInteractions": 50,
     "publishedPinMaps": 33,
     "publishedRecords": 32,

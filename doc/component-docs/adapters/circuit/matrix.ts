@@ -103,6 +103,10 @@ export const CIRCUIT_PUBLICATION_MATRIX: PublicationMatrix = {
   "interaction.verdict": "PUBLISH",
 
   "integration.ruleId": "PUBLISH",
+  // Same decision as `record.ownerSkill`: `/docs/claude-skills/<name>/` is
+  // already generated for this bundle and is on the live site, so this
+  // publishes an existing route rather than a new fact about the project.
+  "integration.ownerSkill": "PUBLISH",
   "integration.domain": "PUBLISH",
   "integration.recordIds": "PUBLISH",
   "integration.factIds": "PUBLISH",
@@ -110,7 +114,31 @@ export const CIRCUIT_PUBLICATION_MATRIX: PublicationMatrix = {
   "integration.verdict": "PUBLISH",
   // The refusal text is the most important line on an integration page: it
   // states what may NOT be concluded from the evidence shown above it.
+  // Publishing the rule while withholding this would leave a reader with the
+  // conditions, the arithmetic and a verdict, and nothing saying what none of
+  // it proves — the single most misleading page this feature could produce.
   "integration.refusal": "PUBLISH",
+
+  // Conditioned calculations. These are the cross-component arithmetic the
+  // rules already record — a VGS divider, a clamp overage, an LED branch peak —
+  // and every part of one is needed to recompute it rather than trust it. The
+  // conditions string in particular says what the number is NOT proof of, and a
+  // result published without it reads as a measurement.
+  "integration.calculationId": "PUBLISH",
+  "integration.calculationFactIds": "PUBLISH",
+  "integration.calculationExpression": "PUBLISH",
+  "integration.calculationResultKey": "PUBLISH",
+  "integration.calculationResults": "PUBLISH",
+  "integration.calculationConditions": "PUBLISH",
+
+  // The source-to-bench evidence chain. Its stages are mostly OPEN, and that is
+  // exactly what has to be visible: withholding the chain would leave the
+  // upstream MIXED stages on the page implying downstream closure that has not
+  // happened. Stage names and statuses are recorded vocabulary, not internal
+  // review state — no reviewer, ticket or person is named.
+  "integration.evidenceChainStage": "PUBLISH",
+  "integration.evidenceChainStatus": "PUBLISH",
+  "integration.evidenceChainFactIds": "PUBLISH",
 
   "pinMap.pinMapId": "PUBLISH",
   "pinMap.symbol": "PUBLISH",

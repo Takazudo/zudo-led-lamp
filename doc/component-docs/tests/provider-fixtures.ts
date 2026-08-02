@@ -21,6 +21,7 @@ import type {
   ProviderRoute,
   ProviderSource,
 } from "../adapters/circuit/evidence.ts";
+import type { ProviderIntegrationRule } from "../adapters/circuit/integration.ts";
 import type { InstanceSelection, PublicationMatrix } from "../core/publication.ts";
 import { CIRCUIT_PUBLICATION_MATRIX } from "../adapters/circuit/matrix.ts";
 
@@ -291,6 +292,82 @@ export function fixtureBundle(overrides: Overrides = {}): ProviderBundle {
   };
 }
 
+/**
+ * A synthetic ruleset covering every shape the real one has.
+ *
+ * Three cases the real six rules contain between them, deliberately spread so
+ * one small fixture exercises all of them:
+ *
+ *   - a calculation recorded as a `results` list, evaluated at several inputs;
+ *   - a calculation recorded as a single bare result under its own
+ *     `result_key`, with no varied input at all;
+ *   - an evidence chain with a settled stage, an open one, and an open one
+ *     carrying no facts.
+ *
+ * A rule with neither calculations nor a chain is included too, because two of
+ * the real rules have neither and the page must not assume they do.
+ */
+export function fixtureIntegrationRules(
+  transform: (rules: ProviderIntegrationRule[]) => ProviderIntegrationRule[] = (rules) => rules,
+): ProviderIntegrationRule[] {
+  const rules: ProviderIntegrationRule[] = [
+    {
+      rule_id: "rule-fixture-power-stage",
+      domain: "fixture-power-stage",
+      record_ids: ["rec-driver", "rec-sense"],
+      fact_ids: ["fact-driver-current-min", "fact-sense-resistance-max"],
+      conditions: "sense tolerance, driver hysteresis and the assembled thermal path",
+      verdict: "NEEDS BENCH",
+      refusal: "Do not promote nominal arithmetic to a guaranteed assembled-stage PASS.",
+      conditioned_calculations: [
+        {
+          calculation_id: "calc-fixture-current",
+          fact_ids: ["fact-sense-resistance-max"],
+          expression: "0.096 / r_sense_ohm",
+          result_key: "current_a",
+          results: [
+            { r_sense_ohm: 0.198, current_a: 0.48484848484848486 },
+            { r_sense_ohm: 0.21, current_a: 0.45714285714285713 },
+          ],
+          conditions: "nominal division only; excludes hysteresis, TCR and self-heating",
+        },
+        {
+          calculation_id: "calc-fixture-margin",
+          fact_ids: ["fact-driver-vin-max"],
+          expression: "fact_driver_vin_max - 32.4",
+          result_key: "margin_v",
+          margin_v: 9.6,
+          conditions: "conditioned subtraction at one table point; not a waveform measurement",
+        },
+      ],
+    },
+    {
+      rule_id: "rule-fixture-chain",
+      domain: "fixture-source-to-bench-chain",
+      record_ids: ["rec-driver", "rec-handfit"],
+      fact_ids: ["fact-driver-identity", "fact-handfit-pitch"],
+      conditions: "trace each claim from the vendor document through to a measurement",
+      verdict: "NEEDS BENCH",
+      refusal: "A completed upstream stage never implies a later measured stage.",
+      evidence_chain: [
+        { stage: "official-source", status: "MIXED", fact_ids: ["fact-driver-identity"] },
+        { stage: "as-built", status: "OPEN", fact_ids: ["fact-handfit-pitch"] },
+        { stage: "bench", status: "OPEN", fact_ids: [] },
+      ],
+    },
+    {
+      rule_id: "rule-fixture-bare",
+      domain: "fixture-bare",
+      record_ids: ["rec-sense"],
+      fact_ids: ["fact-sense-resistance-max"],
+      conditions: "no conditioned arithmetic and no chain are recorded for this rule",
+      verdict: "UNSOURCED",
+      refusal: "Do not read the absence of a calculation as the absence of a risk.",
+    },
+  ];
+  return transform(rules);
+}
+
 /** Every fixture record and source, selected. */
 export const FIXTURE_SELECTION: InstanceSelection = {
   recordIds: ["rec-driver", "rec-sense", "rec-handfit"],
@@ -306,7 +383,7 @@ export const FIXTURE_SELECTION: InstanceSelection = {
     "src-sense-primary",
     "src-handfit-distributor",
   ],
-  expect: { records: 3, sources: 4 },
+  expect: { records: 3, sources: 4, integrationRules: 3 },
 };
 
 /** The real committed decisions — the fixtures must clear the same matrix. */

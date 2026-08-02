@@ -20,6 +20,7 @@ import { assertUnique } from "./ids.ts";
 import { assertLinkIntegrity } from "./links.ts";
 import { PublicationPolicy, type PreflightReport } from "./publication.ts";
 import { renderCatalog } from "./render/catalog.ts";
+import { renderIntegration } from "./render/integration.ts";
 import { renderLanding } from "./render/landing.ts";
 import { renderRecord, renderRecordsIndex } from "./render/record.ts";
 import { buildRecordIndex, type RecordIndex } from "./render/shared.ts";
@@ -100,6 +101,17 @@ export function assertAnchorIntegrity(
     ]);
   }
 
+  // The integration page is the one page whose anchors come from neither a
+  // record nor an interaction: a rule anchor and a conditioned-calculation
+  // anchor are both ids on that single document, so uniqueness among them is
+  // the invariant that keeps a `#rule-…` or `#calc-…` deep link unambiguous.
+  assertUnique("anchor on the integration page", [
+    ...model.integration.map((rule) => rule.anchor),
+    ...model.integration.flatMap((rule) =>
+      rule.calculations.map((calculation) => calculation.anchor),
+    ),
+  ]);
+
   const interactionByAnchor = new Map<string, string>();
   for (const record of model.records) {
     for (const entry of renderedInteractions(record)) {
@@ -168,6 +180,10 @@ export async function runPipeline(
     renderCatalog(model),
     renderRecordsIndex(model.records),
     ...model.records.map((record) => renderRecord(record, recordIndex)),
+    // Rendered after the record pages it links into, so a missing record page
+    // is reported by `assertLinkIntegrity` against a complete page set rather
+    // than by ordering luck.
+    renderIntegration(model, recordIndex),
   ];
   assertUnique("generated path", pages.map((page) => page.relativePath));
   assertLinkIntegrity(pages);

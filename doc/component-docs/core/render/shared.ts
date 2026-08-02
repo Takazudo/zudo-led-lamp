@@ -23,11 +23,21 @@
  */
 
 import { byCodeUnit, type Anchor, type Slug } from "../ids.ts";
-import { fragmentRoute, route, type Route } from "../mdx.ts";
+import {
+  code,
+  fragmentRoute,
+  route,
+  routeCodeLink,
+  space,
+  text,
+  type Route,
+} from "../mdx.ts";
 import { joinSafe, literal, safeText, type SafeText } from "../text.ts";
+import type { PhrasingContent } from "mdast";
 import type {
   PublicCoverage,
   PublicFact,
+  PublicIntegrationRule,
   PublicInteraction,
   PublicPlacement,
   PublicRecord,
@@ -39,10 +49,16 @@ import type {
 export const COMPONENTS_ROUTE: Route = route("/docs/components/");
 export const CATALOG_ROUTE: Route = route("/docs/components/catalog/");
 export const RECORDS_ROUTE: Route = route("/docs/components/records/");
+export const INTEGRATION_ROUTE: Route = route("/docs/components/integration/");
 
 /** `/docs/components/records/<slug>/`, optionally at one anchor inside it. */
 export function recordRoute(slug: Slug, fragment?: Anchor): Route {
   return route(`/docs/components/records/${slug}/`, fragment);
+}
+
+/** One rule's, or one conditioned calculation's, place on the integration page. */
+export function integrationRoute(fragment: Anchor): Route {
+  return route("/docs/components/integration/", fragment);
 }
 
 /** The record's entry on the catalog page. */
@@ -103,6 +119,16 @@ export type RecordIndex = {
    * one interaction on one page.
    */
   readonly interactionsByRecordId: ReadonlyMap<string, readonly PublicInteraction[]>;
+  /**
+   * Every cross-component rule a record is named in.
+   *
+   * Rules are not attached to records at all — they live in their own bundle
+   * and name their participants — so this is the only way a record page can
+   * find the ones that concern it. It is what makes the reciprocal link work:
+   * the integration page names records, and each record page names its rules
+   * back, without either restating the other's content.
+   */
+  readonly rulesByRecordId: ReadonlyMap<string, readonly PublicIntegrationRule[]>;
 };
 
 /**
@@ -120,6 +146,7 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
   const anchorByFactId = new Map<string, Anchor>();
   const sidebarPositionByRecordId = new Map<string, number>();
   const interactionsByRecordId = new Map<string, PublicInteraction[]>();
+  const rulesByRecordId = new Map<string, PublicIntegrationRule[]>();
 
   for (const [position, record] of model.records.entries()) {
     slugByRecordId.set(record.identity.recordId, record.identity.slug);
@@ -150,6 +177,18 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
     }
   }
 
+  // Rules keep model order (which is the ruleset's own file order) under every
+  // record they name. A rule names each participant once, so no deduplication
+  // is needed here — unlike interactions, which the adapter may attach more
+  // than once.
+  for (const rule of model.integration) {
+    for (const participantId of rule.recordIds) {
+      const bucket = rulesByRecordId.get(participantId) ?? [];
+      bucket.push(rule);
+      rulesByRecordId.set(participantId, bucket);
+    }
+  }
+
   return {
     slugByRecordId,
     mpnByRecordId,
@@ -157,6 +196,7 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
     anchorByFactId,
     sidebarPositionByRecordId,
     interactionsByRecordId,
+    rulesByRecordId,
   };
 }
 
@@ -166,11 +206,17 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
  * `null` means "do not link": the fact is not published, so a link would 404.
  * The caller still renders the ID as code — an unpublished dependency is
  * information, and dropping it would hide that the chain leaves the corpus.
+ *
+ * `currentRecordId` is `null` on a page that is not a record page — the
+ * integration page cites facts owned by twelve different records and owns none
+ * of them, so every reference there is a cross-page link. Passing `null` is
+ * what makes that explicit; a sentinel record ID would just be a value that
+ * happens never to match.
  */
 export function factDestination(
   index: RecordIndex,
   factId: string,
-  currentRecordId: string,
+  currentRecordId: string | null,
 ): Route | null {
   const ownerRecordId = index.recordIdByFactId.get(factId);
   const anchor = index.anchorByFactId.get(factId);
@@ -179,6 +225,40 @@ export function factDestination(
 
   const slug = index.slugByRecordId.get(ownerRecordId);
   return slug === undefined ? null : recordRoute(slug, anchor);
+}
+
+/**
+ * A reference to a fact by ID, linked wherever the fact is published.
+ *
+ * A fact that lives on another record is named as well as linked: the ID alone
+ * does not tell a reader they are about to leave the page, and the whole point
+ * of publishing the chain is that it can be followed. An unpublished fact is
+ * still printed, marked as such — dropping it would hide that the chain leaves
+ * the corpus.
+ *
+ * Shared rather than per-page because the record pages and the integration page
+ * cite the same facts, and two renderers each inventing a way to print a
+ * dependency would be two different claims about one edge of the graph.
+ */
+export function factReference(
+  index: RecordIndex,
+  factId: SafeText,
+  currentRecordId: string | null,
+): PhrasingContent[] {
+  const destination = factDestination(index, factId, currentRecordId);
+  if (destination === null) {
+    return [code(factId), space(), text(literal("(not published)"))];
+  }
+
+  const reference: PhrasingContent[] = [routeCodeLink(destination, factId)];
+  const ownerRecordId = index.recordIdByFactId.get(factId);
+  if (ownerRecordId !== undefined && ownerRecordId !== currentRecordId) {
+    const mpn = index.mpnByRecordId.get(ownerRecordId);
+    if (mpn !== undefined) {
+      reference.push(space(), text(literal("on")), space(), text(mpn));
+    }
+  }
+  return reference;
 }
 
 // --- fixed labels ----------------------------------------------------------
@@ -479,6 +559,69 @@ export const IDENTITY_STATE_GLOSS: Readonly<Record<string, string>> = {
 export const SOURCE_STATE_GLOSS: Readonly<Record<string, string>> = {
   AVAILABLE: "At least one document backing this line was retrieved.",
   "SOURCE UNAVAILABLE": "No document backing this line could be retrieved.",
+};
+
+/**
+ * What each cross-component rule is asking, in ordinary words.
+ *
+ * A definition of the question, never an answer to it. "Whether the input rail
+ * stays inside every part's own limits" is a description of scope; "the rail is
+ * fine" would be a verdict, and the rule's own verdict and refusal are the only
+ * things on the page allowed to speak to that.
+ *
+ * A domain with no entry still publishes and simply has no gloss, the same way
+ * an unknown verdict does — the ruleset must be able to grow without a code
+ * change hiding a rule.
+ */
+export const INTEGRATION_DOMAIN_GLOSS: Readonly<Record<string, string>> = {
+  "rail-envelope":
+    "Whether every part on the input rail stays inside its own recorded limits across a legal " +
+    "power contract, a mis-contract, and a transient clamp event.",
+  "usb-pd-nvm-load-switch":
+    "How the power-delivery controller's stored configuration and its enable output drive the " +
+    "load switch, through every state from detached to fault.",
+  "al8860-led-stage":
+    "How the LED driver, its sense resistor, inductor, catch diode and per-branch ballast " +
+    "behave together across the LED forward-voltage, tolerance and temperature envelope.",
+  "ap63203-logic-stage":
+    "How the logic-rail converter, its inductor and its output capacitor behave together under " +
+    "the real load the microcontroller presents.",
+  "ntc-adc-firmware":
+    "How the thermistor, its divider, the analog-to-digital input and the firmware that reads " +
+    "them combine into a temperature the design can act on.",
+  "source-to-bench-chain":
+    "How far each claim has travelled from a manufacturer document towards a measurement on " +
+    "real hardware, stage by stage.",
+};
+
+/**
+ * The stages a claim passes through, from a vendor document to a measurement.
+ *
+ * The order is the chain's own and is never reordered: each stage describes a
+ * different kind of proof, and a completed earlier stage says nothing about a
+ * later one.
+ */
+export const EVIDENCE_STAGE_GLOSS: Readonly<Record<string, string>> = {
+  "official-source": "The claim appears in a document the manufacturer published.",
+  "conditioned-requirement":
+    "The claim has been restated as a requirement with the conditions it holds under.",
+  "generated-netlist": "The requirement is reflected in the netlist the project generates.",
+  "symbol-footprint": "The schematic symbol's pins are mapped onto the footprint's pads.",
+  "pcb-orientation": "The part's orientation and pad mapping are confirmed on the board layout.",
+  "bom-cpl": "The exact orderable part and its placement are confirmed in the assembly files.",
+  "as-built": "The assembled board has been inspected and matches what was specified.",
+  programmed: "The device's stored configuration has been written and read back.",
+  bench: "The behaviour has been measured on powered hardware.",
+};
+
+export const EVIDENCE_STAGE_STATUS_GLOSS: Readonly<Record<string, string>> = {
+  MIXED:
+    "Some claims at this stage are settled and others are not. It is not a completed stage, and " +
+    "the facts listed against it are the ones that carry it.",
+  OPEN:
+    "Nothing at this stage has been established yet. A completed earlier stage does not imply " +
+    "it.",
+  CLOSED: "Every claim this stage covers is settled.",
 };
 
 export const UNIT_NONE_GLOSS =
