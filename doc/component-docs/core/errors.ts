@@ -21,6 +21,8 @@ export const ERROR_CODES = [
   "UNSAFE_MDX",
   /** Two records/anchors resolved to the same slug, or a slug was unusable. */
   "IDENTITY_COLLISION",
+  /** A generated link points at a page or anchor this run did not produce. */
+  "BROKEN_LINK",
   /** The committed generated tree does not match a fresh generation. */
   "GENERATED_DRIFT",
 ] as const;

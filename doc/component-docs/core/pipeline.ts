@@ -9,13 +9,15 @@
  *                   before a single byte is projected
  *   3. project    — adapter reads its data and asserts its selection is fresh
  *   4. render     — data to AST to text, guarded
- *   5. emit       — into the exclusively-owned tree (or diff, in check mode)
- *   6. preflight  — deterministic report of what was published and withheld
+ *   5. link check — every internal destination exists (see `links.ts`)
+ *   6. emit       — into the exclusively-owned tree (or diff, in check mode)
+ *   7. preflight  — deterministic report of what was published and withheld
  */
 
 import { diffAgainstDisk, emit, type EmitResult } from "./emit.ts";
 import { fail } from "./errors.ts";
 import { assertUnique } from "./ids.ts";
+import { assertLinkIntegrity } from "./links.ts";
 import { PublicationPolicy, type PreflightReport } from "./publication.ts";
 import { renderCatalog } from "./render/catalog.ts";
 import { renderLanding } from "./render/landing.ts";
@@ -148,6 +150,7 @@ export async function runPipeline(
     ...model.records.map((record) => renderRecord(record, recordIndex)),
   ];
   assertUnique("generated path", pages.map((page) => page.relativePath));
+  assertLinkIntegrity(pages);
 
   const plan = { root: options.generatedRoot, pages };
   const emitted = options.dryRun ? null : await emit(plan);

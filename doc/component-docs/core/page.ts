@@ -37,6 +37,17 @@ export type GeneratedPage = {
   /** POSIX-style path relative to the generated root, e.g. `records/al8860mp-13/index.mdx`. */
   readonly relativePath: string;
   readonly contents: string;
+  /**
+   * Every `EvidenceAnchor` id this page defines, and every link target it
+   * emits — read off the body AST rather than the serialized text, so a link
+   * label containing a bracket cannot be mistaken for a link.
+   *
+   * `core/links.ts` needs both to prove that what this page points at exists.
+   * They are collected here because this is the only place that still holds
+   * the AST: everything downstream sees `contents` and nothing else.
+   */
+  readonly anchors: readonly string[];
+  readonly links: readonly string[];
 };
 
 const RELATIVE_PATH_PATTERN = /^(?:[a-z0-9][a-z0-9-]*\/)*[a-z0-9][a-z0-9-]*\.mdx$/u;
@@ -61,6 +72,10 @@ export function buildPage(
   const serialized = serializeBody(body);
   assertMdxSafe(serialized, relativePath);
 
+  const anchors: string[] = [];
+  const links: string[] = [];
+  collectReferences(body, anchors, links);
+
   const header = [
     "---",
     GENERATED_MARKER,
@@ -70,7 +85,44 @@ export function buildPage(
     "---",
   ].join("\n");
 
-  return { relativePath, contents: `${header}\n\n${serialized}` };
+  return { relativePath, contents: `${header}\n\n${serialized}`, anchors, links };
+}
+
+/**
+ * The subset of a node this walk cares about. mdast's own types do not cover
+ * the MDX JSX nodes (`mdast-util-mdx` contributes those), and the builders in
+ * `mdx.ts` already cast them into `RootContent`, so the walk reads the shape
+ * structurally instead of re-deriving that union here.
+ */
+type WalkableNode = {
+  readonly type?: string;
+  readonly url?: string;
+  readonly name?: string;
+  readonly attributes?: readonly { readonly name?: string; readonly value?: unknown }[];
+  readonly children?: readonly unknown[];
+};
+
+function collectReferences(
+  nodes: readonly unknown[],
+  anchors: string[],
+  links: string[],
+): void {
+  for (const candidate of nodes) {
+    const node = candidate as WalkableNode;
+    if (node.type === "link" && typeof node.url === "string") {
+      links.push(node.url);
+    }
+    if (node.name === "EvidenceAnchor") {
+      for (const attribute of node.attributes ?? []) {
+        if (attribute.name === "id" && typeof attribute.value === "string") {
+          anchors.push(attribute.value);
+        }
+      }
+    }
+    if (node.children !== undefined) {
+      collectReferences(node.children, anchors, links);
+    }
+  }
 }
 
 /** Whether a file on disk is one this generator owns. */
