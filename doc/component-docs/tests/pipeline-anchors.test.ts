@@ -18,12 +18,23 @@ type RecordParts = {
   readonly factAnchors?: readonly string[];
   readonly coverageAnchors?: readonly string[];
   readonly pinMapAnchors?: readonly string[];
-  readonly interactions?: readonly { readonly id: string; readonly anchor: string }[];
+  readonly interactions?: readonly {
+    readonly id: string;
+    readonly anchor: string;
+    /** Every record the interaction names. Defaults to the one it is attached to. */
+    readonly recordIds?: readonly string[];
+  }[];
 };
 
 function record(parts: RecordParts): PublicRecord {
   return {
-    identity: { anchor: anchor(parts.recordId), slug: recordSlug(parts.recordId) },
+    identity: {
+      // `recordId` is read too: it is the key the rendered-interaction index is
+      // filed under, so without it a page's interactions cannot be resolved.
+      recordId: literal(parts.recordId),
+      anchor: anchor(parts.recordId),
+      slug: recordSlug(parts.recordId),
+    },
     aliases: {},
     sources: (parts.sourceAnchors ?? []).map((id) => ({ anchor: anchor(id) })),
     facts: (parts.factAnchors ?? []).map((id) => ({ anchor: anchor(id) })),
@@ -31,6 +42,10 @@ function record(parts: RecordParts): PublicRecord {
     interactions: (parts.interactions ?? []).map((entry) => ({
       anchor: anchor(entry.anchor),
       interactionId: literal(entry.id),
+      // Read by the check: an interaction is rendered on every record it NAMES,
+      // not only the one it is attached to, so its participants decide which
+      // pages its anchor lands on.
+      recordIds: (entry.recordIds ?? [parts.recordId]).map(literal),
     })),
     pinMaps: (parts.pinMapAnchors ?? []).map((id) => ({ anchor: anchor(id) })),
   } as unknown as PublicRecord;
@@ -55,7 +70,19 @@ describe("anchor integrity", () => {
   it("publishes one interaction on every participating record", () => {
     // The real corpus does this 6 times over; int-al8860-power-stage spans 4 records.
     // A flat global uniqueness check would abort the build here.
-    const shared = [{ id: "int-al8860-power-stage", anchor: "int-al8860-power-stage" }];
+    const participants = [
+      "rec-al8860mp-13",
+      "rec-rlp25feer200",
+      "rec-fxl0630-330-m",
+      "rec-ro-ss26",
+    ];
+    const shared = [
+      {
+        id: "int-al8860-power-stage",
+        anchor: "int-al8860-power-stage",
+        recordIds: participants,
+      },
+    ];
     assert.equal(
       collides(
         model([
@@ -95,6 +122,27 @@ describe("anchor integrity", () => {
         model([
           record({ recordId: "rec-one", factAnchors: ["fact-vin-max"] }),
           record({ recordId: "rec-two", factAnchors: ["fact-vin-max"] }),
+        ]),
+      ),
+      true,
+    );
+  });
+
+  it("refuses an interaction anchor colliding with a fact on a page it only NAMES", () => {
+    // The subtle case. The interaction is attached to rec-one, but names rec-two
+    // as well, so the renderer publishes it on rec-two's page too — where its
+    // anchor collides with a fact. Checking only the attached record would pass
+    // this and ship two elements with the same HTML id.
+    assert.equal(
+      collides(
+        model([
+          record({
+            recordId: "rec-one",
+            interactions: [
+              { id: "int-alpha", anchor: "shared-anchor", recordIds: ["rec-one", "rec-two"] },
+            ],
+          }),
+          record({ recordId: "rec-two", factAnchors: ["shared-anchor"] }),
         ]),
       ),
       true,
