@@ -36,6 +36,7 @@ import {
   paragraph,
   routeCodeLink,
   routeLink,
+  scrollableTable,
   space,
   strong,
   table,
@@ -226,7 +227,8 @@ function ruleIndex(rules: readonly PublicIntegrationRule[]): RootContent[] {
 
   return [
     ...head,
-    table(
+    scrollableTable(
+      "rules-index",
       [
         literal("Rule"),
         literal("Domain"),
@@ -420,11 +422,18 @@ function resultsTable(calculation: PublicRuleCalculation): RootContent[] {
   }
 
   const inputKeys = orderedInputKeys(calculation.cases);
+  const header = [...inputKeys, calculation.resultKey];
+  const rows = calculation.cases.map((entry) => resultRow(entry, inputKeys));
+
+  // Only the wide ones get a scroll container. A calculation with a single
+  // input is a two-column table that fits any viewport, and wrapping it would
+  // add a tab stop to something that never scrolls — a focus stop that does
+  // nothing is noise for a keyboard user, which is why the invariant runs both
+  // ways: every table wider than two columns wrapped, and no narrow one.
   return [
-    table(
-      [...inputKeys, calculation.resultKey],
-      calculation.cases.map((entry) => resultRow(entry, inputKeys)),
-    ),
+    header.length > 2
+      ? scrollableTable("calculation-results", header, rows)
+      : table(header, rows),
   ];
 }
 
@@ -482,7 +491,8 @@ function evidenceChainBlock(
         ),
       ),
     ]),
-    table(
+    scrollableTable(
+      "evidence-chain",
       [literal("Stage"), literal("Status"), literal("Facts at this stage")],
       rule.evidenceChain.map((stage) => evidenceChainRow(stage, index)),
     ),

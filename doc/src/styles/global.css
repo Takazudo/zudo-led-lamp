@@ -98,6 +98,24 @@
   min-width: 46rem;
 }
 
+/* The integration page's tables. They were shipping in the package's plain
+   `overflow-x-auto` wrapper, which scrolls by pointer but carries no tab stop —
+   so at 375px the 5-column rules index (433px of content in a 327px column)
+   could not be scrolled from the keyboard at all, while the record pages could.
+   Narrower than the seven-column tables because they are narrower: the rules
+   index is 5 columns and the other two are 3. */
+.zld-evidence-table--rules-index table {
+  min-width: 40rem;
+}
+
+.zld-evidence-table--evidence-chain table {
+  min-width: 36rem;
+}
+
+.zld-evidence-table--calculation-results table {
+  min-width: 30rem;
+}
+
 /* ── Generated component pages: long identifiers ──────────────────────────
    `.zld-evidence-anchor` is emitted only by doc/component-docs, so it is an
    exact marker for a generated evidence page and scopes these rules to one.
@@ -109,10 +127,38 @@
    inflating the min-content width of the column it sits in. Nothing is
    injected into the string — no <wbr>, no U+200B — so what a reader copies is
    still byte-for-byte the recorded URL. */
-.zd-content:has(.zld-evidence-anchor) :where(p, li, td, th) {
+/* Headings are in this list, `h1` included, because both the page title and the
+   section headings are evidence strings published verbatim.
+
+   `h1` is the MPN. A part number with no hyphen is a single unbreakable token:
+   `STUSB4500QTR` measured 425px against a 327px column at 375px wide, and
+   `CC0603KRX7R9BB104` 614px. 42 of the 64 record URLs overflowed on the title
+   alone. The ones that passed did so by accident of naming — `AL8860MP-13` has
+   hyphens, which Chrome treats as break opportunities.
+
+   `h2`/`h3` are coverage domains, several of them slash-joined:
+   `unpowered/reset/startup/normal/fault/disconnect behavior` is also one token,
+   because Chrome does not break at `/`.
+
+   Without this the whole PAGE BODY scrolls sideways, which is the one thing the
+   narrow-viewport acceptance criterion forbids. Verified in a browser at 375px. */
+.zd-content:has(.zld-evidence-anchor) :where(p, li, td, th, h1, h2, h3, h4, h5, h6) {
   overflow-wrap: break-word;
 }
 
 .zd-content:has(.zld-evidence-anchor) :where(a, code) {
   overflow-wrap: anywhere;
+}
+
+/* A wrapped fact ID still renders as one box per line — `clone` repeats the
+   decoration per fragment, it cannot merge fragments, and no CSS property can.
+   What it buys is that every fragment is fully formed: with the default
+   `slice`, the padding and border-radius are applied once across the whole
+   inline box, so the middle fragments of `fact-al8860-vin-absolute-max` come
+   out visually cut off at both ends. `clone` gives each fragment its own
+   padding and rounding, so the chips read as parts of one identifier rather
+   than as damaged boxes. Confirmed in a browser at 375px. */
+.zd-content:has(.zld-evidence-anchor) code {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }

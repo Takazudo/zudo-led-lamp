@@ -58,19 +58,17 @@ Be honest with yourself about which kind of reuse you are buying. This project's
 is free of provider mechanics, but the view model it freezes is an
 **electronic-component** one: identities carry `mpn`, `manufacturer`, `lcsc`,
 `packageName` and `dnp`; placements carry `board` and `refdes`; the field-key union
-includes `record.lcsc`.
-
-So a second supplier of *component* evidence really is just a new adapter. A different
-**domain** is not — it needs the view model, the field keys and the renderers
-generalised first, which is a substantially larger job. Scope your adoption against
-that distinction before you start, not after.
+includes `record.lcsc`. So a second supplier of *component* evidence really is just a
+new adapter — a different **domain** is not, because it needs the view model, the field
+keys and the renderers generalised first, which is a substantially larger job. Scope
+your adoption against that distinction before you start, not after.
+:::
 
 If you are adopting into a different domain, the parts that transfer unchanged are the
 ones below that never mention a record: the three publication gates, the branded-type
 sanitiser, the preflight report, the emit/ownership rules, and the canary scan. Those
 are the expensive parts to get right, and they are the reason the pattern is worth
 copying even when the view model is not.
-:::
 
 ### What the adapter must supply
 

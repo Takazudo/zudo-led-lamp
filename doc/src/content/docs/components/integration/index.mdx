@@ -19,14 +19,16 @@ A component record answers questions about one part. These rules answer the ones
 
 <EvidenceAnchor id="integration-index" />
 
-| Rule                                                          | Domain                 | Records | Facts | Verdict     |
-| ------------------------------------------------------------- | ---------------------- | ------- | ----- | ----------- |
-| [`rule-rail-envelope`](#rule-rail-envelope)                   | rail-envelope          | 12      | 19    | UNSOURCED   |
-| [`rule-usb-pd-nvm-load-switch`](#rule-usb-pd-nvm-load-switch) | usb-pd-nvm-load-switch | 9       | 18    | UNSOURCED   |
-| [`rule-al8860-led-stage`](#rule-al8860-led-stage)             | al8860-led-stage       | 7       | 25    | NEEDS BENCH |
-| [`rule-ap63203-logic-stage`](#rule-ap63203-logic-stage)       | ap63203-logic-stage    | 4       | 16    | UNSOURCED   |
-| [`rule-ntc-adc-firmware`](#rule-ntc-adc-firmware)             | ntc-adc-firmware       | 3       | 9     | UNSOURCED   |
-| [`rule-evidence-chain`](#rule-evidence-chain)                 | source-to-bench-chain  | 5       | 8     | NEEDS BENCH |
+<EvidenceTable label="rules-index">
+  | Rule                                                          | Domain                 | Records | Facts | Verdict     |
+  | ------------------------------------------------------------- | ---------------------- | ------- | ----- | ----------- |
+  | [`rule-rail-envelope`](#rule-rail-envelope)                   | rail-envelope          | 12      | 19    | UNSOURCED   |
+  | [`rule-usb-pd-nvm-load-switch`](#rule-usb-pd-nvm-load-switch) | usb-pd-nvm-load-switch | 9       | 18    | UNSOURCED   |
+  | [`rule-al8860-led-stage`](#rule-al8860-led-stage)             | al8860-led-stage       | 7       | 25    | NEEDS BENCH |
+  | [`rule-ap63203-logic-stage`](#rule-ap63203-logic-stage)       | ap63203-logic-stage    | 4       | 16    | UNSOURCED   |
+  | [`rule-ntc-adc-firmware`](#rule-ntc-adc-firmware)             | ntc-adc-firmware       | 3       | 9     | UNSOURCED   |
+  | [`rule-evidence-chain`](#rule-evidence-chain)                 | source-to-bench-chain  | 5       | 8     | NEEDS BENCH |
+</EvidenceTable>
 
 ## rule-rail-envelope
 
@@ -483,17 +485,19 @@ Arithmetic across the facts above. The expression and every input are published 
 
 The stages a claim passes through, in order. A settled stage says nothing about any stage after it: a manufacturer document confirming a limit is not an inspection of the assembled board, and neither is a measurement. A stage with no facts against it is not one nobody got round to filling in: nothing has been established there yet, so the rule's conditions and its refusal above are the whole of what is known about it.
 
-| Stage                   | Status | Facts at this stage                                                                                                                                                                                                                                                                                                                           |
-| ----------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| official-source         | MIXED  | [`fact-stusb-vben`](/docs/components/records/stusb4500qtr/#fact-stusb-vben) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                                  |
-| conditioned-requirement | MIXED  | [`fact-stusb-artifact`](/docs/components/records/stusb4500qtr/#fact-stusb-artifact) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                          |
-| generated-netlist       | MIXED  | [`fact-umw-ao3401a-project-nets`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-project-nets) on AO3401A, [`fact-al8860-project-nets`](/docs/components/records/al8860mp-13/#fact-al8860-project-nets) on AL8860MP-13, [`fact-ap63203-project-nets`](/docs/components/records/ap63203wu-7/#fact-ap63203-project-nets) on AP63203WU-7 |
-| symbol-footprint        | MIXED  | [`fact-umw-ao3401a-pinout`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-pinout) on AO3401A, [`fact-c529334-topology`](/docs/components/records/c529334/#fact-c529334-topology) on STM32G031F8P6                                                                                                                                    |
-| pcb-orientation         | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
-| bom-cpl                 | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
-| as-built                | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
-| programmed              | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
-| bench                   | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
+<EvidenceTable label="evidence-chain">
+  | Stage                   | Status | Facts at this stage                                                                                                                                                                                                                                                                                                                           |
+  | ----------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | official-source         | MIXED  | [`fact-stusb-vben`](/docs/components/records/stusb4500qtr/#fact-stusb-vben) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                                  |
+  | conditioned-requirement | MIXED  | [`fact-stusb-artifact`](/docs/components/records/stusb4500qtr/#fact-stusb-artifact) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                          |
+  | generated-netlist       | MIXED  | [`fact-umw-ao3401a-project-nets`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-project-nets) on AO3401A, [`fact-al8860-project-nets`](/docs/components/records/al8860mp-13/#fact-al8860-project-nets) on AL8860MP-13, [`fact-ap63203-project-nets`](/docs/components/records/ap63203wu-7/#fact-ap63203-project-nets) on AP63203WU-7 |
+  | symbol-footprint        | MIXED  | [`fact-umw-ao3401a-pinout`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-pinout) on AO3401A, [`fact-c529334-topology`](/docs/components/records/c529334/#fact-c529334-topology) on STM32G031F8P6                                                                                                                                    |
+  | pcb-orientation         | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
+  | bom-cpl                 | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
+  | as-built                | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
+  | programmed              | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
+  | bench                   | OPEN   | no fact is recorded at this stage                                                                                                                                                                                                                                                                                                             |
+</EvidenceTable>
 
 ## Legend
 

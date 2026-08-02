@@ -495,9 +495,12 @@ describe("evidence-chain stages with nothing recorded against them", () => {
     );
     for (const stage of ["pcb-orientation", "bom-cpl", "as-built", "programmed", "bench"]) {
       assert.ok(
-        new RegExp(`^\\| ${stage}\\s+\\| OPEN\\s+\\| no fact is recorded at this stage`, "mu").test(
-          committed,
-        ),
+        // Leading whitespace tolerated: the chain table sits inside an
+        // `<EvidenceTable>` scroll container, so its rows are indented.
+        new RegExp(
+          `^\\s*\\| ${stage}\\s+\\| OPEN\\s+\\| no fact is recorded at this stage`,
+          "mu",
+        ).test(committed),
         `${stage} does not render as an explicitly-empty OPEN stage`,
       );
     }

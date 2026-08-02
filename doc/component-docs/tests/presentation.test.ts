@@ -20,6 +20,7 @@ import { describe, it } from "node:test";
 
 import { ALLOWED_COMPONENT_ATTRIBUTES, ATTRIBUTE_VALUE_PATTERN } from "../core/mdx.ts";
 import { renderCatalog } from "../core/render/catalog.ts";
+import { renderIntegration } from "../core/render/integration.ts";
 import { renderRecord } from "../core/render/record.ts";
 import { buildRecordIndex } from "../core/render/shared.ts";
 import { FIXTURE_IDS, fixtureModel } from "./fixtures.ts";
@@ -34,6 +35,14 @@ const model = fixtureModel();
 const index = buildRecordIndex(model);
 const catalogPage = renderCatalog(model).contents;
 const recordPages = model.records.map((record) => renderRecord(record, index).contents);
+/**
+ * The integration page was NOT in this list until a browser pass found its
+ * tables scrolling by pointer only — no tab stop, no focus ring — while every
+ * record page had both. The suite said "on every page" and walked
+ * `model.records`, so the one page rendered by a different renderer was
+ * structurally invisible to it. Any future renderer must be added here too.
+ */
+const integrationPage = renderIntegration(model, index).contents;
 /** The fixture record carrying facts, calculations and two pin maps. */
 const driverPage = pageFor(FIXTURE_IDS.driverRecord);
 
@@ -100,7 +109,7 @@ describe("host bindings stay in step with the component allow-list", () => {
 
 describe("dense tables carry a scroll container", () => {
   it("wraps every table wider than two columns, on every page", () => {
-    for (const page of [catalogPage, ...recordPages]) {
+    for (const page of [catalogPage, integrationPage, ...recordPages]) {
       const wide = tableHeaderWidths(page).filter((width) => width > 2);
       const wrappers = [...page.matchAll(/<EvidenceTable\b/gu)].length;
       assert.equal(
