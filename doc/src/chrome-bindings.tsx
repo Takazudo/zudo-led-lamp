@@ -18,6 +18,7 @@
 
 import { defineChromeBindings } from "@takazudo/zudo-doc/chrome-bindings";
 import { EvidenceAnchor } from "../component-docs/ui/evidence-anchor";
+import { EvidenceDetails } from "../component-docs/ui/evidence-details";
 
 export const chromeBindings = defineChromeBindings({
   mdxExtras: {
@@ -27,5 +28,6 @@ export const chromeBindings = defineChromeBindings({
     // (CategoryNav does) — a name the generator emits with neither renders as
     // literal text and silently swallows the content it wraps.
     EvidenceAnchor,
+    EvidenceDetails,
   },
 });

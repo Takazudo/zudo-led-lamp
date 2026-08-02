@@ -39,11 +39,17 @@ describe("the real circuit adapter", () => {
     assert.equal(result.report.viewModelVersion, VIEW_MODEL_VERSION);
     assert.equal(result.report.provider.id, "circuit-component-spec");
 
-    assert.deepEqual(
-      result.pages.map((page) => page.relativePath),
-      ["index.mdx"],
-    );
-    assert.deepEqual(result.emitted?.written, ["index.mdx"]);
+    // The landing page, the catalog, the records index, and one page per
+    // selected record. A change in this count means a renderer was added or a
+    // record stopped being published — both worth failing on.
+    const paths = result.pages.map((page) => page.relativePath);
+    assert.equal(paths.length, result.report.records.selected + 3);
+    assert.ok(paths.includes("index.mdx"));
+    assert.ok(paths.includes("catalog/index.mdx"));
+    assert.ok(paths.includes("records/index.mdx"));
+    assert.ok(paths.includes("records/al8860mp-13/index.mdx"));
+    // `emit` reports in path order; the renderers produce inventory order.
+    assert.deepEqual([...(result.emitted?.written ?? [])].sort(), [...paths].sort());
   });
 
   it("is idempotent — a second run writes nothing", async () => {
@@ -52,7 +58,10 @@ describe("the real circuit adapter", () => {
       dryRun: false,
     });
     assert.deepEqual(result.emitted?.written, []);
-    assert.deepEqual(result.emitted?.unchanged, ["index.mdx"]);
+    assert.deepEqual(
+      [...(result.emitted?.unchanged ?? [])].sort(),
+      result.pages.map((page) => page.relativePath).sort(),
+    );
   });
 
   it("emits identical bytes on repeated runs (no timestamps, no locale order)", async () => {

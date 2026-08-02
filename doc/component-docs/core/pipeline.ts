@@ -17,7 +17,10 @@ import { diffAgainstDisk, emit, type EmitResult } from "./emit.ts";
 import { fail } from "./errors.ts";
 import { assertUnique } from "./ids.ts";
 import { PublicationPolicy, type PreflightReport } from "./publication.ts";
+import { renderCatalog } from "./render/catalog.ts";
 import { renderLanding } from "./render/landing.ts";
+import { renderRecord, renderRecordsIndex } from "./render/record.ts";
+import { buildRecordIndex } from "./render/shared.ts";
 import { VIEW_MODEL_VERSION } from "./view-model.ts";
 import type { ComponentDataAdapter } from "./adapter.ts";
 import type { GeneratedPage } from "./page.ts";
@@ -89,7 +92,18 @@ export async function runPipeline(
     ]),
   );
 
-  const pages: GeneratedPage[] = [renderLanding(model, policy)];
+  // One index built once and handed to every record page. The evidence graph
+  // crosses records — a calculated fact cites a fact owned by another part, an
+  // interaction spans several — so a page cannot resolve its own links from its
+  // own record alone.
+  const recordIndex = buildRecordIndex(model);
+
+  const pages: GeneratedPage[] = [
+    renderLanding(model, policy),
+    renderCatalog(model),
+    renderRecordsIndex(model.records),
+    ...model.records.map((record) => renderRecord(record, recordIndex)),
+  ];
   assertUnique("generated path", pages.map((page) => page.relativePath));
 
   const plan = { root: options.generatedRoot, pages };

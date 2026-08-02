@@ -35,3 +35,16 @@
   display: inline;
   scroll-margin-top: 6rem;
 }
+
+/* Pin-assignment tables are reference data a reader looks up rather than reads,
+   so they ship inside a native <details>. It opens with no JavaScript, and the
+   rows sit in the generated HTML and the Pagefind index whether it is open or
+   closed. Only content that carries no claim is ever wrapped this way. */
+.zld-evidence-details > summary {
+  cursor: pointer;
+}
+
+.zld-evidence-details > summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
