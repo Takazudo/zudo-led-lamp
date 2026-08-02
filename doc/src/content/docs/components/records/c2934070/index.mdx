@@ -92,57 +92,69 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-| Fact                                                                         | Value        | Unit   | Conditions                                      | Verdict                         | Provenance   | Evidence                                                                          |
-| ---------------------------------------------------------------------------- | ------------ | ------ | ----------------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c2934070-temperature" />`fact-c2934070-temperature` | -55 to 155 C | `NONE` | family operating range with derating above 70 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section ratings table and derating curve](#src-c2934070-spec) |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value        | Unit   | Conditions                                      | Verdict                         | Provenance   | Evidence                                                                          |
+  | ---------------------------------------------------------------------------- | ------------ | ------ | ----------------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c2934070-temperature" />`fact-c2934070-temperature` | -55 to 155 C | `NONE` | family operating range with derating above 70 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section ratings table and derating curve](#src-c2934070-spec) |
+</EvidenceTable>
 
 ### RECOMMENDED\_OPERATION
 
 The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
 
-| Fact                                                                 | Value             | Unit | Conditions                                                                                                                          | Verdict                         | Provenance   | Evidence                                                                                                                                               |
-| -------------------------------------------------------------------- | ----------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-c2934070-voltage" />`fact-c2934070-voltage` | 200               | `V`  | 2512 package maximum working-voltage ceiling; not the exact continuous rated voltage and not an overload or dielectric-test ceiling | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: page 3 2512 ratings row and rated-voltage note](#src-c2934070-spec)                                                                |
-| <EvidenceAnchor id="fact-c2934070-rcwv" />`fact-c2934070-rcwv`       | 5.744562646538029 | `V`  | exact 33 ohm, 1 W nominal rated continuous working voltage; lower than the 200 V package ceiling                                    | PASS - primary-source confirmed | CALCULATED   | [`src-c2934070-spec`](#src-c2934070-spec) — calculated from fact-c2934070-power and fact-c2934070-resistance using the manufacturer rated-voltage note |
+<EvidenceTable label="facts">
+  | Fact                                                                 | Value             | Unit | Conditions                                                                                                                          | Verdict                         | Provenance   | Evidence                                                                                                                                               |
+  | -------------------------------------------------------------------- | ----------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-c2934070-voltage" />`fact-c2934070-voltage` | 200               | `V`  | 2512 package maximum working-voltage ceiling; not the exact continuous rated voltage and not an overload or dielectric-test ceiling | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: page 3 2512 ratings row and rated-voltage note](#src-c2934070-spec)                                                                |
+  | <EvidenceAnchor id="fact-c2934070-rcwv" />`fact-c2934070-rcwv`       | 5.744562646538029 | `V`  | exact 33 ohm, 1 W nominal rated continuous working voltage; lower than the 200 V package ceiling                                    | PASS - primary-source confirmed | CALCULATED   | [`src-c2934070-spec`](#src-c2934070-spec) — calculated from fact-c2934070-power and fact-c2934070-resistance using the manufacturer rated-voltage note |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                       | Value | Unit    | Conditions                                                      | Verdict                         | Provenance   | Evidence                                                                   |
-| -------------------------------------------------------------------------- | ----- | ------- | --------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c2934070-resistance" />`fact-c2934070-resistance` | 33    | `Ohm`   | 33R0 order code                                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section ordering-code table](#src-c2934070-spec)       |
-| <EvidenceAnchor id="fact-c2934070-tolerance" />`fact-c2934070-tolerance`   | 1     | `%`     | F tolerance code, plus/minus                                    | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section ordering-code table](#src-c2934070-spec)       |
-| <EvidenceAnchor id="fact-c2934070-tcr" />`fact-c2934070-tcr`               | 100   | `ppm/C` | plus/minus for 10 ohm through 10 Mohm, 2512 plus/minus 1% range | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: page 4 resistance-range/TCR table](#src-c2934070-spec) |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value | Unit    | Conditions                                                      | Verdict                         | Provenance   | Evidence                                                                   |
+  | -------------------------------------------------------------------------- | ----- | ------- | --------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c2934070-resistance" />`fact-c2934070-resistance` | 33    | `Ohm`   | 33R0 order code                                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section ordering-code table](#src-c2934070-spec)       |
+  | <EvidenceAnchor id="fact-c2934070-tolerance" />`fact-c2934070-tolerance`   | 1     | `%`     | F tolerance code, plus/minus                                    | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section ordering-code table](#src-c2934070-spec)       |
+  | <EvidenceAnchor id="fact-c2934070-tcr" />`fact-c2934070-tcr`               | 100   | `ppm/C` | plus/minus for 10 ohm through 10 Mohm, 2512 plus/minus 1% range | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: page 4 resistance-range/TCR table](#src-c2934070-spec) |
+</EvidenceTable>
 
 ### THERMAL\_SOA
 
 Thermal and safe-operating-area behaviour: how much the part may dissipate, and under what mounting and ambient conditions.
 
-| Fact                                                             | Value | Unit | Conditions                                   | Verdict                         | Provenance   | Evidence                                                                             |
-| ---------------------------------------------------------------- | ----- | ---- | -------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-c2934070-power" />`fact-c2934070-power` | 1     | `W`  | 2512 rating at 70 C; derate to zero at 155 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section 2512 ratings row and derating curve](#src-c2934070-spec) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value | Unit | Conditions                                   | Verdict                         | Provenance   | Evidence                                                                             |
+  | ---------------------------------------------------------------- | ----- | ---- | -------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-c2934070-power" />`fact-c2934070-power` | 1     | `W`  | 2512 rating at 70 C; derate to zero at 155 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c2934070-spec: section 2512 ratings row and derating curve](#src-c2934070-spec) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                           | Value                                                                                 | Unit   | Conditions                                                       | Verdict                         | Provenance     | Evidence                                                                            |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------- | ------------------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c2934070-manufacturer" />`fact-c2934070-manufacturer` | FOJAN                                                                                 | `NONE` | exact order-code context from manufacturer-primary specification | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-c2934070-spec: page 1 title block and ordering-code table](#src-c2934070-spec) |
-| <EvidenceAnchor id="fact-c2934070-topology" />`fact-c2934070-topology`         | R30 through R37 each ballast one three-LED series branch; eight branches are parallel | `NONE` | generated Board L netlist                                        | NOT APPLICABLE                  | PROJECT-CHOICE | [src-c2934070-generator: section branch construction](#src-c2934070-generator)      |
-| <EvidenceAnchor id="fact-c2934070-drop-60ma" />`fact-c2934070-drop-60ma`       | 1.98                                                                                  | `V`    | nominal arithmetic at 60 mA; not proof of operating current      | NEEDS BENCH                     | CALCULATED     | [`src-c2934070-spec`](#src-c2934070-spec) — calculated: 33 Ohm \* 0.06 A            |
-| <EvidenceAnchor id="fact-c2934070-power-60ma" />`fact-c2934070-power-60ma`     | 0.11879999999999999                                                                   | `W`    | nominal arithmetic at 60 mA; not proof of operating current      | NEEDS BENCH                     | CALCULATED     | [`src-c2934070-spec`](#src-c2934070-spec) — calculated: 33 Ohm \* 0.06 A squared    |
+<EvidenceTable label="facts">
+  | Fact                                                                           | Value                                                                                 | Unit   | Conditions                                                       | Verdict                         | Provenance     | Evidence                                                                            |
+  | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------- | ------------------------------- | -------------- | ----------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c2934070-manufacturer" />`fact-c2934070-manufacturer` | FOJAN                                                                                 | `NONE` | exact order-code context from manufacturer-primary specification | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-c2934070-spec: page 1 title block and ordering-code table](#src-c2934070-spec) |
+  | <EvidenceAnchor id="fact-c2934070-topology" />`fact-c2934070-topology`         | R30 through R37 each ballast one three-LED series branch; eight branches are parallel | `NONE` | generated Board L netlist                                        | NOT APPLICABLE                  | PROJECT-CHOICE | [src-c2934070-generator: section branch construction](#src-c2934070-generator)      |
+  | <EvidenceAnchor id="fact-c2934070-drop-60ma" />`fact-c2934070-drop-60ma`       | 1.98                                                                                  | `V`    | nominal arithmetic at 60 mA; not proof of operating current      | NEEDS BENCH                     | CALCULATED     | [`src-c2934070-spec`](#src-c2934070-spec) — calculated: 33 Ohm \* 0.06 A            |
+  | <EvidenceAnchor id="fact-c2934070-power-60ma" />`fact-c2934070-power-60ma`     | 0.11879999999999999                                                                   | `W`    | nominal arithmetic at 60 mA; not proof of operating current      | NEEDS BENCH                     | CALCULATED     | [`src-c2934070-spec`](#src-c2934070-spec) — calculated: 33 Ohm \* 0.06 A squared    |
+</EvidenceTable>
 
 ## Calculation dependencies
 
 These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
 
-| Fact                                                    | Expression                                                | Depends on                                                                                             |
-| ------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [`fact-c2934070-rcwv`](#fact-c2934070-rcwv)             | `(fact_c2934070_power * fact_c2934070_resistance) ** 0.5` | [`fact-c2934070-power`](#fact-c2934070-power), [`fact-c2934070-resistance`](#fact-c2934070-resistance) |
-| [`fact-c2934070-drop-60ma`](#fact-c2934070-drop-60ma)   | `fact_c2934070_resistance * 0.06`                         | [`fact-c2934070-resistance`](#fact-c2934070-resistance)                                                |
-| [`fact-c2934070-power-60ma`](#fact-c2934070-power-60ma) | `fact_c2934070_resistance * 0.06 * 0.06`                  | [`fact-c2934070-resistance`](#fact-c2934070-resistance)                                                |
+<EvidenceTable label="calculation-dependencies">
+  | Fact                                                    | Expression                                                | Depends on                                                                                             |
+  | ------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+  | [`fact-c2934070-rcwv`](#fact-c2934070-rcwv)             | `(fact_c2934070_power * fact_c2934070_resistance) ** 0.5` | [`fact-c2934070-power`](#fact-c2934070-power), [`fact-c2934070-resistance`](#fact-c2934070-resistance) |
+  | [`fact-c2934070-drop-60ma`](#fact-c2934070-drop-60ma)   | `fact_c2934070_resistance * 0.06`                         | [`fact-c2934070-resistance`](#fact-c2934070-resistance)                                                |
+  | [`fact-c2934070-power-60ma`](#fact-c2934070-power-60ma) | `fact_c2934070_resistance * 0.06 * 0.06`                  | [`fact-c2934070-resistance`](#fact-c2934070-resistance)                                                |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -157,10 +169,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name         | Footprint pad | Function         |
-  | ---------- | ------------ | ------------- | ---------------- |
-  | `1`        | `terminal-1` | `1`           | passive terminal |
-  | `2`        | `terminal-2` | `2`           | passive terminal |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name         | Footprint pad | Function         |
+    | ---------- | ------------ | ------------- | ---------------- |
+    | `1`        | `terminal-1` | `1`           | passive terminal |
+    | `2`        | `terminal-2` | `2`           | passive terminal |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

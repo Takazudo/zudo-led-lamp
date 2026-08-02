@@ -88,52 +88,62 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
 
-| Fact                                                                   | Value                                   | Unit   | Conditions                              | Verdict                         | Provenance   | Evidence                                                                                                               |
-| ---------------------------------------------------------------------- | --------------------------------------- | ------ | --------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-rlp25-power" />`fact-rlp25-power`             | 2                                       | `W`    | E power code with applicable derating   | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Product Identification table row E power](#src-rlp25-spec)                                    |
-| <EvidenceAnchor id="fact-rlp25-temperature" />`fact-rlp25-temperature` | -55 to +170 C; power derates above 70 C | `NONE` | RLP series operation and derating curve | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Ratings table row Operation Temperature Range and Figure 5.1 Derating Curve](#src-rlp25-spec) |
+<EvidenceTable label="facts">
+  | Fact                                                                   | Value                                   | Unit   | Conditions                              | Verdict                         | Provenance   | Evidence                                                                                                               |
+  | ---------------------------------------------------------------------- | --------------------------------------- | ------ | --------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-rlp25-power" />`fact-rlp25-power`             | 2                                       | `W`    | E power code with applicable derating   | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Product Identification table row E power](#src-rlp25-spec)                                    |
+  | <EvidenceAnchor id="fact-rlp25-temperature" />`fact-rlp25-temperature` | -55 to +170 C; power derates above 70 C | `NONE` | RLP series operation and derating curve | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Ratings table row Operation Temperature Range and Figure 5.1 Derating Curve](#src-rlp25-spec) |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                 | Value | Unit    | Conditions                                             | Verdict                         | Provenance   | Evidence                                                                                           |
-| -------------------------------------------------------------------- | ----- | ------- | ------------------------------------------------------ | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-rlp25-resistance" />`fact-rlp25-resistance` | 0.2   | `ohm`   | R200 nominal resistance code                           | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Product Identification table row R200](#src-rlp25-spec)                   |
-| <EvidenceAnchor id="fact-rlp25-tolerance" />`fact-rlp25-tolerance`   | 0.01  | `ratio` | F initial resistance tolerance at reference conditions | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Product Identification table row F](#src-rlp25-spec)                      |
-| <EvidenceAnchor id="fact-rlp25-tcr" />`fact-rlp25-tcr`               | 50    | `ppm/C` | magnitude, +25 C to +125 C test                        | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Ratings table row Temperature Coefficient of Resistance](#src-rlp25-spec) |
+<EvidenceTable label="facts">
+  | Fact                                                                 | Value | Unit    | Conditions                                             | Verdict                         | Provenance   | Evidence                                                                                           |
+  | -------------------------------------------------------------------- | ----- | ------- | ------------------------------------------------------ | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-rlp25-resistance" />`fact-rlp25-resistance` | 0.2   | `ohm`   | R200 nominal resistance code                           | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Product Identification table row R200](#src-rlp25-spec)                   |
+  | <EvidenceAnchor id="fact-rlp25-tolerance" />`fact-rlp25-tolerance`   | 0.01  | `ratio` | F initial resistance tolerance at reference conditions | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Product Identification table row F](#src-rlp25-spec)                      |
+  | <EvidenceAnchor id="fact-rlp25-tcr" />`fact-rlp25-tcr`               | 50    | `ppm/C` | magnitude, +25 C to +125 C test                        | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Ratings table row Temperature Coefficient of Resistance](#src-rlp25-spec) |
+</EvidenceTable>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-| Fact                                                             | Value | Unit                | Conditions                                                                  | Verdict                         | Provenance   | Evidence                                                                                   |
-| ---------------------------------------------------------------- | ----- | ------------------- | --------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-rlp25-overload" />`fact-rlp25-overload` | 5     | `times-rated-power` | short-time overload for 5 seconds; post-test resistance shift limit applies | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Reliability Tests table row Short time overload](#src-rlp25-spec) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value | Unit                | Conditions                                                                  | Verdict                         | Provenance   | Evidence                                                                                   |
+  | ---------------------------------------------------------------- | ----- | ------------------- | --------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-rlp25-overload" />`fact-rlp25-overload` | 5     | `times-rated-power` | short-time overload for 5 seconds; post-test resistance shift limit applies | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rlp25-spec: Section Reliability Tests table row Short time overload](#src-rlp25-spec) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                         | Value                | Unit   | Conditions                                                                                                                                                      | Verdict                         | Provenance     | Evidence                                                                                                          |
-| ---------------------------------------------------------------------------- | -------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-rlp25-manufacturer" />`fact-rlp25-manufacturer`     | TA-I Technology      | `NONE` | exact RLP25FEER200 orderable identity                                                                                                                           | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-rlp25-spec: title block and Section Product Identification table row RLP25](#src-rlp25-spec)                 |
-| <EvidenceAnchor id="fact-rlp25-resistance-min" />`fact-rlp25-resistance-min` | 0.198                | `ohm`  | minimum initial resistance at reference conditions; TCR and self-heating excluded                                                                               | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-rlp25-resistance times one minus fact-rlp25-tolerance      |
-| <EvidenceAnchor id="fact-rlp25-resistance-max" />`fact-rlp25-resistance-max` | 0.202                | `ohm`  | maximum initial resistance at reference conditions; TCR and self-heating excluded                                                                               | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-rlp25-resistance times one plus fact-rlp25-tolerance       |
-| <EvidenceAnchor id="fact-rlp25-project-nets" />`fact-rlp25-project-nets`     | RS1.1=V15; RS1.2=SET | `NONE` | current generated Board L source                                                                                                                                | NOT APPLICABLE                  | PROJECT-CHOICE | [src-rlp25-generator: COMPONENTS table row RS1 and NETS rows V15 and SET](#src-rlp25-generator)                   |
-| <EvidenceAnchor id="fact-rlp25-worst-power" />`fact-rlp25-worst-power`       | 0.05462626262626262  | `W`    | upper calculated mean LED current through the same minimum initial 1% resistance that produces that current; TCR, PCB temperature, and pulse loading unresolved | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-al8860-current-max squared times fact-rlp25-resistance-min |
-| <EvidenceAnchor id="fact-rlp25-power-margin" />`fact-rlp25-power-margin`     | 1.9453737373737374   | `W`    | reference-condition initial-tolerance calculation before PCB/ambient derating and pulse qualification                                                           | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-rlp25-power minus fact-rlp25-worst-power                   |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value                | Unit   | Conditions                                                                                                                                                      | Verdict                         | Provenance     | Evidence                                                                                                          |
+  | ---------------------------------------------------------------------------- | -------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-rlp25-manufacturer" />`fact-rlp25-manufacturer`     | TA-I Technology      | `NONE` | exact RLP25FEER200 orderable identity                                                                                                                           | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-rlp25-spec: title block and Section Product Identification table row RLP25](#src-rlp25-spec)                 |
+  | <EvidenceAnchor id="fact-rlp25-resistance-min" />`fact-rlp25-resistance-min` | 0.198                | `ohm`  | minimum initial resistance at reference conditions; TCR and self-heating excluded                                                                               | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-rlp25-resistance times one minus fact-rlp25-tolerance      |
+  | <EvidenceAnchor id="fact-rlp25-resistance-max" />`fact-rlp25-resistance-max` | 0.202                | `ohm`  | maximum initial resistance at reference conditions; TCR and self-heating excluded                                                                               | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-rlp25-resistance times one plus fact-rlp25-tolerance       |
+  | <EvidenceAnchor id="fact-rlp25-project-nets" />`fact-rlp25-project-nets`     | RS1.1=V15; RS1.2=SET | `NONE` | current generated Board L source                                                                                                                                | NOT APPLICABLE                  | PROJECT-CHOICE | [src-rlp25-generator: COMPONENTS table row RS1 and NETS rows V15 and SET](#src-rlp25-generator)                   |
+  | <EvidenceAnchor id="fact-rlp25-worst-power" />`fact-rlp25-worst-power`       | 0.05462626262626262  | `W`    | upper calculated mean LED current through the same minimum initial 1% resistance that produces that current; TCR, PCB temperature, and pulse loading unresolved | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-al8860-current-max squared times fact-rlp25-resistance-min |
+  | <EvidenceAnchor id="fact-rlp25-power-margin" />`fact-rlp25-power-margin`     | 1.9453737373737374   | `W`    | reference-condition initial-tolerance calculation before PCB/ambient derating and pulse qualification                                                           | NEEDS BENCH                     | CALCULATED     | [`src-rlp25-spec`](#src-rlp25-spec) — CALCULATED: fact-rlp25-power minus fact-rlp25-worst-power                   |
+</EvidenceTable>
 
 ## Calculation dependencies
 
 These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
 
-| Fact                                                      | Expression                                                                      | Depends on                                                                                                                                                           |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`fact-rlp25-resistance-min`](#fact-rlp25-resistance-min) | `fact_rlp25_resistance * (1 - fact_rlp25_tolerance)`                            | [`fact-rlp25-resistance`](#fact-rlp25-resistance), [`fact-rlp25-tolerance`](#fact-rlp25-tolerance)                                                                   |
-| [`fact-rlp25-resistance-max`](#fact-rlp25-resistance-max) | `fact_rlp25_resistance * (1 + fact_rlp25_tolerance)`                            | [`fact-rlp25-resistance`](#fact-rlp25-resistance), [`fact-rlp25-tolerance`](#fact-rlp25-tolerance)                                                                   |
-| [`fact-rlp25-worst-power`](#fact-rlp25-worst-power)       | `fact_al8860_current_max * fact_al8860_current_max * fact_rlp25_resistance_min` | [`fact-al8860-current-max`](/docs/components/records/al8860mp-13/#fact-al8860-current-max) on AL8860MP-13, [`fact-rlp25-resistance-min`](#fact-rlp25-resistance-min) |
-| [`fact-rlp25-power-margin`](#fact-rlp25-power-margin)     | `fact_rlp25_power - fact_rlp25_worst_power`                                     | [`fact-rlp25-power`](#fact-rlp25-power), [`fact-rlp25-worst-power`](#fact-rlp25-worst-power)                                                                         |
+<EvidenceTable label="calculation-dependencies">
+  | Fact                                                      | Expression                                                                      | Depends on                                                                                                                                                           |
+  | --------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [`fact-rlp25-resistance-min`](#fact-rlp25-resistance-min) | `fact_rlp25_resistance * (1 - fact_rlp25_tolerance)`                            | [`fact-rlp25-resistance`](#fact-rlp25-resistance), [`fact-rlp25-tolerance`](#fact-rlp25-tolerance)                                                                   |
+  | [`fact-rlp25-resistance-max`](#fact-rlp25-resistance-max) | `fact_rlp25_resistance * (1 + fact_rlp25_tolerance)`                            | [`fact-rlp25-resistance`](#fact-rlp25-resistance), [`fact-rlp25-tolerance`](#fact-rlp25-tolerance)                                                                   |
+  | [`fact-rlp25-worst-power`](#fact-rlp25-worst-power)       | `fact_al8860_current_max * fact_al8860_current_max * fact_rlp25_resistance_min` | [`fact-al8860-current-max`](/docs/components/records/al8860mp-13/#fact-al8860-current-max) on AL8860MP-13, [`fact-rlp25-resistance-min`](#fact-rlp25-resistance-min) |
+  | [`fact-rlp25-power-margin`](#fact-rlp25-power-margin)     | `fact_rlp25_power - fact_rlp25_worst_power`                                     | [`fact-rlp25-power`](#fact-rlp25-power), [`fact-rlp25-worst-power`](#fact-rlp25-worst-power)                                                                         |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -148,10 +158,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name  | Footprint pad | Function                  |
-  | ---------- | ----- | ------------- | ------------------------- |
-  | `1`        | `V15` | `1`           | high-side supply terminal |
-  | `2`        | `SET` | `2`           | sense terminal            |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name  | Footprint pad | Function                  |
+    | ---------- | ----- | ------------- | ------------------------- |
+    | `1`        | `V15` | `1`           | high-side supply terminal |
+    | `2`        | `SET` | `2`           | sense terminal            |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

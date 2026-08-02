@@ -83,19 +83,23 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                             | Value                                                                                       | Unit   | Conditions                                                                                                        | Verdict                         | Provenance   | Evidence                                                                                                                                |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c492404-rating" />`fact-c492404-rating` | 3 A, contact resistance 20 milliohm maximum, -40 to 105 C, dielectric withstand 500 VAC/min | `NONE` | PZ254V-11 family drawing; voltage working rating is not stated and must not be inferred from dielectric withstand | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c492404-drawing: specification notes rows current, contact resistance, temperature and dielectric withstand](#src-c492404-drawing) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value                                                                                       | Unit   | Conditions                                                                                                        | Verdict                         | Provenance   | Evidence                                                                                                                                |
+  | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c492404-rating" />`fact-c492404-rating` | 3 A, contact resistance 20 milliohm maximum, -40 to 105 C, dielectric withstand 500 VAC/min | `NONE` | PZ254V-11 family drawing; voltage working rating is not stated and must not be inferred from dielectric withstand | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c492404-drawing: specification notes rows current, contact resistance, temperature and dielectric withstand](#src-c492404-drawing) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                         | Value                                                                                                                      | Unit   | Conditions                                                                          | Verdict                         | Provenance     | Evidence                                                                      |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------- | ------------------------------- | -------------- | ----------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c492404-manufacturer" />`fact-c492404-manufacturer` | XFCN                                                                                                                       | `NONE` | PZ254V-11 family identity; exact XX=05 selection is locked by the project generator | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-c492404-drawing: title block row PZ254V-11-XX](#src-c492404-drawing)     |
-| <EvidenceAnchor id="fact-c492404-mechanical" />`fact-c492404-mechanical`     | 5 positions at 2.54 mm pitch; 10.16 mm span; 0.64 mm square pins; 1.02 mm PCB holes; 6.1 mm mating and 3.0 mm tail lengths | `NONE` | XX=05 dimensional row                                                               | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-c492404-drawing: title block and dimensions table](#src-c492404-drawing) |
-| <EvidenceAnchor id="fact-c492404-topology" />`fact-c492404-topology`         | J3 pin order 1 SWDIO, 2 SWCLK, 3 NRST, 4 V3P3, 5 GND; hand-fit/DNP                                                         | `NONE` | generated Board L netlist and population flag                                       | NOT APPLICABLE                  | PROJECT-CHOICE | [src-c492404-generator: section PARTS J3 and NETS](#src-c492404-generator)    |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value                                                                                                                      | Unit   | Conditions                                                                          | Verdict                         | Provenance     | Evidence                                                                      |
+  | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------- | ------------------------------- | -------------- | ----------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c492404-manufacturer" />`fact-c492404-manufacturer` | XFCN                                                                                                                       | `NONE` | PZ254V-11 family identity; exact XX=05 selection is locked by the project generator | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-c492404-drawing: title block row PZ254V-11-XX](#src-c492404-drawing)     |
+  | <EvidenceAnchor id="fact-c492404-mechanical" />`fact-c492404-mechanical`     | 5 positions at 2.54 mm pitch; 10.16 mm span; 0.64 mm square pins; 1.02 mm PCB holes; 6.1 mm mating and 3.0 mm tail lengths | `NONE` | XX=05 dimensional row                                                               | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-c492404-drawing: title block and dimensions table](#src-c492404-drawing) |
+  | <EvidenceAnchor id="fact-c492404-topology" />`fact-c492404-topology`         | J3 pin order 1 SWDIO, 2 SWCLK, 3 NRST, 4 V3P3, 5 GND; hand-fit/DNP                                                         | `NONE` | generated Board L netlist and population flag                                       | NOT APPLICABLE                  | PROJECT-CHOICE | [src-c492404-generator: section PARTS J3 and NETS](#src-c492404-generator)    |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -110,13 +114,15 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 5
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name    | Footprint pad | Function |
-  | ---------- | ------- | ------------- | -------- |
-  | `1`        | `pin-1` | `1`           | SWDIO    |
-  | `2`        | `pin-2` | `2`           | SWCLK    |
-  | `3`        | `pin-3` | `3`           | NRST     |
-  | `4`        | `pin-4` | `4`           | V3P3     |
-  | `5`        | `pin-5` | `5`           | GND      |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name    | Footprint pad | Function |
+    | ---------- | ------- | ------------- | -------- |
+    | `1`        | `pin-1` | `1`           | SWDIO    |
+    | `2`        | `pin-2` | `2`           | SWCLK    |
+    | `3`        | `pin-3` | `3`           | NRST     |
+    | `4`        | `pin-4` | `4`           | V3P3     |
+    | `5`        | `pin-5` | `5`           | GND      |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

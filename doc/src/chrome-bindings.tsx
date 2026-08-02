@@ -19,6 +19,7 @@
 import { defineChromeBindings } from "@takazudo/zudo-doc/chrome-bindings";
 import { EvidenceAnchor } from "../component-docs/ui/evidence-anchor";
 import { EvidenceDetails } from "../component-docs/ui/evidence-details";
+import { EvidenceTable } from "../component-docs/ui/evidence-table";
 
 export const chromeBindings = defineChromeBindings({
   mdxExtras: {
@@ -29,5 +30,6 @@ export const chromeBindings = defineChromeBindings({
     // literal text and silently swallows the content it wraps.
     EvidenceAnchor,
     EvidenceDetails,
+    EvidenceTable,
   },
 });

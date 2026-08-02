@@ -95,23 +95,27 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
 
-| Fact                                                                                 | Value   | Unit   | Conditions                                                                                      | Verdict                         | Provenance   | Evidence                                                                     |
-| ------------------------------------------------------------------------------------ | ------- | ------ | ----------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-current" />`fact-jst-b6b-xh-a-current`         | 3       | `A`    | AC/DC maximum with applicable XH contact and wire-size conditions; harness selection can derate | PASS - primary-source confirmed | PRIMARY-SPEC | [src-jst-xh: page 1 Specifications table row Current rating](#src-jst-xh)    |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-voltage" />`fact-jst-b6b-xh-a-voltage`         | 250     | `V`    | AC/DC series rating under catalog test conditions; PCB spacing/system safety still governs      | PASS - primary-source confirmed | PRIMARY-SPEC | [src-jst-xh: page 1 Specifications table row Voltage rating](#src-jst-xh)    |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-temperature" />`fact-jst-b6b-xh-a-temperature` | -25..85 | `degC` | including terminal temperature rise                                                             | PASS - primary-source confirmed | PRIMARY-SPEC | [src-jst-xh: page 1 Specifications table row Temperature range](#src-jst-xh) |
+<EvidenceTable label="facts">
+  | Fact                                                                                 | Value   | Unit   | Conditions                                                                                      | Verdict                         | Provenance   | Evidence                                                                     |
+  | ------------------------------------------------------------------------------------ | ------- | ------ | ----------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-current" />`fact-jst-b6b-xh-a-current`         | 3       | `A`    | AC/DC maximum with applicable XH contact and wire-size conditions; harness selection can derate | PASS - primary-source confirmed | PRIMARY-SPEC | [src-jst-xh: page 1 Specifications table row Current rating](#src-jst-xh)    |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-voltage" />`fact-jst-b6b-xh-a-voltage`         | 250     | `V`    | AC/DC series rating under catalog test conditions; PCB spacing/system safety still governs      | PASS - primary-source confirmed | PRIMARY-SPEC | [src-jst-xh: page 1 Specifications table row Voltage rating](#src-jst-xh)    |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-temperature" />`fact-jst-b6b-xh-a-temperature` | -25..85 | `degC` | including terminal temperature rise                                                             | PASS - primary-source confirmed | PRIMARY-SPEC | [src-jst-xh: page 1 Specifications table row Temperature range](#src-jst-xh) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                                   | Value                                                                                                            | Unit   | Conditions                                                             | Verdict                         | Provenance     | Evidence                                                                                                            |
-| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------- | ------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-manufacturer" />`fact-jst-b6b-xh-a-manufacturer` | JST                                                                                                              | `NONE` | exact B6B-XH-A header; (LF)(SN) label suffix                           | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh-header: page 5 Header table row B6B-XH-A and JST footer](#src-jst-xh-header)                            |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-identity" />`fact-jst-b6b-xh-a-identity`         | six-circuit top-entry through-hole XH header; label displays (LF)(SN)                                            | `NONE` | B6B-XH-A(LF)(SN) orderable                                             | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh-header: page 5 Header table row B6B-XH-A and note 1](#src-jst-xh-header)                                |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-pitch" />`fact-jst-b6b-xh-a-pitch`               | 2.5                                                                                                              | `mm`   | XH series contact pitch                                                | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh: page 1 title/features row Pitch 2.50 mm](#src-jst-xh)                                                  |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-dimensions" />`fact-jst-b6b-xh-a-dimensions`     | A=12.5 mm, B=17.4 mm; six circuits; square 0.64 mm posts                                                         | `NONE` | top-entry B6B-XH-A dimension figure/table                              | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh-header: page 5 Header table row 6 circuits B6B-XH-A and top-entry dimension figure](#src-jst-xh-header) |
-| <EvidenceAnchor id="fact-jst-b6b-xh-a-harness" />`fact-jst-b6b-xh-a-harness`           | mating housing, contacts, wire gauge/color/length, crimp process, and complete pin-to-pin harness are unselected | `NONE` | current project state; family compatibility is not a selected assembly | NEEDS BENCH                     | PROJECT-CHOICE | [src-jst-xh: mating-parts tables versus project open-domain declaration](#src-jst-xh)                               |
+<EvidenceTable label="facts">
+  | Fact                                                                                   | Value                                                                                                            | Unit   | Conditions                                                             | Verdict                         | Provenance     | Evidence                                                                                                            |
+  | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------- | ------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-manufacturer" />`fact-jst-b6b-xh-a-manufacturer` | JST                                                                                                              | `NONE` | exact B6B-XH-A header; (LF)(SN) label suffix                           | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh-header: page 5 Header table row B6B-XH-A and JST footer](#src-jst-xh-header)                            |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-identity" />`fact-jst-b6b-xh-a-identity`         | six-circuit top-entry through-hole XH header; label displays (LF)(SN)                                            | `NONE` | B6B-XH-A(LF)(SN) orderable                                             | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh-header: page 5 Header table row B6B-XH-A and note 1](#src-jst-xh-header)                                |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-pitch" />`fact-jst-b6b-xh-a-pitch`               | 2.5                                                                                                              | `mm`   | XH series contact pitch                                                | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh: page 1 title/features row Pitch 2.50 mm](#src-jst-xh)                                                  |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-dimensions" />`fact-jst-b6b-xh-a-dimensions`     | A=12.5 mm, B=17.4 mm; six circuits; square 0.64 mm posts                                                         | `NONE` | top-entry B6B-XH-A dimension figure/table                              | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-jst-xh-header: page 5 Header table row 6 circuits B6B-XH-A and top-entry dimension figure](#src-jst-xh-header) |
+  | <EvidenceAnchor id="fact-jst-b6b-xh-a-harness" />`fact-jst-b6b-xh-a-harness`           | mating housing, contacts, wire gauge/color/length, crimp process, and complete pin-to-pin harness are unselected | `NONE` | current project state; family compatibility is not a selected assembly | NEEDS BENCH                     | PROJECT-CHOICE | [src-jst-xh: mating-parts tables versus project open-domain declaration](#src-jst-xh)                               |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -126,14 +130,16 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 6
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function                      |
-  | ---------- | ---- | ------------- | ----------------------------- |
-  | `1`        | `1`  | `1`           | Board P VBUS\_OUT conductor A |
-  | `2`        | `2`  | `2`           | Board P VBUS\_OUT conductor B |
-  | `3`        | `3`  | `3`           | Board P ATT                   |
-  | `4`        | `4`  | `4`           | Board P PDOK                  |
-  | `5`        | `5`  | `5`           | Board P GND conductor A       |
-  | `6`        | `6`  | `6`           | Board P GND conductor B       |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function                      |
+    | ---------- | ---- | ------------- | ----------------------------- |
+    | `1`        | `1`  | `1`           | Board P VBUS\_OUT conductor A |
+    | `2`        | `2`  | `2`           | Board P VBUS\_OUT conductor B |
+    | `3`        | `3`  | `3`           | Board P ATT                   |
+    | `4`        | `4`  | `4`           | Board P PDOK                  |
+    | `5`        | `5`  | `5`           | Board P GND conductor A       |
+    | `6`        | `6`  | `6`           | Board P GND conductor B       |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ### pinmap-jst-b6b-xh-a-board-l
@@ -145,14 +151,16 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 6
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function                    |
-  | ---------- | ---- | ------------- | --------------------------- |
-  | `1`        | `1`  | `1`           | Board L VBUS\_L conductor A |
-  | `2`        | `2`  | `2`           | Board L VBUS\_L conductor B |
-  | `3`        | `3`  | `3`           | Board L ATT                 |
-  | `4`        | `4`  | `4`           | Board L PDOK                |
-  | `5`        | `5`  | `5`           | Board L GND conductor A     |
-  | `6`        | `6`  | `6`           | Board L GND conductor B     |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function                    |
+    | ---------- | ---- | ------------- | --------------------------- |
+    | `1`        | `1`  | `1`           | Board L VBUS\_L conductor A |
+    | `2`        | `2`  | `2`           | Board L VBUS\_L conductor B |
+    | `3`        | `3`  | `3`           | Board L ATT                 |
+    | `4`        | `4`  | `4`           | Board L PDOK                |
+    | `5`        | `5`  | `5`           | Board L GND conductor A     |
+    | `6`        | `6`  | `6`           | Board L GND conductor B     |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

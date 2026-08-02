@@ -86,51 +86,63 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                 | Value | Unit | Conditions                               | Verdict                         | Provenance   | Evidence                                                        |
-| -------------------------------------------------------------------- | ----- | ---- | ---------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-pesd-leakage" />`fact-pesd-leakage`         | 50    | `nA` | maximum at VRWM=24 V, Tamb=25 degC       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row IRM](#src-pesd24vs1ub) |
-| <EvidenceAnchor id="fact-pesd-capacitance" />`fact-pesd-capacitance` | 50    | `pF` | maximum at f=1 MHz, VR=0 V, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row Cd](#src-pesd24vs1ub)  |
+<EvidenceTable label="facts">
+  | Fact                                                                 | Value | Unit | Conditions                               | Verdict                         | Provenance   | Evidence                                                        |
+  | -------------------------------------------------------------------- | ----- | ---- | ---------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-pesd-leakage" />`fact-pesd-leakage`         | 50    | `nA` | maximum at VRWM=24 V, Tamb=25 degC       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row IRM](#src-pesd24vs1ub) |
+  | <EvidenceAnchor id="fact-pesd-capacitance" />`fact-pesd-capacitance` | 50    | `pF` | maximum at f=1 MHz, VR=0 V, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row Cd](#src-pesd24vs1ub)  |
+</EvidenceTable>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-| Fact                                                 | Value | Unit | Conditions                                                         | Verdict                         | Provenance   | Evidence                                                                        |
-| ---------------------------------------------------- | ----- | ---- | ------------------------------------------------------------------ | ------------------------------- | ------------ | ------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-pesd-esd" />`fact-pesd-esd` | 23    | `kV` | maximum IEC 61000-4-2 contact discharge; ten non-repetitive pulses | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 8, Table 5 ESD maximum-ratings row](#src-pesd24vs1ub) |
+<EvidenceTable label="facts">
+  | Fact                                                 | Value | Unit | Conditions                                                         | Verdict                         | Provenance   | Evidence                                                                        |
+  | ---------------------------------------------------- | ----- | ---- | ------------------------------------------------------------------ | ------------------------------- | ------------ | ------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-pesd-esd" />`fact-pesd-esd` | 23    | `kV` | maximum IEC 61000-4-2 contact discharge; ten non-repetitive pulses | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 8, Table 5 ESD maximum-ratings row](#src-pesd24vs1ub) |
+</EvidenceTable>
 
 ### PROTECTION\_STANDOFF
 
 The voltage a protection device is expected to sit at without conducting.
 
-| Fact                                                           | Value | Unit | Conditions                           | Verdict                         | Provenance   | Evidence                                                         |
-| -------------------------------------------------------------- | ----- | ---- | ------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-pesd-standoff" />`fact-pesd-standoff` | 24    | `V`  | Tamb=25 degC reverse working voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VRWM](#src-pesd24vs1ub) |
+<EvidenceTable label="facts">
+  | Fact                                                           | Value | Unit | Conditions                           | Verdict                         | Provenance   | Evidence                                                         |
+  | -------------------------------------------------------------- | ----- | ---- | ------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-pesd-standoff" />`fact-pesd-standoff` | 24    | `V`  | Tamb=25 degC reverse working voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VRWM](#src-pesd24vs1ub) |
+</EvidenceTable>
 
 ### PROTECTION\_BREAKDOWN
 
 The voltage at which a protection device begins to conduct.
 
-| Fact                                                             | Value      | Unit | Conditions            | Verdict                         | Provenance   | Evidence                                                        |
-| ---------------------------------------------------------------- | ---------- | ---- | --------------------- | ------------------------------- | ------------ | --------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-pesd-breakdown" />`fact-pesd-breakdown` | 26.5..27.5 | `V`  | IR=5 mA, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VBR](#src-pesd24vs1ub) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value      | Unit | Conditions            | Verdict                         | Provenance   | Evidence                                                        |
+  | ---------------------------------------------------------------- | ---------- | ---- | --------------------- | ------------------------------- | ------------ | --------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-pesd-breakdown" />`fact-pesd-breakdown` | 26.5..27.5 | `V`  | IR=5 mA, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VBR](#src-pesd24vs1ub) |
+</EvidenceTable>
 
 ### PROTECTION\_CLAMP
 
 The voltage a protection device clamps to while conducting its rated surge current.
 
-| Fact                                                     | Value                        | Unit | Conditions                                 | Verdict                         | Provenance   | Evidence                                                        |
-| -------------------------------------------------------- | ---------------------------- | ---- | ------------------------------------------ | ------------------------------- | ------------ | --------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-pesd-clamp" />`fact-pesd-clamp` | 36 max at 1 A; 70 max at 3 A | `V`  | non-repetitive 8/20 us pulse, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VCL](#src-pesd24vs1ub) |
+<EvidenceTable label="facts">
+  | Fact                                                     | Value                        | Unit | Conditions                                 | Verdict                         | Provenance   | Evidence                                                        |
+  | -------------------------------------------------------- | ---------------------------- | ---- | ------------------------------------------ | ------------------------------- | ------------ | --------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-pesd-clamp" />`fact-pesd-clamp` | 36 max at 1 A; 70 max at 3 A | `V`  | non-repetitive 8/20 us pulse, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VCL](#src-pesd24vs1ub) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                   | Value                                      | Unit   | Conditions                                                | Verdict                         | Provenance   | Evidence                                                                                                     |
-| ---------------------------------------------------------------------- | ------------------------------------------ | ------ | --------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-pesd-manufacturer" />`fact-pesd-manufacturer` | Nexperia                                   | `NONE` | exact PESD24VS1UB orderable including ,115 packing suffix | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: document title block and ordering information table row PESD24VS1UB,115](#src-pesd24vs1ub) |
-| <EvidenceAnchor id="fact-pesd-pinout" />`fact-pesd-pinout`             | pin 1 cathode, pin 2 anode; unidirectional | `NONE` | SOD523 package top-view marking/orientation               | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 4, Table pinning; Section 11 Figure 10](#src-pesd24vs1ub)                          |
+<EvidenceTable label="facts">
+  | Fact                                                                   | Value                                      | Unit   | Conditions                                                | Verdict                         | Provenance   | Evidence                                                                                                     |
+  | ---------------------------------------------------------------------- | ------------------------------------------ | ------ | --------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-pesd-manufacturer" />`fact-pesd-manufacturer` | Nexperia                                   | `NONE` | exact PESD24VS1UB orderable including ,115 packing suffix | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: document title block and ordering information table row PESD24VS1UB,115](#src-pesd24vs1ub) |
+  | <EvidenceAnchor id="fact-pesd-pinout" />`fact-pesd-pinout`             | pin 1 cathode, pin 2 anode; unidirectional | `NONE` | SOD523 package top-view marking/orientation               | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 4, Table pinning; Section 11 Figure 10](#src-pesd24vs1ub)                          |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -145,10 +157,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function                     |
-  | ---------- | ---- | ------------- | ---------------------------- |
-  | `1`        | `K`  | `1`           | cathode to protected CC line |
-  | `2`        | `A`  | `2`           | anode to ground              |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function                     |
+    | ---------- | ---- | ------------- | ---------------------------- |
+    | `1`        | `K`  | `1`           | cathode to protected CC line |
+    | `2`        | `A`  | `2`           | anode to ground              |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

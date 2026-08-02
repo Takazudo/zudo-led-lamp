@@ -136,37 +136,45 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-| Fact                                                             | Value | Unit  | Conditions       | Verdict                         | Provenance   | Evidence                                                                            |
-| ---------------------------------------------------------------- | ----- | ----- | ---------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c14663-voltage" />`fact-c14663-voltage` | 50    | `Vdc` | rated DC voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, row Voltage DC](#src-c14663-yageo) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value | Unit  | Conditions       | Verdict                         | Provenance   | Evidence                                                                            |
+  | ---------------------------------------------------------------- | ----- | ----- | ---------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c14663-voltage" />`fact-c14663-voltage` | 50    | `Vdc` | rated DC voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, row Voltage DC](#src-c14663-yageo) |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                     | Value              | Unit   | Conditions                    | Verdict                         | Provenance   | Evidence                                                                                                          |
-| ------------------------------------------------------------------------ | ------------------ | ------ | ----------------------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c14663-capacitance" />`fact-c14663-capacitance` | 0.1                | `uF`   | nominal                       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, row Capacitance](#src-c14663-yageo)                              |
-| <EvidenceAnchor id="fact-c14663-tolerance" />`fact-c14663-tolerance`     | 10                 | `%`    | tolerance                     | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, row Tolerance](#src-c14663-yageo)                                |
-| <EvidenceAnchor id="fact-c14663-dielectric" />`fact-c14663-dielectric`   | X7R, -55 to +125 C | `NONE` | temperature coefficient/range | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, rows Temperature Range and Temp. Coefficient](#src-c14663-yageo) |
+<EvidenceTable label="facts">
+  | Fact                                                                     | Value              | Unit   | Conditions                    | Verdict                         | Provenance   | Evidence                                                                                                          |
+  | ------------------------------------------------------------------------ | ------------------ | ------ | ----------------------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c14663-capacitance" />`fact-c14663-capacitance` | 0.1                | `uF`   | nominal                       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, row Capacitance](#src-c14663-yageo)                              |
+  | <EvidenceAnchor id="fact-c14663-tolerance" />`fact-c14663-tolerance`     | 10                 | `%`    | tolerance                     | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, row Tolerance](#src-c14663-yageo)                                |
+  | <EvidenceAnchor id="fact-c14663-dielectric" />`fact-c14663-dielectric`   | X7R, -55 to +125 C | `NONE` | temperature coefficient/range | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c14663-yageo: page 1, Specifications table, rows Temperature Range and Temp. Coefficient](#src-c14663-yageo) |
+</EvidenceTable>
 
 ### TYPICAL\_CURVE
 
 A representative figure read from a characteristic curve. Typical values are not guaranteed and vary part to part.
 
-| Fact                                                                                 | Value                                                                                           | Unit   | Conditions                                  | Verdict     | Provenance   | Evidence                                                                                          |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------ | ------------------------------------------- | ----------- | ------------ | ------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c14663-simulation-caveat" />`fact-c14663-simulation-caveat` | Simulation response is not a specification and is not a specified or implied maximum capability | `NONE` | DC bias/ripple/temperature simulation pages | NEEDS BENCH | PRIMARY-SPEC | [Section evidence, src-c14663-yageo: page 4, simulation disclaimer paragraphs](#src-c14663-yageo) |
+<EvidenceTable label="facts">
+  | Fact                                                                                 | Value                                                                                           | Unit   | Conditions                                  | Verdict     | Provenance   | Evidence                                                                                          |
+  | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------ | ------------------------------------------- | ----------- | ------------ | ------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c14663-simulation-caveat" />`fact-c14663-simulation-caveat` | Simulation response is not a specification and is not a specified or implied maximum capability | `NONE` | DC bias/ripple/temperature simulation pages | NEEDS BENCH | PRIMARY-SPEC | [Section evidence, src-c14663-yageo: page 4, simulation disclaimer paragraphs](#src-c14663-yageo) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                       | Value                                         | Unit   | Conditions                        | Verdict                         | Provenance       | Evidence                                                                                 |
-| -------------------------------------------------------------------------- | --------------------------------------------- | ------ | --------------------------------- | ------------------------------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c14663-manufacturer" />`fact-c14663-manufacturer` | Yageo                                         | `NONE` | exact orderable CC0603KRX7R9BB104 | PASS - primary-source confirmed | PRIMARY-SPEC     | [src-c14663-yageo: page 1, title block](#src-c14663-yageo)                               |
-| <EvidenceAnchor id="fact-c14663-termination" />`fact-c14663-termination`   | 0603/1608, tin termination                    | `NONE` | package dimensions                | PASS - primary-source confirmed | PRIMARY-SPEC     | [src-c14663-yageo: page 1, General Information and Dimensions tables](#src-c14663-yageo) |
-| <EvidenceAnchor id="fact-c14663-c35-topology" />`fact-c14663-c35-topology` | C35 is between Q1\_G and VBUS\_IN, not ground | `NONE` | current generated Board P netlist | NOT APPLICABLE                  | REFERENCE-DESIGN | [src-c14663-generator: NETS mapping, rows VBUS\_IN and Q1\_G](#src-c14663-generator)     |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value                                         | Unit   | Conditions                        | Verdict                         | Provenance       | Evidence                                                                                 |
+  | -------------------------------------------------------------------------- | --------------------------------------------- | ------ | --------------------------------- | ------------------------------- | ---------------- | ---------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c14663-manufacturer" />`fact-c14663-manufacturer` | Yageo                                         | `NONE` | exact orderable CC0603KRX7R9BB104 | PASS - primary-source confirmed | PRIMARY-SPEC     | [src-c14663-yageo: page 1, title block](#src-c14663-yageo)                               |
+  | <EvidenceAnchor id="fact-c14663-termination" />`fact-c14663-termination`   | 0603/1608, tin termination                    | `NONE` | package dimensions                | PASS - primary-source confirmed | PRIMARY-SPEC     | [src-c14663-yageo: page 1, General Information and Dimensions tables](#src-c14663-yageo) |
+  | <EvidenceAnchor id="fact-c14663-c35-topology" />`fact-c14663-c35-topology` | C35 is between Q1\_G and VBUS\_IN, not ground | `NONE` | current generated Board P netlist | NOT APPLICABLE                  | REFERENCE-DESIGN | [src-c14663-generator: NETS mapping, rows VBUS\_IN and Q1\_G](#src-c14663-generator)     |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -181,10 +189,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name         | Footprint pad | Function         |
-  | ---------- | ------------ | ------------- | ---------------- |
-  | `1`        | `terminal-1` | `1`           | passive terminal |
-  | `2`        | `terminal-2` | `2`           | passive terminal |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name         | Footprint pad | Function         |
+    | ---------- | ------------ | ------------- | ---------------- |
+    | `1`        | `terminal-1` | `1`           | passive terminal |
+    | `2`        | `terminal-2` | `2`           | passive terminal |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

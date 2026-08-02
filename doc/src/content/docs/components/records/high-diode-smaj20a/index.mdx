@@ -131,59 +131,73 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                                     | Value | Unit | Conditions                       | Verdict                         | Provenance   | Evidence                                                                                        |
-| ---------------------------------------------------------------------------------------- | ----- | ---- | -------------------------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-leakage" />`fact-high-diode-smaj20a-leakage` | 5     | `uA` | maximum IR at VRWM 20 V, TA 25 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row IR and VRWM columns](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                     | Value | Unit | Conditions                       | Verdict                         | Provenance   | Evidence                                                                                        |
+  | ---------------------------------------------------------------------------------------- | ----- | ---- | -------------------------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-leakage" />`fact-high-diode-smaj20a-leakage` | 5     | `uA` | maximum IR at VRWM 20 V, TA 25 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row IR and VRWM columns](#src-high-diode-primary) |
+</EvidenceTable>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-| Fact                                                                                     | Value | Unit | Conditions                                                                                                                                                       | Verdict                         | Provenance   | Evidence                                                                                                                 |
-| ---------------------------------------------------------------------------------------- | ----- | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-thermal" />`fact-high-diode-smaj20a-thermal` | 400   | `W`  | 400 W peak pulse power at 10/1000 us waveform, TA=25 C, with the page 5 pulse-duration and ambient-temperature derating curves; not the catalog API PD\_mW field | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 1 PPPM/temperature features and page 5 waveform/derating figures](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                     | Value | Unit | Conditions                                                                                                                                                       | Verdict                         | Provenance   | Evidence                                                                                                                 |
+  | ---------------------------------------------------------------------------------------- | ----- | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-thermal" />`fact-high-diode-smaj20a-thermal` | 400   | `W`  | 400 W peak pulse power at 10/1000 us waveform, TA=25 C, with the page 5 pulse-duration and ambient-temperature derating curves; not the catalog API PD\_mW field | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 1 PPPM/temperature features and page 5 waveform/derating figures](#src-high-diode-primary) |
+</EvidenceTable>
 
 ### THERMAL\_SOA
 
 Thermal and safe-operating-area behaviour: how much the part may dissipate, and under what mounting and ambient conditions.
 
-| Fact                                                                                             | Value       | Unit | Conditions                                                                     | Verdict                         | Provenance   | Evidence                                                                                                              |
-| ------------------------------------------------------------------------------------------------ | ----------- | ---- | ------------------------------------------------------------------------------ | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-temperature" />`fact-high-diode-smaj20a-temperature` | -55 to +150 | `C`  | operating junction and storage temperature range; pulse derating still applies | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 1 features section operating-junction/storage-temperature row](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                             | Value       | Unit | Conditions                                                                     | Verdict                         | Provenance   | Evidence                                                                                                              |
+  | ------------------------------------------------------------------------------------------------ | ----------- | ---- | ------------------------------------------------------------------------------ | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-temperature" />`fact-high-diode-smaj20a-temperature` | -55 to +150 | `C`  | operating junction and storage temperature range; pulse derating still applies | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 1 features section operating-junction/storage-temperature row](#src-high-diode-primary) |
+</EvidenceTable>
 
 ### PROTECTION\_STANDOFF
 
 The voltage a protection device is expected to sit at without conducting.
 
-| Fact                                                                                       | Value | Unit | Conditions                        | Verdict                         | Provenance   | Evidence                                                                                |
-| ------------------------------------------------------------------------------------------ | ----- | ---- | --------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-standoff" />`fact-high-diode-smaj20a-standoff` | 20    | `V`  | VRWM exact SMAJ20A row at TA 25 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row VRWM column](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                       | Value | Unit | Conditions                        | Verdict                         | Provenance   | Evidence                                                                                |
+  | ------------------------------------------------------------------------------------------ | ----- | ---- | --------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-standoff" />`fact-high-diode-smaj20a-standoff` | 20    | `V`  | VRWM exact SMAJ20A row at TA 25 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row VRWM column](#src-high-diode-primary) |
+</EvidenceTable>
 
 ### PROTECTION\_BREAKDOWN
 
 The voltage at which a protection device begins to conduct.
 
-| Fact                                                                                         | Value        | Unit | Conditions                           | Verdict                         | Provenance   | Evidence                                                                                       |
-| -------------------------------------------------------------------------------------------- | ------------ | ---- | ------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-breakdown" />`fact-high-diode-smaj20a-breakdown` | 22.2 to 24.5 | `V`  | VBR minimum/maximum at 1 mA, TA 25 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row VBR and IT columns](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                         | Value        | Unit | Conditions                           | Verdict                         | Provenance   | Evidence                                                                                       |
+  | -------------------------------------------------------------------------------------------- | ------------ | ---- | ------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-breakdown" />`fact-high-diode-smaj20a-breakdown` | 22.2 to 24.5 | `V`  | VBR minimum/maximum at 1 mA, TA 25 C | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row VBR and IT columns](#src-high-diode-primary) |
+</EvidenceTable>
 
 ### PROTECTION\_CLAMP
 
 The voltage a protection device clamps to while conducting its rated surge current.
 
-| Fact                                                                                 | Value | Unit | Conditions                                                                           | Verdict                         | Provenance   | Evidence                                                                                                     |
-| ------------------------------------------------------------------------------------ | ----- | ---- | ------------------------------------------------------------------------------------ | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-clamp" />`fact-high-diode-smaj20a-clamp` | 32.4  | `V`  | maximum VC at IPP 12.3 A, 10/1000 us waveform, TA 25 C; not a universal rail ceiling | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row VC/IPP and page 5 pulse waveform](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                 | Value | Unit | Conditions                                                                           | Verdict                         | Provenance   | Evidence                                                                                                     |
+  | ------------------------------------------------------------------------------------ | ----- | ---- | ------------------------------------------------------------------------------------ | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-clamp" />`fact-high-diode-smaj20a-clamp` | 32.4  | `V`  | maximum VC at IPP 12.3 A, 10/1000 us waveform, TA 25 C; not a universal rail ceiling | PASS - primary-source confirmed | PRIMARY-SPEC | [src-high-diode-primary: page 2 exact SMAJ20A row VC/IPP and page 5 pulse waveform](#src-high-diode-primary) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                                               | Value                                                                                          | Unit   | Conditions                                                                                                                                        | Verdict                               | Provenance           | Evidence                                                                                                       |
-| -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-manufacturer" />`fact-high-diode-smaj20a-manufacturer` | High Diode                                                                                     | `NONE` | official High Diode SMAJ family document with exact SMAJ20A row                                                                                   | PASS - primary-source confirmed       | PRIMARY-SPEC         | [src-high-diode-primary: page 1 title/logo and page 2 SMAJ20A row](#src-high-diode-primary)                    |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-identity" />`fact-high-diode-smaj20a-identity`         | `lcsc`=C571370; `manufacturer`=High Diode; `mpn`=SMAJ20A; `variant`=unidirectional SMA package | `NONE` | stable distributor identity binding to exact C571370; same-name cross-vendor substitution prohibited; supplies no electrical or thermal authority | CONFIRMED - distributor identity only | DISTRIBUTOR-IDENTITY | [src-high-diode-c571370: title block and distributor orderable row C571370](#src-high-diode-c571370)           |
-| <EvidenceAnchor id="fact-high-diode-smaj20a-polarity" />`fact-high-diode-smaj20a-polarity`         | device band marks cathode                                                                      | `NONE` | manufacturer marking rule only; project numeric pad mapping and incoming continuity remain open                                                   | PASS - primary-source confirmed       | PRIMARY-SPEC         | [src-high-diode-primary: page 1 polarity marking statement and page 6 package figure](#src-high-diode-primary) |
+<EvidenceTable label="facts">
+  | Fact                                                                                               | Value                                                                                          | Unit   | Conditions                                                                                                                                        | Verdict                               | Provenance           | Evidence                                                                                                       |
+  | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-manufacturer" />`fact-high-diode-smaj20a-manufacturer` | High Diode                                                                                     | `NONE` | official High Diode SMAJ family document with exact SMAJ20A row                                                                                   | PASS - primary-source confirmed       | PRIMARY-SPEC         | [src-high-diode-primary: page 1 title/logo and page 2 SMAJ20A row](#src-high-diode-primary)                    |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-identity" />`fact-high-diode-smaj20a-identity`         | `lcsc`=C571370; `manufacturer`=High Diode; `mpn`=SMAJ20A; `variant`=unidirectional SMA package | `NONE` | stable distributor identity binding to exact C571370; same-name cross-vendor substitution prohibited; supplies no electrical or thermal authority | CONFIRMED - distributor identity only | DISTRIBUTOR-IDENTITY | [src-high-diode-c571370: title block and distributor orderable row C571370](#src-high-diode-c571370)           |
+  | <EvidenceAnchor id="fact-high-diode-smaj20a-polarity" />`fact-high-diode-smaj20a-polarity`         | device band marks cathode                                                                      | `NONE` | manufacturer marking rule only; project numeric pad mapping and incoming continuity remain open                                                   | PASS - primary-source confirmed       | PRIMARY-SPEC         | [src-high-diode-primary: page 1 polarity marking statement and page 6 package figure](#src-high-diode-primary) |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -198,10 +212,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function                     |
-  | ---------- | ---- | ------------- | ---------------------------- |
-  | `1`        | `K`  | `1`           | project cathode/VBUS mapping |
-  | `2`        | `A`  | `2`           | project anode/GND mapping    |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function                     |
+    | ---------- | ---- | ------------- | ---------------------------- |
+    | `1`        | `K`  | `1`           | project cathode/VBUS mapping |
+    | `2`        | `A`  | `2`           | project anode/GND mapping    |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

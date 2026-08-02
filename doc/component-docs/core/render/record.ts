@@ -45,6 +45,7 @@ import {
   paragraph,
   routeCodeLink,
   routeLink,
+  scrollableTable,
   space,
   strong,
   table,
@@ -416,7 +417,8 @@ function factClassBlock(
   return [
     heading(3, factClass),
     ...(gloss === undefined ? [] : [paragraph([text(literal(gloss))])]),
-    table(
+    scrollableTable(
+      "facts",
       [
         literal("Fact"),
         literal("Value"),
@@ -534,7 +536,8 @@ function calculationSection(record: PublicRecord, index: RecordIndex): RootConte
         ),
       ),
     ]),
-    table(
+    scrollableTable(
+      "calculation-dependencies",
       [literal("Fact"), literal("Expression"), literal("Depends on")],
       calculated.map((fact) => [
         [routeCodeLink(samePage(fact.anchor), fact.factId)],
@@ -643,7 +646,8 @@ function pinMapEntry(pinMap: PublicPinMap): RootContent[] {
 
   blocks.push(
     containerComponent("EvidenceDetails", { label: "pin-assignments" }, [
-      table(
+      scrollableTable(
+        "pin-assignments",
         [
           literal("Symbol pin"),
           literal("Name"),

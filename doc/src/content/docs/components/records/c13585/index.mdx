@@ -131,36 +131,44 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-| Fact                                                             | Value | Unit  | Conditions    | Verdict                         | Provenance   | Evidence                                                                                               |
-| ---------------------------------------------------------------- | ----- | ----- | ------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-c13585-voltage" />`fact-c13585-voltage` | 50    | `Vdc` | rated voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, Section A Samsung Part Number, row Rated Voltage](#src-c13585-page) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value | Unit  | Conditions    | Verdict                         | Provenance   | Evidence                                                                                               |
+  | ---------------------------------------------------------------- | ----- | ----- | ------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-c13585-voltage" />`fact-c13585-voltage` | 50    | `Vdc` | rated voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, Section A Samsung Part Number, row Rated Voltage](#src-c13585-page) |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                     | Value                                 | Unit   | Conditions                                           | Verdict                         | Provenance   | Evidence                                                                                                           |
-| ------------------------------------------------------------------------ | ------------------------------------- | ------ | ---------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-c13585-capacitance" />`fact-c13585-capacitance` | 10                                    | `uF`   | nominal capacitance for exact CL31A106KBHNNNE        | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, Section A Samsung Part Number, row Capacitance](#src-c13585-page)               |
-| <EvidenceAnchor id="fact-c13585-tolerance" />`fact-c13585-tolerance`     | 10                                    | `%`    | plus/minus tolerance                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, Section A Samsung Part Number, row Capacitance tolerance](#src-c13585-page)     |
-| <EvidenceAnchor id="fact-c13585-dielectric" />`fact-c13585-dielectric`   | X5R, -55 to +85 C, plus/minus 15% TCC | `NONE` | temperature characteristic for exact reference sheet | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 2, Section C reliability table, row Temperature Characteristics](#src-c13585-page) |
+<EvidenceTable label="facts">
+  | Fact                                                                     | Value                                 | Unit   | Conditions                                           | Verdict                         | Provenance   | Evidence                                                                                                           |
+  | ------------------------------------------------------------------------ | ------------------------------------- | ------ | ---------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-c13585-capacitance" />`fact-c13585-capacitance` | 10                                    | `uF`   | nominal capacitance for exact CL31A106KBHNNNE        | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, Section A Samsung Part Number, row Capacitance](#src-c13585-page)               |
+  | <EvidenceAnchor id="fact-c13585-tolerance" />`fact-c13585-tolerance`     | 10                                    | `%`    | plus/minus tolerance                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, Section A Samsung Part Number, row Capacitance tolerance](#src-c13585-page)     |
+  | <EvidenceAnchor id="fact-c13585-dielectric" />`fact-c13585-dielectric`   | X5R, -55 to +85 C, plus/minus 15% TCC | `NONE` | temperature characteristic for exact reference sheet | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 2, Section C reliability table, row Temperature Characteristics](#src-c13585-page) |
+</EvidenceTable>
 
 ### TYPICAL\_CURVE
 
 A representative figure read from a characteristic curve. Typical values are not guaranteed and vary part to part.
 
-| Fact                                                                       | Value                                                                                        | Unit   | Conditions                                                                                         | Verdict     | Provenance   | Evidence                                                                                                                                                                                                |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------- | ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c13585-curve-caveat" />`fact-c13585-curve-caveat` | Typical DC-bias, AC-voltage, ripple-current and temperature curves are design reference only | `NONE` | reference-sheet product manual; installed DC bias, AC voltage, temperature and layout not supplied | NEEDS BENCH | PRIMARY-SPEC | [src-c13585-page: physical pages 13-14, Sections 2-1-3 and 2-5; physical pages 15-16, Sections 2-6 self-heating/ripple and 2-7 DC/AC voltage examples; physical page 32, Section 5-3](#src-c13585-page) |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value                                                                                        | Unit   | Conditions                                                                                         | Verdict     | Provenance   | Evidence                                                                                                                                                                                                |
+  | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------- | ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c13585-curve-caveat" />`fact-c13585-curve-caveat` | Typical DC-bias, AC-voltage, ripple-current and temperature curves are design reference only | `NONE` | reference-sheet product manual; installed DC bias, AC voltage, temperature and layout not supplied | NEEDS BENCH | PRIMARY-SPEC | [src-c13585-page: physical pages 13-14, Sections 2-1-3 and 2-5; physical pages 15-16, Sections 2-6 self-heating/ripple and 2-7 DC/AC voltage examples; physical page 32, Section 5-3](#src-c13585-page) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                       | Value                              | Unit   | Conditions                      | Verdict                         | Provenance   | Evidence                                                                                            |
-| -------------------------------------------------------------------------- | ---------------------------------- | ------ | ------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c13585-manufacturer" />`fact-c13585-manufacturer` | Samsung Electro-Mechanics          | `NONE` | exact orderable CL31A106KBHNNNE | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, title block and Section A Samsung Part Number](#src-c13585-page) |
-| <EvidenceAnchor id="fact-c13585-package" />`fact-c13585-package`           | 1206/3216, Ni/Cu/Ni/Sn termination | `NONE` | part-number codes 31 and N      | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-catalog: Part Numbering, Size Code and Design Code tables](#src-c13585-catalog)         |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value                              | Unit   | Conditions                      | Verdict                         | Provenance   | Evidence                                                                                            |
+  | -------------------------------------------------------------------------- | ---------------------------------- | ------ | ------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c13585-manufacturer" />`fact-c13585-manufacturer` | Samsung Electro-Mechanics          | `NONE` | exact orderable CL31A106KBHNNNE | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-page: physical page 1, title block and Section A Samsung Part Number](#src-c13585-page) |
+  | <EvidenceAnchor id="fact-c13585-package" />`fact-c13585-package`           | 1206/3216, Ni/Cu/Ni/Sn termination | `NONE` | part-number codes 31 and N      | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c13585-catalog: Part Numbering, Size Code and Design Code tables](#src-c13585-catalog)         |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -175,10 +183,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name         | Footprint pad | Function         |
-  | ---------- | ------------ | ------------- | ---------------- |
-  | `1`        | `terminal-1` | `1`           | passive terminal |
-  | `2`        | `terminal-2` | `2`           | passive terminal |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name         | Footprint pad | Function         |
+    | ---------- | ------------ | ------------- | ---------------- |
+    | `1`        | `terminal-1` | `1`           | passive terminal |
+    | `2`        | `terminal-2` | `2`           | passive terminal |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions
