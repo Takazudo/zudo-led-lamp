@@ -67,7 +67,7 @@ flowchart TD
   U1 -->|"ATT (open-drain)"| JOUT
   U1 -->|"PDOK (open-drain)"| JOUT
 
-  J2["J2 pogo pads (1x4)\nNVM I2C programming"] --- U1
+  J2["J2 pogo pads (1x4)\nNVM I2C programming + reset"] --- U1
   J3["J3 pogo pads (1x8)\ndebug: CC1DB CC2DB VREG_2V7 VBUS_IN GND ATT PDOK VBEN"] --- U1
 
   JOUT -->|"switched 15V + GND"| DOWNSTREAM["Downstream board(s)\n(LED power stage / control — TBD by wave-3 architecture decision)"]
@@ -97,11 +97,21 @@ netlist because that schematic does not exist yet.
 | `Net-(U1-VREG_1V2)` | `U1.VREG_1V2 C34.1` | 1.2 V internal digital-core regulator. `C34` decap |
 | `SCL` | `U1.SCL R15.1 J2.1` | NVM programming clock. `R15` 4.7 kΩ pull-up to `VREG_2V7` |
 | `SDA` | `U1.SDA R16.1 J2.2` | NVM programming data. `R16` 4.7 kΩ pull-up |
+| `RESET` | `U1.RESET R21.1 J2.4` | R21 10 kΩ pull-down keeps the chip in run state; `J2.4` lets the programming jig assert a hardware reset if an NVM write leaves the I2C state wedged |
 | `ATT` | `U1.ATTACH J3.6 JOUT.3` | ATTACH flag, open-drain active-low, no on-board pull-up |
 | `PDOK` | `U1.POWER_OK2 J3.7 JOUT.4` | Asserts on a live PDO2/15 V contract, open-drain active-low, no on-board pull-up |
-| `GND` | `U1.GND U1.RESET U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 R17.2(DNP) R18.2(DNP) J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.RESET` active-high, grounded = run. `U1.ADDR0/1` → I2C address `0x28`. `U1.VSYS` grounded (VDD-only supply). `U1.EP` = exposed thermal/electrical pad |
+| `GND` | `U1.GND U1.ADDR0 U1.ADDR1 U1.VSYS U1.EP J1.GND C1.1 C2.1 C30.1 C34.2 R21.2 R17.2(DNP) R18.2(DNP) J2.3 J3.5 D5.anode D6.2(DNP) D7.2(DNP) JOUT.5 JOUT.6` | Common ground. `U1.ADDR0/1` → I2C address `0x28`. `U1.VSYS` grounded (VDD-only supply). `U1.EP` = exposed thermal/electrical pad |
 | Unused U1 pins | `NC`, `POWER_OK3` (float), `GPIO` (float), `A_B_SIDE` (float), `ALERT` (float) | Same disposition as zudo-pd's Board A |
-| `J2` pad 4 | `J2.4` | Unconnected (NC) |
+
+:::caution[VREG_2V7 external loading is an open item]
+Pin 23 (`VREG_2V7`) is documented in the STUSB4500's pin map as decoupling-only, yet this
+design loads it externally with the R15/R16 4.7 kΩ I2C pull-ups and exposes it on debug
+pad `J3.3`. Closing this needs a datasheet locator that authorizes external DC load on
+this pin (or a re-route decision, out of this page's scope), plus the constraint that the
+NVM-programming jig's logic levels must match 2.7 V, not 3.3 V or 5 V. This must close
+before the #34 programming artifact executes — tracked on
+[#43](https://github.com/Takazudo/zudo-led-lamp/issues/43).
+:::
 
 :::warning
 No 5 V-class USB ESD array (e.g. a USBLC6-2SC6-family part) belongs anywhere on this
@@ -136,6 +146,7 @@ per-part rating evidence and the one part this audit swapped out.
 | R16 | 4.7 kΩ | [C23162](https://jlcpcb.com/partdetail/C23162) | 0603 | I2C SDA pull-up | 7,433,362 |
 | R19 | 0 Ω | [C21189](https://jlcpcb.com/partdetail/C21189) | 0603 | CC1DB↔CC1 link (fitted) | 6,153,233 |
 | R20 | 0 Ω | [C21189](https://jlcpcb.com/partdetail/C21189) | 0603 | CC2DB↔CC2 link (fitted) | 6,153,233 |
+| R21 | 10 kΩ | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | RESET pull-down (run state); shares Board L's reel | 10,726,008 |
 | J2 | Pogo pads, 1×4 | — (bare copper, no part) | Custom SMD | NVM I2C programming | $0 |
 | J3 | Pogo pads, 1×8 | — (bare copper, no part) | Custom SMD | Debug pads | $0 |
 | JOUT | JST B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT, 2.5 mm pitch | Downstream interface connector | 47,935 |

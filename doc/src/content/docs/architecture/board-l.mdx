@@ -20,7 +20,7 @@ flowchart LR
   SETN["SET node\nU2 pin 1"]
   L1["L1 33uH\n2.5A sat"]
   LEDP["LED_P\narray anode rail"]
-  BAL["R30..R37\n8x 33R 1206 ballast"]
+  BAL["R30..R37\n8x 33R 2512 ballast"]
   STR["8 strings x 3 series\n24x HL-AM-2835H421W\n3000K, 62.5mA each"]
   LEDN["LED_N = switching node\nU2 SW pins 5,6"]
   D11["D11 SS26 60V\ncatch diode"]
@@ -75,7 +75,7 @@ numbers, which the parts DB does not:
 | CRI (Ra) | 80 min |
 | Forward voltage | 2.6 V min, 3.2 V max (±0.1 V measurement tolerance) |
 | Viewing angle | 120° |
-| Package rating | 288 mW |
+| Package rating | 306 mW |
 
 ### Arrangement
 
@@ -123,20 +123,56 @@ The 2512 runs at 27% there, and its larger copper helps spread the array's heat.
 | Ballast drop at 62.5 mA | 2.06 V |
 | Dissipation per resistor | 129 mW — **13%** of the 2512 part's 1 W rating (was 52% of the old 1206's 250 mW) |
 | Total ballast loss | 1.03 W (19% of delivered power) |
-| Imbalance, realistic same-reel spread (±0.3 V/string) | **±9 mA, ±15%** |
-| Imbalance, datasheet worst case (±0.9 V/string) | ±27 mA, ±43% |
-| Hottest string at datasheet worst case | 90 mA → 0.27 W vs the **0.288 W** package rating |
 
-(The 0.27 W figure holds Vf at the nominal 3.0 V as a conservative bound. The LED that
-actually draws 90 mA is by definition a low-Vf one, dropping closer to 2.6 V, so its real
-dissipation is nearer 0.23 W — 81% of rating. The conservative number is the one carried
-into the [hot-spot table](#power-budget-dissipation-hot-spots).)
+Current sharing across the eight strings is bounded by an **assembled-string Vf
+spread** — `max(string total Vf) − min(string total Vf)` across the eight 3-LED
+strings, not a ±-from-centre figure. And the driver's own guaranteed worst case already
+consumes most of the LED's headroom before any Vf mismatch exists: total peak current
+is **0.6303 A** (the 0.5253 A maximum mean current at the AL8860's maximum sense
+threshold over the sense resistor's minimum initial resistance, raised by half the
+40% coil ripple the driver sets internally), against ballast of 33 Ω ±1% and a 90 mA
+absolute-maximum LED forward current:
 
-The last row is the check that matters: **even at the datasheet's full Vf spread, no LED
-exceeds its package power rating.** The constant-current driver holds the *total* at
-500 mA, so one string running hot forces the others down rather than compounding — there
-is no runaway path. The 1.03 W of ballast loss is the price paid for that guarantee, and
-it is a deliberate trade against the alternative of eight driver ICs.
+| Assembled-string Vf spread | Hottest branch, peak | vs the 90 mA absolute maximum |
+|---|---|---|
+| 0 V (perfectly matched) | 80.18 mA | 89.1% |
+| **0.30 V (locked acceptance limit)** | **88.19 mA** | **98.0%** |
+| 0.3677 V (computed bound) | 90.00 mA | 100.0% |
+| 1.80 V (full retained 2.6–3.2 V window, unmitigated) | 128.27 mA | 142.5% |
+
+**Even with perfectly matched strings the design sits at 89% of the LED's
+absolute-maximum forward current on a peak basis.** The driver's own guaranteed worst
+case — maximum sense threshold, minimum sense resistor, full ripple peak — consumes 89%
+of the limit before any Vf mismatch exists; the entire Vf-matching budget is the
+remaining 9.8 mA. At the full retained 2.6–3.2 V window, unmitigated, the hottest LED
+reaches 128.3 mA peak / 114.9 mA mean — 142% / 128% of the absolute maximum. The old
+conclusion here landed on exactly 90 mA only because it used nominal current with no
+ripple and no resistor tolerance — that result was an artifact of the assumption, not a
+property of the design.
+
+On a **mean** basis the picture is comfortable: at the locked 0.30 V limit the hot
+branch averages 74.8 mA (83% of 90 mA) and dissipates 194.6 mW at Vf = 2.6 V — **64%**
+of the 306 mW package rating (not the smaller derived-not-datasheet figure this page
+previously used, from 3.2 V × 90 mA rather than the manufacturer spec). Peak-against-
+absolute-maximum is the conservative gate (no pulsed-current rating is retained for this
+part); mean is what governs junction temperature. Both readings belong here: peak is the
+gate, mean is the thermal reality.
+
+**Locked acceptance limit: 0.30 V**, defined as the full spread across the eight
+assembled 3-LED strings, not ±0.30 V. It applies per assembled string, not per LED —
+0.30 V over three LEDs is 0.10 V each, exactly the datasheet's own Vf measurement
+tolerance. Measurement protocol, summarized: 60 mA DC ±1%, either a single 10 ms pulse at
+≤1% duty or a 30 s DC soak, applied identically to all 24 LEDs, at 25 ±3 °C with ≤10 mV
+differential instrument uncertainty; sort all 24 LEDs descending by Vf and greedily
+assign each to whichever of the eight groups currently has the smallest running sum;
+gate on the assembled string totals, not on individual LEDs. Full protocol and scope:
+[#35](https://github.com/Takazudo/zudo-led-lamp/issues/35).
+
+Ballast stays **33 Ω, 2512, 1 W** — this finding is about the driver's own current
+headroom, not the ballast value, and within the existing inventory there is no lever for
+more margin (raising RS1 or increasing the ballast both need a new part). Raised as a
+follow-up issue rather than fixed here: see
+[#52](https://github.com/Takazudo/zudo-led-lamp/issues/52).
 
 Ballast resistors sit on the **anode side** (between `LED_P` and each string's top LED)
 so that the common `LED_N` node — the driver's switching node — stays as one compact
@@ -175,6 +211,14 @@ Duty cycle across the LED's full Vf bin:
 | 2.6 V (bin min) | 7.8 V | 9.86 V | 69% | inside the band |
 | 3.0 V (nominal) | 9.0 V | 11.06 V | 77% | design point — 2 points above the recommended 25–75% band |
 | 3.2 V (bin max) | 9.6 V | 11.66 V | 81% | accepted, still far below the 98% max duty |
+
+These figures are all against the AL8860's **DSW** parameter — the recommended
+buck-switch operating duty-cycle range, 25–75%, guaranteed by design (DS39014 Rev 5,
+primary-confirmed). That is a different number from **DSW(MAX)**, the 98%
+absolute-maximum duty cycle, and from the separate 5–100% analog-dimming range on the
+**CTRL** pin — three distinct datasheet figures that are easy to conflate. The
+77%-nominal design point sits 2 points above the DSW band and is unchanged by this
+distinction; it is spelled out here because readers currently have to infer it.
 
 The review corrected these duty figures (the original 66/74/78% used `Vout/Vin` without
 the diode and resistive terms). The honest statement of the 3s-vs-4s choice is: 3s sits
@@ -256,13 +300,29 @@ PA6 (TIM3_CH1, 20 kHz PWM, 0-3.3 V)
 
 | Quantity | Value |
 |---|---|
-| Full-scale CTRL voltage | 3.3 V x 33/43 = **2.53 V** — just past the 2.5 V clamp point, so 100% duty = 100% of I_NOM |
+| Full-scale CTRL voltage, nominal | 3.3 V x 33/43 = **2.53 V** — just past the 2.5 V clamp point, so 100% duty = 100% of I_NOM **nominally** |
+| Full-scale CTRL voltage, guaranteed floor | Rail 3.27 V min, R20 max 10.1 kΩ, R21 min 32.67 kΩ → **2.4978 V**, guaranteeing **99.9%** of I_NOM, not 100% |
 | Filter cutoff | R20 ∥ R21 = 7.67 kΩ with 100 nF → **208 Hz** |
 | PWM carrier | **20 kHz** — ~40 dB of attenuation, leaving tens of millivolts of residual ripple on a 2.53 V span, and above the audio band regardless |
 | Animation update rate | **50 Hz** — filter τ is 0.77 ms against 20 ms frames, so no visible lag |
 | Duty at the CTRL off threshold (0.3 V) | 11.9% |
 | Duty at the 5% current floor (0.41 V) | 16.2% |
 | Soft-start from C21 | 100 nF x 1.5 ms/nF = **150 ms** |
+
+The "100% duty = 100% of I_NOM" claim is **nominal-only**. At the guaranteed worst-low
+corner (rail at 3.27 V, R20 at its 1% maximum, R21 at its 1% minimum) CTRL's floor is
+2.4978 V against the AL8860's 0.3–2.5 V analog-dim range, which guarantees **99.9%** of
+I_NOM rather than 100%. Two items stay open alongside that number, not closed by it:
+
+- The floor assumes `PWM_DIM` drives to the rail. No STM32G031 output-level (V_OH)
+  rating is retained, so the GPIO's own drop is not covered by evidence. Physically it
+  is negligible — the divider draws only 76.7 µA, so even a 50 Ω driver contributes
+  ≈3.8 mV — but the 99.9% figure is conditional on an assumption the registry does not
+  currently substantiate.
+- The worst-high corner (rail at 3.33 V, R20 at its minimum, R21 at its maximum) puts
+  **2.567 V** on CTRL, above the 2.5 V top of the analog-dim range. Benign for dimming —
+  it simply saturates at full current — but no CTRL absolute-maximum rating is retained
+  for the AL8860.
 
 ### Safe default-OFF
 
@@ -307,6 +367,16 @@ pulses and 15 detents per revolution. Confirm it on the received part; the firmw
 factor is a one-line change if it turns out to be 8 counts per detent instead. The scale
 exists because unscaled counting would need **4.3 turns** to sweep 0–255, which is far too
 much travel for a lamp knob.
+
+:::caution[Pulses-per-revolution is unresolved]
+This page states 30 pulses / 15 detents per revolution. The retained manufacturer-authored specification
+(KK-2010-9648) states the **reverse** — 15 pulses / 30 detents — and the generator's SW1 label says only
+"15-detent". A 2026-08-02 retrieval attempt could not reach Alps Alpine's primary source: the
+`EC11L1525G01` product page returns HTTP 403 on every path while the sibling `EC11E15244G1` page loads
+normally, and no `EC11L` row appears in any current encoder sub-category listing. Mirror-only evidence cannot
+settle a number the firmware UI scale depends on, so no figure on this page has been changed. Tracked in
+[#32](https://github.com/Takazudo/zudo-led-lamp/issues/32).
+:::
 
 An encoder has no absolute position, so the boot ramp exists to tell the user the lamp is
 alive. It happens strictly *after* firmware has taken control of CTRL, so it does not
@@ -395,17 +465,59 @@ visible on/off snap.
 ### Thermal derate
 
 `RT1` is an `NCP18XH103F03RB` 10 kΩ B=3380 K NTC ([C13564](https://jlcpcb.com/partdetail/C13564))
-placed **inside the LED array**, in a 10 kΩ divider to PA4 (ADC_IN4).
+placed **inside the LED array**, in a **100 kΩ** divider to PA4 (ADC_IN4).
 
-| Board temperature | NTC resistance | PA4 voltage | Firmware action |
-|---|---|---|---|
-| 25 °C | 10.0 kΩ | 1.650 V | normal |
-| 65 °C | 2.61 kΩ | 0.683 V | `DERATE_START` — begin linear roll-off |
-| 80 °C | 1.71 kΩ | 0.481 V | `CRITICAL` — hard off |
+| Board temperature | NTC resistance | PA4 voltage | 12-bit ADC code | Firmware action |
+|---|---|---|---|---|
+| 25 °C | 10.00 kΩ | 0.300 V | 372 | normal |
+| 65 °C | 2.616 kΩ | 0.0841 V | 104 | `DERATE_START` — begin linear roll-off |
+| 80 °C | 1.711 kΩ | 0.0555 V | 69 | `CRITICAL` — hard off |
 
-The thresholds sit under the LED's own −40…+85 °C operating range with margin. Divider
-current is 165 µA, so NTC self-heating is 0.27 mW against a 100 mW rating — negligible.
-The derate function is [control-safety's](/docs/research/control-safety/#over-temperature-derating-hook)
+The thresholds sit under the LED's own −40…+85 °C operating range with margin.
+
+The binding limit on this divider's current is Murata's **0.1 mA maximum operating
+current**, not the 100 mW power rating this page previously compared against. Murata's
+own column header reads "Maximum Operating Current (25 °C)"; the parallel catalog term
+"Permissive Operating Current" is defined as the current that keeps the thermistor's
+self-heating rise to at most 1 °C. **The outgoing 10 kΩ divider violated it**: 168 µA
+worst case at 25 °C — 1.68x the limit — rising to 288 µA at the `CRITICAL` point. That is
+why R26 changed. A 33 kΩ divider was evaluated and rejected: with the NTC shorted,
+3.33 V / 32.67 kΩ = 101.9 µA already exceeds the limit, and it crosses 100 µA at 119.4 °C
+— inside the part's −40…+125 °C range. The selected **100 kΩ** divider's worst case is
+**33.6 µA = 33.6%** of the limit — a 2.97x margin that holds at every temperature and
+under a shorted-thermistor fault (`V3P3` max 3.33 V, R26 min 99 kΩ at 1%). Self-heating
+at 25 °C is now 9.0 µW (30.0 µA through 10 kΩ), roughly 0.009 °C against the 1 mW/°C
+typical dissipation constant — self-heating was never the binding constraint; the 0.1 mA
+operating maximum is, and the outgoing divider exceeded it by 68% while this page
+reported comfort against a rating that does not govern.
+
+Three caveats apply to the table above:
+
+- **Sample time.** The ADC channel must use the **160.5-cycle** sample time. Worst-case
+  source impedance (R26 in parallel with the NTC, at R26's maximum) is 43.8 kΩ at
+  −20 °C against the datasheet's 50 kΩ allowance at that sample time; the allowance is
+  exceeded below about −25 °C, so **the sensing chain's stated validity floor is −20 °C
+  at RT1**. C24's 100 nF supplies the sampling charge, so this is a conservative
+  requirement, not a hard functional limit for an indoor lamp.
+- **Resolution.** 104 − 69 = 35 counts across the 15 °C derate band = 2.37 counts/°C,
+  i.e. **0.42 °C per LSB**. This is 7.1x coarser than the outgoing 10 kΩ divider
+  (16.7 counts/°C) — adequate for a thermal roll-off, but a real cost of the change and
+  stated here rather than buried.
+- **Beta-only conversion.** Every resistance-vs-temperature value in the table above is
+  computed from the NTC's 10 kΩ ±1% at 25 °C and its B25/50 = 3380 K ±1%, not from a
+  guaranteed manufacturer R–T table (none exists for this exact part). Tolerance alone
+  gives ±0.75 °C of uncertainty at the `CRITICAL` point, and substituting the typical
+  B25/85 = 3434 K moves the same point a further ≈1 °C — so **the trip temperatures
+  carry roughly ±2 °C of model uncertainty and are nominal design points, not
+  guaranteed trip temperatures.**
+
+The divider is fed from `V3P3`, and the ADC reference (VDDA) is also `V3P3`, so the
+conversion is **ratiometric** — the ADC code depends only on the resistance ratio, and
+rail tolerance cancels out of the threshold. Rail tolerance still matters for the
+*current* envelope above, because that math is not ratiometric; that is why the
+threshold table carries no rail-tolerance column while the current figures do. The
+derate function is
+[control-safety's](/docs/research/control-safety/#over-temperature-derating-hook)
 unchanged.
 
 ## Net-connectivity table
@@ -485,7 +597,7 @@ Strings are numbered 1–8; LEDs `LED1`–`LED24` in order, so string *n* holds
 | 16 | PA11 [PA9] | — | Unused |
 | 17 | PA12 [PA10] | — | Unused |
 | 18 | PA13 | `SWDIO` | → `J3.1` |
-| 19 | PA14-BOOT0 / PA15 | `SWCLK` | → `J3.2`. Internal pull-down at reset holds BOOT0 low → boots from flash, no external part needed |
+| 19 | PA14-BOOT0 / PA15 | `SWCLK` | → `J3.2`. Boot source depends on the programmed option bytes (`nBOOT_SEL`/`nBOOT0`/`nBOOT1`), not on this pin alone — a blank device boots system memory regardless of BOOT0's state. No external pull is fitted; PA14/BOOT0 is sampled on NRST rising and shares this package pin with PA15/SWCLK. The resolved boot-mode selection is an open programming artifact — see [#46](https://github.com/Takazudo/zudo-led-lamp/issues/46) |
 | 20 | PB3 / PB4 / PB5 / PB6 | — | Unused |
 
 :::note[Multiplexed package pins]
@@ -507,7 +619,7 @@ pin with PA15, so PA15 must never be configured as an output in firmware.
 | `ENC_B` | `R28.2 R23.2 C23.1 U3.PA1(8)` | R28/R23/C23, mirror of phase A |
 | `PDOK` | `J2.4 R24.2 U3.PA5(12)` | R24 10 kΩ pull-up — Board P drives this open-drain |
 | `ATT` | `J2.3 R25.2 U3.PA7(14)` | R25 10 kΩ pull-up |
-| `NTC_SENSE` | `RT1.1 R26.2 C24.1 U3.PA4(11)` | R26 10 kΩ divider top to `V3P3` |
+| `NTC_SENSE` | `RT1.1 R26.2 C24.1 U3.PA4(11)` | R26 100 kΩ divider top to `V3P3` |
 | `NRST` | `U3.PF2-NRST(6) C20.1 J3.3` | |
 | `SWDIO` | `U3.PA13(18) J3.1` | |
 | `SWCLK` | `U3.PA14(19) J3.2` | |
@@ -581,6 +693,28 @@ Against the 45 W / 3.0 A PD contract cap.
 | Against the 3.0 A cap | **13.7% used, 7.3x margin** |
 | Worst case if Board P's R14 draws continuously (see [the open question](./board-p.mdx#one-number-this-pass-could-not-resolve)) | 6.64 W / 443 mA — **14.8% used, 6.8x margin** |
 
+:::caution[F1's hold-current margin shrinks with ambient temperature]
+The 750 mA hold rating is a 25 °C number. The PPTC's own thermal derating table gives
+**0.41 A hold at 85 °C** ambient — against this design's ~409–443 mA worst-case load,
+that margin can reach zero well before the fuse's own 85 °C ambient limit, let alone the
+LED array's warmer local environment. The failure mode is a nuisance trip (the lamp goes
+dark, then self-resets after cooling), not damage — F1 is resettable — but this is a real
+operating constraint, not a fixed margin, and belongs in any enclosure thermal review.
+:::
+
+:::note[The 25 mA logic-rail budget is a load cap, justified against a down-rated inductor]
+L2 (FNR4030S4R7MT, [C167874](https://jlcpcb.com/partdetail/C167874)) is rated for
+**2.0 A** max-design heating current, but the AP63203's own recommended full-load
+envelope wants a 2.7 A inductor (2 A load x the datasheet's 1.35x current headroom) —
+primary-confirmed on both sides, a **−0.7 A** margin against that envelope. That gap is
+acceptable here only because **this rail's actual draw is 25 mA**, three orders of
+magnitude below the 2.7 A envelope the rating gap describes — the justification is load,
+not rating, and the 25 mA figure above is the budget cap this design must not exceed. The
+R26 NTC-divider change (100 kΩ, up from 10 kΩ) reduces this rail's draw further, by
+roughly 135 µA (165 → 30 µA) — far below this table's resolution, so no power-budget
+retabulation is needed.
+:::
+
 ### The binding constraint is thermal, not the contract
 
 The 45 W figure is a ceiling, not a target. Scaling this lamp to use it would mean ~7x
@@ -593,8 +727,8 @@ at it deliberately.
 
 | Site | Count | Each | vs limit |
 |---|---|---|---|
-| LED (nominal) | 24 | 0.19 W | 65% of the 288 mW package rating; ~19% of the ~1 W/site FR-4 guideline |
-| LED (worst-case imbalanced string) | up to 3 | 0.27 W | 94% of the package rating — **the tightest number on the board** |
+| LED (nominal) | 24 | 0.19 W | 62% of the 306 mW package rating; ~19% of the ~1 W/site FR-4 guideline |
+| LED (hot branch, mean, at the locked 0.30 V spread limit) | up to 8 | 0.195 W | 64% of the package rating — comfortable on this thermal/mean basis |
 | Ballast resistor, 2512 1 W | 8 | 0.129 W | 13% nominal; 27% at the worst-case 90 mA string |
 | L1 (33 µH, 310 mΩ) | 1 | 0.078 W | — |
 | D11 SS26 | 1 | 0.059 W | — |
@@ -602,12 +736,15 @@ at it deliberately.
 | U2 AL8860 | 1 | ~0.10 W | θJA 56 °C/W → ΔT ≈ 6 °C |
 | U4 AP63203 | 1 | ~0.03 W | θJA 89 °C/W → ΔT ≈ 3 °C |
 
-No site exceeds its rating, and the two ICs barely warm. The worst-case imbalanced LED at
-94% of its package rating is the number to watch: it is derived from the datasheet's full
-2.6–3.2 V Vf spread, which is far wider than a single reel will actually deliver, but it
-is the only bound the datasheet guarantees. If a built board shows visibly uneven strings,
-that is the symptom, and the fix is a larger ballast value at the cost of duty-cycle
-headroom.
+No site exceeds its rating on this thermal (mean) basis, and the two ICs barely warm.
+The number to watch is not in this table: it is the **peak-current** comparison in
+[current sharing](#ballast-and-current-sharing) — even at zero Vf spread the hot
+branch's guaranteed peak sits at 89.1% of the LED's 90 mA absolute-maximum forward
+current, rising to 98.0% at the locked 0.30 V acceptance limit. That is a
+driver-headroom finding, not a thermal one; see
+[#52](https://github.com/Takazudo/zudo-led-lamp/issues/52). If a built board shows
+visibly uneven strings, the assembly-time acceptance gate is what catches it, not a
+bench thermal reading.
 
 ## References
 

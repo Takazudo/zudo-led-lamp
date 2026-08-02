@@ -165,6 +165,18 @@ order: encoder counting → PWM/CTRL mapping → gamma → modulation → therma
 that the boot behaviour is dark-then-ramp, and that a mid-operation reset drops the lamp
 to dark rather than to full brightness.
 
+:::caution[Encoder debounce and contact verification is a real bring-up gate, not just "bring it up first"]
+Encoder counting comes first in the bring-up order because it needs bench verification,
+not just code: the retained EC11 mechanical spec conditions are the datasheet's own test
+point (5 V, 5 kΩ pull-ups), not this design's real operating point (3.3 V, 10 kΩ
+pull-ups via R22/R23). No rotary-contact wetting-current minimum is retained for this
+part, so a lower test current has not been shown safe by datasheet evidence alone —
+confirm clean, bounce-free counting on the bench at the real operating point. Also check
+that C22/C23's discharge through the contact (≈33 mA peak through the 100 Ω series
+resistors R27/R28 on each closure) is not accelerating contact wear beyond what the
+bench verification shows acceptable.
+:::
+
 ## Open questions for the bench
 
 | Question | Why it matters | How to answer |
