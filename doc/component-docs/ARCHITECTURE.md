@@ -30,7 +30,7 @@ fails the build.
 | `doc/src/content/docs/components/` | **generator, exclusively** | never hand-edit; every file is rewritten from evidence |
 | `doc/component-docs/preflight.json` | generator | committed, deterministic, reviewable |
 | `doc/src/chrome-bindings.tsx` | this feature | MDX component registry |
-| `doc/src/styles/global.css` | site | one appended rule (`.zld-evidence-anchor`) |
+| `doc/src/styles/global.css` | site | an appended presentation block for the generated pages (`.zld-evidence-anchor`, plus the `.zld-evidence-table` scroll container and its long-token wrapping, added by #62) |
 | `doc/zfb.config.ts` | site | `chromeBindingsModule`, `docHistoryExclude` |
 | `doc/pages/**` | **package** | never modified — the proof below does not need it |
 | `doc/src/content/docs/claude*/` | zudo-doc generator | never hand-edited by this feature |
