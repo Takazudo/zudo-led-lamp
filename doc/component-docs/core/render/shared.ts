@@ -525,16 +525,15 @@ export function ownerSkillOf(record: PublicRecord): SafeText | null {
 /**
  * The hub above `/docs/claude-skills/` and `/docs/claude-md/`.
  *
- * #61 gave the sixth header slot to `Components`, so this hub no longer has a
- * header entry of its own. The landing page links to it to keep the raw
- * agent-resource tree reachable by navigation and not only by search or a
- * remembered URL.
+ * #61 gave the sixth header slot to `Components`, so this hub is reached
+ * through that item's dropdown rather than a header entry of its own. The
+ * landing page also links to it, so the raw agent-resource tree stays
+ * reachable by navigation and not only by search or a remembered URL.
  *
- * This is a page-level "browse everything" destination, which is why it exists
- * while a per-record fallback deliberately does not: a hub link on the landing
- * page promises nothing about any particular record, whereas a record page
- * falling back to the resource index would read as *that record's* bundle and
- * lead somewhere else.
+ * This is a browse-everything link on a section landing page, NOT the
+ * owner-skill fallback that `agentResourceDestination` deliberately refuses to
+ * have — the reasoning below applies to a link that claims to be one record's
+ * bundle, and this one never claims that.
  */
 export const AGENT_RESOURCES_HUB_ROUTE: Route = route("/docs/claude/");
 
