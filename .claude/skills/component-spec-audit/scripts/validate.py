@@ -529,6 +529,12 @@ def validate_pass_trust(facts, sources):
                 require(fact["provenance"] == "PRIMARY-SPEC" and source["availability"] == "AVAILABLE" and source["authority_class"] == "MANUFACTURER_PRIMARY", f"{fact['fact_id']}: deterministic BLOCKER requires available manufacturer-primary evidence")
 
 
+def fact_blocks_domain(fact_id, facts_by_id, sources_by_id):
+    # contract.md: a NOT APPLICABLE fact does not address the domain, so it never blocks.
+    fact = facts_by_id[fact_id]
+    return fact["verdict"] in ("UNSOURCED", "NEEDS BENCH") or sources_by_id[fact["source_id"]]["availability"] == "SOURCE UNAVAILABLE"
+
+
 def fact_evidence_available(fact_id, facts_by_id, sources_by_id, trail=None):
     trail = trail or set()
     require(fact_id not in trail, f"{fact_id}: evidence dependency cycle")
@@ -643,9 +649,9 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
             require(all(fact_evidence_available(fact_id, facts_by_id, sources_by_id) for fact_id in item["fact_ids"]), f"{item['coverage_id']}: COVERED domain depends on unavailable or UNSOURCED evidence")
         if item["status"] == "OPEN":
             for fact_id in item["blocking_fact_ids"]:
-                fact = facts_by_id[fact_id]
-                source = sources_by_id[fact["source_id"]]
-                require(fact["verdict"] in ("UNSOURCED", "NEEDS BENCH") or source["availability"] == "SOURCE UNAVAILABLE", f"{item['coverage_id']}: blocking fact {fact_id} does not carry a blocking verdict")
+                require(fact_blocks_domain(fact_id, facts_by_id, sources_by_id), f"{item['coverage_id']}: blocking fact {fact_id} does not carry a blocking verdict")
+            unnamed = [fact_id for fact_id in item["fact_ids"] if fact_blocks_domain(fact_id, facts_by_id, sources_by_id)]
+            require(item["blocking_fact_ids"] or not unnamed, f"{item['coverage_id']}: OPEN entry cites blocking-verdict facts {sorted(unnamed)} but blocking_fact_ids is empty")
             if OPEN_UNAVAILABLE_CLAIM.search(item["reason"]):
                 require(item["blocking_fact_ids"], f"{item['coverage_id']}: OPEN reason claims unavailable/lower-authority/UNSOURCED evidence but blocking_fact_ids is empty")
     for interaction in interactions:
