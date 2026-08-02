@@ -44,7 +44,7 @@ import {
 } from "../mdx.ts";
 import { anchor } from "../ids.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
-import { literal, safeText, type SafeText } from "../text.ts";
+import { joinSafe, literal, safeText, type SafeText } from "../text.ts";
 import {
   EVIDENCE_STAGE_GLOSS,
   EVIDENCE_STAGE_STATUS_GLOSS,
@@ -117,15 +117,47 @@ export function renderIntegration(
     "integration/index.mdx",
     {
       title: literal("Integration"),
-      description: literal(
-        "Cross-component rules: what each one spans, the conditions it holds under, its " +
-          "conditioned calculations, and what it refuses to conclude.",
-      ),
+      description: pageDescription(rules),
       // After the landing page (1), the catalog (2) and the records index (3):
       // a reader needs the parts before the relationships between them.
       sidebarPosition: 4,
     },
     body,
+  );
+}
+
+/**
+ * Carries the exact rule identifiers on purpose.
+ *
+ * The site's search index stores `title` and `description` whole but caps
+ * `body` at 300 characters (`MAX_BODY_LENGTH` in zudo-doc, not configurable),
+ * and matching is plain case-insensitive substring. Every rule ID on this page
+ * sits far past that cut-off, so without them here a reader who has
+ * `rule-rail-envelope` in hand — from a narrative page, a commit message or the
+ * evidence bundle itself — could not search their way to the page that
+ * publishes it. The same reasoning put the orderable ID and the placements in
+ * each record page's description.
+ *
+ * Kept short enough to still read as a description: it is also the meta
+ * description and the search-result subtitle.
+ */
+function pageDescription(rules: readonly PublicIntegrationRule[]): SafeText {
+  if (rules.length === 0) {
+    return literal("Cross-component rules. None is currently published.");
+  }
+  return joinSafe(
+    [
+      literal("Cross-component rules —"),
+      joinSafe(
+        rules.map((rule) => rule.ruleId),
+        ", ",
+      ),
+      literal(
+        "— with the records and facts each spans, its conditioned calculations, and what it " +
+          "refuses to conclude.",
+      ),
+    ],
+    " ",
   );
 }
 
