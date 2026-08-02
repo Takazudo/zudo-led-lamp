@@ -7,8 +7,10 @@
  *
  * `<details>` is native HTML. It opens and closes with no JavaScript at all, so
  * this stays true to the rule that the static page is the complete reference:
- * the rows are in the generated file, in the built HTML and in the Pagefind
- * index whether or not the element is open.
+ * the rows are in the generated file, in the built HTML and in `llms-full.txt`
+ * whether or not the element is open. Site search is the one surface they do
+ * not reach — zudo-doc's index truncates `body` to 300 characters, which the
+ * disclosure has no bearing on.
  *
  * Nothing that carries a claim is ever wrapped in this. No value, condition,
  * verdict, coverage reason or source goes behind a disclosure: hiding those

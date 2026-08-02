@@ -93,7 +93,7 @@ Admonitions (above), tabbed content (`<Tabs>` / `<TabItem>`, `<CodeGroup>`), and
 
 ## Enabled Features
 
-- **search** — Full-text search via Pagefind
+- **search** — zudo-doc's own index: the build emits `search-index.json` and an inline client that scores by case-insensitive substring over `title` (+3), `description` (+2) and `body` (+1), with `body` truncated to 300 characters. Not Pagefind — `pagefind` is an unused devDependency, referenced by no script and by nothing in `zfb.config.ts`, and `dist/` contains no `pagefind/` directory.
 - **claudeResources** — Auto-generated docs for Claude Code resources
 - **sidebarResizer** — Draggable sidebar width
 - **sidebarToggle** — Show/hide desktop sidebar
