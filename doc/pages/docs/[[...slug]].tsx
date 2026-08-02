@@ -36,11 +36,13 @@ import { createChrome } from "@takazudo/zudo-doc/chrome";
 import { DocHistory } from "@takazudo/zudo-doc/doc-history";
 import { defineChromeBindings } from "@takazudo/zudo-doc/chrome-bindings";
 import { chromeBindings } from "virtual:zudo-doc-chrome-bindings";
+import { FootprintPreviewIsland } from "../../src/component-preview/footprint-preview-island";
 import { PackageModelViewerIsland } from "../../src/component-model-viewer/package-model-viewer-island";
 
 // zfb's island scanner follows this route's static import graph, not the
 // virtual chrome-binding re-export. Keeping the real client component reachable
 // here registers the island rendered by generated record MDX.
+void FootprintPreviewIsland;
 void PackageModelViewerIsland;
 
 const ctx = routeContext as unknown as RouteContextPayload;

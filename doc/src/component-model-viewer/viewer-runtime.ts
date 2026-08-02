@@ -17,7 +17,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { VRMLLoader } from "three/addons/loaders/VRMLLoader.js";
 
 import type { ModelVector, ModelViewerDescriptor } from "../../component-docs/core/model-descriptor.ts";
-import { setViewerState } from "./viewer-state.ts";
+import { setViewerMessage, setViewerState } from "./viewer-state.ts";
 
 export type MountedModelViewer = { readonly dispose: () => void };
 
@@ -143,8 +143,12 @@ export async function mountModelViewer(
     }
     themeObserver = new MutationObserver(invalidator.invalidate);
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
-    invalidator.invalidate();
-    setViewerState(root, "ready", "Interactive package model ready. Drag to orbit; scroll to zoom; arrow keys pan.");
+    // Update the layout-affecting live text before sizing, then publish ready
+    // only after the first synchronous render is complete.
+    setViewerMessage(root, "Interactive package model ready. Drag to orbit; scroll to zoom; arrow keys pan.");
+    invalidator.cancel();
+    render();
+    root.dataset.viewerState = "ready";
 
     return {
       dispose() {

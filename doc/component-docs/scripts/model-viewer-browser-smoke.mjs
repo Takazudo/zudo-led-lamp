@@ -98,10 +98,18 @@ async function main() {
         }
       }
 
+      await setViewportAndMedia(cdp, 375, "dark", false, 812, 2);
+      await navigate(cdp, origin, RECORD);
+      await setDocumentTheme(cdp, "dark");
+      await revealReadyViewer(cdp);
+      await exerciseDialogGeometry(cdp, 375, 812);
+
       await setViewportAndMedia(cdp, 1440, "light", false);
       await navigate(cdp, origin, RECORD);
       await setDocumentTheme(cdp, "light");
       await revealReadyViewer(cdp);
+      await exerciseFootprintDialog(cdp);
+      await exerciseModelDialog(cdp);
       await exerciseViewerInteractions(cdp);
 
       // No continuous animation loop: after interaction/resize settles, the
@@ -121,33 +129,38 @@ async function main() {
       assertDurationAtMost(reducedDurations.animation, 0.001, "reduced-motion animation duration");
       assertDurationAtMost(reducedDurations.transition, 0.001, "reduced-motion transition duration");
 
+      await evaluate(cdp, `document.querySelector('[data-component-preview-enlarge="model"]').click()`);
+      await waitFor(cdp, `document.querySelector('[data-model-viewer-instance="dialog"]')?.dataset.viewerState === 'ready'`, 20_000);
       await evaluate(cdp, `
-        window.__zldOldViewer = document.querySelector('[data-component-model-viewer-root]');
-        window.__zldOldCanvas = window.__zldOldViewer.querySelector('canvas');
+        window.__zldOldViewers = [...document.querySelectorAll('[data-component-model-viewer-root]')];
+        window.__zldOldCanvases = window.__zldOldViewers.map((viewer) => viewer.querySelector('canvas'));
         document.querySelector('a[href=${JSON.stringify(AWAY)}]').click();
       `);
       await waitFor(cdp, `location.pathname === ${JSON.stringify(AWAY)}`);
-      await waitFor(cdp, `window.__zldOldViewer?.dataset.viewerDisposed === 'true'`);
-      assertEqual(await evaluate(cdp, `window.__zldOldCanvas?.isConnected`), false, "old canvas detached on SPA swap");
+      await waitFor(cdp, `window.__zldOldViewers?.every((viewer) => viewer.dataset.viewerDisposed === 'true')`);
+      assertEqual(await evaluate(cdp, `window.__zldOldViewers?.length`), 2, "SPA navigation started with inline and dialog viewers");
+      assertEqual(await evaluate(cdp, `window.__zldOldCanvases?.every((canvas) => !canvas?.isConnected)`), true, "inline and dialog canvases detached on SPA swap");
 
       await evaluate(cdp, "history.back()");
       await waitFor(cdp, `location.pathname === ${JSON.stringify(RECORD)}`);
       await revealReadyViewer(cdp);
       assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-component-model-viewer-root]').length`), 1, "one viewer root after SPA back");
       assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 1, "one canvas after SPA back");
-      assertEqual(await evaluate(cdp, `document.querySelector('[data-component-model-viewer-root]') === window.__zldOldViewer`), false, "fresh viewer after SPA back");
+      assertEqual(await evaluate(cdp, `window.__zldOldViewers?.includes(document.querySelector('[data-component-model-viewer-root]'))`), false, "fresh viewer after SPA back");
 
       await navigate(cdp, origin, `${RECORD}?model-viewer-model=fail`);
       await revealViewer(cdp);
       await waitFor(cdp, `document.querySelector('[data-component-model-viewer-root]')?.dataset.viewerState === 'error'`);
       assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 0, "no canvas after model load failure");
       assertEqual(await evaluate(cdp, `document.querySelector('[data-model-viewer-status]')?.textContent.includes('package reference')`), true, "meaningful model-load fallback");
+      assertEqual(await evaluate(cdp, `getComputedStyle(document.querySelector('[data-component-preview-enlarge="model"]')).display`), "none", "model enlarge hidden after model load failure");
 
       await navigate(cdp, origin, `${RECORD}?model-viewer-webgl=fail`);
       await revealViewer(cdp);
       await waitFor(cdp, `document.querySelector('[data-component-model-viewer-root]')?.dataset.viewerState === 'unavailable'`);
       assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 0, "no canvas after forced WebGL failure");
       assertEqual(await evaluate(cdp, `document.querySelector('[data-model-viewer-status]')?.textContent.includes('WebGL is unavailable')`), true, "meaningful WebGL fallback");
+      assertEqual(await evaluate(cdp, `getComputedStyle(document.querySelector('[data-component-preview-enlarge="model"]')).display`), "none", "model enlarge hidden without WebGL");
 
       await cdp.send("Emulation.setScriptExecutionDisabled", { value: true });
       await navigate(cdp, origin, REPRESENTATIVES[0].path);
@@ -156,6 +169,14 @@ async function main() {
       assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 0, "no canvas without JavaScript");
       assertEqual(await evaluate(cdp, `document.querySelector('[data-model-viewer-status]')?.textContent.includes('requires JavaScript and WebGL')`), true, "no-JS explanation retained");
       await waitFor(cdp, `document.querySelector('.zld-component-references__footprint img')?.complete && document.querySelector('.zld-component-references__footprint img')?.naturalWidth > 0`);
+      const noJsPreviews = await evaluate(cdp, `({
+        controlsHidden: [...document.querySelectorAll('[data-component-preview-enlarge]')].every((control) => getComputedStyle(control).display === 'none'),
+        dialogsClosed: [...document.querySelectorAll('[data-component-preview-dialog]')].every((dialog) => !dialog.open),
+        footprintLink: document.querySelector('.zld-component-references__footprint-frame > a')?.href.endsWith('.svg')
+      })`);
+      assertEqual(noJsPreviews.controlsHidden, true, "no-JS enlarge controls hidden");
+      assertEqual(noJsPreviews.dialogsClosed, true, "no-JS dialogs closed");
+      assertEqual(noJsPreviews.footprintLink, true, "no-JS footprint direct link retained");
       await cdp.send("Emulation.setScriptExecutionDisabled", { value: false });
 
       await setViewportAndMedia(cdp, 1440, "light", false);
@@ -164,15 +185,19 @@ async function main() {
       const catalogState = await evaluate(cdp, `({
         viewers: document.querySelectorAll('[data-component-model-viewer-root]').length,
         canvases: document.querySelectorAll('canvas').length,
+        previewDialogs: document.querySelectorAll('[data-component-preview-dialog]').length,
+        previewTriggers: document.querySelectorAll('[data-component-preview-enlarge]').length,
         modelResources: performance.getEntriesByType('resource').filter((entry) => entry.name.includes('/assets/component-previews/models/')).length,
         modelMarkers: document.documentElement.innerHTML.includes('data-model-url')
       })`);
       assertEqual(catalogState.viewers, 0, "catalog has no viewer root");
       assertEqual(catalogState.canvases, 0, "catalog has no canvas");
+      assertEqual(catalogState.previewDialogs, 0, "catalog has no preview dialogs");
+      assertEqual(catalogState.previewTriggers, 0, "catalog has no preview triggers");
       assertEqual(catalogState.modelResources, 0, "catalog loads no model resource");
       assertEqual(catalogState.modelMarkers, false, "catalog has no model descriptor");
 
-      process.stdout.write(`component reference browser smoke passed: ${inspected} responsive/theme cases, interactions, on-demand idle, SPA cleanup, fallbacks, no-JS, viewer-free catalog\n`);
+      process.stdout.write(`component reference browser smoke passed: ${inspected} responsive/theme cases, footprint/model dialogs, interactions, focus, on-demand idle, SPA cleanup, fallbacks, no-JS, viewer-free catalog\n`);
     } catch (error) {
       const diagnostics = await evaluate(cdp, `({
         href: location.href,
@@ -197,14 +222,14 @@ async function main() {
   }
 }
 
-async function setViewportAndMedia(cdp, width, theme, reducedMotion) {
+async function setViewportAndMedia(cdp, width, theme, reducedMotion, height = 900, deviceScaleFactor = 1) {
   await cdp.send("Emulation.setDeviceMetricsOverride", {
     width,
-    height: 900,
-    deviceScaleFactor: 1,
+    height,
+    deviceScaleFactor,
     mobile: false,
     screenWidth: width,
-    screenHeight: 900,
+    screenHeight: height,
   });
   await cdp.send("Emulation.setEmulatedMedia", {
     media: "screen",
@@ -243,10 +268,12 @@ async function inspectReferencePage(cdp, representative, width, theme) {
   const report = await evaluate(cdp, `(() => {
     const section = document.querySelector('.zld-component-references');
     const cards = [...section.querySelectorAll('.zld-component-references__card')];
-    const footprintLink = section.querySelector('.zld-component-references__footprint > a');
+    const footprintLink = section.querySelector('.zld-component-references__footprint-frame > a');
     const footprintImage = footprintLink.querySelector('img');
     const modelViewport = section.querySelector('[data-model-viewer-viewport]');
     const modelRoot = section.querySelector('[data-component-model-viewer-root]');
+    const footprintTrigger = section.querySelector('[data-component-preview-enlarge="footprint"]');
+    const modelTrigger = section.querySelector('[data-component-preview-enlarge="model"]');
     const documentLink = section.querySelector('.zld-component-references__document-title a');
     const label = section.querySelector('.zld-component-references__document-label');
     const metadata = [...section.querySelectorAll('.zld-component-references__metadata > div')];
@@ -271,6 +298,21 @@ async function inspectReferencePage(cdp, representative, width, theme) {
       footprintRect,
       imageRect,
       modelRect,
+      footprintTrigger: {
+        rect: rect(footprintTrigger),
+        display: getComputedStyle(footprintTrigger).display,
+        label: footprintTrigger.getAttribute('aria-label'),
+      },
+      modelTrigger: {
+        rect: rect(modelTrigger),
+        display: getComputedStyle(modelTrigger).display,
+        label: modelTrigger.getAttribute('aria-label'),
+      },
+      dialogs: [...section.querySelectorAll('[data-component-preview-dialog]')].map((dialog) => ({
+        kind: dialog.dataset.componentPreviewDialog,
+        open: dialog.open,
+        labelResolves: document.getElementById(dialog.getAttribute('aria-labelledby')) !== null,
+      })),
       documentLabel: label?.textContent.trim(),
       documentHref: documentLink?.href,
       availability,
@@ -299,6 +341,12 @@ async function inspectReferencePage(cdp, representative, width, theme) {
   assertEqual(report.viewerRoots, 1, `${representative.kind} viewer root count`);
   assertEqual(report.modelUrl?.endsWith(".wrl"), true, `${representative.kind} selected WRL`);
   assertEqual(report.modelUrl?.toLowerCase().endsWith(".step"), false, `${representative.kind} no STEP URL`);
+  assertEqual(report.footprintTrigger.display !== "none", true, `${representative.kind} footprint enlarge visible after hydration`);
+  assertEqual(report.modelTrigger.display !== "none", true, `${representative.kind} model enlarge visible when ready`);
+  assertEqual(report.footprintTrigger.label.startsWith("Enlarge footprint preview"), true, `${representative.kind} footprint enlarge label`);
+  assertEqual(report.modelTrigger.label.startsWith("Enlarge 3D preview"), true, `${representative.kind} model enlarge label`);
+  assertEqual(report.dialogs.length, 2, `${representative.kind} closed dialog shell count`);
+  assertEqual(report.dialogs.every((dialog) => !dialog.open && dialog.labelResolves), true, `${representative.kind} closed dialogs are labeled`);
   assertEqual(report.statusVisible, true, `${representative.kind} visible status`);
   assertEqual(report.cardColorsDistinct, true, `${representative.kind} readable card colors`);
   assertEqual(report.sectionBeforeEvidence, true, `${representative.kind} references before evidence`);
@@ -313,6 +361,10 @@ async function inspectReferencePage(cdp, representative, width, theme) {
   assertContained(report.footprintRect, footprintCard, `${representative.kind} footprint at ${width}/${theme}`);
   assertContained(report.imageRect, report.footprintRect, `${representative.kind} footprint image at ${width}/${theme}`);
   assertContained(report.modelRect, modelCard, `${representative.kind} model viewport at ${width}/${theme}`);
+  assertContained(report.footprintTrigger.rect, report.footprintRect, `${representative.kind} footprint enlarge at ${width}/${theme}`);
+  assertContained(report.modelTrigger.rect, report.modelRect, `${representative.kind} model enlarge at ${width}/${theme}`);
+  assertEqual(report.footprintTrigger.rect.width >= 44 && report.footprintTrigger.rect.height >= 44, true, `${representative.kind} footprint target size`);
+  assertEqual(report.modelTrigger.rect.width >= 44 && report.modelTrigger.rect.height >= 44, true, `${representative.kind} model target size`);
   const columns = new Set(report.cardRects.map((rect) => Math.round(rect.left)));
   if (width === 375) assertEqual(columns.size, 1, `${representative.kind} cards stack at mobile width`);
   else assertEqual(columns.size >= 2, true, `${representative.kind} cards use desktop width`);
@@ -336,47 +388,262 @@ async function revealReadyViewer(cdp) {
   assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 1, "one canvas after load");
 }
 
-async function exerciseViewerInteractions(cdp) {
+async function exerciseDialogGeometry(cdp, width, height) {
+  for (const kind of ["footprint", "model"]) {
+    const triggerSelector = `[data-component-preview-enlarge="${kind}"]`;
+    const dialogSelector = `[data-component-preview-dialog="${kind}"]`;
+    await waitFor(cdp, `getComputedStyle(document.querySelector(${JSON.stringify(triggerSelector)})).display !== 'none'`);
+    if (kind === "model") {
+      await evaluate(cdp, `(() => {
+        window.__zldDialogReadyRenderCount = null;
+        const observer = new MutationObserver(() => {
+          const root = document.querySelector('[data-model-viewer-instance="dialog"]');
+          if (root?.dataset.viewerState !== 'ready') return;
+          window.__zldDialogReadyRenderCount = Number(root.dataset.renderCount ?? 0);
+          observer.disconnect();
+        });
+        observer.observe(document.querySelector(${JSON.stringify(dialogSelector)}), {
+          subtree: true,
+          childList: true,
+          attributes: true,
+          attributeFilter: ['data-viewer-state'],
+        });
+      })()`);
+    }
+    await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
+    await waitFor(cdp, `document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+    if (kind === "model") {
+      await waitFor(cdp, `document.querySelector('[data-model-viewer-instance="dialog"]')?.dataset.viewerState === 'ready'`, 20_000);
+      await waitFor(cdp, `window.__zldDialogReadyRenderCount !== null`);
+      assertEqual(await evaluate(cdp, `window.__zldDialogReadyRenderCount > 0`), true, "model ready state is published after its first render");
+      await waitForCanvasSize(cdp, "dialog");
+    }
+
+    const report = await evaluate(cdp, `(() => {
+      const dialog = document.querySelector(${JSON.stringify(dialogSelector)});
+      const close = dialog.querySelector('.zld-preview-dialog__close');
+      const content = dialog.querySelector('.zld-preview-dialog__content');
+      const label = document.getElementById(dialog.getAttribute('aria-labelledby'));
+      const rect = (element) => {
+        const value = element.getBoundingClientRect();
+        return { left: value.left, right: value.right, top: value.top, bottom: value.bottom, width: value.width, height: value.height };
+      };
+      const image = dialog.querySelector('img');
+      const modelViewport = dialog.querySelector('[data-model-viewer-viewport]');
+      const canvas = modelViewport?.querySelector('canvas');
+      return {
+        modal: dialog.matches(':modal'),
+        labelResolved: Boolean(label?.textContent.trim()),
+        viewport: { width: innerWidth, height: innerHeight },
+        pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        dialogOverflow: dialog.scrollWidth > dialog.clientWidth + 1,
+        dialog: rect(dialog),
+        close: rect(close),
+        content: rect(content),
+        image: image ? { rect: rect(image), objectFit: getComputedStyle(image).objectFit } : null,
+        model: modelViewport && canvas ? {
+          viewport: rect(modelViewport),
+          clientWidth: modelViewport.clientWidth,
+          clientHeight: modelViewport.clientHeight,
+          canvas: rect(canvas),
+          pixelWidth: canvas.width,
+          pixelHeight: canvas.height,
+          ratio: devicePixelRatio,
+        } : null,
+      };
+    })()`);
+    const viewportRect = { left: 0, top: 0, right: report.viewport.width, bottom: report.viewport.height, width: report.viewport.width, height: report.viewport.height };
+    assertEqual(Math.round(report.viewport.width), width, `${kind} dialog visual viewport width`);
+    assertEqual(Math.round(report.viewport.height), height, `${kind} dialog visual viewport height`);
+    assertEqual(report.modal, true, `${kind} dialog is in the native modal top layer`);
+    assertEqual(report.labelResolved, true, `${kind} dialog accessible label resolves`);
+    assertEqual(report.pageOverflow, false, `${kind} dialog causes no page overflow`);
+    assertEqual(report.dialogOverflow, false, `${kind} dialog causes no internal horizontal overflow`);
+    assertEqual(await evaluate(cdp, `getComputedStyle(document.documentElement).overflowY`), "hidden", `${kind} dialog locks background scrolling`);
+    const scrollY = await evaluate(cdp, "window.scrollY");
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseWheel", x: 0, y: Math.round(height / 2), deltaX: 0, deltaY: 600 });
+    await delay(100);
+    assertEqual(Math.round(await evaluate(cdp, "window.scrollY")), Math.round(scrollY), `${kind} backdrop wheel leaves page scroll unchanged`);
+    assertContained(report.dialog, viewportRect, `${kind} dialog at ${width}x${height}`);
+    assertContained(report.close, viewportRect, `${kind} close control at ${width}x${height}`);
+    assertContained(report.content, report.dialog, `${kind} dialog content at ${width}x${height}`);
+    assertEqual(report.close.width >= 44 && report.close.height >= 44, true, `${kind} dialog close target is at least 44px`);
+    if (kind === "footprint") {
+      assertEqual(report.image?.objectFit, "contain", "enlarged footprint uses contain sizing");
+      assertContained(report.image.rect, report.content, `enlarged footprint at ${width}x${height}`);
+    } else {
+      assertEqual(report.model !== null, true, "enlarged model has a live canvas");
+      assertContained(report.model.viewport, report.content, `enlarged model viewport at ${width}x${height}`);
+      assertContained(report.model.canvas, report.model.viewport, `enlarged model canvas at ${width}x${height}`);
+      const expectedWidth = report.model.clientWidth * report.model.ratio;
+      const expectedHeight = report.model.clientHeight * report.model.ratio;
+      assertEqual(Math.abs(report.model.pixelWidth - expectedWidth) <= Math.max(4, expectedWidth * 0.01), true, "enlarged model pixel width tracks DPR2 viewport");
+      assertEqual(Math.abs(report.model.pixelHeight - expectedHeight) <= Math.max(4, expectedHeight * 0.01), true, "enlarged model pixel height tracks DPR2 viewport");
+    }
+    await evaluate(cdp, `document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__close').click()`);
+    await waitFor(cdp, `!document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+    if (kind === "model") {
+      await waitFor(cdp, `document.querySelectorAll('[data-model-viewer-instance="dialog"]').length === 0`);
+    }
+    await waitFor(cdp, `document.activeElement === document.querySelector(${JSON.stringify(triggerSelector)})`);
+  }
+}
+
+async function exerciseFootprintDialog(cdp) {
+  const triggerSelector = '[data-component-preview-enlarge="footprint"]';
+  const dialogSelector = '[data-component-preview-dialog="footprint"]';
+  await waitFor(cdp, `getComputedStyle(document.querySelector(${JSON.stringify(triggerSelector)})).display !== 'none'`);
+  const trigger = await evaluate(cdp, `(() => {
+    const element = document.querySelector(${JSON.stringify(triggerSelector)});
+    const rect = element.getBoundingClientRect();
+    return { tag: element.tagName, width: rect.width, height: rect.height, label: element.getAttribute('aria-label') };
+  })()`);
+  assertEqual(trigger.tag, "BUTTON", "footprint enlarge uses a native button");
+  assertEqual(trigger.width >= 44 && trigger.height >= 44, true, "footprint enlarge target is at least 44px");
+  assertEqual(trigger.label.startsWith("Enlarge footprint preview"), true, "footprint enlarge has a specific accessible name");
+
+  assertEqual(await evaluate(cdp, `document.activeElement !== document.querySelector(${JSON.stringify(triggerSelector)})`), true, "footprint pointer-style activation begins without trigger focus");
+  await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
+  await waitFor(cdp, `document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+  assertEqual(await evaluate(cdp, `document.activeElement === document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__close')`), true, "footprint dialog moves focus to close");
+  assertEqual(await evaluate(cdp, `document.querySelector(${JSON.stringify(dialogSelector)}).matches(':modal')`), true, "footprint dialog is modal");
+  assertEqual(await evaluate(cdp, `document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('img')?.alt.startsWith('Footprint preview for ')`), true, "enlarged footprint retains alt text");
+  const layout = await evaluate(cdp, `(() => {
+    const content = document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__content');
+    const image = content.querySelector(':scope > img');
+    const rect = (element) => {
+      const value = element.getBoundingClientRect();
+      return { left: value.left, right: value.right, top: value.top, bottom: value.bottom, width: value.width, height: value.height };
+    };
+    return {
+      content: rect(content),
+      image: rect(image),
+      overflow: content.scrollWidth > content.clientWidth + 1 || content.scrollHeight > content.clientHeight + 1,
+    };
+  })()`);
+  assertContained(layout.image, layout.content, "desktop enlarged footprint");
+  assertEqual(layout.overflow, false, "desktop enlarged footprint has no internal overflow");
+
+  await pressKey(cdp, "Tab", "Tab", 9);
+  assertEqual(await evaluate(cdp, `document.querySelector(${JSON.stringify(dialogSelector)}).contains(document.activeElement)`), true, "forward Tab remains in footprint dialog");
+  await pressKey(cdp, "Tab", "Tab", 9, 8);
+  assertEqual(await evaluate(cdp, `document.querySelector(${JSON.stringify(dialogSelector)}).contains(document.activeElement)`), true, "reverse Tab remains in footprint dialog");
+
+  await pressKey(cdp, "Escape", "Escape", 27);
+  await waitFor(cdp, `!document.querySelector(${JSON.stringify(dialogSelector)})?.open && !document.querySelector(${JSON.stringify(dialogSelector)})?.querySelector('img')`);
+  assertEqual(await evaluate(cdp, `document.activeElement === document.querySelector(${JSON.stringify(triggerSelector)})`), true, "Escape restores footprint trigger focus");
+
+  await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
+  await waitFor(cdp, `document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+  await clickAt(cdp, 0, 0);
+  await waitFor(cdp, `!document.querySelector(${JSON.stringify(dialogSelector)})?.open && !document.querySelector(${JSON.stringify(dialogSelector)})?.querySelector('img')`);
+  assertEqual(await evaluate(cdp, `document.activeElement === document.querySelector(${JSON.stringify(triggerSelector)})`), true, "backdrop close restores footprint trigger focus");
+
+  await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
+  await waitFor(cdp, `document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+  await evaluate(cdp, `document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__close').click()`);
+  await waitFor(cdp, `!document.querySelector(${JSON.stringify(dialogSelector)})?.open && !document.querySelector(${JSON.stringify(dialogSelector)})?.querySelector('img')`);
+  assertEqual(await evaluate(cdp, `document.activeElement === document.querySelector(${JSON.stringify(triggerSelector)})`), true, "close button restores footprint trigger focus");
+  assertEqual(await evaluate(cdp, `location.pathname === ${JSON.stringify(RECORD)}`), true, "footprint enlarge never navigates to the raw SVG");
+}
+
+async function exerciseModelDialog(cdp) {
+  const triggerSelector = '[data-component-preview-enlarge="model"]';
+  const dialogSelector = '[data-component-preview-dialog="model"]';
+  await waitFor(cdp, `getComputedStyle(document.querySelector(${JSON.stringify(triggerSelector)})).display !== 'none'`);
+  const trigger = await evaluate(cdp, `(() => {
+    const element = document.querySelector(${JSON.stringify(triggerSelector)});
+    const rect = element.getBoundingClientRect();
+    return { tag: element.tagName, width: rect.width, height: rect.height, label: element.getAttribute('aria-label') };
+  })()`);
+  assertEqual(trigger.tag, "BUTTON", "model enlarge uses a native button");
+  assertEqual(trigger.width >= 44 && trigger.height >= 44, true, "model enlarge target is at least 44px");
+  assertEqual(trigger.label.startsWith("Enlarge 3D preview"), true, "model enlarge has a specific accessible name");
+
+  assertEqual(await evaluate(cdp, `document.activeElement !== document.querySelector(${JSON.stringify(triggerSelector)})`), true, "model pointer-style activation begins without trigger focus");
+  await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
+  await waitFor(cdp, `document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+  await waitFor(cdp, `document.querySelector('[data-model-viewer-instance="dialog"]')?.dataset.viewerState === 'ready'`, 20_000);
+  assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-component-model-viewer-root]').length`), 2, "model dialog mounts one temporary viewer");
+  assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 2, "model dialog mounts one temporary canvas");
+  assertEqual(await evaluate(cdp, `document.activeElement === document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__close')`), true, "model dialog moves focus to close");
+
+  await exerciseViewerInteractions(cdp, "dialog", false);
+  await waitForRenderIdle(cdp, "enlarged model remains render-on-demand idle", "dialog");
+
+  const beforeThemeRender = await renderCount(cdp, "dialog");
+  await evaluate(cdp, `document.documentElement.dataset.theme = 'dark'`);
+  await waitFor(cdp, `Number(document.querySelector('[data-model-viewer-instance="dialog"]').dataset.renderCount) > ${beforeThemeRender}`);
+  await evaluate(cdp, `document.documentElement.dataset.theme = 'light'`);
+
+  await evaluate(cdp, `
+    window.__zldClosedDialogViewer = document.querySelector('[data-model-viewer-instance="dialog"]');
+    window.__zldClosedDialogCanvas = window.__zldClosedDialogViewer.querySelector('canvas');
+    document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__close').click();
+  `);
+  await waitFor(cdp, `!document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
+  await waitFor(cdp, `window.__zldClosedDialogViewer?.dataset.viewerDisposed === 'true'`);
+  assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-component-model-viewer-root]').length`), 1, "closing model dialog removes temporary viewer");
+  assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 1, "closing model dialog removes temporary canvas");
+  assertEqual(await evaluate(cdp, `window.__zldClosedDialogCanvas?.isConnected`), false, "closing model dialog detaches temporary canvas");
+  assertEqual(await evaluate(cdp, `document.activeElement === document.querySelector(${JSON.stringify(triggerSelector)})`), true, "closing model dialog restores trigger focus");
+
+  for (let cycle = 1; cycle <= 2; cycle += 1) {
+    await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
+    await waitFor(cdp, `document.querySelector('[data-model-viewer-instance="dialog"]')?.dataset.viewerState === 'ready'`, 20_000);
+    await evaluate(cdp, `
+      window.__zldCycleViewer = document.querySelector('[data-model-viewer-instance="dialog"]');
+      document.querySelector(${JSON.stringify(dialogSelector)}).querySelector('.zld-preview-dialog__close').click();
+    `);
+    await waitFor(cdp, `window.__zldCycleViewer?.dataset.viewerDisposed === 'true'`);
+    assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-component-model-viewer-root]').length`), 1, `model dialog reopen cycle ${cycle} leaves one viewer`);
+    assertEqual(await evaluate(cdp, `document.querySelectorAll('[data-model-viewer-viewport] canvas').length`), 1, `model dialog reopen cycle ${cycle} leaves one canvas`);
+  }
+}
+
+async function exerciseViewerInteractions(cdp, instance = "inline", testResize = true) {
+  const rootSelector = `[data-model-viewer-instance="${instance}"]`;
   const canvas = await evaluate(cdp, `(() => {
-    const rect = document.querySelector('[data-model-viewer-viewport] canvas').getBoundingClientRect();
+    const rect = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport] canvas`)}).getBoundingClientRect();
     return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
   })()`);
   const x = canvas.left + canvas.width / 2;
   const y = canvas.top + canvas.height / 2;
 
-  await waitForRenderIdle(cdp, "before orbit input");
-  let before = await renderCount(cdp);
+  await waitForRenderIdle(cdp, `before ${instance} orbit input`, instance);
+  let before = await renderCount(cdp, instance);
   await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", buttons: 1, clickCount: 1 });
   await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: x + 48, y: y + 24, button: "left", buttons: 1 });
   await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: x + 48, y: y + 24, button: "left", buttons: 0, clickCount: 1 });
-  await waitFor(cdp, `Number(document.querySelector('[data-component-model-viewer-root]').dataset.renderCount) > ${before}`);
+  await waitFor(cdp, `Number(document.querySelector(${JSON.stringify(rootSelector)}).dataset.renderCount) > ${before}`);
 
-  await waitForRenderIdle(cdp, "before zoom input");
-  before = await renderCount(cdp);
+  await waitForRenderIdle(cdp, `before ${instance} zoom input`, instance);
+  before = await renderCount(cdp, instance);
   await cdp.send("Input.dispatchMouseEvent", { type: "mouseWheel", x, y, deltaX: 0, deltaY: -180 });
-  await waitFor(cdp, `Number(document.querySelector('[data-component-model-viewer-root]').dataset.renderCount) > ${before}`);
+  await waitFor(cdp, `Number(document.querySelector(${JSON.stringify(rootSelector)}).dataset.renderCount) > ${before}`);
 
-  await waitForRenderIdle(cdp, "before keyboard input");
-  await evaluate(cdp, `document.querySelector('[data-model-viewer-viewport]').focus()`);
-  before = await renderCount(cdp);
+  await waitForRenderIdle(cdp, `before ${instance} keyboard input`, instance);
+  await evaluate(cdp, `document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)}).focus()`);
+  before = await renderCount(cdp, instance);
   await cdp.send("Input.dispatchKeyEvent", { type: "rawKeyDown", key: "ArrowLeft", code: "ArrowLeft", windowsVirtualKeyCode: 37, nativeVirtualKeyCode: 37 });
   await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "ArrowLeft", code: "ArrowLeft", windowsVirtualKeyCode: 37, nativeVirtualKeyCode: 37 });
-  await waitFor(cdp, `Number(document.querySelector('[data-component-model-viewer-root]').dataset.renderCount) > ${before}`);
+  await waitFor(cdp, `Number(document.querySelector(${JSON.stringify(rootSelector)}).dataset.renderCount) > ${before}`);
   const focus = await evaluate(cdp, `(() => {
-    const viewport = document.querySelector('[data-model-viewer-viewport]');
+    const viewport = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)});
     const style = getComputedStyle(viewport);
     return { active: document.activeElement === viewport, outline: style.outlineStyle, width: parseFloat(style.outlineWidth) };
   })()`);
-  assertEqual(focus.active, true, "viewer keyboard focus retained");
-  assertEqual(focus.outline !== "none" && focus.width >= 2, true, "viewer focus state visible");
+  assertEqual(focus.active, true, `${instance} viewer keyboard focus retained`);
+  assertEqual(focus.outline !== "none" && focus.width >= 2, true, `${instance} viewer focus state visible`);
 
-  await waitForRenderIdle(cdp, "before resize input");
-  before = await renderCount(cdp);
+  if (!testResize) return;
+  await waitForRenderIdle(cdp, `before ${instance} resize input`, instance);
+  before = await renderCount(cdp, instance);
   await setViewportAndMedia(cdp, 1200, "light", false);
-  await waitFor(cdp, `Number(document.querySelector('[data-component-model-viewer-root]').dataset.renderCount) > ${before}`);
+  await waitFor(cdp, `Number(document.querySelector(${JSON.stringify(rootSelector)}).dataset.renderCount) > ${before}`);
   const resized = await evaluate(cdp, `(() => {
-    const canvas = document.querySelector('[data-model-viewer-viewport] canvas');
-    const viewport = document.querySelector('[data-model-viewer-viewport]');
+    const canvas = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport] canvas`)});
+    const viewport = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)});
     return { cssWidth: canvas.clientWidth, viewportWidth: viewport.clientWidth, pixelWidth: canvas.width, ratio: devicePixelRatio };
   })()`);
   const expectedPixelWidth = resized.viewportWidth * resized.ratio;
@@ -386,21 +653,46 @@ async function exerciseViewerInteractions(cdp) {
   await setViewportAndMedia(cdp, 1440, "light", false);
 }
 
-async function renderCount(cdp) {
-  return Number(await evaluate(cdp, `document.querySelector('[data-component-model-viewer-root]')?.dataset.renderCount ?? 0`));
+async function renderCount(cdp, instance = "inline") {
+  return Number(await evaluate(cdp, `document.querySelector('[data-model-viewer-instance=${JSON.stringify(instance)}]')?.dataset.renderCount ?? 0`));
 }
 
-async function waitForRenderIdle(cdp, label) {
+async function waitForCanvasSize(cdp, instance) {
+  const rootSelector = `[data-model-viewer-instance="${instance}"]`;
+  await waitFor(cdp, `(() => {
+    const viewport = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)});
+    const canvas = viewport?.querySelector('canvas');
+    if (!viewport || !canvas) return false;
+    const ratio = Math.min(devicePixelRatio, 2);
+    const expectedWidth = Math.max(1, viewport.clientWidth) * ratio;
+    const expectedHeight = Math.max(1, viewport.clientHeight) * ratio;
+    return Math.abs(canvas.width - expectedWidth) <= Math.max(4, expectedWidth * 0.01)
+      && Math.abs(canvas.height - expectedHeight) <= Math.max(4, expectedHeight * 0.01);
+  })()`);
+}
+
+async function waitForRenderIdle(cdp, label, instance = "inline") {
   await delay(150);
-  const count = await renderCount(cdp);
+  const count = await renderCount(cdp, instance);
   await delay(250);
-  assertEqual(await renderCount(cdp), count, label);
+  assertEqual(await renderCount(cdp, instance), count, label);
+}
+
+async function pressKey(cdp, key, code, keyCode, modifiers = 0) {
+  await cdp.send("Input.dispatchKeyEvent", { type: "rawKeyDown", key, code, modifiers, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
+  await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key, code, modifiers, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
+}
+
+async function clickAt(cdp, x, y) {
+  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", buttons: 1, clickCount: 1 });
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y, button: "left", buttons: 0, clickCount: 1 });
 }
 
 function assertContained(child, parent, label) {
   const epsilon = 1;
   if (
     child.left < parent.left - epsilon || child.right > parent.right + epsilon ||
+    child.top < parent.top - epsilon || child.bottom > parent.bottom + epsilon ||
     child.width <= 0 || child.height <= 0
   ) {
     throw new Error(`${label} is not contained: child=${JSON.stringify(child)} parent=${JSON.stringify(parent)}`);

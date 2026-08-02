@@ -226,11 +226,31 @@ describe("the stylesheet declares what the components emit", () => {
     );
     assert.match(
       stylesheet,
-      /\.zld-component-references__footprint > a\s*\{[^}]*aspect-ratio:\s*16 \/ 9/u,
+      /\.zld-component-references__footprint-frame > a\s*\{[^}]*aspect-ratio:\s*16 \/ 9/u,
     );
     assert.match(
       stylesheet,
       /\.zld-component-references__footprint img\s*\{[^}]*object-fit:\s*contain/u,
     );
+  });
+
+  it("keeps enlarge dialogs viewport-bound, scroll-contained, and keyboard visible", () => {
+    assert.match(stylesheet, /\.zld-preview-dialog\s*\{[^}]*height:[^;}]*100dvh/u);
+    assert.match(stylesheet, /\.zld-preview-dialog\s*\{[^}]*max-width:[^;}]*100vw/u);
+    assert.match(stylesheet, /\.zld-preview-dialog__content\s*\{[^}]*overscroll-behavior:\s*contain/u);
+    assert.match(
+      stylesheet,
+      /\.zld-preview-dialog--footprint \.zld-preview-dialog__content > img\s*\{[^}]*object-fit:\s*contain/u,
+    );
+    assert.match(stylesheet, /\.zld-preview-enlarge-button:focus-visible,[^{]*\{[^}]*outline:/u);
+  });
+
+  it("gives every preview dialog control a 44px target and semantic colors", () => {
+    for (const selector of ["zld-preview-enlarge-button", "zld-preview-dialog__close"]) {
+      const rule = new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`, "u").exec(stylesheet)?.[1] ?? "";
+      assert.match(rule, /min-width:\s*44px/u, `.${selector} has no 44px minimum width`);
+      assert.match(rule, /min-height:\s*44px/u, `.${selector} has no 44px minimum height`);
+      assert.match(rule, /var\(--color-/u, `.${selector} does not use theme color tokens`);
+    }
   });
 });

@@ -61,6 +61,12 @@ async function main() {
     assert.match(footprintPath, /^\/assets\/component-previews\/footprints\/[A-Za-z0-9._+-]+\.svg$/u);
     referencedFootprints.add(basename(footprintPath));
     await assertRegularDistFile(footprintPath);
+    assert.match(section, /data-footprint-preview-state=(?:"no-js"|no-js)(?:\s|>)/u, `${slug} footprint enhancement must start inert`);
+    assert.match(section, /data-zfb-island=(?:"FootprintPreviewIsland"|FootprintPreviewIsland)(?:\s|>)/u, `${slug} must register the footprint island`);
+    assert.ok(
+      section.includes(`>Open SVG</a>`),
+      `${slug} must retain the direct footprint link without JavaScript`,
+    );
 
     const modelTags = section.match(/<[^>]+\bdata-model-url=(?:"[^"]+"|'[^']+'|[^\s>]+)[^>]*>/gu) ?? [];
     const modelPaths = modelTags.map((tag) => decodeHtml(readAttribute(tag, "data-model-url")));
@@ -71,6 +77,31 @@ async function main() {
     await assertRegularDistFile(modelPath);
 
     assert.match(section, /data-viewer-state=(?:"no-js"|no-js)(?:\s|>)/u, `${slug} must retain a no-JS viewer state`);
+    assert.match(section, /data-model-viewer-instance=(?:"inline"|inline)(?:\s|>)/u, `${slug} must render only the inline model initially`);
+    assert.match(section, /data-zfb-island=(?:"PackageModelViewerIsland"|PackageModelViewerIsland)(?:\s|>)/u, `${slug} must register the model island`);
+
+    const enlargeTriggers = section.match(/<button\b[^>]*\bdata-component-preview-enlarge=(?:"[^"]+"|'[^']+'|[^\s>]+)[^>]*>/gu) ?? [];
+    assert.equal(enlargeTriggers.length, 2, `${slug} must render footprint and model enlarge controls`);
+    assert.deepEqual(
+      enlargeTriggers.map((tag) => readAttribute(tag, "data-component-preview-enlarge")).sort(),
+      ["footprint", "model"],
+      `${slug} enlarge controls must target both preview kinds`,
+    );
+    for (const tag of enlargeTriggers) {
+      assert.match(decodeHtml(readAttribute(tag, "aria-label")), /^Enlarge (?:footprint|3D) preview/u, `${slug} enlarge control needs a specific accessible name`);
+    }
+
+    const dialogs = section.match(/<dialog\b[^>]*\bdata-component-preview-dialog=(?:"[^"]+"|'[^']+'|[^\s>]+)[^>]*>/gu) ?? [];
+    assert.equal(dialogs.length, 2, `${slug} must render two closed preview dialog shells`);
+    assert.deepEqual(
+      dialogs.map((tag) => readAttribute(tag, "data-component-preview-dialog")).sort(),
+      ["footprint", "model"],
+      `${slug} dialog shells must cover both preview kinds`,
+    );
+    for (const tag of dialogs) {
+      const labelId = readAttribute(tag, "aria-labelledby");
+      assert.match(section, new RegExp(`\\bid=(?:"${labelId}"|'${labelId}'|${labelId})(?:\\s|>)`, "u"), `${slug} dialog label must resolve`);
+    }
     assert.match(
       section,
       /Interactive inspection requires JavaScript and WebGL\. The package identity remains available in this page\./u,
@@ -94,7 +125,11 @@ async function main() {
   assert.equal(actualPreviewFiles.some((path) => [".step", ".stp"].includes(extname(path).toLowerCase())), false, "STEP must not be browser-published");
 
   const catalog = await readFile(CATALOG, "utf8");
-  assert.doesNotMatch(catalog, /data-component-model-viewer-root|data-model-url|component-previews\/models\/|<canvas\b/u, "catalog index must not create or reference a live model viewer");
+  assert.doesNotMatch(
+    catalog,
+    /data-component-model-viewer-root|data-model-url|component-previews\/models\/|data-component-preview-(?:dialog|enlarge)|<canvas\b/u,
+    "catalog index must not create or reference live preview UI",
+  );
 
   process.stdout.write("built component references passed: 32 records, 22 SVGs, 22 WRLs, 0 STEP; catalog viewer-free\n");
 }
