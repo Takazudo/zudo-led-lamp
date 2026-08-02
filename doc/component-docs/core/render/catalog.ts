@@ -38,9 +38,10 @@ import {
 } from "../mdx.ts";
 import { anchor } from "../ids.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
-import { literal } from "../text.ts";
+import { literal, type SafeText } from "../text.ts";
 import {
   agentResourceDestination,
+  aliasTerms,
   fitLabel,
   openDomainRatio,
   openDomainSummary,
@@ -178,6 +179,7 @@ function indexRow(record: PublicRecord): TableRow {
 function entry(record: PublicRecord): RootContent[] {
   const { identity } = record;
   const ownerSkill = ownerSkillOf(record);
+  const aliases = aliasTerms(record);
 
   const details: readonly PhrasingContent[][] = [
     field("Record ID", [code(identity.recordId)]),
@@ -187,6 +189,9 @@ function entry(record: PublicRecord): RootContent[] {
     field("Orderable ID", [code(identity.lcsc)]),
     field("Package", [code(identity.packageName)]),
     field("Inventory line", [code(identity.lineId)]),
+    // Several records are routed by LCSC code rather than part number, so the
+    // alternate terms have to be ON the page for anyone to find them by search.
+    ...(aliases.length === 0 ? [] : [field("Also known as", termList(aliases))]),
     ...(ownerSkill === null ? [] : [field("Owner skill", [code(ownerSkill)])]),
     field("Placements", [text(placementSummary(identity.placements))]),
     field("Fit", [text(fitLabel(identity.dnp))]),
@@ -254,6 +259,16 @@ function kindValue(record: PublicRecord): PhrasingContent[] {
  */
 function field(label: string, value: readonly PhrasingContent[]): PhrasingContent[] {
   return [strong(literal(`${label}:`)), space(), ...value];
+}
+
+/** Exact terms, comma-separated, each rendered as the identifier it is. */
+function termList(terms: readonly SafeText[]): PhrasingContent[] {
+  const list: PhrasingContent[] = [];
+  for (const [position, term] of terms.entries()) {
+    if (position > 0) list.push(text(literal(",")), space());
+    list.push(code(term));
+  }
+  return list;
 }
 
 function labelled(label: string, description: string): PhrasingContent[] {

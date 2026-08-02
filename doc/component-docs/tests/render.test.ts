@@ -92,6 +92,18 @@ describe("catalog", () => {
     assert.ok(catalogPage.includes("**Fit:** Fitted"));
   });
 
+  it("prints alternate search terms so a record is findable by its other names", () => {
+    // Several real records are routed by LCSC code rather than part number, so
+    // the alias has to be in the rendered page — search indexes the page, not
+    // the view model.
+    assert.ok(catalogPage.includes("**Also known as:** `FX8860`"));
+    assert.ok(driverPage.includes("**Also known as:** `FX8860`"));
+    // Terms already shown as identity fields are not repeated.
+    assert.ok(!catalogPage.includes("`FX8860MP-13`, `FX8860`"));
+    // A record with no extra aliases gets no empty row.
+    assert.ok(!hostilePage.includes("**Also known as:**"));
+  });
+
   it("groups placements by board rather than listing them flat", () => {
     assert.ok(catalogPage.includes("**Placements:** board-l U2; board-p U7"));
   });

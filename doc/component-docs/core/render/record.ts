@@ -65,6 +65,7 @@ import {
   VERDICT_GLOSS,
   CATALOG_ROUTE,
   agentResourceDestination,
+  aliasTerms,
   catalogEntryRoute,
   factDestination,
   factValue,
@@ -200,6 +201,7 @@ function subordinateSection(record: PublicRecord): RootContent[] {
 function identitySection(record: PublicRecord): RootContent[] {
   const { identity } = record;
   const ownerSkill = ownerSkillOf(record);
+  const aliases = aliasTerms(record);
 
   return [
     heading(2, literal("Identity")),
@@ -212,6 +214,10 @@ function identitySection(record: PublicRecord): RootContent[] {
       field("Orderable ID", [code(identity.lcsc)]),
       field("Package", [code(identity.packageName)]),
       field("Inventory line", [code(identity.lineId)]),
+      // This record's route may be its LCSC code rather than its part number,
+      // so the alternate terms must appear in the rendered page or nobody can
+      // search their way here by the other name.
+      ...(aliases.length === 0 ? [] : [field("Also known as", termList(aliases))]),
       ...(ownerSkill === null ? [] : [field("Owner skill", [code(ownerSkill)])]),
       field("Fit", [text(fitLabel(identity.dnp))]),
       field("Identity state", [text(identity.identityState)]),
@@ -885,6 +891,16 @@ function agentResourceSection(record: PublicRecord): RootContent[] {
 
 function field(label: string, value: readonly PhrasingContent[]): PhrasingContent[] {
   return [strong(literal(`${label}:`)), space(), ...value];
+}
+
+/** Exact terms, comma-separated, each rendered as the identifier it is. */
+function termList(terms: readonly SafeText[]): PhrasingContent[] {
+  const list: PhrasingContent[] = [];
+  for (const [position, term] of terms.entries()) {
+    if (position > 0) list.push(text(literal(",")), space());
+    list.push(code(term));
+  }
+  return list;
 }
 
 /**

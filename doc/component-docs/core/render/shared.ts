@@ -212,6 +212,43 @@ export function placementSummary(placements: readonly PublicPlacement[]): SafeTe
   return joinSafe(parts, "; ");
 }
 
+/**
+ * The record's alternate search terms, minus the ones already on the page.
+ *
+ * `PublicAliases` exists to make exact-term discovery work: several records are
+ * routed by their LCSC code rather than a part number, so the page **title** is
+ * the MPN and the aliases are what let someone find the record by typing the
+ * other identifier. That only works if the terms are in the rendered HTML —
+ * search indexes the page, not the view model — so a record whose aliases are
+ * never printed is a record that cannot be found by its alternate names.
+ *
+ * Values already rendered as identity fields are dropped, because repeating
+ * `C100001` twice on one page helps nobody. Order follows the arrays, so it
+ * stays whatever the provider decided rather than being re-sorted here.
+ */
+export function aliasTerms(record: PublicRecord): SafeText[] {
+  const { identity, aliases } = record;
+  const shown = new Set<string>([
+    identity.mpn,
+    identity.lcsc,
+    identity.manufacturer,
+    identity.function,
+  ]);
+
+  const terms: SafeText[] = [];
+  for (const value of [
+    ...aliases.mpn,
+    ...aliases.lcsc,
+    ...aliases.manufacturer,
+    ...aliases.function,
+  ]) {
+    if (shown.has(value)) continue;
+    shown.add(value);
+    terms.push(value);
+  }
+  return terms;
+}
+
 /** A fact's value and its unit, kept as two fields because they are two fields. */
 export function factValue(fact: PublicFact): SafeText {
   return typeof fact.value === "number"
