@@ -10,7 +10,7 @@ generated: true
 
 # Project routing
 
-Use `.claude/skills/component-spec-audit` whenever circuit, schematic, PCB, BOM, firmware, bring-up, substitution, or related documentation work touches component identity, behavior, ratings, pins, packages, defaults, or interactions. Run its offline validator first and route every exact MPN/LCSC/function through the central inventory. Never infer unavailable evidence from memory or a same-name/generic-family part.
+Use `.claude/skills/component-spec-audit` whenever circuit, schematic, PCB, BOM, firmware, bring-up, substitution, or related documentation work touches component identity, behavior, ratings, pins, packages, defaults, previews, or interactions. **Adding or replacing a BOM component always starts there**: it owns the exact schematic/spec change, evidence, KiCad assets, explicit catalog publication, previews, generated docs, and validation. Run its offline validator first and route every exact MPN/LCSC/function through the central inventory. Never infer unavailable evidence from memory or a same-name/generic-family part.
 
 Load every matching exact owner skill, including first-class subordinate records:
 

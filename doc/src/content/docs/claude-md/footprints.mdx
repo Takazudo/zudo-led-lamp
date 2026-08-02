@@ -24,16 +24,43 @@ This project uses [easyeda2kicad.py](https://github.com/uPesy/easyeda2kicad.py) 
 
 > Every `.kicad_mod` file must exist in BOTH `footprints/kicad/` (master) AND `footprints/kicad/zudo-led-lamp.pretty/` (resolution path). A file only in the master dir will NOT resolve when KiCad opens the PCB. Copying into the `.pretty` dir is mandatory, not optional.
 
+## Adding or replacing a BOM component
+
+Start with `.claude/skills/component-spec-audit`; it owns the complete onboarding
+workflow. This file defines only the KiCad-asset part of that workflow.
+
+1. Merge only the exact imported symbol entry into `symbols/zudo-led-lamp.kicad_sym`.
+   Never overwrite this shared multi-symbol library with an importer output, and do
+   not substitute a generic symbol when the pin map is part-specific.
+2. Acquire the footprint and both model formats. For an LCSC/EasyEDA import, include
+   `--3d`:
+
+   ```bash
+   easyeda2kicad --lcsc_id <LCSC_ID> --footprint --symbol --3d --output /path/to/dl/zudo-led-lamp
+   ```
+
+3. Copy the canonical `.kicad_mod` to both library locations and verify the copies
+   are byte-identical with `cmp -s`. Place matching same-basename `.step` **and**
+   `.wrl` files in `zudo-led-lamp.3dshapes/`.
+4. Review the footprint's `${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/`
+   WRL reference and its offset, rotation, and scale transforms. The browser preview
+   uses WRL; STEP is the required matching audit pair, not an optional replacement.
+5. After the explicit catalog selection is updated, run
+   `pnpm --dir doc generate:footprint-previews`, `pnpm --dir doc check:footprint-previews`,
+   `pnpm --dir doc generate:models`, and `pnpm --dir doc check:models`. Commit the
+   generated SVG preview manifest/assets and public WRL preview; do not hand-edit them.
+
 ## Downloading parts
 
 ```bash
 # Download both footprint and symbol for one LCSC part
-easyeda2kicad --lcsc_id <LCSC_ID> --footprint --symbol --output /path/to/dl/zudo-led-lamp
+easyeda2kicad --lcsc_id <LCSC_ID> --footprint --symbol --3d --output /path/to/dl/zudo-led-lamp
 
 # Then copy into the project
 cp /path/to/dl/zudo-led-lamp.pretty/*.kicad_mod footprints/kicad/
 cp /path/to/dl/zudo-led-lamp.pretty/*.kicad_mod footprints/kicad/zudo-led-lamp.pretty/
-cp /path/to/dl/zudo-led-lamp.kicad_sym symbols/zudo-led-lamp.kicad_sym
+# Merge only the imported symbol entry into symbols/zudo-led-lamp.kicad_sym.
+# NEVER copy this generated multi-symbol file over the shared library.
 ```
 
 Notes learned during the initial bulk download (2026-08-01):

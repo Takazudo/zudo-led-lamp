@@ -27,13 +27,15 @@ Documentation site built with [zudo-doc](https://github.com/zudolab/zudo-doc) �
 - `pnpm dev:network` — same, but zfb binds `--host 0.0.0.0` for LAN access (`pnpm dev:zfb:network` individually); the doc-history server stays loopback-only and LAN clients reach it through zfb's `/doc-history/*` dev proxy
 - **Trusted networks only:** this also serves your git doc-history — including UNPUBLISHED local commits — to anyone on the LAN via the `/doc-history/*` proxy
 - `run-p` swallows trailing args, so other zfb flags don't forward through `pnpm dev` — pass them directly instead: `pnpm run dev:zfb -- <flags>`
-- `pnpm build` — regenerates the component docs, then static HTML export to `dist/`
+- `pnpm build` — regenerates public model previews and component docs, then static HTML export to `dist/`
 - `pnpm check` — TypeScript type checking (covers `component-docs/` too)
 - `pnpm preview` — serve the built `dist/`
 - `pnpm generate:components` — project `.claude/skills/**` evidence into `src/content/docs/components/`
 - `pnpm check:components` — fail if that generated output or `component-docs/preflight.json` is stale
 - `pnpm test:components` — the generator's own test suite
-- `pnpm b4push` — `check` + `test:components` + `build` + `check:components`
+- `pnpm generate:footprint-previews` / `pnpm check:footprint-previews` — regenerate with the pinned KiCad container / verify committed SVG previews without Docker
+- `pnpm generate:models` / `pnpm check:models` — copy the reviewed selected WRL files into public preview assets / verify their bytes
+- `pnpm b4push` — `check` + `test:components` + footprint/model checks + `build` + `check:components` + both artifact scans; it is the local validation gate, not a deploy command
 
 ## Key Directories
 
@@ -47,6 +49,9 @@ component-docs/           # component-knowledge projection (see its ARCHITECTURE
 ├── adapters/circuit/     # this repo's evidence provider (.claude/skills + validate.py)
 ├── cli/                  # generate / check / watch entrypoints
 └── preflight.json        # committed publication report — regenerate, never hand-edit
+public/assets/component-previews/
+├── footprints/           # GENERATED, committed SVG previews + manifest
+└── models/               # GENERATED, committed reviewed WRL previews
 src/
 ├── chrome-bindings.tsx   # typed primary chrome / named header / MDX bindings
 ├── content/
@@ -60,6 +65,14 @@ src/
 `.claude/skills/` or the renderers under `component-docs/core/render/`, then run
 `pnpm generate:components`. A hand-authored file placed in that tree fails the
 generator rather than being deleted. Full contract: `component-docs/ARCHITECTURE.md`.
+The footprint SVGs, their manifest, and selected public WRLs are likewise generated
+and committed: regenerate them from the reviewed canonical KiCad assets; never edit
+them by hand. A component change must explicitly update the selection and its truthful
+document kind before any generated page or preview can exist.
+
+`pnpm b4push` completes every credential-free gate. CI runs its extra drift/link
+checks and only then performs the credential-gated Cloudflare preview deploy; missing
+credentials skip deployment, never validation.
 
 Everything else — layout, header, sidebar, footer, doc chrome, islands, and the default design tokens — lives in `node_modules/@takazudo/zudo-doc`. For supported markup replacement, create `src/chrome-bindings.tsx` with `defineChromeBindings`, set `chromeBindingsModule`, and use the primary `Header` / `Footer` / `Sidebar` / `Toc` / `Breadcrumb` / `DocPager` slots or the named `headerRightComponents` registry. The generated default, locale, and doc-history route shapes already consume the same binding object; do not fork a route stub for presentational customization. `npx zudo-doc eject <component>` only copies source: heed its primary, nested-chrome, or content-layer remediation before expecting the copy to render. Settings you didn't set explicitly in `zfb.config.ts` use the package's documented defaults — hover `zudoDoc`'s `ZudoDocConfig` argument in your editor to see every field and its `@default`.
 
