@@ -18,7 +18,7 @@ import { fail } from "./errors.ts";
 import { assertUnique } from "./ids.ts";
 import { PublicationPolicy, type PreflightReport } from "./publication.ts";
 import { renderLanding } from "./render/landing.ts";
-import { VIEW_MODEL_VERSION } from "./view-model.ts";
+import { VIEW_MODEL_VERSION, type PublicViewModel } from "./view-model.ts";
 import type { ComponentDataAdapter } from "./adapter.ts";
 import type { GeneratedPage } from "./page.ts";
 
@@ -37,6 +37,59 @@ export type PipelineResult = {
   /** Present only when `dryRun` is true; empty means the tree is in sync. */
   readonly drift: readonly string[];
 };
+
+/**
+ * Anchors become HTML `id` attributes, so the invariant that actually matters is
+ * uniqueness *within a document* — not across the site.
+ *
+ * Record-scoped nodes (identity, sources, facts, coverage, pin maps) each carry a
+ * singular `recordId` and therefore live on exactly one page, so for them the two
+ * invariants coincide and global uniqueness is the stricter, better check.
+ *
+ * Interactions are the one node type with a plural `recordIds`: the same interaction is
+ * published on every participating record's page (6 of this corpus's 50 span 2-4
+ * records). Its anchor legitimately recurs across pages, so a flat global check would
+ * abort the build on exactly the fan-out the view model exists to express. What must
+ * still hold is that one anchor never denotes two different interactions — otherwise a
+ * deep link would resolve to two different rules depending on where it was followed.
+ */
+export function assertAnchorIntegrity(model: PublicViewModel): void {
+  assertUnique(
+    "anchor",
+    model.records.flatMap((record) => [
+      record.identity.anchor,
+      ...record.sources.map((source) => source.anchor),
+      ...record.facts.map((fact) => fact.anchor),
+      ...record.coverage.map((entry) => entry.anchor),
+      ...record.pinMaps.map((entry) => entry.anchor),
+    ]),
+  );
+
+  for (const record of model.records) {
+    assertUnique(`anchor on record ${record.identity.slug}`, [
+      record.identity.anchor,
+      ...record.sources.map((source) => source.anchor),
+      ...record.facts.map((fact) => fact.anchor),
+      ...record.coverage.map((entry) => entry.anchor),
+      ...record.interactions.map((entry) => entry.anchor),
+      ...record.pinMaps.map((entry) => entry.anchor),
+    ]);
+  }
+
+  const interactionByAnchor = new Map<string, string>();
+  for (const record of model.records) {
+    for (const entry of record.interactions) {
+      const seen = interactionByAnchor.get(entry.anchor);
+      if (seen !== undefined && seen !== entry.interactionId) {
+        fail("IDENTITY_COLLISION", "duplicate anchor", {
+          kind: "interaction anchor",
+          duplicates: [entry.anchor],
+        });
+      }
+      interactionByAnchor.set(entry.anchor, entry.interactionId);
+    }
+  }
+}
 
 export async function runPipeline(
   adapter: ComponentDataAdapter,
@@ -77,17 +130,7 @@ export async function runPipeline(
 
   const slugs = model.records.map((record) => record.identity.slug);
   assertUnique("record slug", slugs);
-  assertUnique(
-    "anchor",
-    model.records.flatMap((record) => [
-      record.identity.anchor,
-      ...record.sources.map((source) => source.anchor),
-      ...record.facts.map((fact) => fact.anchor),
-      ...record.coverage.map((entry) => entry.anchor),
-      ...record.interactions.map((entry) => entry.anchor),
-      ...record.pinMaps.map((entry) => entry.anchor),
-    ]),
-  );
+  assertAnchorIntegrity(model);
 
   const pages: GeneratedPage[] = [renderLanding(model, policy)];
   assertUnique("generated path", pages.map((page) => page.relativePath));
