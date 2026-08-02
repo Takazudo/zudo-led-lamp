@@ -307,7 +307,7 @@ Default-zero is structural, not conventional:
 
 ### V1 field decisions
 
-`DENY` (8 of 80 keys):
+`DENY` (8 of 81 keys):
 
 | Field | Why |
 |---|---|

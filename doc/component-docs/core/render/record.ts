@@ -596,9 +596,13 @@ function factReference(
  * disclosure element. It is reference data a reader looks up rather than reads,
  * it is the longest table on the page, and hiding it costs nothing: `<details>`
  * is native HTML that opens without JavaScript, and the rows stay in the
- * generated file and in the Pagefind index either way. Nothing that carries a
- * claim — no value, condition, verdict, coverage reason or source — is ever
- * placed inside one.
+ * generated file, the built HTML and `llms-full.txt` either way. Nothing that
+ * carries a claim — no value, condition, verdict, coverage reason or source —
+ * is ever placed inside one.
+ *
+ * Site search is the one surface they do NOT reach, and the disclosure is not
+ * why: zudo-doc's index truncates `body` to 300 characters, so a pin row is
+ * past the cut-off open or closed. Measured, not assumed.
  */
 function pinMapSection(record: PublicRecord): RootContent[] {
   const head = [
