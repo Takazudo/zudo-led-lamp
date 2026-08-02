@@ -77,6 +77,26 @@ export const INTEGRATION_INDEX_ANCHOR = "integration-index";
  */
 const NO_CURRENT_RECORD = null;
 
+/*
+ * Why some recorded strings are monospace here and others are not.
+ *
+ * `assertMdxSafe` fails on any unescaped `{` in the final file, and it does not
+ * ask whether the brace was inside an inline-code span — where MDX would in
+ * fact treat it as inert. That is a deliberate false positive (ARCHITECTURE.md
+ * §7): the guard fails closed and a human decides. The consequence for this
+ * page is a rule the renderer obeys rather than works around:
+ *
+ *   monospace is for IDENTIFIERS — rule, calculation, record and fact ids, the
+ *   expression and its result key — all of which are code-shaped by
+ *   construction. A domain, a stage name, a status and a verdict are phrases
+ *   the evidence chose, and one of them containing a brace must render, not
+ *   stop the build.
+ *
+ * Weakening the guard to admit braces inside code spans would be the wrong fix:
+ * it is the layer that catches a serializer regression, and it is worth more
+ * than a monospace domain.
+ */
+
 export function renderIntegration(
   model: PublicViewModel,
   index: RecordIndex,
@@ -207,7 +227,9 @@ function ruleSection(rule: PublicIntegrationRule, index: RecordIndex): RootConte
       ? []
       : [paragraph([strong(literal("What this rule asks:")), space(), text(literal(gloss))])]),
     bulletList([
-      field("Domain", [code(rule.domain)]),
+      // `text`, not `code`: a domain is a phrase the evidence chose, not an
+      // identifier. See MONOSPACE_IS_FOR_IDENTIFIERS below.
+      field("Domain", [text(rule.domain)]),
       field("Verdict", [text(rule.verdict)]),
     ]),
     // Immediately after the verdict and before any evidence. A reader who takes
@@ -434,7 +456,7 @@ function evidenceChainBlock(
 
 function evidenceChainRow(stage: PublicRuleEvidenceStage, index: RecordIndex): TableRow {
   return [
-    [code(stage.stage)],
+    [text(stage.stage)],
     [text(stage.status)],
     stage.factIds.length === 0
       ? [text(literal("none recorded"))]
@@ -501,7 +523,9 @@ function legendSection(rules: readonly PublicIntegrationRule[]): RootContent[] {
       heading(3, literal(group.title)),
       table(
         [literal("Recorded term"), literal("What it means")],
-        group.terms.map((term) => [[code(term)], [text(glossFor(group.gloss, term))]]),
+        // Every term here is a phrase the evidence chose rather than an
+        // identifier, so none of them is monospace — see the note above.
+        group.terms.map((term) => [[text(term)], [text(glossFor(group.gloss, term))]]),
       ),
     );
   }

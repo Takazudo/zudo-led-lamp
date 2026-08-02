@@ -34,7 +34,7 @@ A component record answers questions about one part. These rules answer the ones
 
 **What this rule asks:** Whether every part on the input rail stays inside its own recorded limits across a legal power contract, a mis-contract, and a transient clamp event.
 
-- **Domain:** `rail-envelope`
+- **Domain:** rail-envelope
 - **Verdict:** UNSOURCED
 
 **This rule refuses to conclude:** Do not declare the complete rail safe while STUSB primary trust, project mapping, actual clamp/source-impedance waveform, and harness/as-built evidence remain open.
@@ -124,7 +124,7 @@ Arithmetic across the facts above. The expression and every input are published 
 
 **What this rule asks:** How the power-delivery controller's stored configuration and its enable output drive the load switch, through every state from detached to fault.
 
-- **Domain:** `usb-pd-nvm-load-switch`
+- **Domain:** usb-pd-nvm-load-switch
 - **Verdict:** UNSOURCED
 
 **This rule refuses to conclude:** Do not infer PDOs, VBEN default policy, fitted Rd state, programmed/read-back NVM bytes, or a deterministic 32.4 V VGS violation/safe result without the actual VBEN/gate/source waveform, duration, device/parasitic model, as-built state, and bench evidence.
@@ -238,7 +238,7 @@ Arithmetic across the facts above. The expression and every input are published 
 
 **What this rule asks:** How the LED driver, its sense resistor, inductor, catch diode and per-branch ballast behave together across the LED forward-voltage, tolerance and temperature envelope.
 
-- **Domain:** `al8860-led-stage`
+- **Domain:** al8860-led-stage
 - **Verdict:** NEEDS BENCH
 
 **This rule refuses to conclude:** Do not promote mirror-only FXL or R+O SS26 limits, assumed branch sharing, or nominal arithmetic to a guaranteed selected-stage PASS.
@@ -336,7 +336,7 @@ Arithmetic across the facts above. The expression and every input are published 
 
 **What this rule asks:** How the logic-rail converter, its inductor and its output capacitor behave together under the real load the microcontroller presents.
 
-- **Domain:** `ap63203-logic-stage`
+- **Domain:** ap63203-logic-stage
 - **Verdict:** UNSOURCED
 
 **This rule refuses to conclude:** Do not infer minimum off-time, MCU load, guaranteed MLCC capacitance, or full-load FNR thermal margin from nominal values.
@@ -377,7 +377,7 @@ Arithmetic across the facts above. The expression and every input are published 
 
 **What this rule asks:** How the thermistor, its divider, the analog-to-digital input and the firmware that reads them combine into a temperature the design can act on.
 
-- **Domain:** `ntc-adc-firmware`
+- **Domain:** ntc-adc-firmware
 - **Verdict:** UNSOURCED
 
 **This rule refuses to conclude:** Do not invent firmware thresholds or use beta-only conversion as a guaranteed full R-T curve.
@@ -451,7 +451,7 @@ Arithmetic across the facts above. The expression and every input are published 
 
 **What this rule asks:** How far each claim has travelled from a manufacturer document towards a measurement on real hardware, stage by stage.
 
-- **Domain:** `source-to-bench-chain`
+- **Domain:** source-to-bench-chain
 - **Verdict:** NEEDS BENCH
 
 **This rule refuses to conclude:** A completed upstream stage never implies a later as-built, programmed, or measured stage.
@@ -483,17 +483,17 @@ Arithmetic across the facts above. The expression and every input are published 
 
 The stages a claim passes through, in order. A settled stage says nothing about any stage after it: a manufacturer document confirming a limit is not an inspection of the assembled board, and neither is a measurement.
 
-| Stage                     | Status | Facts at this stage                                                                                                                                                                                                                                                                                                                           |
-| ------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `official-source`         | MIXED  | [`fact-stusb-vben`](/docs/components/records/stusb4500qtr/#fact-stusb-vben) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                                  |
-| `conditioned-requirement` | MIXED  | [`fact-stusb-artifact`](/docs/components/records/stusb4500qtr/#fact-stusb-artifact) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                          |
-| `generated-netlist`       | MIXED  | [`fact-umw-ao3401a-project-nets`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-project-nets) on AO3401A, [`fact-al8860-project-nets`](/docs/components/records/al8860mp-13/#fact-al8860-project-nets) on AL8860MP-13, [`fact-ap63203-project-nets`](/docs/components/records/ap63203wu-7/#fact-ap63203-project-nets) on AP63203WU-7 |
-| `symbol-footprint`        | MIXED  | [`fact-umw-ao3401a-pinout`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-pinout) on AO3401A, [`fact-c529334-topology`](/docs/components/records/c529334/#fact-c529334-topology) on STM32G031F8P6                                                                                                                                    |
-| `pcb-orientation`         | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
-| `bom-cpl`                 | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
-| `as-built`                | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
-| `programmed`              | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
-| `bench`                   | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
+| Stage                   | Status | Facts at this stage                                                                                                                                                                                                                                                                                                                           |
+| ----------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| official-source         | MIXED  | [`fact-stusb-vben`](/docs/components/records/stusb4500qtr/#fact-stusb-vben) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                                  |
+| conditioned-requirement | MIXED  | [`fact-stusb-artifact`](/docs/components/records/stusb4500qtr/#fact-stusb-artifact) on STUSB4500QTR, [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) on AO3401A                                                                                                                                          |
+| generated-netlist       | MIXED  | [`fact-umw-ao3401a-project-nets`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-project-nets) on AO3401A, [`fact-al8860-project-nets`](/docs/components/records/al8860mp-13/#fact-al8860-project-nets) on AL8860MP-13, [`fact-ap63203-project-nets`](/docs/components/records/ap63203wu-7/#fact-ap63203-project-nets) on AP63203WU-7 |
+| symbol-footprint        | MIXED  | [`fact-umw-ao3401a-pinout`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-pinout) on AO3401A, [`fact-c529334-topology`](/docs/components/records/c529334/#fact-c529334-topology) on STM32G031F8P6                                                                                                                                    |
+| pcb-orientation         | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
+| bom-cpl                 | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
+| as-built                | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
+| programmed              | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
+| bench                   | OPEN   | none recorded                                                                                                                                                                                                                                                                                                                                 |
 
 ## Legend
 
@@ -503,40 +503,40 @@ What the recorded terms on this page mean, in ordinary words. The exact terms ab
 
 | Recorded term | What it means                                                                                       |
 | ------------- | --------------------------------------------------------------------------------------------------- |
-| `NEEDS BENCH` | Cannot be settled from documents. It needs measurement on real hardware before it can be relied on. |
-| `UNSOURCED`   | No accepted source backs this value yet. Treat it as a claim, not a fact.                           |
+| NEEDS BENCH   | Cannot be settled from documents. It needs measurement on real hardware before it can be relied on. |
+| UNSOURCED     | No accepted source backs this value yet. Treat it as a claim, not a fact.                           |
 
 ### Domain
 
-| Recorded term            | What it means                                                                                                                                                            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `al8860-led-stage`       | How the LED driver, its sense resistor, inductor, catch diode and per-branch ballast behave together across the LED forward-voltage, tolerance and temperature envelope. |
-| `ap63203-logic-stage`    | How the logic-rail converter, its inductor and its output capacitor behave together under the real load the microcontroller presents.                                    |
-| `ntc-adc-firmware`       | How the thermistor, its divider, the analog-to-digital input and the firmware that reads them combine into a temperature the design can act on.                          |
-| `rail-envelope`          | Whether every part on the input rail stays inside its own recorded limits across a legal power contract, a mis-contract, and a transient clamp event.                    |
-| `source-to-bench-chain`  | How far each claim has travelled from a manufacturer document towards a measurement on real hardware, stage by stage.                                                    |
-| `usb-pd-nvm-load-switch` | How the power-delivery controller's stored configuration and its enable output drive the load switch, through every state from detached to fault.                        |
+| Recorded term          | What it means                                                                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| al8860-led-stage       | How the LED driver, its sense resistor, inductor, catch diode and per-branch ballast behave together across the LED forward-voltage, tolerance and temperature envelope. |
+| ap63203-logic-stage    | How the logic-rail converter, its inductor and its output capacitor behave together under the real load the microcontroller presents.                                    |
+| ntc-adc-firmware       | How the thermistor, its divider, the analog-to-digital input and the firmware that reads them combine into a temperature the design can act on.                          |
+| rail-envelope          | Whether every part on the input rail stays inside its own recorded limits across a legal power contract, a mis-contract, and a transient clamp event.                    |
+| source-to-bench-chain  | How far each claim has travelled from a manufacturer document towards a measurement on real hardware, stage by stage.                                                    |
+| usb-pd-nvm-load-switch | How the power-delivery controller's stored configuration and its enable output drive the load switch, through every state from detached to fault.                        |
 
 ### Evidence stage
 
-| Recorded term             | What it means                                                                    |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| `as-built`                | The assembled board has been inspected and matches what was specified.           |
-| `bench`                   | The behaviour has been measured on powered hardware.                             |
-| `bom-cpl`                 | The exact orderable part and its placement are confirmed in the assembly files.  |
-| `conditioned-requirement` | The claim has been restated as a requirement with the conditions it holds under. |
-| `generated-netlist`       | The requirement is reflected in the netlist the project generates.               |
-| `official-source`         | The claim appears in a document the manufacturer published.                      |
-| `pcb-orientation`         | The part's orientation and pad mapping are confirmed on the board layout.        |
-| `programmed`              | The device's stored configuration has been written and read back.                |
-| `symbol-footprint`        | The schematic symbol's pins are mapped onto the footprint's pads.                |
+| Recorded term           | What it means                                                                    |
+| ----------------------- | -------------------------------------------------------------------------------- |
+| as-built                | The assembled board has been inspected and matches what was specified.           |
+| bench                   | The behaviour has been measured on powered hardware.                             |
+| bom-cpl                 | The exact orderable part and its placement are confirmed in the assembly files.  |
+| conditioned-requirement | The claim has been restated as a requirement with the conditions it holds under. |
+| generated-netlist       | The requirement is reflected in the netlist the project generates.               |
+| official-source         | The claim appears in a document the manufacturer published.                      |
+| pcb-orientation         | The part's orientation and pad mapping are confirmed on the board layout.        |
+| programmed              | The device's stored configuration has been written and read back.                |
+| symbol-footprint        | The schematic symbol's pins are mapped onto the footprint's pads.                |
 
 ### Evidence stage status
 
 | Recorded term | What it means                                                                                                                                      |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MIXED`       | Some claims at this stage are settled and others are not. It is not a completed stage, and the facts listed against it are the ones that carry it. |
-| `OPEN`        | Nothing at this stage has been established yet. A completed earlier stage does not imply it.                                                       |
+| MIXED         | Some claims at this stage are settled and others are not. It is not a completed stage, and the facts listed against it are the ones that carry it. |
+| OPEN          | Nothing at this stage has been established yet. A completed earlier stage does not imply it.                                                       |
 
 ## Raw agent resource
 
