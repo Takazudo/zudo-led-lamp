@@ -360,6 +360,18 @@ export function assertMdxSafe(body: string, where: string): void {
     if (/^\s{0,3}-{3,}\s*$/u.test(line)) {
       fail("UNSAFE_MDX", `${where}:${index + 1}: line looks like a frontmatter fence`, at);
     }
+    // Unlike the `{`/`<` checks below, this one is NOT escape-aware: it refuses
+    // `\<!--` as well. That is the settled decision (#64), not an oversight.
+    //
+    // MDX has no HTML comment syntax — `<!--` is a parse error there rather
+    // than a comment — so it has no well-defined inert form the way `\<` does.
+    // Accepting the escaped spelling would mean relying on backslash handling
+    // staying identical across future remark/MDX majors, and comment handling
+    // is precisely where that has moved before. The cost of the strictness is a
+    // build that stops with a file, a line and a reason, on a corpus where
+    // nothing triggers it; the remedy is an evidence decision by the evidence
+    // owner. The alternative failure — a page whose meaning depends on the
+    // compiler version — is silent. Relaxing this is a publication decision.
     if (line.includes("<!--")) {
       fail("UNSAFE_MDX", `${where}:${index + 1}: line contains an HTML comment`, at);
     }

@@ -182,12 +182,20 @@ function positiveControls(model: PublicViewModel): readonly Control[] {
   const factWithVerdict = record.facts.find((fact) => fact.verdict !== "");
   const openDomain = record.coverage.find((entry) => entry.status === "OPEN");
   const linkedSource = record.sources.find((source) => source.url !== null);
+  // Pin assignments are wrapped in an `EvidenceDetails` container. A container
+  // may change how content is PRESENTED, never whether it exists — so one of
+  // its rows is a control, and the day the wrapper becomes a client-gated
+  // island the static artifacts lose it and this fails.
+  const containerRow = record.pinMaps[0]?.pins[0]?.function;
 
   if (factWithUnit === undefined || factWithVerdict === undefined) {
     throw new Error("expected a fact carrying a unit, conditions and a verdict");
   }
   if (openDomain === undefined || linkedSource?.url == null) {
     throw new Error("expected an open coverage domain and a source with a published link");
+  }
+  if (containerRow === undefined) {
+    throw new Error("expected a pin map row to use as a container-content control");
   }
 
   return [
@@ -208,6 +216,7 @@ function positiveControls(model: PublicViewModel): readonly Control[] {
     { label: "source: availability", value: linkedSource.availability },
     { label: "source: locator", value: linkedSource.locator },
     { label: "source: link", value: linkedSource.url },
+    { label: "container content: pin function", value: containerRow },
   ];
 }
 
@@ -461,6 +470,16 @@ async function main(): Promise<void> {
     canaries: MINIMUM_SITE_CANARIES,
     files: MINIMUM_SITE_FILES,
   });
+
+  // `llms-full.txt` mirrors the whole site, so its negative scan belongs to the
+  // SITE tier — but it is the artifact an agent reads instead of the pages, and
+  // an agent that silently loses the pin assignments is worse off than one that
+  // cannot find the page at all. So it carries the full positive controls.
+  const llmsFull = distTargets.filter((target) => target.label === "dist/llms-full.txt");
+  if (llmsFull.length === 0) {
+    throw new ComponentDocsError("PUBLICATION_POLICY", "dist/llms-full.txt is missing");
+  }
+  assertPositiveControls(llmsFull, controls, "llms-full.txt");
 
   const payloads = assertNoEvidenceGraphHydration(distTargets);
   assertCredentialFree(distTargets);
