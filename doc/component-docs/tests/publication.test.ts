@@ -15,6 +15,7 @@ const selection: InstanceSelection = {
   recordIds: ["rec-a"],
   sourceIds: ["src-a"],
   linkableSourceIds: ["src-a"],
+  documentSelections: [{ recordId: "rec-a", sourceId: "src-a", documentKind: "datasheet" }],
   expect: { records: 1, sources: 1, integrationRules: 0 },
 };
 

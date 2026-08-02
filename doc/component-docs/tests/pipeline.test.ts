@@ -181,6 +181,7 @@ describe("adapter contract", () => {
           dnpOrHandFitLines: 0,
         },
         records: [],
+        packagePreviews: [],
         integration: [],
       }),
     };

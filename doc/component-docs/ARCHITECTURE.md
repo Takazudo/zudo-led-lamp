@@ -705,7 +705,7 @@ adoption guide is #66's deliverable.
 - No change to component selections, schematic connectivity, firmware behaviour, or
   the frozen evidence contract. The evidence schema is **not** adjusted for
   presentation convenience.
-- No PDFs, no skill assets, no browser-side raw JSON viewer.
+- No retained/evidence PDF binaries, no broad skill assets, no browser-side raw JSON viewer.
 - No component-wide PASS/FAIL verdict, ever. Coverage is per-domain; an absent open
   domain is not a safety claim.
 - No replacement of narrative design rationale with generated tables.
@@ -766,3 +766,48 @@ Two things measured here that the prose above could be read as denying:
   built HTML. The generator proves its own links fatally instead. The volume is
   the risk, not the warnings: a real broken link in a hand-authored page would be
   invisible in that noise.
+
+## 15. Reviewed component reference assets (#83)
+
+The catalog reference seam is intentionally narrower than either the evidence
+source list or the repository's asset tree. `InstanceSelection.documentSelections`
+names exactly one source and one explicit `documentKind` for each of the 32
+selected records. That selection is a curated shortcut; `records[].sources`
+remains complete and unchanged.
+
+Document order cannot express kind: the first source may be an identity mirror,
+a reference manual, a generator, or an unsuccessful retrieval. A `.pdf` suffix
+cannot express it either: Samsung and Murata return PDF bytes from download/ASHX
+endpoints, query-bearing LCSC endpoints are PDFs, and a `.pdf` URL may return an
+HTML denial. The 32 choices were live-audited on 2026-08-03 by following redirects
+and inspecting response/content behavior. The audit is locked in selection and
+normal generation performs no network access. `SOURCE UNAVAILABLE` remains the
+evidence's historical availability label; the STM32 selection qualifies because
+the current audit reached the actual ST PDF content, not because the label is
+ignored or because a product-page exception exists.
+
+Each selected record also resolves its existing pin-map footprint against the
+canonical `zudo-led-lamp.pretty` library. Before projection, the adapter requires:
+
+- exactly one distinct footprint name per record and one model node per footprint;
+- a regular, non-symlink WRL contained in `zudo-led-lamp.3dshapes`, plus an
+  existing same-basename `.step` audit pair;
+- the exact KiCad offset, rotation, and scale, including non-zero Z rotations;
+- VRML 2.0 containing only `Shape`, `Appearance`, `Material`, `IndexedFaceSet`,
+  and `Coordinate`, with resource-loading/executable nodes and URL-bearing live
+  content rejected;
+- 512 KiB per footprint, 2 MiB per WRL, and 8 MiB for the selected aggregate.
+
+The 32 record mappings collapse to a reviewed 22-package manifest while retaining
+record-level lookup. Public paths identify only those manifest-selected footprint
+and WRL files. Same-basename STEP is validation evidence and is not published:
+browser preview loaders use WRL, while exposing both formats would double the
+binary surface without adding a supported rendering path. `asset.binary` remains
+`DENY`; the only new positive decisions are the explicit datasheet-PDF link,
+footprint-preview, and model-preview capabilities and their named descriptor
+fields.
+
+Whole-board rendering is deferred. The checked-in PCB layouts are placeholders,
+so a board viewer would turn provisional placement into a misleading design
+claim. Package previews are useful and bounded now; board rendering becomes valid
+only after the layouts themselves become authoritative.

@@ -212,6 +212,48 @@ export type PublicPinMap = {
   readonly pins: readonly PublicPin[];
 };
 
+export type PublicDocumentKind = "datasheet" | "specification" | "drawing";
+
+/** The one reviewed, PDF-representing shortcut for a record. */
+export type PublicDocumentReference = {
+  readonly sourceId: SafeText;
+  /** The source's own title, preserved rather than replaced by UI wording. */
+  readonly documentTitle: SafeText;
+  /** Exactly one of Datasheet PDF / Specification PDF / Mechanical drawing PDF. */
+  readonly label: SafeText;
+  readonly authorityClass: SafeText;
+  readonly url: SafeUrl;
+  readonly availability: SafeText;
+  readonly documentKind: PublicDocumentKind;
+};
+
+export type PublicTransform3d = {
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
+};
+
+/** A safe local WRL descriptor, derived from one canonical KiCad footprint. */
+export type PublicFootprintReference = {
+  readonly packageId: SafeText;
+  readonly footprintName: SafeText;
+  readonly footprintPath: SafeText;
+  readonly modelPath: SafeText;
+  readonly offset: PublicTransform3d;
+  readonly rotation: PublicTransform3d;
+  readonly scale: PublicTransform3d;
+};
+
+export type PublicRecordReference = {
+  readonly document: PublicDocumentReference;
+  readonly footprint: PublicFootprintReference;
+};
+
+/** The deduplicated renderer input; records retain lookup through packageId. */
+export type PublicPackagePreview = PublicFootprintReference & {
+  readonly recordIds: readonly SafeText[];
+};
+
 /** One published record page's complete data. */
 export type PublicRecord = {
   readonly identity: PublicRecordIdentity;
@@ -221,6 +263,7 @@ export type PublicRecord = {
   readonly coverage: readonly PublicCoverage[];
   readonly interactions: readonly PublicInteraction[];
   readonly pinMaps: readonly PublicPinMap[];
+  readonly reference: PublicRecordReference;
 };
 
 /**
@@ -305,5 +348,7 @@ export type PublicViewModel = {
   readonly corpus: CorpusSummary;
   /** Deterministically ordered: inventory-line order, parents before children. */
   readonly records: readonly PublicRecord[];
+  /** Exactly the unique packages referenced by records, in first-record order. */
+  readonly packagePreviews: readonly PublicPackagePreview[];
   readonly integration: readonly PublicIntegrationRule[];
 };

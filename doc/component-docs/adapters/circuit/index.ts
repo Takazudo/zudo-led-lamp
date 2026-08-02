@@ -31,13 +31,20 @@ import type {
   PublicFactValueEntry,
   PublicInteraction,
   PublicPinMap,
+  PublicPackagePreview,
   PublicRecord,
+  PublicRecordReference,
   PublicRecordIdentity,
   PublicSource,
   PublicViewModel,
 } from "../../core/view-model.ts";
 import { CIRCUIT_PUBLICATION_MATRIX } from "./matrix.ts";
 import { CIRCUIT_SELECTION } from "./selection.ts";
+import {
+  readCircuitReferenceContract,
+  type CircuitPackageReference,
+  type CircuitReferenceContract,
+} from "./references.ts";
 import { INTEGRATION_RULES_FILE, INTEGRATION_SKILL_NAME, INVENTORY_FILE } from "./paths.ts";
 import { projectIntegrationRules } from "./integration.ts";
 import { createPythonValidator } from "./validate.ts";
@@ -89,7 +96,8 @@ export async function readEvidenceIndex(): Promise<EvidenceIndex> {
     Promise.all(ownerSkills.map(readBundle)),
     readIntegrationRules(INTEGRATION_RULES_FILE),
   ]);
-  return indexEvidence(inventory, bundles, rules.rules);
+  const index = indexEvidence(inventory, bundles, rules.rules);
+  return { ...index, references: await readCircuitReferenceContract(index, CIRCUIT_SELECTION) };
 }
 
 /**
@@ -111,13 +119,17 @@ export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): P
   const selected = index.records.filter((entry) => policy.isRecordSelected(entry.record.record_id));
   const ordered = orderRecords(selected, inventory.lines);
   assertSelectionIsClosed(ordered, index, policy);
+  const references = index.references;
+  if (references === undefined) {
+    fail("ADAPTER_CONTRACT", "reference assets were not validated before projection");
+  }
 
   const slugByRecordId = new Map(
     ordered.map((entry) => [entry.record.record_id, recordSlug(entry.record.record_id)]),
   );
 
   const records: PublicRecord[] = ordered.map((entry) =>
-    projectRecord(entry, index, slugByRecordId, policy),
+    projectRecord(entry, index, slugByRecordId, references, policy),
   );
 
   // The rules are projected against what was actually published, not against
@@ -162,6 +174,7 @@ export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): P
     },
     corpus,
     records,
+    packagePreviews: references.packages.map((entry) => projectPackage(entry, policy)),
     integration,
   };
 }
@@ -172,6 +185,7 @@ function projectRecord(
   entry: IndexedRecord,
   index: EvidenceIndex,
   slugByRecordId: ReadonlyMap<string, Slug>,
+  references: CircuitReferenceContract,
   policy: PublicationPolicy,
 ): PublicRecord {
   return {
@@ -188,6 +202,71 @@ function projectRecord(
       projectInteraction(interactionOf(index, interactionId), policy),
     ),
     pinMaps: entry.pinMaps.map((pinMap) => projectPinMap(pinMap, policy)),
+    reference: projectRecordReference(entry, references, policy),
+  };
+}
+
+function projectRecordReference(
+  entry: IndexedRecord,
+  references: CircuitReferenceContract,
+  policy: PublicationPolicy,
+): PublicRecordReference {
+  const recordId = entry.record.record_id;
+  const document = references.documentsByRecordId.get(recordId);
+  const footprint = references.packageByRecordId.get(recordId);
+  if (document === undefined || footprint === undefined) {
+    fail("ADAPTER_CONTRACT", "record has no complete reference descriptor", { recordId });
+  }
+  const classified = classifyUrl(document.source.authoritative_url);
+  if (classified.decision === "DENY") {
+    fail("UNSAFE_VALUE", "selected document URL failed classification", {
+      recordId,
+      sourceId: document.source.source_id,
+      reason: classified.reason,
+    });
+  }
+  policy.publishRequired("asset.datasheetPdf", true);
+  policy.publishRequired("asset.footprintPreview", true);
+  policy.publishRequired("asset.modelPreview", true);
+  const labels = {
+    datasheet: "Datasheet PDF",
+    specification: "Specification PDF",
+    drawing: "Mechanical drawing PDF",
+  } as const;
+  return {
+    document: {
+      sourceId: policy.publishRequired("reference.document.sourceId", safeText(document.source.source_id, { field: `${recordId}.reference.sourceId` })),
+      documentTitle: policy.publishRequired("reference.document.documentTitle", safeText(document.source.document_title, { field: `${recordId}.reference.documentTitle` })),
+      label: policy.publishRequired("reference.document.label", safeText(labels[document.documentKind], { field: `${recordId}.reference.label` })),
+      authorityClass: policy.publishRequired("reference.document.authorityClass", safeText(document.source.authority_class, { field: `${recordId}.reference.authorityClass` })),
+      url: policy.publishRequired("reference.document.url", classified.url),
+      availability: policy.publishRequired("reference.document.availability", safeText(document.source.availability, { field: `${recordId}.reference.availability` })),
+      documentKind: policy.publishRequired("reference.document.documentKind", document.documentKind),
+    },
+    footprint: projectFootprint(footprint, policy),
+  };
+}
+
+function projectPackage(entry: CircuitPackageReference, policy: PublicationPolicy): PublicPackagePreview {
+  return {
+    ...projectFootprint(entry, policy),
+    recordIds: policy.publishRequired(
+      "reference.package.recordIds",
+      entry.recordIds.map((recordId) => safeText(recordId, { field: `${entry.packageId}.recordId` })),
+    ),
+  };
+}
+
+function projectFootprint(entry: CircuitPackageReference, policy: PublicationPolicy) {
+  const at = `${entry.packageId}.reference`;
+  return {
+    packageId: policy.publishRequired("reference.footprint.packageId", safeText(entry.packageId, { field: `${at}.packageId` })),
+    footprintName: policy.publishRequired("reference.footprint.name", safeText(entry.footprintName, { field: `${at}.footprintName` })),
+    footprintPath: policy.publishRequired("reference.footprint.path", safeText(entry.footprintPath, { field: `${at}.footprintPath` })),
+    modelPath: policy.publishRequired("reference.model.path", safeText(entry.modelPath, { field: `${at}.modelPath` })),
+    offset: policy.publishRequired("reference.model.offset", entry.offset),
+    rotation: policy.publishRequired("reference.model.rotation", entry.rotation),
+    scale: policy.publishRequired("reference.model.scale", entry.scale),
   };
 }
 
