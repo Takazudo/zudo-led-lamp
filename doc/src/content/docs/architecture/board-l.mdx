@@ -355,7 +355,7 @@ Gate 3 still measures CTRL with the MCU held in reset as confirmation (probe TP1
 
 The encoder drives **TIM2 in hardware quadrature-encoder mode** (PA0 = TIM2_CH1,
 PA1 = TIM2_CH2), so edge counting costs no CPU time and the invalid-transition rejection
-in [control-safety](/docs/research/control-safety/#knob-fault-fallback) is handled in
+in [control-safety](/docs/research/control-safety/#fault-handling-sketch-knob-fault-fallback) is handled in
 silicon. Firmware reads the counter each animation frame and clamps it.
 
 | | Value |
@@ -444,7 +444,7 @@ void animation_frame(void)
 ```
 
 The pipeline is `modulation -> thermal derate -> gamma LUT -> CTRL duty`, exactly the
-composition [control-safety](/docs/research/control-safety/#over-temperature-derating-hook)
+composition [control-safety](/docs/research/control-safety/#fault-handling-sketch-over-temperature-derating-hook)
 describes. The 256-byte gamma LUT is trivial against 64 KB of flash.
 
 :::caution[Pulse-skip near the bottom of the analog range]
