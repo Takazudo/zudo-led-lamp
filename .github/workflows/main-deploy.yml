@@ -30,6 +30,12 @@ on:
       - main
     paths:
       - "doc/**"
+      # The site publishes repo-root Claude resources — doc/zfb.config.ts sets
+      # claudeResources.claudeDir "../.claude" and scanRoot "..", so these
+      # inputs change the built site despite living outside doc/.
+      - ".claude/skills/**"
+      - "CLAUDE.md"
+      - "**/CLAUDE.md"
       - ".github/workflows/main-deploy.yml"
 
 concurrency:
