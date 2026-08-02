@@ -28,6 +28,7 @@ import { joinSafe, literal, safeText, type SafeText } from "../text.ts";
 import type {
   PublicCoverage,
   PublicFact,
+  PublicInteraction,
   PublicPlacement,
   PublicRecord,
   PublicViewModel,
@@ -85,6 +86,23 @@ export type RecordIndex = {
   readonly anchorByFactId: ReadonlyMap<string, Anchor>;
   /** Sidebar order, so a record page never has to know its own position. */
   readonly sidebarPositionByRecordId: ReadonlyMap<string, number>;
+  /**
+   * Every interaction a record takes part in — not only the ones attached to it.
+   *
+   * `PublicInteraction.recordIds` is plural: 6 of this corpus's 50 interactions
+   * span 2-4 records, a parent and its subordinates. Whether the adapter
+   * attaches such an interaction to all its participants or only to one is the
+   * adapter's business, and it has changed once already. Reading
+   * `record.interactions` directly makes the page depend on that choice — and
+   * under one-record attachment the SS26, RLP25, FXL, PESD, external-Rd, FNR,
+   * CL21 and SWD-header pages would each silently show no interactions at all,
+   * losing nine record/interaction links from the site.
+   *
+   * So this index is the union of both readings, deduplicated by interaction ID.
+   * It is correct under either attachment scheme, and it cannot double-render
+   * one interaction on one page.
+   */
+  readonly interactionsByRecordId: ReadonlyMap<string, readonly PublicInteraction[]>;
 };
 
 /**
@@ -101,6 +119,7 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
   const recordIdByFactId = new Map<string, string>();
   const anchorByFactId = new Map<string, Anchor>();
   const sidebarPositionByRecordId = new Map<string, number>();
+  const interactionsByRecordId = new Map<string, PublicInteraction[]>();
 
   for (const [position, record] of model.records.entries()) {
     slugByRecordId.set(record.identity.recordId, record.identity.slug);
@@ -115,12 +134,29 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
     }
   }
 
+  // Walk every attached interaction and file it under each record it names.
+  // Model order is preserved, so the result is deterministic regardless of which
+  // record the adapter chose to attach it to.
+  for (const record of model.records) {
+    for (const interaction of record.interactions) {
+      for (const participantId of interaction.recordIds) {
+        const bucket = interactionsByRecordId.get(participantId) ?? [];
+        if (bucket.some((entry) => entry.interactionId === interaction.interactionId)) {
+          continue;
+        }
+        bucket.push(interaction);
+        interactionsByRecordId.set(participantId, bucket);
+      }
+    }
+  }
+
   return {
     slugByRecordId,
     mpnByRecordId,
     recordIdByFactId,
     anchorByFactId,
     sidebarPositionByRecordId,
+    interactionsByRecordId,
   };
 }
 
@@ -249,32 +285,58 @@ export function aliasTerms(record: PublicRecord): SafeText[] {
   return terms;
 }
 
-/** A fact's value and its unit, kept as two fields because they are two fields. */
+/**
+ * One key/value pair of a structured fact value.
+ *
+ * Three facts in the corpus record an object rather than a scalar — the
+ * distributor-identity bindings, whose value is `{lcsc, manufacturer, mpn,
+ * variant}`. The evidence contract forbids flattening them into a string, so
+ * the view model keeps the shape and the renderer has to present it as the
+ * several values it is.
+ */
+export type FactValueEntry = {
+  readonly key: SafeText;
+  readonly value: number | SafeText;
+};
+
+/**
+ * The structured form of a fact value, or `null` for a scalar.
+ *
+ * Deliberately takes `unknown`. `PublicFact["value"]` is being widened by the
+ * adapter from `number | SafeText` to include the entry array, and this narrows
+ * correctly on both the old and the new union — so the renderer is right before
+ * and after that lands, without this feature editing the view model it does not
+ * own. `Array.isArray` is the discriminator because it narrows cleanly against a
+ * branded string.
+ */
+export function factValueEntries(value: unknown): readonly FactValueEntry[] | null {
+  return Array.isArray(value) ? (value as readonly FactValueEntry[]) : null;
+}
+
+/** A scalar fact value as published text. Structured values do not come here. */
 export function factValue(fact: PublicFact): SafeText {
   if (typeof fact.value === "number") {
     return safeText(String(fact.value), { field: `${fact.factId} value` });
   }
   if (typeof fact.value === "string") return fact.value;
 
-  // A structured JSON value — 3 in this corpus, all orderable-identity bindings
-  // ({lcsc, manufacturer, mpn, variant}). The adapter keeps them as key/value pairs
-  // rather than coercing to a string, so render them as legible pairs instead of
-  // collapsing them into one opaque blob. Entries arrive sorted byCodeUnit and both
-  // halves are already SafeText, so this is safe composition, not re-sanitising.
+  // Structured values normally reach the page through factValueEntries()/entryValue(),
+  // which renders each pair separately so every component stays individually visible
+  // and searchable — the three real ones are orderable-identity bindings carrying MPN
+  // and LCSC, the exact terms the index is required to find. This branch only catches a
+  // caller that skipped that check. It joins legible pairs rather than casting an array
+  // to SafeText: the widened union is on the base now, so the cast would be unsound.
   return joinSafe(
-    fact.value.map((entry) =>
-      joinSafe(
-        [
-          entry.key,
-          typeof entry.value === "number"
-            ? safeText(String(entry.value), { field: `${fact.factId} value` })
-            : entry.value,
-        ],
-        "=",
-      ),
-    ),
+    fact.value.map((entry) => joinSafe([entry.key, entryValue(entry, fact.factId)], "=")),
     "; ",
   );
+}
+
+/** One entry of a structured value as published text. */
+export function entryValue(entry: FactValueEntry, factId: string): SafeText {
+  return typeof entry.value === "number"
+    ? safeText(String(entry.value), { field: `${factId} ${entry.key}` })
+    : entry.value;
 }
 
 // --- fact classes ----------------------------------------------------------
@@ -437,40 +499,46 @@ export function presentTerms(values: readonly SafeText[]): SafeText[] {
 // --- owner skill -----------------------------------------------------------
 
 /**
- * The evidence bundle a record belongs to, when the view model carries it.
+ * The evidence bundle a record belongs to.
  *
- * Issue #60 asks each record page to name its owner skill and to link back to
- * the raw agent resource it is projected from. The provider has the value —
- * `InventoryLine.owner_skill` is read by the circuit adapter to count bundles —
- * but view model v1 does not carry it to the renderer, and this feature does
- * not own the view model.
+ * `PublicRecordIdentity.ownerSkill` is an approved addition owned by the
+ * adapter (13 bundles across 32 lines, and `component-project-passives` alone
+ * owns 11, so it is not derivable from anything else the model publishes). The
+ * read sits behind one accessor purely so this feature does not have to guess
+ * at the exact moment that leaf lands.
  *
- * So the read sits behind this one accessor. It returns `null` today, and both
- * pages fall back to linking the agent-resource index rather than the owning
- * bundle. Adding `ownerSkill: SafeText` to `PublicRecordIdentity` is all that
- * is needed to complete both surfaces; nothing else has to change.
+ * The leaf has since landed, so this reads it directly — the structural cast it
+ * was written behind is gone, and dropping the field is now a compile error here
+ * rather than a page that silently degrades to a plausible-but-wrong link.
+ *
+ * The nullable return and the callers' absent-owner branches are kept: every
+ * record in THIS provider has an owning bundle, but the fallback is the correct
+ * behaviour for one that does not, and it is deliberately never a stand-in link.
+ * Pointing the reciprocal link at the agent-resource index would look like the
+ * owning bundle and lead somewhere else, and a wrong link is worse than a stated
+ * absence.
  */
-type OwnerSkillCarrier = { readonly ownerSkill?: SafeText };
-
 export function ownerSkillOf(record: PublicRecord): SafeText | null {
-  return (record.identity as OwnerSkillCarrier).ownerSkill ?? null;
+  return record.identity.ownerSkill;
 }
-
-/** The index of every published agent resource — the owner-skill fallback. */
-export const AGENT_RESOURCES_ROUTE: Route = route("/docs/claude-skills/");
 
 /**
  * The hub above `/docs/claude-skills/` and `/docs/claude-md/`.
  *
- * #61 gave the sixth header slot to `Components`, so this hub no longer has a
- * header entry of its own. The landing page links to it to keep the raw
- * agent-resource tree reachable by navigation and not only by search or a
- * remembered URL.
+ * #61 gave the sixth header slot to `Components`, so this hub is reached
+ * through that item's dropdown rather than a header entry of its own. The
+ * landing page also links to it, so the raw agent-resource tree stays
+ * reachable by navigation and not only by search or a remembered URL.
+ *
+ * This is a browse-everything link on a section landing page, NOT the
+ * owner-skill fallback that `agentResourceDestination` deliberately refuses to
+ * have — the reasoning below applies to a link that claims to be one record's
+ * bundle, and this one never claims that.
  */
 export const AGENT_RESOURCES_HUB_ROUTE: Route = route("/docs/claude/");
 
-/** Where a record's raw evidence bundle is published, as precisely as we know. */
-export function agentResourceDestination(record: PublicRecord): Route {
+/** Where a record's raw evidence bundle is published, when the owner is known. */
+export function agentResourceDestination(record: PublicRecord): Route | null {
   const ownerSkill = ownerSkillOf(record);
-  return ownerSkill === null ? AGENT_RESOURCES_ROUTE : agentResourceRoute(ownerSkill);
+  return ownerSkill === null ? null : agentResourceRoute(ownerSkill);
 }

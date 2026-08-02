@@ -122,12 +122,20 @@ function identity(input: IdentityInput): PublicRecordIdentity {
   };
 }
 
+/**
+ * A structured fact value as the adapter publishes it: ordered key/value pairs,
+ * sorted `byCodeUnit` on the key. Three real facts carry one — the
+ * distributor-identity bindings, `{lcsc, manufacturer, mpn, variant}` — and the
+ * evidence contract forbids flattening them to a string.
+ */
+type FixtureValueEntry = { readonly key: string; readonly value: number | string };
+
 type FactInput = {
   readonly factId: string;
   readonly recordId: string;
   readonly sourceId: string;
   readonly factClass: string;
-  readonly value: number | string;
+  readonly value: number | string | readonly FixtureValueEntry[];
   readonly unit?: string;
   readonly conditions: string;
   readonly locator: string;
@@ -137,6 +145,15 @@ type FactInput = {
   readonly expression?: string;
 };
 
+function factValue(value: FactInput["value"]): PublicFact["value"] {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") return t(value);
+  return value.map((entry) => ({
+    key: t(entry.key),
+    value: typeof entry.value === "number" ? entry.value : t(entry.value),
+  }));
+}
+
 function fact(input: FactInput): PublicFact {
   return {
     factId: t(input.factId),
@@ -144,7 +161,7 @@ function fact(input: FactInput): PublicFact {
     recordId: t(input.recordId),
     sourceId: t(input.sourceId),
     factClass: t(input.factClass),
-    value: typeof input.value === "number" ? input.value : t(input.value),
+    value: factValue(input.value),
     unit: t(input.unit ?? "NONE"),
     conditions: t(input.conditions),
     locator: t(input.locator),
@@ -297,6 +314,8 @@ export const FIXTURE_IDS = {
   firstPinMap: "pinmap-fixture-driver",
   secondPinMap: "pinmap-fixture-driver-harness",
   interaction: "int-fixture-control",
+  /** The default `identity()` applies when a record does not name its own. */
+  ownerSkill: "component-fixture-bundle",
 } as const;
 
 /**
@@ -433,9 +452,13 @@ function driverRecord(): PublicRecord {
         recordId: FIXTURE_IDS.driverRecord,
         sourceId: FIXTURE_IDS.availableSource,
         factClass: "PROJECT_STATE",
-        value:
-          "lcsc=C100001; manufacturer=Fixture Semiconductor; mpn=FX8860MP-13; " +
-          "variant=exact orderable driver",
+        // Entries arrive sorted byCodeUnit on the key, as the adapter emits them.
+        value: [
+          { key: "lcsc", value: "C100001" },
+          { key: "manufacturer", value: "Fixture Semiconductor" },
+          { key: "mpn", value: "FX8860MP-13" },
+          { key: "variant", value: "exact orderable driver" },
+        ],
         conditions: "stable distributor identity binding; supplies no electrical authority",
         locator: `${FIXTURE_IDS.availableSource}: title block and distributor row C100001`,
         provenance: "DISTRIBUTOR-IDENTITY",
@@ -550,7 +573,12 @@ function senseRecord(): PublicRecord {
       function: "200 mOhm current-sense resistor",
       placements: [["board-l", "RS1"]],
     }),
-    aliases: { mpn: [t("RLP25FEER200")], lcsc: [t("C459674")], manufacturer: [], function: [] },
+    aliases: {
+      mpn: [t("RLP25FEER200"), t("RLP25FEER200TS")],
+      lcsc: [t("C459674")],
+      manufacturer: [t("TA-I")],
+      function: [],
+    },
     sources: [
       source({
         sourceId: "src-fixture-sense-datasheet",
@@ -582,6 +610,10 @@ function senseRecord(): PublicRecord {
         reason: "TCR and self-heating at the installed current are not on record.",
       }),
     ],
+    // Deliberately EMPTY while the driver record attaches the interaction they
+    // share. That is the one-record attachment case, and it is what makes the
+    // renderer's reverse index load-bearing: read naively, this page would show
+    // no interactions at all despite taking part in one.
     interactions: [],
     pinMaps: [],
   };

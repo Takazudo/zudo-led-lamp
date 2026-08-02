@@ -200,20 +200,23 @@ function entry(record: PublicRecord): RootContent[] {
     field("Open coverage domains", [text(openDomainSummary(record.coverage))]),
   ];
 
-  return [
-    heading(3, identity.mpn),
-    bulletList(details),
-    paragraph([
-      routeLink(recordRoute(identity.slug), literal("Record details")),
+  const agentResource = agentResourceDestination(record);
+  const links: PhrasingContent[] = [
+    routeLink(recordRoute(identity.slug), literal("Record details")),
+  ];
+  // Only linked when the owning bundle is actually known — see
+  // `agentResourceDestination`. A stand-in link to the resource index would read
+  // as this record's bundle and go somewhere else.
+  if (agentResource !== null) {
+    links.push(
       space(),
       text(literal("—")),
       space(),
-      routeLink(
-        agentResourceDestination(record),
-        ownerSkill === null ? literal("Raw agent resources") : literal("Raw agent resource"),
-      ),
-    ]),
-  ];
+      routeLink(agentResource, literal("Raw agent resource")),
+    );
+  }
+
+  return [heading(3, identity.mpn), bulletList(details), paragraph(links)];
 }
 
 /**

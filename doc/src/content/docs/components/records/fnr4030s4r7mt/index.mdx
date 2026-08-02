@@ -156,23 +156,7 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 
 ## Interactions
 
-Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction is published against one record; the other records it names are linked from here.
-
-### int-fnr-filter
-
-<EvidenceAnchor id="int-fnr-filter" />
-
-- **Records involved:** `rec-fnr4030s4r7mt` (this record)
-- **Conditions:** actual V3P3 load, ripple, ambient, and airflow
-- **Verdict:** NEEDS BENCH
-
-**Facts this rests on:**
-
-- [`fact-fnr-inductance-min`](#fact-fnr-inductance-min)
-- [`fact-fnr-dcr-max`](#fact-fnr-dcr-max)
-- [`fact-fnr-isat-margin`](#fact-fnr-isat-margin)
-- [`fact-fnr-irated-margin`](#fact-fnr-irated-margin)
-- [`fact-fnr-project-nets`](#fact-fnr-project-nets)
+Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction that spans several parts appears on every one of their pages, under the same identifier, because it is equally a fact about each.
 
 ### int-ap63203-power-stage
 
@@ -191,6 +175,22 @@ Behaviour that is not a property of this part alone. Each interaction names the 
 - [`fact-fnr-irated-margin`](#fact-fnr-irated-margin)
 - [`fact-cl21-effective-capacitance-status`](/docs/components/records/cl21a226maqnnne/#fact-cl21-effective-capacitance-status) on CL21A226MAQNNNE
 
+### int-fnr-filter
+
+<EvidenceAnchor id="int-fnr-filter" />
+
+- **Records involved:** `rec-fnr4030s4r7mt` (this record)
+- **Conditions:** actual V3P3 load, ripple, ambient, and airflow
+- **Verdict:** NEEDS BENCH
+
+**Facts this rests on:**
+
+- [`fact-fnr-inductance-min`](#fact-fnr-inductance-min)
+- [`fact-fnr-dcr-max`](#fact-fnr-dcr-max)
+- [`fact-fnr-isat-margin`](#fact-fnr-isat-margin)
+- [`fact-fnr-irated-margin`](#fact-fnr-irated-margin)
+- [`fact-fnr-project-nets`](#fact-fnr-project-nets)
+
 ## Sources
 
 Every document cited above, with its identification, when it was retrieved, and what kind of authority it carries. Sources that could not be retrieved are listed too, with their unavailability stated, so a gap in the evidence is visible rather than absent.
@@ -205,9 +205,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** not stated
 - **Retrieved:** 2026-08-02
 - **Authority:** MANUFACTURER\_MIRROR
-- **Availability:** AVAILABLE
 - **Locator:** Specifications table row FNR4030S4R7MT and footnote rows 1-4 on physical page 19
 - **Printed page:** unprinted physical page 19
+- **Availability:** AVAILABLE
 - **Document URL:** [https://datasheet.lcsc.com/datasheet/pdf/a0b12ba9dfe6b9e66b6bb852b7c71c03.pdf?productCode=C167874](https://datasheet.lcsc.com/datasheet/pdf/a0b12ba9dfe6b9e66b6bb852b7c71c03.pdf?productCode=C167874)
 
 ### Board L generated schematic specification
@@ -220,9 +220,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** 2026-08-02
 - **Retrieved:** 2026-08-02
 - **Authority:** PROJECT\_GENERATOR
-- **Availability:** AVAILABLE
 - **Locator:** COMPONENTS table row L2 and NETS rows SW\_LOGIC and V3P3
 - **Printed page:** source file
+- **Availability:** AVAILABLE
 - **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py)
 
 ### Wire Wound SMD Power Inductors - FNR Series
@@ -235,9 +235,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** not stated
 - **Retrieved:** 2026-08-02
 - **Authority:** MANUFACTURER\_PRIMARY
-- **Availability:** AVAILABLE
 - **Locator:** Page 1 title/operating-temperature statement and Product Identification decode table; page 2 FNR4030S dimensions row; FNR4030S Series specifications table row FNR4030S4R7MT
 - **Printed page:** 10
+- **Availability:** AVAILABLE
 - **Document URL:** [http://www.cjiang.com.cn/Pr\_download\_id\_1205.html](http://www.cjiang.com.cn/Pr_download_id_1205.html)
 
 ## Legend

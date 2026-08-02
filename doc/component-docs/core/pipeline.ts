@@ -22,8 +22,13 @@ import { PublicationPolicy, type PreflightReport } from "./publication.ts";
 import { renderCatalog } from "./render/catalog.ts";
 import { renderLanding } from "./render/landing.ts";
 import { renderRecord, renderRecordsIndex } from "./render/record.ts";
-import { buildRecordIndex } from "./render/shared.ts";
-import { VIEW_MODEL_VERSION, type PublicViewModel } from "./view-model.ts";
+import { buildRecordIndex, type RecordIndex } from "./render/shared.ts";
+import {
+  VIEW_MODEL_VERSION,
+  type PublicInteraction,
+  type PublicRecord,
+  type PublicViewModel,
+} from "./view-model.ts";
 import type { ComponentDataAdapter } from "./adapter.ts";
 import type { GeneratedPage } from "./page.ts";
 
@@ -58,7 +63,21 @@ export type PipelineResult = {
  * still hold is that one anchor never denotes two different interactions — otherwise a
  * deep link would resolve to two different rules depending on where it was followed.
  */
-export function assertAnchorIntegrity(model: PublicViewModel): void {
+export function assertAnchorIntegrity(
+  model: PublicViewModel,
+  // The per-page check must see the anchors the RENDERER emits, not the ones
+  // the adapter happened to attach. `render/record.ts` publishes an interaction
+  // on every record it names, whether or not the adapter attached it there — so
+  // checking `record.interactions` alone would leave an interaction anchor
+  // unvalidated on every participant page but one, and a collision with a fact
+  // or source anchor on such a page would ship duplicate HTML ids with the build
+  // still green. Defaulted so callers that only want the invariant, including
+  // the tests, need not build an index.
+  index: RecordIndex = buildRecordIndex(model),
+): void {
+  const renderedInteractions = (record: PublicRecord): readonly PublicInteraction[] =>
+    index.interactionsByRecordId.get(record.identity.recordId) ?? record.interactions;
+
   assertUnique(
     "anchor",
     model.records.flatMap((record) => [
@@ -76,14 +95,14 @@ export function assertAnchorIntegrity(model: PublicViewModel): void {
       ...record.sources.map((source) => source.anchor),
       ...record.facts.map((fact) => fact.anchor),
       ...record.coverage.map((entry) => entry.anchor),
-      ...record.interactions.map((entry) => entry.anchor),
+      ...renderedInteractions(record).map((entry) => entry.anchor),
       ...record.pinMaps.map((entry) => entry.anchor),
     ]);
   }
 
   const interactionByAnchor = new Map<string, string>();
   for (const record of model.records) {
-    for (const entry of record.interactions) {
+    for (const entry of renderedInteractions(record)) {
       const seen = interactionByAnchor.get(entry.anchor);
       if (seen !== undefined && seen !== entry.interactionId) {
         fail("IDENTITY_COLLISION", "duplicate anchor", {
@@ -135,13 +154,14 @@ export async function runPipeline(
 
   const slugs = model.records.map((record) => record.identity.slug);
   assertUnique("record slug", slugs);
-  assertAnchorIntegrity(model);
 
-  // One index built once and handed to every record page. The evidence graph
-  // crosses records — a calculated fact cites a fact owned by another part, an
-  // interaction spans several — so a page cannot resolve its own links from its
+  // One index built once, handed to every record page AND to the anchor check —
+  // so what is validated is exactly what is rendered. The evidence graph crosses
+  // records: a calculated fact cites a fact owned by another part, an
+  // interaction spans several, so a page cannot resolve its own links from its
   // own record alone.
   const recordIndex = buildRecordIndex(model);
+  assertAnchorIntegrity(model, recordIndex);
 
   const pages: GeneratedPage[] = [
     renderLanding(model, policy),

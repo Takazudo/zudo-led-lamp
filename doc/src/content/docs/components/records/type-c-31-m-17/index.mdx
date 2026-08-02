@@ -171,7 +171,7 @@ A value this project recorded about how the part is used here — a chosen opera
 | Fact                                                                                       | Value                                                                                          | Unit   | Conditions                                                                                                             | Verdict                               | Provenance           | Evidence                                                                                                               |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | <EvidenceAnchor id="fact-type-c-31-m-17-manufacturer" />`fact-type-c-31-m-17-manufacturer` | HRO                                                                                            | `NONE` | exact manufacturer product-page model TYPE-C-31-M-17                                                                   | PASS - primary-source confirmed       | PRIMARY-SPEC         | [src-type-c-primary-page: product title and exact model row](#src-type-c-primary-page)                                 |
-| <EvidenceAnchor id="fact-type-c-31-m-17-identity" />`fact-type-c-31-m-17-identity`         | lcsc=C283540; manufacturer=HRO; mpn=TYPE-C-31-M-17; variant=exact orderable receptacle         | `NONE` | stable distributor identity binding from C283540 to exact TYPE-C-31-M-17; supplies no electrical or thermal authority  | CONFIRMED - distributor identity only | DISTRIBUTOR-IDENTITY | [src-type-c-c283540: title block and distributor row C283540](#src-type-c-c283540)                                     |
+| <EvidenceAnchor id="fact-type-c-31-m-17-identity" />`fact-type-c-31-m-17-identity`         | `lcsc`=C283540; `manufacturer`=HRO; `mpn`=TYPE-C-31-M-17; `variant`=exact orderable receptacle | `NONE` | stable distributor identity binding from C283540 to exact TYPE-C-31-M-17; supplies no electrical or thermal authority  | CONFIRMED - distributor identity only | DISTRIBUTOR-IDENTITY | [src-type-c-c283540: title block and distributor row C283540](#src-type-c-c283540)                                     |
 | <EvidenceAnchor id="fact-type-c-31-m-17-project-map" />`fact-type-c-31-m-17-project-map`   | project maps 1=GND, 2/5=VBUS, 3=CC1, 4=CC2, 6=GND, 0=shell                                     | `NONE` | immutable generator contract only; physical equivalence and orientation require incoming continuity                    | NEEDS BENCH                           | PROJECT-CHOICE       | [src-type-c-board-p-generator: COMPONENTS J1 and NETS VBUS\_IN/CC1/CC2/GND rows](#src-type-c-board-p-generator)        |
 | <EvidenceAnchor id="fact-type-c-31-m-17-mechanical" />`fact-type-c-31-m-17-mechanical`     | manufacturer-controlled dimensions, USB contact sketch and recommended PCB layout are retained | `NONE` | drawing does not bind USB contact names to project numeric pins/shell; incoming orientation and continuity remain open | PASS - primary-source confirmed       | PRIMARY-SPEC         | [src-type-c-primary-drawing: dimension figure, contact sketch and recommended PCB layout](#src-type-c-primary-drawing) |
 
@@ -201,7 +201,7 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 
 ## Interactions
 
-Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction is published against one record; the other records it names are linked from here.
+Behaviour that is not a property of this part alone. Each interaction names the records it spans, the conditions it holds under, and how far it has been confirmed. An interaction that spans several parts appears on every one of their pages, under the same identifier, because it is equally a fact about each.
 
 ### int-type-c-netlist
 
@@ -246,9 +246,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** 2021
 - **Retrieved:** 2026-08-02
 - **Authority:** DISTRIBUTOR\_IDENTITY
-- **Availability:** AVAILABLE
 - **Locator:** Title block exact TYPE-C-31-M-17; distributor productCode C283540
 - **Printed page:** 1
+- **Availability:** AVAILABLE
 - **Document URL:** [https://datasheet.lcsc.com/datasheet/pdf/26d9c5bff410f020782d77a1fd4062b2.pdf?productCode=C283540](https://datasheet.lcsc.com/datasheet/pdf/26d9c5bff410f020782d77a1fd4062b2.pdf?productCode=C283540)
 
 ### HRO TYPE-C-31-M-17 product page
@@ -261,9 +261,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** 2026-08-02
 - **Retrieved:** 2026-08-02
 - **Authority:** MANUFACTURER\_PRIMARY
-- **Availability:** AVAILABLE
 - **Locator:** Product title and exact TYPE-C-31-M-17 model row
 - **Printed page:** web page
+- **Availability:** AVAILABLE
 - **Document URL:** [https://en.krhro.com/Product-Details/722.html](https://en.krhro.com/Product-Details/722.html)
 
 ### HRO TYPE-C-31-M-17 product specification
@@ -276,9 +276,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** 2022-11-12
 - **Retrieved:** 2026-08-02
 - **Authority:** MANUFACTURER\_PRIMARY
-- **Availability:** AVAILABLE
 - **Locator:** Specification table, USB contact sketch, dimensions and recommended PCB layout
 - **Printed page:** 1
+- **Availability:** AVAILABLE
 - **Document URL:** [https://omo-oss-file110.thefastfile.com/portal-saas/new2023011311465142457/cms/file/134891b2-9b01-4104-89d3-96207243f692.pdf](https://omo-oss-file110.thefastfile.com/portal-saas/new2023011311465142457/cms/file/134891b2-9b01-4104-89d3-96207243f692.pdf)
 
 ### Board P immutable schematic generator
@@ -291,9 +291,9 @@ Every document cited above, with its identification, when it was retrieved, and 
 - **Document date:** 2026-08-02
 - **Retrieved:** 2026-08-02
 - **Authority:** PROJECT\_GENERATOR
-- **Availability:** AVAILABLE
 - **Locator:** COMPONENTS row J1 and NETS rows VBUS\_IN, CC1, CC2 and GND
 - **Printed page:** source
+- **Availability:** AVAILABLE
 - **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/90e3a2895b2912482b6177dad1482c2997d164ef/scripts/schgen/board\_p\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/90e3a2895b2912482b6177dad1482c2997d164ef/scripts/schgen/board_p_spec.py)
 
 ## Legend

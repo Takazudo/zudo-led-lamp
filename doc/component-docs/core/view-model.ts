@@ -21,7 +21,15 @@ import type { Anchor, Slug } from "./ids.ts";
 import type { SafeText } from "./text.ts";
 import type { SafeUrl } from "./url.ts";
 
-/** Bumped only when the shape changes incompatibly; adapters negotiate on it. */
+/**
+ * Adapters negotiate on this. Bumped when the shape changes incompatibly —
+ * **except for the duration of epic #57**, where it deliberately stays at 1
+ * through such changes because core and the only adapter compile together from
+ * one repository, so a skew is a compile error long before this number is read,
+ * and nothing outside the repository has ever consumed v1. It becomes a real
+ * boundary at extraction, and the rule then applies literally. Full reasoning
+ * and the epic's two incompatible changes: ARCHITECTURE.md §5.
+ */
 export const VIEW_MODEL_VERSION = 1;
 
 export type ViewModelVersion = typeof VIEW_MODEL_VERSION;
