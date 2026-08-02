@@ -107,6 +107,7 @@ describe("assertMdxSafe rejects text the serializer did not produce", () => {
     ["double-escaped backslash before <", "trailing backslash \\\\<div>\n"],
     ["unlisted component", "<Danger id=\"x\" />\n"],
     ["unlisted attribute", "<EvidenceAnchor onClick=\"x\" />\n"],
+    ["attribute belonging to another component", "<EvidenceAnchor category=\"x\" />\n"],
     ["bad attribute value", "<EvidenceAnchor id=\"a b\" />\n"],
   ];
 
@@ -129,6 +130,13 @@ describe("component builders", () => {
   it("rejects an unlisted component name", () => {
     assert.throws(
       () => component("Danger" as "EvidenceAnchor"),
+      (error: unknown) => error instanceof ComponentDocsError && error.code === "UNSAFE_MDX",
+    );
+  });
+
+  it("rejects an attribute that belongs to a different component", () => {
+    assert.throws(
+      () => component("EvidenceAnchor", { category: "components" }),
       (error: unknown) => error instanceof ComponentDocsError && error.code === "UNSAFE_MDX",
     );
   });

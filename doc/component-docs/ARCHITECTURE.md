@@ -297,8 +297,8 @@ drift is visible. `check:components` compares it byte-for-byte.
    on: a line-leading `import`/`export`, a line-leading `:::`, a `---` fence line,
    an HTML comment, any `{` or `<` not escaped by an **odd** number of preceding
    backslashes (so `\\<` is correctly treated as live), any JSX name outside
-   `ALLOWED_COMPONENTS`, any attribute outside `ALLOWED_ATTRIBUTES`, and any
-   attribute value outside `^[a-z0-9][a-z0-9-]*$`.
+   `ALLOWED_COMPONENT_ATTRIBUTES`, any attribute not listed **for that
+   component**, and any attribute value outside `^[a-z0-9][a-z0-9-]*$`.
 
 Consequences that downstream code must not weaken:
 
@@ -375,9 +375,10 @@ touched.
   Bindings must stay SSR-presentational — the virtual re-export sits outside zfb's
   static-import scanner reachability graph, so a client island registered there is
   not guaranteed to hydrate.
-- `ALLOWED_COMPONENTS` in `core/mdx.ts` and the `mdxExtras` registry in
-  `chrome-bindings.tsx` must be kept in sync. A name the generator emits without a
-  binding renders as literal text.
+- `ALLOWED_COMPONENT_ATTRIBUTES` in `core/mdx.ts` and the `mdxExtras` registry in
+  `chrome-bindings.tsx` must be kept in sync. Every allowed name must either be
+  registered there or ship globally from `@takazudo/zudo-doc` (`CategoryNav` does).
+  A name with neither renders as literal text and silently swallows what it wraps.
 
 ## 10. CI
 

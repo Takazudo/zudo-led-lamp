@@ -21,9 +21,11 @@ import { EvidenceAnchor } from "../component-docs/ui/evidence-anchor";
 
 export const chromeBindings = defineChromeBindings({
   mdxExtras: {
-    // Generated component pages only. Keep this registry in sync with
-    // ALLOWED_COMPONENTS in doc/component-docs/core/mdx.ts — a name the
-    // generator emits without a binding here renders as literal text.
+    // Generated component pages only. Every entry in
+    // ALLOWED_COMPONENT_ATTRIBUTES (doc/component-docs/core/mdx.ts) must
+    // either be registered here or ship globally from @takazudo/zudo-doc
+    // (CategoryNav does) — a name the generator emits with neither renders as
+    // literal text and silently swallows the content it wraps.
     EvidenceAnchor,
   },
 });

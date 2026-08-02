@@ -88,7 +88,6 @@ export function createScheduler(
         timer = null;
         void run();
       }, debounceMs);
-      timer.unref?.();
     },
     idle(): Promise<void> {
       return new Promise((resolve) => {

@@ -11,6 +11,7 @@
 
 import { readFile } from "node:fs/promises";
 
+import { fail } from "../core/errors.ts";
 import { reportFailure, runOnce, serializeReport, summarize } from "./run.ts";
 import { PREFLIGHT_FILE } from "../adapters/circuit/paths.ts";
 
@@ -23,15 +24,15 @@ async function main(): Promise<void> {
   if (actual === null) drift.push("missing: component-docs/preflight.json");
   else if (actual !== expected) drift.push("changed: component-docs/preflight.json");
 
-  process.stdout.write(`${summarize(result.report)}\n`);
+  process.stdout.write(`${summarize(result.report)}\n\n`);
 
   if (drift.length > 0) {
-    process.stderr.write("\ngenerated output is out of date; run `pnpm generate:components`\n");
-    for (const entry of drift) process.stderr.write(`  ${entry}\n`);
-    process.exit(1);
+    fail("GENERATED_DRIFT", "generated output is out of date; run `pnpm generate:components`", {
+      drift,
+    });
   }
 
-  process.stdout.write("\ngenerated output is up to date\n");
+  process.stdout.write("generated output is up to date\n");
 }
 
 try {

@@ -29,19 +29,37 @@ import type { SafeText } from "./text.ts";
 import type { SafeUrl } from "./url.ts";
 
 /**
- * The only MDX components generated pages may reference. Each needs a binding
- * in `doc/src/chrome-bindings.tsx`; an unbound name renders as literal text
- * and would silently swallow content, so the guard rejects anything else.
+ * The only MDX components generated pages may reference, each with the only
+ * attribute names it accepts.
+ *
+ * `EvidenceAnchor` is bound by this project in `doc/src/chrome-bindings.tsx`;
+ * `CategoryNav` ships globally from `@takazudo/zudo-doc` and needs no binding.
+ * A name outside this map — or an attribute outside its component's list —
+ * fails the guard, because an unbound component renders as literal text and
+ * would silently swallow content.
  */
-export const ALLOWED_COMPONENTS: readonly string[] = ["EvidenceAnchor", "CategoryNav"];
+export const ALLOWED_COMPONENT_ATTRIBUTES = {
+  EvidenceAnchor: ["id"],
+  CategoryNav: ["category"],
+} as const satisfies Record<string, readonly string[]>;
+
+export type AllowedComponent = keyof typeof ALLOWED_COMPONENT_ATTRIBUTES;
+
+export const ALLOWED_COMPONENTS: readonly string[] = Object.keys(
+  ALLOWED_COMPONENT_ATTRIBUTES,
+);
 
 /**
- * The only attribute names those components accept, and the pattern every
- * attribute VALUE must match. Evidence text can never reach an attribute:
- * the pattern admits slugs and small integers and nothing else.
+ * The pattern every attribute VALUE must match. Evidence text can never reach
+ * an attribute: this admits slugs and small integers and nothing else.
  */
-export const ALLOWED_ATTRIBUTES: readonly string[] = ["id", "category"];
 export const ATTRIBUTE_VALUE_PATTERN = /^[a-z0-9][a-z0-9-]*$/u;
+
+function allowedAttributesFor(name: string): readonly string[] | null {
+  return name in ALLOWED_COMPONENT_ATTRIBUTES
+    ? ALLOWED_COMPONENT_ATTRIBUTES[name as AllowedComponent]
+    : null;
+}
 
 // --- builders --------------------------------------------------------------
 
@@ -118,15 +136,19 @@ export function table(header: readonly SafeText[], rows: readonly TableRow[]): R
 
 /** A void JSX element from the whitelist. Attribute values are re-checked here. */
 export function component(
-  name: (typeof ALLOWED_COMPONENTS)[number],
+  name: AllowedComponent,
   attributes: Readonly<Record<string, string>> = {},
 ): RootContent {
-  if (!ALLOWED_COMPONENTS.includes(name)) {
+  const allowed = allowedAttributesFor(name);
+  if (allowed === null) {
     fail("UNSAFE_MDX", `component ${name} is not on the allow-list`, { name });
   }
   for (const [key, value] of Object.entries(attributes)) {
-    if (!ALLOWED_ATTRIBUTES.includes(key)) {
-      fail("UNSAFE_MDX", `attribute ${key} is not on the allow-list`, { name, attribute: key });
+    if (!allowed.includes(key)) {
+      fail("UNSAFE_MDX", `attribute ${key} is not allowed on ${name}`, {
+        name,
+        attribute: key,
+      });
     }
     if (!ATTRIBUTE_VALUE_PATTERN.test(value)) {
       fail("UNSAFE_MDX", `attribute ${key} has an unpublishable value`, {
@@ -136,6 +158,8 @@ export function component(
       });
     }
   }
+  // `mdxJsxFlowElement` is an MDX node, not core mdast, so it is not a member
+  // of mdast's `RootContent` union; `mdast-util-mdx` is what serialises it.
   return {
     type: "mdxJsxFlowElement",
     name,
@@ -254,7 +278,8 @@ function assertOnlyAllowedJsx(body: string, where: string): void {
     if (!match?.groups) continue;
 
     const name = match.groups.name as string;
-    if (!ALLOWED_COMPONENTS.includes(name)) {
+    const allowed = allowedAttributesFor(name);
+    if (allowed === null) {
       fail("UNSAFE_MDX", `${where}: component ${name} is not on the allow-list`, {
         file: where,
         name,
@@ -262,8 +287,8 @@ function assertOnlyAllowedJsx(body: string, where: string): void {
     }
     for (const attribute of (match.groups.attrs ?? "").matchAll(JSX_ATTR)) {
       const [, key = "", value = ""] = attribute;
-      if (!ALLOWED_ATTRIBUTES.includes(key)) {
-        fail("UNSAFE_MDX", `${where}: attribute ${key} is not on the allow-list`, {
+      if (!allowed.includes(key)) {
+        fail("UNSAFE_MDX", `${where}: attribute ${key} is not allowed on ${name}`, {
           file: where,
           name,
           attribute: key,

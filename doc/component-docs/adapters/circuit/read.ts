@@ -60,6 +60,13 @@ async function assertNoSymlinkOnPath(resolved: string): Promise<void> {
   const root = resolve(SKILLS_ROOT);
   const segments = relative(root, resolved).split(sep).filter(Boolean);
 
+  // The root itself first: a symlinked `.claude/skills` would redirect every
+  // read below it while each individual segment looked clean.
+  const rootStats = await lstat(root);
+  if (rootStats.isSymbolicLink()) {
+    fail("PATH_CONTAINMENT", "the skills root is a symlink", { root });
+  }
+
   let current = root;
   for (const segment of segments) {
     current = resolve(current, segment);

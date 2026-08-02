@@ -256,19 +256,26 @@ function buildIdentity(
 
 async function readBundle(skill: string) {
   const dir = join(SKILLS_ROOT, skill);
-  const [manifest, sources, facts, coverage, , interactions, pinMap] = (await Promise.all(
-    BUNDLE_FILES.map((file) => readProviderJson(join(dir, file))),
-  )) as [
-    { records: ManifestRecord[] },
-    { sources: { source_id: string }[] },
-    { facts: unknown[] },
-    { coverage: unknown[] },
-    unknown,
-    { interactions: { interaction_id: string }[] },
-    { pin_maps: { pins: unknown[] }[] },
-  ];
+  // Read by name, not by position: a tuple destructure of BUNDLE_FILES would
+  // silently misalign if that list is ever reordered.
+  const read = async <T>(file: (typeof BUNDLE_FILES)[number]): Promise<T> =>
+    (await readProviderJson(join(dir, file))) as T;
+
+  const [manifest, sources, facts, coverage, routing, interactions, pinMap] =
+    await Promise.all([
+      read<{ records: ManifestRecord[] }>("manifest.json"),
+      read<{ sources: { source_id: string }[] }>("sources.json"),
+      read<{ facts: unknown[] }>("facts.json"),
+      read<{ coverage: unknown[] }>("coverage.json"),
+      // Not projected until #59; read so a missing or malformed routing bundle
+      // fails now rather than three issues later.
+      read<{ routes: unknown[] }>("routing.json"),
+      read<{ interactions: { interaction_id: string }[] }>("interactions.json"),
+      read<{ pin_maps: { pins: unknown[] }[] }>("pin-map.json"),
+    ]);
 
   return {
+    routeCount: routing.routes.length,
     records: manifest.records,
     sourceIds: sources.sources.map((source) => source.source_id),
     factCount: facts.facts.length,
