@@ -143,7 +143,8 @@ export async function mountModelViewer(
     }
     themeObserver = new MutationObserver(invalidator.invalidate);
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
-    invalidator.invalidate();
+    invalidator.cancel();
+    render();
     setViewerState(root, "ready", "Interactive package model ready. Drag to orbit; scroll to zoom; arrow keys pan.");
 
     return {

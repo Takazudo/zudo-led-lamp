@@ -2,6 +2,7 @@
 /** @jsxImportSource preact */
 
 import { decodeComponentReferencesDescriptor } from "../core/reference-descriptor.ts";
+import { FootprintPreview } from "./footprint-preview.tsx";
 import { PackageModelViewer } from "./package-model-viewer.tsx";
 
 export type ComponentReferencesProps = { readonly descriptor: string };
@@ -31,14 +32,7 @@ export function ComponentReferences({ descriptor: encoded }: ComponentReferences
         </article>
         <article className="zld-component-references__card">
           <h3 className="zld-component-references__card-heading">Footprint preview</h3>
-          <figure className="zld-component-references__footprint">
-            <a href={footprint.assetUrl} aria-label={`Open footprint SVG for ${footprint.name}`}>
-              <img src={footprint.assetUrl} alt={`Footprint preview for ${footprint.name}`} />
-            </a>
-            <figcaption>
-              Shared footprint package: <code>{footprint.name}</code>. <a href={footprint.assetUrl}>Open SVG</a>
-            </figcaption>
-          </figure>
+          <FootprintPreview assetUrl={footprint.assetUrl} footprintName={footprint.name} />
         </article>
         <article className="zld-component-references__card zld-component-references__model-card">
           <h3 className="zld-component-references__card-heading">Package model</h3>
