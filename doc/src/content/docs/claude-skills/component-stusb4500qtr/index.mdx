@@ -18,3 +18,7 @@ For controller work, separate unpowered/dead-battery, reset, configuration-load,
 Provision only with a current-limited source that satisfies the documented VDD or VSYS operating range and with a common-ground I2C programmer using the board pogo interface. Keep the load disconnected for first power and verify VBUS, gate polarity, discharge timing, CC state, and fault registers in stages. Volatile register edits are not persistent NVM proof.
 
 Apply the netlist assertions in `interactions.json` exactly. A deterministic wrong pin, missing series discharge resistor, wrong PMOS polarity, or unsafe voltage is a blocker; state-dependent negotiation, timing, thermal behavior, ESD performance, and as-built NVM contents require bench evidence.
+
+## Human component reference
+
+Human projection of this bundle: [rec-stusb4500qtr](/docs/components/records/stusb4500qtr/), [rec-pesd24vs1ub](/docs/components/records/pesd24vs1ub/), [rec-rd-0603waf5101t5e](/docs/components/records/rd-0603waf5101t5e/). Those pages are generated from the JSON files here and add nothing to them — where the two disagree, this bundle is correct. See also the [component catalog](/docs/components/catalog/) and the [cross-component rules](/docs/components/integration/).
