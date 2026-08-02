@@ -231,7 +231,10 @@ function projectCases(
       fail("ADAPTER_CONTRACT", "conditioned calculation records an empty results list", detail);
     }
     return calculation.results.map((row) => {
-      if (!(resultKey in row)) {
+      // `Object.hasOwn`, not `in`: `in` walks the prototype chain, so a
+      // `result_key` of `constructor` or `toString` would appear to be present
+      // and the "result" would be an inherited function.
+      if (!Object.hasOwn(row, resultKey)) {
         fail("ADAPTER_CONTRACT", "conditioned calculation result row has no result key", detail);
       }
       return {
@@ -244,7 +247,7 @@ function projectCases(
     });
   }
 
-  if (!(resultKey in calculation)) {
+  if (!Object.hasOwn(calculation, resultKey)) {
     fail("ADAPTER_CONTRACT", "conditioned calculation records neither results nor a result", detail);
   }
   return [

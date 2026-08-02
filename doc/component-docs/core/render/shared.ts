@@ -178,9 +178,10 @@ export function buildRecordIndex(model: PublicViewModel): RecordIndex {
   }
 
   // Rules keep model order (which is the ruleset's own file order) under every
-  // record they name. A rule names each participant once, so no deduplication
-  // is needed here — unlike interactions, which the adapter may attach more
-  // than once.
+  // record they name. No deduplication here, unlike interactions: the adapter
+  // may attach one interaction to several records, whereas a rule names each
+  // participant exactly once — and `parseIntegrationRules` fails the build on a
+  // rule that repeats a record rather than letting this quietly render it twice.
   for (const rule of model.integration) {
     for (const participantId of rule.recordIds) {
       const bucket = rulesByRecordId.get(participantId) ?? [];

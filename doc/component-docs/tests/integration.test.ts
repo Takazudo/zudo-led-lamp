@@ -265,6 +265,73 @@ describe("rule parsing", () => {
       "ADAPTER_CONTRACT",
     );
   });
+
+  it("refuses a rule that lists the same record or fact twice", () => {
+    // Nothing downstream deduplicates: a repeated record would render twice on
+    // the integration page and twice again on that record's own page.
+    for (const mutate of [
+      (rule: ProviderIntegrationRule) => ({
+        ...rule,
+        record_ids: [...rule.record_ids, rule.record_ids[0] as string],
+      }),
+      (rule: ProviderIntegrationRule) => ({
+        ...rule,
+        fact_ids: [...rule.fact_ids, rule.fact_ids[0] as string],
+      }),
+    ]) {
+      throwsWith(
+        () =>
+          parseIntegrationRules({
+            schema_version: 1,
+            rules: fixtureIntegrationRules((rules) => rules.map(mutate)),
+          }),
+        "ADAPTER_CONTRACT",
+      );
+    }
+  });
+
+  it("refuses a missing reference list rather than crashing later", () => {
+    // `rules.json` is the one provider file `validate.py` does not cover, so a
+    // missing array has to fail here, named, instead of as a TypeError from a
+    // `.map` somewhere in the projection.
+    throwsWith(
+      () =>
+        parseIntegrationRules({
+          schema_version: 1,
+          rules: fixtureIntegrationRules((rules) =>
+            rules.map(({ fact_ids: _factIds, ...rest }) => rest as ProviderIntegrationRule),
+          ),
+        }),
+      "ADAPTER_CONTRACT",
+    );
+  });
+
+  it("refuses a result key that only exists on the prototype", () => {
+    // `in` would find `toString`; `Object.hasOwn` does not. Without that the
+    // "result" would be an inherited function.
+    throwsWith(
+      () =>
+        projectIntegrationRules(
+          fixtureIntegrationRules((rules) =>
+            rules.map((rule) =>
+              rule.conditioned_calculations === undefined
+                ? rule
+                : {
+                    ...rule,
+                    conditioned_calculations: rule.conditioned_calculations.map((entry) => ({
+                      ...entry,
+                      result_key: "toString",
+                      results: undefined,
+                    })),
+                  },
+            ),
+          ),
+          CONTEXT,
+          new PublicationPolicy(FIXTURE_MATRIX, FIXTURE_SELECTION),
+        ),
+      "ADAPTER_CONTRACT",
+    );
+  });
 });
 
 describe("integration page", () => {

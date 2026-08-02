@@ -237,9 +237,16 @@ export async function readIntegrationRules(path: string): Promise<ProviderIntegr
  * Version-check and shape-check the integration ruleset. Pure, like
  * `parseBundle`, so every failure case is constructed from a plain object.
  *
- * Uniqueness is asserted on rule and calculation IDs together with the record
- * anchors they share a page namespace with: both become HTML `id`s on the
+ * Rule and calculation IDs must be unique because both become HTML `id`s on the
  * integration route, so a duplicate would send two deep links to one target.
+ *
+ * The reference lists are checked more closely here than a bundle's are, for
+ * one reason: `rules.json` is the only provider file `validate.py` does not
+ * cover — the Python side owns the component-spec contract, and the forward
+ * tests exercise routing rather than shape. A missing array would otherwise
+ * surface as a `TypeError` from a `.map` deep in the projection instead of a
+ * fail-closed error naming the rule, and a record listed twice inside one rule
+ * would render twice on the page and twice again on that record's own page.
  */
 export function parseIntegrationRules(raw: unknown): ProviderIntegrationRules {
   assertSchemaVersion(raw, INTEGRATION_RULES_LABEL);
@@ -253,7 +260,41 @@ export function parseIntegrationRules(raw: unknown): ProviderIntegrationRules {
     (calculation) => calculation,
   );
 
+  for (const rule of rules) {
+    const at = `${INTEGRATION_RULES_LABEL}:${rule.rule_id}`;
+    assertDistinctIds(rule.record_ids, `${at}.record_ids`);
+    assertDistinctIds(rule.fact_ids, `${at}.fact_ids`);
+    assertOptionalArray(rule.conditioned_calculations, `${at}.conditioned_calculations`);
+    assertOptionalArray(rule.evidence_chain, `${at}.evidence_chain`);
+    for (const calculation of rule.conditioned_calculations ?? []) {
+      assertDistinctIds(calculation.fact_ids, `${at}.${calculation.calculation_id}.fact_ids`);
+    }
+    for (const stage of rule.evidence_chain ?? []) {
+      assertDistinctIds(stage.fact_ids, `${at}.${stage.stage}.fact_ids`);
+    }
+  }
+
   return { schema_version: PROVIDER_SCHEMA_VERSION, rules };
+}
+
+/** An ID list that is present, an array, and free of repeats. */
+function assertDistinctIds(value: unknown, where: string): void {
+  if (!Array.isArray(value)) {
+    fail("ADAPTER_CONTRACT", "integration rule field is not an id array", { where });
+  }
+  const duplicates = value.filter((id, position) => value.indexOf(id) !== position);
+  if (duplicates.length > 0) {
+    fail("ADAPTER_CONTRACT", "integration rule lists the same id twice", {
+      where,
+      ids: [...new Set(duplicates.map(String))].sort(byCodeUnit),
+    });
+  }
+}
+
+function assertOptionalArray(value: unknown, where: string): void {
+  if (value !== undefined && !Array.isArray(value)) {
+    fail("ADAPTER_CONTRACT", "integration rule field is present but not an array", { where });
+  }
 }
 
 export async function readBundle(skill: string): Promise<ProviderBundle> {
