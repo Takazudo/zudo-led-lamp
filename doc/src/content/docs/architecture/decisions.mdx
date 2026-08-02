@@ -68,9 +68,12 @@ complete passive sets on a board whose entire output is 5.5 W — absurd. Vf-bin
 procurement is a supply guarantee the JLCPCB catalog cannot make.
 
 Ballast costs **1.03 W (19% of delivered power)** and that is the honest price of the
-choice. What it buys: even at the datasheet's full 2.6–3.2 V Vf spread, the hottest
-string reaches 0.27 W against a 0.288 W package rating — it passes, by construction, with
-no reliance on procurement luck.
+choice. What it buys: strong sharing within a matched lot — not unconditional safety. At
+the datasheet's full 2.6–3.2 V Vf window the hottest branch would still reach 142.5% of
+the LED's 90 mA absolute maximum, which is why incoming lots are gated on the ≤0.30 V
+string-spread acceptance bound (issue #35); within that bound the datasheet worst-case
+branch peak stays at 98% of the absolute maximum (see board-l's current-sharing analysis
+against the primary-confirmed 306 mW limit).
 
 33 Ω specifically is a two-sided optimisation: larger ballast improves sharing but pushes
 the duty cycle past the driver's recommended band; smaller ballast does the reverse. 33 Ω
