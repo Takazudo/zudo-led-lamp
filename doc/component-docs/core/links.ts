@@ -19,6 +19,11 @@
  * `/docs/claude/` hub — are pages zudo-doc generates from `.claude/`, which
  * this run never sees, so they are deliberately NOT resolved here. Those are
  * verified against the built site.
+ *
+ * An anchor here means an `EvidenceAnchor` id, which is every anchor these
+ * renderers emit. A renderer that starts linking to a heading-derived slug
+ * instead would have to teach `buildPage` about heading anchors first —
+ * otherwise this reports the link as broken, correctly by its own lights.
  */
 
 import { fail } from "./errors.ts";

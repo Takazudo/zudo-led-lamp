@@ -120,6 +120,13 @@ describe("link integrity", () => {
     ]);
   });
 
+  it("treats a route that merely shares a string prefix as outside the tree", () => {
+    // Containment is segment-wise: `/docs/components-other/` is NOT inside
+    // `/docs/components/`, so it must fall through rather than be mapped onto
+    // `-other/index.mdx` and reported as a missing generated page.
+    assert.equal(breaks([page("index.mdx", [linkTo(route("/docs/components-other/"))])]), null);
+  });
+
   it("leaves routes outside the generated tree to the built-site check", () => {
     // These pages come from zudo-doc's claudeResources generator, which this
     // run never sees. Resolving them here would fail every build.
