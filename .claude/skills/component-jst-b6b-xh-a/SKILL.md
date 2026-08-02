@@ -8,3 +8,7 @@ description: Audit the exact JST B6B-XH-A(LF)(SN) C144397 six-circuit XH board h
 Run the central validator and read every local artifact. Keep the board header distinct from the mating housing, crimp contact, wire, and completed cable assembly. No complete harness has been selected; do not invent one from the XH family catalog.
 
 Use the official JST XH catalog for the 2.50 mm six-circuit top-entry header identity, dimensions, and series-level ratings. Use `pin-map.json` only for the current Board P/Board L signal assignment. Before interconnecting boards, verify header pin 1 on both PCBs, cable end-to-end mapping, duplicate power/ground conductors, contact retention, wire gauge/current suitability, and absence of swaps or shorts.
+
+## Human component reference
+
+Human projection of this bundle: [rec-jst-b6b-xh-a](/docs/components/records/jst-b6b-xh-a/). Those pages are generated from the JSON files here and add nothing to them — where the two disagree, this bundle is correct. See also the [component catalog](/docs/components/catalog/) and the [cross-component rules](/docs/components/integration/).

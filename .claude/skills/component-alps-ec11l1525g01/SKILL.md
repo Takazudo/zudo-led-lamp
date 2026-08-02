@@ -12,3 +12,7 @@ The retained mirror identifies 15 pulses and 30 detents, while the generator dis
 Use the retained chatter, bounce, torque, life, shaft, panel-support, and solder-process facts only with their stated conditions. Firmware debounce, direction convention at the UI, installed knob load, panel support, switch use, lifecycle status, and bench behavior remain open.
 
 The design's real operating point differs from every retained spec condition: V3P3's 10 kOhm pull-up (R22/R23) gives roughly 0.33 mA closed-contact current versus the retained 5 V/5 kOhm chatter-bounce test circuit, and the only retained minimum-current spec (500 uA) belongs to the unused D/E push switch, not the A/B/C rotary contacts. C22/C23 100 nF at ENC_A/ENC_B discharge through R27/R28 100 Ohm at roughly 33 mA peak with no retained contact-current rating. Bench debounce/contact verification at the real 3.3 V/10k operating point is required before this domain closes.
+
+## Human component reference
+
+Human projection of this bundle: [rec-c2991196](/docs/components/records/c2991196/). Those pages are generated from the JSON files here and add nothing to them — where the two disagree, this bundle is correct. See also the [component catalog](/docs/components/catalog/) and the [cross-component rules](/docs/components/integration/).
