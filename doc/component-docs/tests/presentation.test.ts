@@ -23,7 +23,6 @@ import { renderCatalog } from "../core/render/catalog.ts";
 import { renderRecord } from "../core/render/record.ts";
 import { buildRecordIndex } from "../core/render/shared.ts";
 import { FIXTURE_IDS, fixtureModel } from "./fixtures.ts";
-import type { PublicViewModel } from "../core/view-model.ts";
 
 /** Names bound by the host rather than by this project. */
 const PACKAGE_GLOBAL_COMPONENTS: readonly string[] = ["CategoryNav"];
@@ -35,12 +34,13 @@ const model = fixtureModel();
 const index = buildRecordIndex(model);
 const catalogPage = renderCatalog(model).contents;
 const recordPages = model.records.map((record) => renderRecord(record, index).contents);
-const driverPage = pageFor(model, FIXTURE_IDS.driverRecord);
+/** The fixture record carrying facts, calculations and two pin maps. */
+const driverPage = pageFor(FIXTURE_IDS.driverRecord);
 
-function pageFor(source: PublicViewModel, recordId: string): string {
-  const record = source.records.find((entry) => entry.identity.recordId === recordId);
+function pageFor(recordId: string): string {
+  const record = model.records.find((entry) => entry.identity.recordId === recordId);
   assert.ok(record, `fixture has no record ${recordId}`);
-  return renderRecord(record, buildRecordIndex(source)).contents;
+  return renderRecord(record, index).contents;
 }
 
 /** Every `| … | … |` header row, with its cell count. */
@@ -65,6 +65,17 @@ function disclosedBlocks(page: string): string[] {
 
 describe("host bindings stay in step with the component allow-list", () => {
   const bindings = readFileSync(BINDINGS_PATH, "utf8");
+  // The registry body, comments stripped. Matching the whole file would let a
+  // name mentioned only in a comment satisfy the assertion — which is exactly
+  // the near-miss this test exists to catch.
+  const registry = (/mdxExtras:\s*\{([\s\S]*?)\n\s*\},/u.exec(bindings)?.[1] ?? "").replace(
+    /\/\/[^\n]*/gu,
+    "",
+  );
+
+  it("finds the mdxExtras registry at all", () => {
+    assert.notEqual(registry.trim(), "", "chrome-bindings.tsx has no mdxExtras object");
+  });
 
   for (const name of Object.keys(ALLOWED_COMPONENT_ATTRIBUTES)) {
     if (PACKAGE_GLOBAL_COMPONENTS.includes(name)) continue;
@@ -79,8 +90,8 @@ describe("host bindings stay in step with the component allow-list", () => {
         `${name} is on the allow-list but chrome-bindings.tsx does not import it`,
       );
       assert.match(
-        bindings,
-        new RegExp(`mdxExtras[\\s\\S]*\\b${name}\\b[\\s\\S]*\\}`, "u"),
+        registry,
+        new RegExp(`^\\s*${name}\\s*,\\s*$`, "mu"),
         `${name} is imported but not registered in mdxExtras`,
       );
     });
