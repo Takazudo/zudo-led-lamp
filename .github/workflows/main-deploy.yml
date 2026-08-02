@@ -39,6 +39,9 @@ on:
       # claudeResources.claudeDir "../.claude" and scanRoot "..", so these
       # inputs change the built site despite living outside doc/.
       - ".claude/skills/**"
+      # Canonical package geometry is outside doc/, but is hashed by the
+      # committed footprint-preview manifest.
+      - "footprints/**/*.kicad_mod"
       - "CLAUDE.md"
       - "**/CLAUDE.md"
       - "footprints/**/*.wrl"
@@ -102,6 +105,10 @@ jobs:
       - name: Component generator tests
         working-directory: doc
         run: pnpm test:components
+
+      - name: Footprint previews are current and safe
+        working-directory: doc
+        run: pnpm check:footprint-previews
 
       - name: Build site
         working-directory: doc
