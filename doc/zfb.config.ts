@@ -15,10 +15,19 @@ export default defineConfig(
     imageEnlarge: true,
     dynamicPageTransition: true,
     docHistory: true,
+    // Generated component pages carry their own provenance (source, revision,
+    // locator, retrieval date) on the page itself. Git history of the
+    // generated MDX would show generator churn, not evidence history, so it is
+    // excluded. The first pattern covers /docs/components/ itself (its slug is
+    // `components`, not `components/index`), the second everything beneath.
+    docHistoryExclude: ["components", "components/**"],
     bodyFootUtilArea: {
       docHistory: true,
       viewSourceLink: false,
     },
+    // Registers the MDX components generated component pages reference,
+    // without editing the package-owned route stub under pages/.
+    chromeBindingsModule: "./src/chrome-bindings.tsx",
     // Publish the REPO-ROOT .claude, not doc/.claude. The component-audit
     // skills that document this circuit live at the repo root; doc/.claude
     // holds only tooling for editing this site and is deliberately unpublished.

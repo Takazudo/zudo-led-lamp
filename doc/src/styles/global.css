@@ -26,3 +26,12 @@
 @theme {
   /* e.g. --color-accent: oklch(0.6 0.2 250); */
 }
+
+/* Generated component pages (doc/component-docs) anchor on evidence IDs rather
+   than heading text, so a reworded heading never breaks an external deep link.
+   The target is an empty inline element; scroll-margin keeps it clear of the
+   sticky header when a fragment URL lands on it. */
+.zld-evidence-anchor {
+  display: inline;
+  scroll-margin-top: 6rem;
+}

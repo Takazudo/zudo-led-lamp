@@ -1,0 +1,566 @@
+{
+  "viewModelVersion": 1,
+  "provider": {
+    "id": "circuit-component-spec",
+    "contractVersion": 1
+  },
+  "records": {
+    "available": 32,
+    "selected": 32,
+    "slugs": [
+      "al8860mp-13",
+      "ap63203wu-7",
+      "bsmd1206-075-30v",
+      "c13564",
+      "c13585",
+      "c14663",
+      "c15849",
+      "c17414",
+      "c210315",
+      "c21189",
+      "c22775",
+      "c22807",
+      "c23162",
+      "c23179",
+      "c25803",
+      "c2934070",
+      "c2991196",
+      "c4216",
+      "c492404",
+      "c529334",
+      "cl21a226maqnnne",
+      "fnr4030s4r7mt",
+      "fxl0630-330-m",
+      "high-diode-smaj20a",
+      "jst-b6b-xh-a",
+      "pesd24vs1ub",
+      "rd-0603waf5101t5e",
+      "rlp25feer200",
+      "ro-ss26",
+      "stusb4500qtr",
+      "type-c-31-m-17",
+      "umw-ao3401a"
+    ]
+  },
+  "sources": {
+    "available": 81,
+    "selected": 81,
+    "linkable": 81,
+    "ids": [
+      "src-al8860-ds39014",
+      "src-al8860-generator",
+      "src-ap63203-generator",
+      "src-ap6320x-ds41326",
+      "src-bhfuse-1206",
+      "src-bhfuse-generator",
+      "src-c13564-catalog",
+      "src-c13564-current",
+      "src-c13564-generator",
+      "src-c13585-catalog",
+      "src-c13585-page",
+      "src-c14663-generator",
+      "src-c14663-yageo",
+      "src-c15849-catalog",
+      "src-c15849-page",
+      "src-c17414-generator",
+      "src-c17414-uniroyal",
+      "src-c210315-generator",
+      "src-c210315-lcsc",
+      "src-c210315-spec",
+      "src-c21189-generator",
+      "src-c21189-uniroyal",
+      "src-c22775-generator",
+      "src-c22775-uniroyal",
+      "src-c22807-generator",
+      "src-c22807-uniroyal",
+      "src-c23162-uniroyal",
+      "src-c23179-generator",
+      "src-c23179-uniroyal",
+      "src-c25803-uniroyal",
+      "src-c2934070-generator",
+      "src-c2934070-spec",
+      "src-c2991196-encoder-rc",
+      "src-c2991196-generator",
+      "src-c2991196-page",
+      "src-c2991196-primary-retry",
+      "src-c2991196-spec",
+      "src-c4216-generator",
+      "src-c4216-uniroyal",
+      "src-c492404-drawing",
+      "src-c492404-generator",
+      "src-c492404-page",
+      "src-c529334-ds",
+      "src-c529334-es",
+      "src-c529334-generator",
+      "src-c529334-rm",
+      "src-cl21-generator",
+      "src-fnr-generator",
+      "src-fnr-series-mirror",
+      "src-fnr-series-official",
+      "src-fxl-generator",
+      "src-fxl-series-mirror",
+      "src-fxl-series-official",
+      "src-high-diode-c571370",
+      "src-high-diode-primary",
+      "src-jst-xh",
+      "src-jst-xh-header",
+      "src-pesd24vs1ub",
+      "src-rd-board-p-generator",
+      "src-rd-c23186",
+      "src-rd-uniroyal-smd-sp-001",
+      "src-rlp25-generator",
+      "src-rlp25-spec",
+      "src-ro-ss26-mirror",
+      "src-samsung-cl21-product",
+      "src-ss26-generator",
+      "src-ss26-primary-attempt",
+      "src-stusb-board-p-generator",
+      "src-stusb-ds12499",
+      "src-stusb-ds12499-primary-attempt",
+      "src-stusb-ds12499-ratings",
+      "src-stusb-stsw004",
+      "src-stusb-um2398",
+      "src-stusb-um2650",
+      "src-stusb-um2650-primary-attempt",
+      "src-type-c-board-p-generator",
+      "src-type-c-c283540",
+      "src-type-c-primary-drawing",
+      "src-type-c-primary-page",
+      "src-umw-ao3401a",
+      "src-umw-ao3401a-board-p-generator"
+    ]
+  },
+  "fields": [
+    {
+      "key": "record.recordId",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.slug",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.kind",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.parentRecordId",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.lineId",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.mpn",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.manufacturer",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.lcsc",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.package",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.function",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.identityState",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.sourceState",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.dnp",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "record.placements",
+      "decision": "PUBLISH",
+      "emitted": 32,
+      "withheld": 0
+    },
+    {
+      "key": "alias.mpn",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "alias.lcsc",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "alias.manufacturer",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "alias.function",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "routing.positivePrompts",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "routing.negativePrompts",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.sourceId",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.documentTitle",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.documentNumber",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.revision",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.documentDate",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.retrievalDate",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.authorityClass",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.availability",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.locator",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.printedPageLabel",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.physicalPdfPageIndex",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.authoritativeUrl",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.alternateAuthoritativeUrl",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.sha256",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "source.evidenceExtract",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.factId",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.class",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.value",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.unit",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.conditions",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.locator",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.provenance",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.verdict",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.dependsOn",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "fact.expression",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "coverage.coverageId",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "coverage.domain",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "coverage.status",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "coverage.reason",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "coverage.factIds",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "coverage.blockingFactIds",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "interaction.interactionId",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "interaction.recordIds",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "interaction.factIds",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "interaction.conditions",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "interaction.verdict",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.ruleId",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.domain",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.recordIds",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.factIds",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.conditions",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.verdict",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "integration.refusal",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "pinMap.pinMapId",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "pinMap.symbol",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "pinMap.footprint",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "pinMap.pins",
+      "decision": "PUBLISH",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "pinMap.reviewedBy",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    },
+    {
+      "key": "corpus.counts",
+      "decision": "PUBLISH",
+      "emitted": 1,
+      "withheld": 0
+    },
+    {
+      "key": "asset.binary",
+      "decision": "DENY",
+      "emitted": 0,
+      "withheld": 0
+    }
+  ],
+  "urls": [],
+  "counts": {
+    "generatedPages": 1,
+    "publishedCoverageDomains": 0,
+    "publishedFacts": 0,
+    "publishedIntegrationRules": 0,
+    "publishedInteractions": 0,
+    "publishedPinMaps": 0,
+    "publishedRecords": 32,
+    "publishedSources": 0
+  }
+}
