@@ -50,9 +50,9 @@
     {"review_id":"review-bhfuse-surface-temperature","sha256":"ae1e002b4b7083a9ff94e2d62cde1759a66511ac82272c33b7092f2a37bb9642"},
     {"review_id":"review-c210315-maxima","sha256":"3be21f464450e1695792703ba43b6ef9cf64cf2ce9de6b6cecd065c2bc88320f"},
     {"review_id":"review-rlp25-power","sha256":"485554956fa596bdb03d5a3d310081644128ec94b972744daf806c77a9598baa"},
-    {"review_id":"review-fnr-irated-max","sha256":"95315683d7762c65aa51ec34b994124ce7785a6408df6a1b5a483e9148c66ad7"},
+    {"review_id":"review-fnr-irated-max","sha256":"d726e53d16e0d25051904fa1cbf71fb682ffceba52437b07ece87f308c4e9bad"},
     {"review_id":"review-c2934070-power","sha256":"2fa613d32a70b38176133a6323b302df4cc19af1a95f04ad199d024ada86318c"},
-    {"review_id":"review-c13564-max-current","sha256":"450f58e36ca6322a566f1470fbe15b2a5e026935228c805af43253116f782790"}
+    {"review_id":"review-c13564-max-current","sha256":"abff892e01c8e37dfcfa7b37f2ceacccaa6fd3d7c0efb1c61fa12acf98ea9ab3"}
   ],
   "reviews": [
     {
@@ -358,14 +358,14 @@
       "review_id": "review-fnr-irated-max",
       "domain": "current",
       "fact_id": "fact-fnr-irated-max",
-      "source_id": "src-fnr-series-mirror",
-      "physical_pdf_page_index": 18,
-      "printed_page_label": "unprinted physical page 19",
-      "locator": "src-fnr-series-mirror: Specifications table row FNR4030S4R7MT Irms and footnote row 4",
+      "source_id": "src-fnr-series-official",
+      "physical_pdf_page_index": 9,
+      "printed_page_label": "10",
+      "locator": "src-fnr-series-official: FNR4030S Series specifications table row FNR4030S4R7MT Irms maximum column",
       "evidence_extract": "2",
       "conditions": "table max-design Irms column; 40 C temperature rise from 20 C ambient",
       "reviewer": "issue-25 foreground destructive-risk review",
-      "status": "UNSOURCED"
+      "status": "CONFIRMED"
     },
     {
       "review_id": "review-c2934070-power",
@@ -387,9 +387,9 @@
       "source_id": "src-c13564-current",
       "physical_pdf_page_index": 4,
       "printed_page_label": "5/5",
-      "locator": "src-c13564-current: current part-list table row NCP18XH103F03RB maximum-current column",
+      "locator": "src-c13564-current: current part-list table row NCP18XH103F03RB, maximum-current column header (translated from Japanese) reads 'Maximum Operating Current (25C)', identical wording repeated on every page (physical indices 0-4) of the document",
       "evidence_extract": "0.1",
-      "conditions": "maximum current in current part list; installed divider current must be checked across temperature",
+      "conditions": "Murata's own column header for this value is an OPERATING maximum, not a measurement/test-current specification (Japanese header translates to 'Maximum Operating Current, 25C'); corroborated by older catalog src-c13564-catalog physical page index 7, which defines the parallel English term 'Permissive Operating Current' as the current level that keeps the thermistor's own self-heating temperature rise to max. 1C; installed divider current must still be checked against this operating limit across temperature",
       "reviewer": "issue-25 foreground destructive-risk review",
       "status": "CONFIRMED"
     }

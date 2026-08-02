@@ -6,8 +6,11 @@
       "record_id": "rec-c2991196",
       "domain": "phase-detent-switch-mechanical-and-process-context",
       "status": "OPEN",
-      "reason": "facts retain exact mirror-spec locators, lower-authority UNSOURCED status, and project pin topology Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "facts retain exact mirror-spec locators, lower-authority UNSOURCED status, and project pin topology. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
       "fact_ids": [
+        "fact-c2991196-label-conflict"
+      ],
+      "blocking_fact_ids": [
         "fact-c2991196-label-conflict"
       ]
     },
@@ -19,6 +22,9 @@
       "reason": "fact-c2991196-lifecycle: current manufacturer page unavailable",
       "fact_ids": [
         "fact-c2991196-lifecycle"
+      ],
+      "blocking_fact_ids": [
+        "fact-c2991196-lifecycle"
       ]
     },
     {
@@ -27,7 +33,8 @@
       "domain": "firmware-debounce-and-ui-direction",
       "status": "OPEN",
       "reason": "contact timing does not establish firmware debounce or user-facing direction",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c2991196-load",
@@ -36,6 +43,10 @@
       "status": "OPEN",
       "reason": "fact-c2991196-mechanical and fact-c2991196-life require installed mechanical validation",
       "fact_ids": [
+        "fact-c2991196-mechanical",
+        "fact-c2991196-life"
+      ],
+      "blocking_fact_ids": [
         "fact-c2991196-mechanical",
         "fact-c2991196-life"
       ]
@@ -48,6 +59,32 @@
       "reason": "fact-c2991196-topology leaves D/E unused and provides no bench result",
       "fact_ids": [
         "fact-c2991196-topology"
+      ],
+      "blocking_fact_ids": [
+        "fact-c2991196-topology"
+      ]
+    },
+    {
+      "coverage_id": "cov-c2991196-real-operating-point",
+      "record_id": "rec-c2991196",
+      "domain": "encoder-real-operating-point-bench-gate",
+      "status": "OPEN",
+      "reason": "The design's real operating point differs from every retained spec test condition. V3P3's 10 kOhm pull-up gives roughly 0.33 mA closed-contact current versus the retained 5 V/5 kOhm chatter-bounce test circuit. The only retained minimum-current spec, 500 uA, belongs to the unused D/E push switch, not the A/B/C rotary contacts, so no retained wetting-current minimum covers the rotary path. C22/C23 100 nF at ENC_A/ENC_B discharge through R27/R28 100 Ohm at roughly 33 mA peak with no retained contact-current rating for that transient. Bench debounce and contact verification at the real 3.3 V/10k operating point is required before this domain can close.",
+      "fact_ids": [
+        "fact-c2991196-real-topology",
+        "fact-c2991196-real-rail",
+        "fact-c2991196-real-pullup",
+        "fact-c2991196-real-series-r",
+        "fact-c2991196-real-current",
+        "fact-c2991196-real-discharge-peak",
+        "fact-c2991196-switch",
+        "fact-c2991196-contact-timing"
+      ],
+      "blocking_fact_ids": [
+        "fact-c2991196-real-current",
+        "fact-c2991196-real-discharge-peak",
+        "fact-c2991196-switch",
+        "fact-c2991196-contact-timing"
       ]
     }
   ]

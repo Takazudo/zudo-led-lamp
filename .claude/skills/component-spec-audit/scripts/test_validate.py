@@ -155,6 +155,66 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         with self.assertRaisesRegex(validator.ContractError, "open domains"):
             validator.validate_bundle(bundle, self.schema, True)
 
+    def test_open_coverage_blocking_fact_ids_lint_rejects_old_defective_shape(self):
+        # The migrated template shape (an OPEN reason that claims UNSOURCED
+        # evidence and cites the exact blocking fact) passes outright.
+        migrated = validator.template_bundle()
+        validator.validate_bundle(migrated, self.schema, True)
+
+        # Old defective shape #1: the field is missing entirely (pre-migration).
+        missing_field = copy.deepcopy(migrated)
+        del missing_field["coverage"][0]["blocking_fact_ids"]
+        with self.assertRaisesRegex(validator.ContractError, "missing keys"):
+            validator.validate_bundle(missing_field, self.schema, True)
+
+        # Old defective shape #2: the reason claims unavailable/lower-authority/
+        # UNSOURCED evidence (the copy-pasted boilerplate bug) but does not cite
+        # any blocking fact, so the claim is not machine-checkable.
+        unverifiable_claim = copy.deepcopy(migrated)
+        unverifiable_claim["coverage"][0]["reason"] = (
+            "Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED."
+        )
+        unverifiable_claim["coverage"][0]["blocking_fact_ids"] = []
+        with self.assertRaisesRegex(validator.ContractError, "blocking_fact_ids is empty"):
+            validator.validate_bundle(unverifiable_claim, self.schema, True)
+
+        # Old defective shape #3: a cited blocking fact does not actually carry
+        # a blocking verdict (e.g. it is really PASS/NOT APPLICABLE with
+        # available evidence), so it cannot truthfully keep the domain open.
+        non_blocking_member = copy.deepcopy(migrated)
+        non_blocking_member["sources"][0]["availability"] = "AVAILABLE"
+        non_blocking_member["sources"][0]["sha256"] = hashlib.sha256(b"non-blocking-fixture").hexdigest()
+        next(f for f in non_blocking_member["facts"] if f["fact_id"] == "fact-example-pin")["verdict"] = "NOT APPLICABLE"
+        with self.assertRaisesRegex(validator.ContractError, "does not carry a blocking verdict"):
+            validator.validate_bundle(non_blocking_member, self.schema, True)
+
+        # Old defective shape #4: the reason is reworded to dodge the keyword
+        # guard entirely while fact_ids still carries a blocking fact. Only the
+        # structural rule catches this one.
+        reworded_bypass = copy.deepcopy(migrated)
+        reworded_bypass["coverage"][0]["reason"] = "Domain stays open pending inspection of the assembled board."
+        reworded_bypass["coverage"][0]["blocking_fact_ids"] = []
+        self.assertFalse(validator.OPEN_UNAVAILABLE_CLAIM.search(reworded_bypass["coverage"][0]["reason"]))
+        with self.assertRaisesRegex(validator.ContractError, "blocking-verdict facts"):
+            validator.validate_bundle(reworded_bypass, self.schema, True)
+
+        # Legitimate empty array: the domain's only fact is NOT APPLICABLE on an
+        # available source, so nothing addresses the domain in the blocking
+        # sense (the shape of component-stm32g031f8p6's cov-c492404-fit).
+        not_applicable_only = copy.deepcopy(reworded_bypass)
+        not_applicable_only["sources"][0]["availability"] = "AVAILABLE"
+        not_applicable_only["sources"][0]["sha256"] = hashlib.sha256(b"not-applicable-fixture").hexdigest()
+        next(f for f in not_applicable_only["facts"] if f["fact_id"] == "fact-example-pin")["verdict"] = "NOT APPLICABLE"
+        validator.validate_bundle(not_applicable_only, self.schema, True)
+
+    def test_open_coverage_blocking_fact_ids_lint_passes_on_migrated_data(self):
+        for owner in sorted({line["owner_skill"] for line in self.lines}):
+            bundle = validator.load_skill_bundle(validator.ROOT / ".claude/skills" / owner)
+            for item in bundle["coverage"]:
+                self.assertIn("blocking_fact_ids", item, f"{owner}/{item['coverage_id']}: missing blocking_fact_ids")
+                if item["status"] == "OPEN" and validator.OPEN_UNAVAILABLE_CLAIM.search(item["reason"]):
+                    self.assertTrue(item["blocking_fact_ids"], f"{owner}/{item['coverage_id']}: unverifiable OPEN claim")
+
     def test_every_owner_directory_and_artifact_is_required(self):
         with tempfile.TemporaryDirectory() as directory:
             skills_root = Path(directory)

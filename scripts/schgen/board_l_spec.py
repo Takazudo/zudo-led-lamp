@@ -8,7 +8,7 @@ EC11 symbol pins: A/B/C terminals, D/E push-button terminals (unused), 6/7 mount
 
 PROJECT_NAME = 'board-l'
 OUT = 'boards/board-l/board-l.kicad_sch'
-PAPER = 'A2'  # 68 parts + title block did not fit A3 without collisions
+PAPER = 'A2'  # 71 parts + title block did not fit A3 without collisions
 
 _C100N = ('CC0603KRX7R9BB104', '100nF/50V', 'C14663', 'zudo-led-lamp:C0603')
 _C10U = ('CL31A106KBHNNNE', '10uF/50V', 'C13585', 'zudo-led-lamp:C1206')
@@ -55,7 +55,7 @@ COMPONENTS = {
     'R23':  (*_R10K, False, (251.46, 177.8)),
     'R24':  (*_R10K, False, (287.02, 177.8)),
     'R25':  (*_R10K, False, (322.58, 177.8)),
-    'R26':  (*_R10K, False, (358.14, 177.8)),
+    'R26':  ('0603WAF1003T5E', '100k', 'C25803', 'zudo-led-lamp:R0603', False, (358.14, 177.8)),
     'R27':  ('0603WAF1000T5E', '100R', 'C22775', 'zudo-led-lamp:R0603', False, (393.7, 177.8)),
     'R28':  ('0603WAF1000T5E', '100R', 'C22775', 'zudo-led-lamp:R0603', False, (429.26, 177.8)),
     'TP1':  ('TestPad', 'CTRL test pad', '', 'zudo-led-lamp:TestPad_D1.5mm', False, (393.7, 152.4)),

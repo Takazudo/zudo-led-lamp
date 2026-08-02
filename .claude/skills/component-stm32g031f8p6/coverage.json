@@ -6,8 +6,17 @@
       "record_id": "rec-c529334",
       "domain": "package-pins-reset-boot-adc-and-errata-context",
       "status": "OPEN",
-      "reason": "fact-c529334-pin-bonds through fact-c529334-errata retain locators but remain UNSOURCED because exact official bytes were unavailable Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
+      "reason": "fact-c529334-pin-bonds through fact-c529334-errata retain locators but remain UNSOURCED because exact official bytes were unavailable. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED.",
       "fact_ids": [
+        "fact-c529334-pin-bonds",
+        "fact-c529334-reset",
+        "fact-c529334-adc",
+        "fact-c529334-mux",
+        "fact-c529334-boot",
+        "fact-c529334-debug",
+        "fact-c529334-errata"
+      ],
+      "blocking_fact_ids": [
         "fact-c529334-pin-bonds",
         "fact-c529334-reset",
         "fact-c529334-adc",
@@ -22,9 +31,14 @@
       "record_id": "rec-c529334",
       "domain": "programmed-option-bytes-and-boot-policy",
       "status": "OPEN",
-      "reason": "fact-c529334-boot: programmed option bytes are not retained",
+      "reason": "fact-c529334-boot: programmed option bytes are not retained; fact-c529334-boot-artifact: no nBOOT_SEL/nBOOT0/nBOOT1 option-byte readback artifact has been captured, so verdict stays NEEDS BENCH",
       "fact_ids": [
-        "fact-c529334-boot"
+        "fact-c529334-boot",
+        "fact-c529334-boot-artifact"
+      ],
+      "blocking_fact_ids": [
+        "fact-c529334-boot",
+        "fact-c529334-boot-artifact"
       ]
     },
     {
@@ -34,6 +48,9 @@
       "status": "OPEN",
       "reason": "fact-c529334-mux lists only candidates; firmware is absent",
       "fact_ids": [
+        "fact-c529334-mux"
+      ],
+      "blocking_fact_ids": [
         "fact-c529334-mux"
       ]
     },
@@ -45,6 +62,9 @@
       "reason": "fact-c529334-adc: ADC configuration and effective source impedance are unverified",
       "fact_ids": [
         "fact-c529334-adc"
+      ],
+      "blocking_fact_ids": [
+        "fact-c529334-adc"
       ]
     },
     {
@@ -54,6 +74,9 @@
       "status": "OPEN",
       "reason": "fact-c529334-debug: DBG settings and measured behavior are absent",
       "fact_ids": [
+        "fact-c529334-debug"
+      ],
+      "blocking_fact_ids": [
         "fact-c529334-debug"
       ]
     },
@@ -68,7 +91,8 @@
         "fact-c492404-rating",
         "fact-c492404-mechanical",
         "fact-c492404-topology"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-c492404-fit",
@@ -78,7 +102,8 @@
       "reason": "fact-c492404-topology marks J3 hand-fit/DNP; installed state and programmer behavior require inspection",
       "fact_ids": [
         "fact-c492404-topology"
-      ]
+      ],
+      "blocking_fact_ids": []
     }
   ]
 }

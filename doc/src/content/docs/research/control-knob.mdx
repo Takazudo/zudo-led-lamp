@@ -34,11 +34,22 @@ This isn't a one-off gap — the broader `Resistors > Potentiometers, Variable R
 
 **How it works:** two digital outputs (A/B) that a rotating shaft toggles out of phase; the MCU counts edges (interrupt or timer input-capture) to track relative position, and optionally a third pin for an integrated push-button (many encoder parts bundle a click-to-push switch on the same shaft). Endless rotation — no mechanical end-stops — and typically better tactile "feel" (detents) for a UI control than a pot.
 
-**JLCPCB availability — good.** `Switches > Rotary Encoders` has **2,976 parts**, and the common **EC11 family** (the de facto hobbyist/consumer-electronics standard, THT, panel-mountable via a threaded metal bushing + nut, same mechanical mounting style people expect from a "knob") is well stocked:
+**JLCPCB availability — good.** `Switches > Rotary Encoders` has **2,976 parts**, and the common **EC11 family** (the de facto hobbyist/consumer-electronics standard, THT, panel-mountable via a threaded metal bushing + nut, same mechanical mounting style people expect from a "knob") is well stocked.
+
+:::caution[Pulses-per-revolution is unresolved]
+The three project surfaces disagree. The retained manufacturer-authored specification (KK-2010-9648) states
+**15 pulses / 30 detents** per revolution; the parts DB and
+[board-l](/docs/architecture/board-l/) state the **reverse** — 30 pulses / 15 detents — and the generator's
+SW1 label says only "15-detent". A 2026-08-02 retrieval attempt could not reach Alps Alpine's primary source: the
+`EC11L1525G01` product page returns HTTP 403 on every path while the sibling `EC11E15244G1` page loads
+normally, and no `EC11L` row appears in any current encoder sub-category listing. Mirror-only evidence cannot
+settle a number the firmware UI scale depends on, so the table below leaves the count unresolved rather than
+adopting the mirror's figure. Tracked in [#32](https://github.com/Takazudo/zudo-led-lamp/issues/32).
+:::
 
 | Part | LCSC | Stock | Tier | Detents | Push-button | Price (1-9) |
 |---|---|---|---|---|---|---|
-| EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | 4,566 | Extended | 15 (30 pulses/rev per datasheet designation) | No | $1.27 |
+| EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | 4,566 | Extended | Detent/pulse count unresolved — the mirror (KK-2010-9648) says 15 pulses / 30 detents, see [#32](https://github.com/Takazudo/zudo-led-lamp/issues/32) | No | $1.27 |
 | EC11E15244G1 | [C370970](https://jlcpcb.com/partdetail/C370970) | 5,515 | Extended | 15 | No (check datasheet for exact variant) | $2.26 |
 | EC11N1525404 | [C470748](https://jlcpcb.com/partdetail/C470748) | 4,658 | Extended | 15 | Two-phase output, incremental | $2.76 |
 

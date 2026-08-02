@@ -16,7 +16,8 @@
         "fact-bhfuse-time-trip",
         "fact-bhfuse-resistance-min",
         "fact-bhfuse-resistance-reset-max"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-bhfuse-thermal",
@@ -32,7 +33,8 @@
         "fact-bhfuse-cycling",
         "fact-bhfuse-process-warning",
         "fact-bhfuse-package"
-      ]
+      ],
+      "blocking_fact_ids": []
     },
     {
       "coverage_id": "cov-bhfuse-fault",
@@ -40,7 +42,8 @@
       "domain": "fault-current-ambient-and-cycling",
       "status": "OPEN",
       "reason": "The generator does not bound upstream fault current/energy, ambient/local heating, trip count, cooling interval, or downstream normal-load envelope.",
-      "fact_ids": []
+      "fact_ids": [],
+      "blocking_fact_ids": []
     }
   ]
 }

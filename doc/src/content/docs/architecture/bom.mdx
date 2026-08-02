@@ -29,7 +29,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | C1 | 1 | CL31A106KBHNNNE 10 µF 50 V | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | **Basic** | 1,877,266 | VDD bulk |
 | C2, C35 | 2 | CC0603KRX7R9BB104 100 nF 50 V | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | **Basic** | 12,618,106 | VDD HF decouple, gate–source soft-start. The C1711 → C14663 swap recommended on the [Board P page](./board-p.mdx) was applied at KiCad capture — one Extended line removed, reel shared with Board L |
 | C30, C34 | 2 | CL10A105KB8NNNC 1 µF 50 V | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | **Basic** | 5,979,916 | VREG decoupling |
-| R11 | 1 | 100 kΩ ±1% | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | **Basic** | 7,990,119 | Gate pull-up (default OFF) |
+| R11 | 1 | 100 kΩ ±1% | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | **Basic** | 7,990,119 | Gate pull-up (default OFF); shares Board L's R26 reel |
 | R12 | 1 | 150 kΩ ±1% | [C22807](https://jlcpcb.com/partdetail/C22807) | 0603 | **Basic** | 414,154 | Gate series — re-ratioed from 56 kΩ by the design review to keep V_GS inside ±12 V at a 20 V mis-contract |
 | R13, R14 | 2 | 470 Ω ±1% | [C23179](https://jlcpcb.com/partdetail/C23179) | 0603 | **Basic** | 1,899,614 | DISCH + pin-18 series |
 | R15, R16 | 2 | 4.7 kΩ ±1% | [C23162](https://jlcpcb.com/partdetail/C23162) | 0603 | **Basic** | 7,433,362 | I2C pull-ups |
@@ -58,7 +58,8 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | L2 | 1 | FNR4030S4R7MT 4.7 µH | [C167874](https://jlcpcb.com/partdetail/C167874) | SMD 4x4 mm | Extended | 252,195 | Logic buck inductor, shielded, 78 mΩ |
 | RS1 | 1 | RLP25FEER200 200 mΩ ±1% 2 W | [C459674](https://jlcpcb.com/partdetail/C459674) | 2512 | Extended | **20,654** | High-side sense → 500 mA |
 | R30–R37 | 8 | 33 Ω ±1% 1 W | [C2934070](https://jlcpcb.com/partdetail/C2934070) | 2512 | Extended | 85,468 | Per-string ballast — upsized from a 250 mW 1206 by the design review (the 1206 exceeded its rating at the worst-case 90 mA string) |
-| R20, R22–R26 | 6 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | CTRL filter series, encoder/PDOK/ATT pull-ups, NTC divider |
+| R20, R22–R25 | 5 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | CTRL filter series, encoder/PDOK/ATT pull-ups |
+| R26 | 1 | 100 kΩ ±1% | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | **Basic** | 7,990,119 | NTC divider top — moved off the 10 kΩ line by the design review; the outgoing 10 kΩ divider exceeded the NTC's 0.1 mA maximum operating current by 68%. Shares Board P's R11 reel |
 | R27, R28 | 2 | 100 Ω ±1% | [C22775](https://jlcpcb.com/partdetail/C22775) | 0603 | **Basic** | 7,325,193 | Encoder phase series — limits C22/C23 discharge through the EC11 contacts. Added by the design review |
 | R21 | 1 | 33 kΩ ±1% | [C4216](https://jlcpcb.com/partdetail/C4216) | 0603 | **Basic** | 696,981 | CTRL pull-down + divider (default-OFF) |
 | C10, C11, C12, C14 | 4 | CL31A106KBHNNNE 10 µF 50 V | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | **Basic** | 1,877,266 | Input bulk + both buck input caps |
@@ -68,7 +69,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | RT1 | 1 | NCP18XH103F03RB 10 kΩ B=3380 K | [C13564](https://jlcpcb.com/partdetail/C13564) | 0603 | Extended | 398,625 | NTC, placed inside the LED array |
 | F1 | 1 | BSMD1206-075-30V | [C976305](https://jlcpcb.com/partdetail/C976305) | 1206 | Extended | 73,979 | PPTC, 750 mA hold / 1.5 A trip / 30 V |
 | J2 | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Board P interface (mirrors JOUT) |
-| SW1 | 1 | EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | THT, panel bushing | Extended | **4,566** | Rotary encoder, 15 detents |
+| SW1 | 1 | EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | THT, panel bushing | Extended | **4,566** | Rotary encoder; detent/pulse count unresolved, see #32 |
 | LED1–LED24 | 24 | HL-AM-2835H421W-S1-08-HR3 (2800–3100 K) | [C210315](https://jlcpcb.com/partdetail/C210315) | SMD2835-2P | Extended | 399,813 | 3000 K, CRI 80, 29 lm typ @ 60 mA |
 
 **Footprint only — not in the assembly BOM:**
@@ -99,8 +100,8 @@ separate PCBA jobs, which they must be.
 
 | | Board P | Board L |
 |---|---|---|
-| Unique fitted part numbers | 14 | 21 |
-| of which **Basic** | 9 | 7 |
+| Unique fitted part numbers | 14 | 22 |
+| of which **Basic** | 9 | 8 |
 | of which **Preferred** | 0 | 1 |
 | of which **Extended** | **5** | **13** |
 

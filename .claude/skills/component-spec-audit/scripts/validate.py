@@ -23,6 +23,7 @@ TEMPLATE = AUDIT / "assets/component-skill-template"
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 ID = re.compile(r"^[a-z][a-z0-9-]*$")
 LOCATOR_DETAIL = re.compile(r"(section|table|figure|row|pin|title block|calculated)", re.I)
+OPEN_UNAVAILABLE_CLAIM = re.compile(r"unavailable|lower-authority|UNSOURCED", re.I)
 ZERO_SHA256 = "0" * 64
 HTTP_TIMEOUT_SECONDS = 20
 HTTP_HEADERS = {
@@ -528,6 +529,12 @@ def validate_pass_trust(facts, sources):
                 require(fact["provenance"] == "PRIMARY-SPEC" and source["availability"] == "AVAILABLE" and source["authority_class"] == "MANUFACTURER_PRIMARY", f"{fact['fact_id']}: deterministic BLOCKER requires available manufacturer-primary evidence")
 
 
+def fact_blocks_domain(fact_id, facts_by_id, sources_by_id):
+    # contract.md: a NOT APPLICABLE fact does not address the domain, so it never blocks.
+    fact = facts_by_id[fact_id]
+    return fact["verdict"] in ("UNSOURCED", "NEEDS BENCH") or sources_by_id[fact["source_id"]]["availability"] == "SOURCE UNAVAILABLE"
+
+
 def fact_evidence_available(fact_id, facts_by_id, sources_by_id, trail=None):
     trail = trail or set()
     require(fact_id not in trail, f"{fact_id}: evidence dependency cycle")
@@ -635,9 +642,18 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
         require(isinstance(item["fact_ids"], list) and len(item["fact_ids"]) == len(set(item["fact_ids"])), f"{item['coverage_id']}: fact_ids must be a unique list")
         require(set(item["fact_ids"]) <= set(facts_by_id), f"{item['coverage_id']}: unknown coverage fact ID")
         require(all(facts_by_id[fact_id]["record_id"] == item["record_id"] for fact_id in item["fact_ids"]), f"{item['coverage_id']}: coverage fact belongs to another record")
+        require(isinstance(item["blocking_fact_ids"], list) and len(item["blocking_fact_ids"]) == len(set(item["blocking_fact_ids"])), f"{item['coverage_id']}: blocking_fact_ids must be a unique list")
+        require(set(item["blocking_fact_ids"]) <= set(item["fact_ids"]), f"{item['coverage_id']}: blocking_fact_ids must be a subset of fact_ids")
         if item["status"] == "COVERED":
             require(item["fact_ids"], f"{item['coverage_id']}: COVERED domain requires explicit fact IDs")
             require(all(fact_evidence_available(fact_id, facts_by_id, sources_by_id) for fact_id in item["fact_ids"]), f"{item['coverage_id']}: COVERED domain depends on unavailable or UNSOURCED evidence")
+        if item["status"] == "OPEN":
+            for fact_id in item["blocking_fact_ids"]:
+                require(fact_blocks_domain(fact_id, facts_by_id, sources_by_id), f"{item['coverage_id']}: blocking fact {fact_id} does not carry a blocking verdict")
+            unnamed = [fact_id for fact_id in item["fact_ids"] if fact_blocks_domain(fact_id, facts_by_id, sources_by_id)]
+            require(item["blocking_fact_ids"] or not unnamed, f"{item['coverage_id']}: OPEN entry cites blocking-verdict facts {sorted(unnamed)} but blocking_fact_ids is empty")
+            if OPEN_UNAVAILABLE_CLAIM.search(item["reason"]):
+                require(item["blocking_fact_ids"], f"{item['coverage_id']}: OPEN reason claims unavailable/lower-authority/UNSOURCED evidence but blocking_fact_ids is empty")
     for interaction in interactions:
         required_keys(interaction, schema["interaction_required"], "interaction")
         require(interaction["verdict"] in schema["verdicts"] and interaction["verdict"] != "CONFIRMED - distributor identity only", f"{interaction['interaction_id']}: verdict")
