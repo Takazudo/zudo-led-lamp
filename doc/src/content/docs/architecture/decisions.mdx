@@ -93,12 +93,15 @@ The [driver research](/docs/research/driver-ics/#rail-constraint-a-conditioned-t
 screened each candidate against the SMAJ20A's **32.4 V** table point. That point is
 specified only at 12.3 A, a 10/1000 µs pulse, and 25 °C; it is a conservative
 selection reference, not a prediction or universal ceiling for the installed rail.
-The [ratings matrix](/docs/power/ratings-matrix/) keeps the actual waveform open.
+The [ratings matrix](/docs/power/ratings-matrix/) keeps the actual waveform open, and the
+same screening point is published canonically as
+[`fact-high-diode-smaj20a-clamp`](/docs/components/records/high-diode-smaj20a/#fact-high-diode-smaj20a-clamp)
+with its exact conditions attached.
 
 | Candidate | VIN operating | VIN absolute max | Against the conditioned 32.4 V screening point |
 |---|---|---|---|
 | PT4115 | 6–30 V | not confirmable from a primary datasheet in the research pass | Does not cover the screening point; no confirmed absolute-max fallback |
-| **AL8860** | 4.5–**40 V** | **42 V** (DS39014 Rev 5) | Covers the screening point by 7.6 V operating / 9.6 V absolute |
+| **AL8860** | 4.5–**40 V** ([`fact-al8860-vin-recommended-max`](/docs/components/records/al8860mp-13/#fact-al8860-vin-recommended-max)) | **42 V** (DS39014 Rev 5, [`fact-al8860-vin-absolute-max`](/docs/components/records/al8860mp-13/#fact-al8860-vin-absolute-max)) | Covers the screening point by 7.6 V operating / 9.6 V absolute |
 | TPS92511 | 4.5–65 V | — | Covers the screening point with the widest margin |
 
 PT4115 is rejected by this conservative screening rule, not because 32.4 V has been
@@ -112,16 +115,22 @@ pass could not confirm its IADJ formula or its full passive count from a primary
 datasheet, so it is not schematic-ready. The AL8860 is characterised end to end.
 
 The AL8860 also brought the decisive control-side property nobody was looking for: a
-CTRL pin with a **guaranteed 5–100% analog dimming range**, which is what made
+CTRL pin with a **guaranteed 5–100% analog dimming range**
+([`fact-al8860-ctrl`](/docs/components/records/al8860mp-13/#fact-al8860-ctrl)), which is what made
 flicker-free dimming possible (see below).
+
+The cross-component behaviour of the whole driver stage — the sense resistor, inductor,
+catch diode, ballast and LED envelope together — is published as
+[`rule-al8860-led-stage`](/docs/components/integration/#rule-al8860-led-stage), including the exact statement of
+what it refuses to promote to a PASS.
 
 ## Driver passive set
 
 | Slot | Chosen | Reasoning |
 |---|---|---|
-| Sense resistor RS1 | 200 mΩ 2512 ([C459674](https://jlcpcb.com/partdetail/C459674)) | `I = 0.1/Rs` → exactly 500 mA. 50 mW on a 2 W part |
-| Inductor L1 | 33 µH ([C177245](https://jlcpcb.com/partdetail/C177245)) | ~440 kHz switching, 1.69 µs on-time (above the 500 ns minimum), 2.5 A saturation against 0.6 A peak |
-| Catch diode D11 | SS26 60 V ([C7420363](https://jlcpcb.com/partdetail/C7420363)) | Rejected SS24 (40 V) — it leaves zero margin against the AL8860's own 40 V input ceiling for a negligible price difference, exactly as the [driver research](/docs/research/driver-ics/) argued |
+| Sense resistor RS1 | 200 mΩ 2512 ([C459674](https://jlcpcb.com/partdetail/C459674), [record](/docs/components/records/rlp25feer200/)) | `I = 0.1/Rs` → exactly 500 mA. 50 mW on a 2 W part |
+| Inductor L1 | 33 µH ([C177245](https://jlcpcb.com/partdetail/C177245), [record](/docs/components/records/fxl0630-330-m/)) | ~440 kHz switching, 1.69 µs on-time (above the 500 ns minimum), 2.5 A saturation against 0.6 A peak |
+| Catch diode D11 | SS26 60 V ([C7420363](https://jlcpcb.com/partdetail/C7420363), [record](/docs/components/records/ro-ss26/)) | Rejected SS24 (40 V) — it leaves zero margin against the AL8860's own 40 V input ceiling for a negligible price difference, exactly as the [driver research](/docs/research/driver-ics/) argued |
 | Input caps | 10 µF 1206 + 100 nF 0603 | Datasheet asks 10 µF or higher X7R; see the [X5R deviation note](./bom.mdx#extended-part-fee-economics) |
 
 ## Logic rail
@@ -337,7 +346,9 @@ a Board L fault — a shorted LED string, a failed driver — can pull 45 W thro
 harness before anything intervenes. A 750 mA hold bounds that at under 2x the normal
 draw.
 
-**Conditioned open point:** the PPTC's 30 V rating is **1.4 V below** the SMAJ20A's
+**Conditioned open point:** the PPTC's 30 V rating
+([`fact-bhfuse-voltage-max`](/docs/components/records/bsmd1206-075-30v/#fact-bhfuse-voltage-max)) is
+**1.4 V below** the SMAJ20A's
 32.4 V table value at 12.3 A, 10/1000 µs, and 25 °C. That subtraction is a useful
 screening lead, not an installed-waveform result or an accepted over-rating. Actual
 source impedance, clamp current, duration, parasitics, and fuse stress remain part of
@@ -347,14 +358,17 @@ the issue #34 simulation and bench gate.
 
 | Risk | Evidence status | Where |
 |---|---|---|
-| U1 STUSB4500 VDD, conditioned 4.4 V over its mirror-stated absolute maximum at the D5 table point | **UNSOURCED / waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/) |
-| Q1 exact UMW (Youtai Semiconductor) AO3401A VDS, conditioned 2.4 V magnitude over absolute maximum at that table point | **Waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/) |
-| F1 PPTC, conditioned 1.4 V over its 30 V rating at that table point | **Waveform and pulse stress OPEN**, not accepted | this page, above |
+| U1 STUSB4500 VDD, conditioned 4.4 V over its mirror-stated absolute maximum at the D5 table point | **UNSOURCED / waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/), [`calc-stusb-vdd-clamp-overage`](/docs/components/integration/#calc-stusb-vdd-clamp-overage) |
+| Q1 exact UMW (Youtai Semiconductor) AO3401A VDS, conditioned 2.4 V magnitude over absolute maximum at that table point | **Waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/), [`calc-q1-vds-clamp-overage`](/docs/components/integration/#calc-q1-vds-clamp-overage) |
+| F1 PPTC, conditioned 1.4 V over its 30 V rating at that table point | **Waveform and pulse stress OPEN**, not accepted | this page, above; [`rule-rail-envelope`](/docs/components/integration/#rule-rail-envelope) |
 | Duty cycle 81% at the LED bin's Vf maximum, above the AL8860's 25–75% recommended DSW band (guaranteed by design, now primary-confirmed) | steady state, bounded — 98% DSW(MAX) is the hard maximum | [Board L](./board-l.mdx#al8860-constant-current-driver) |
-| Even at zero Vf spread, the LED stage's datasheet worst-case peak current sits at 89.1% of the LED's absolute-maximum forward current — 98.0% at the locked 0.30 V acceptance limit | steady state, datasheet-bounded but bench-unverified (the composed peak carries a `NEEDS BENCH` verdict); residual driver-side headroom raised as [#52](https://github.com/Takazudo/zudo-led-lamp/issues/52) | [Board L](./board-l.mdx#led-array-and-the-brightness-number-ballast-and-current-sharing) |
+| Even at zero Vf spread, the LED stage's datasheet worst-case peak current sits at 89.1% of the LED's absolute-maximum forward current — 98.0% at the locked 0.30 V acceptance limit | steady state, datasheet-bounded but bench-unverified (the composed peak carries a `NEEDS BENCH` verdict); residual driver-side headroom raised as [#52](https://github.com/Takazudo/zudo-led-lamp/issues/52) | [Board L](./board-l.mdx#led-array-and-the-brightness-number-ballast-and-current-sharing), [`calc-led-hot-branch-headroom`](/docs/components/integration/#calc-led-hot-branch-headroom) |
 | ~~R21's ability to hold CTRL low is not datasheet-provable~~ **Resolved: yes** — the soft-start spec bounds CTRL bias current at ≤1.67 µA, ≤55 mV into 33 kΩ, 3.6x below the 0.2 V off threshold | Gate 3 (probe TP1) kept as confirmation only | [Board L](./board-l.mdx#mcu-knob-and-dimming-path-safe-default-off) |
 | The whole Board P topology has never run on hardware | as-built and bench evidence OPEN | [input-protection evidence gate](https://github.com/Takazudo/zudo-led-lamp/issues/34) |
 
-These first three rows are conditioned arithmetic, not permission to energize or call
-either protected input chain PASS. The current no-PD gate is tracked in
+Each of those conditioned figures is published as a calculation on the
+[integration page](/docs/components/integration/), with the expression, every input fact, and the conditions under
+which the number means anything — so the arithmetic can be recomputed rather than
+trusted. These first three rows are conditioned arithmetic, not permission to energize or
+call either protected input chain PASS. The current no-PD gate is tracked in
 [issue #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).

@@ -8,6 +8,13 @@ This is the **final** BOM, not a candidate list. Every C-number below was re-ver
 individually against the local JLCPCB parts database (snapshot dated **2026-07-25**;
 per-part data-fetch dates within the snapshot range from 2026-05-23 to 2026-07-03).
 
+Every fitted line below also has a canonical component record — the exact orderable
+identity, every board placement, the sources behind it and which coverage domains are
+still open. Browse them in the [component catalog](/docs/components/catalog/); the
+cross-component rules that span several of these parts at once are on the
+[integration page](/docs/components/integration/). This page keeps the ordering,
+tier and cost reasoning, which lives nowhere else.
+
 :::warning[Stock is a point-in-time read]
 Stock figures are from the snapshot, not a guarantee. Re-check every line immediately
 before ordering — and pay particular attention to the four lines flagged below with
@@ -86,10 +93,10 @@ they are the specialty parts — but each needs a re-check before ordering.
 
 | Part | Stock | Risk and fallback |
 |---|---|---|
-| D5 / D10 SMAJ20A ([C571370](https://jlcpcb.com/partdetail/C571370)) | **3,770**, and **two boards need it** | Lowest-stock line in the whole design. Do not make a same-name or different-standoff substitution: exact vendor identity, conditioned clamp table, pad orientation, and both rail waveforms must be re-audited in the [ratings analysis](/docs/power/ratings-matrix/) |
-| U2 AL8860MP-13 ([C500782](https://jlcpcb.com/partdetail/C500782)) | **4,000** | Fine for a prototype run. `AL8860WT-7` (TSOT-25) is pin-compatible in function but showed 0 stock and is limited to 1 A — it would still cover this design's 500 mA if the MSOP part disappears |
-| SW1 EC11L1525G01 ([C2991196](https://jlcpcb.com/partdetail/C2991196)) | **4,566** | The [knob research](/docs/research/control-knob/) found two other EC11 SKUs in the 4,600–5,500 range ([C370970](https://jlcpcb.com/partdetail/C370970), [C470748](https://jlcpcb.com/partdetail/C470748)); any of them substitutes, at a higher unit price. Verify the pinout of whichever is fitted — EC11 terminal order is not universal across SKUs |
-| RS1 RLP25FEER200 ([C459674](https://jlcpcb.com/partdetail/C459674)) | **20,654** | Any 200 mΩ ±1% 2512 sense resistor rated 1 W or better substitutes directly; the value, not the manufacturer, is what sets 500 mA |
+| D5 / D10 SMAJ20A ([C571370](https://jlcpcb.com/partdetail/C571370)) | **3,770**, and **two boards need it** | Lowest-stock line in the whole design. Do not make a same-name or different-standoff substitution: exact vendor identity, conditioned clamp table, pad orientation, and both rail waveforms must be re-audited in the [ratings analysis](/docs/power/ratings-matrix/) and against the canonical record ([`rec-high-diode-smaj20a`](/docs/components/records/high-diode-smaj20a/)) |
+| U2 AL8860MP-13 ([C500782](https://jlcpcb.com/partdetail/C500782)) — canonical record [`rec-al8860mp-13`](/docs/components/records/al8860mp-13/) | **4,000** | Fine for a prototype run. `AL8860WT-7` (TSOT-25) is pin-compatible in function but showed 0 stock and is limited to 1 A — it would still cover this design's 500 mA if the MSOP part disappears |
+| SW1 EC11L1525G01 ([C2991196](https://jlcpcb.com/partdetail/C2991196)) — canonical record [`rec-c2991196`](/docs/components/records/c2991196/) | **4,566** | The [knob research](/docs/research/control-knob/) found two other EC11 SKUs in the 4,600–5,500 range ([C370970](https://jlcpcb.com/partdetail/C370970), [C470748](https://jlcpcb.com/partdetail/C470748)); any of them substitutes, at a higher unit price. Verify the pinout of whichever is fitted — EC11 terminal order is not universal across SKUs |
+| RS1 RLP25FEER200 ([C459674](https://jlcpcb.com/partdetail/C459674)) | **20,654** | Any 200 mΩ ±1% 2512 sense resistor rated 1 W or better substitutes directly; the value, not the manufacturer, is what sets 500 mA — see [`fact-rlp25-resistance`](/docs/components/records/rlp25feer200/#fact-rlp25-resistance) |
 
 ## Extended-part fee economics
 

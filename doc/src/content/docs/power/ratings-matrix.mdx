@@ -14,6 +14,15 @@ state and cannot establish primary-source closure:
    VC max at IPP 12.3 A for a 10/1000 µs waveform at 25 °C. It is not a universal rail
    ceiling; source impedance, waveform, layout and as-built behavior still require proof.
 
+Every limit cited below is also held as a stored fact, with its exact value, unit,
+conditions, provenance and verdict, in the [component reference](/docs/components/). The
+evidence column links each row to the canonical fact rather than repeating it, so the
+number here and the number there can never drift apart. The cross-component question this
+whole page asks — whether the input rail stays inside every part's own limit across a
+legal contract, a mis-contract and a clamp event — is published as
+[`rule-rail-envelope`](/docs/components/integration/#rule-rail-envelope), together with
+the exact wording of what it refuses to conclude.
+
 ## The C456012 discrepancy — resolved
 
 zudo-pd's own USB-C connector page describes its `C456012` receptacle as "**Voltage
@@ -74,16 +83,16 @@ the usual LCSC stock caveat.
 
 | Part | Rated limit (cited evidence) | vs 15 V nominal | vs conditioned 32.4 V point | Verdict |
 |------|-------------------------------|------------------|------------------------------|---------|
-| U1 STUSB4500QTR — VDD pin | Manufacturer-authored DS12499 Rev 8 mirror states 28 V absolute max and 4.1–22 V operating range; mirror evidence remains `UNSOURCED` under the primary-only trust policy | Conditioned arithmetic is below the stated operating ceiling, but trust closure is OPEN | The 32.4 V conditioned D5 table point would exceed the stated 28 V absolute maximum; the actual waveform is unresolved | **EVIDENCE BLOCKER (UNSOURCED)** — require primary evidence plus simulation and measured VDD waveform |
-| U1 STUSB4500QTR — CC1/CC2/CC1DB/CC2DB pins | Manufacturer-authored Rev 8 mirror states 22 V short-to-VBUS protection; primary trust remains OPEN | Conditioned only | Generator topology does not place CC pins directly on `VBUS_IN`, but as-built continuity is unverified | OPEN |
-| Q1 UMW AO3401A, exact C347476 | VDS absolute max **−30 V**, VGS absolute max **±12 V** (UMW manufacturer specification); this exact orderable must not be attributed to AOS | Ideal steady VBEN-low divider gives VGS = `−15×100k/(100k+150k)` = **−6.0 V** (and −8.0 V at a 20 V mis-contract) | A static 32.4 V divider calculation gives −12.96 V, but C35 is gate-to-source and the nominal `(100k∥150k)×100nF` time constant is about 6 ms; actual VDS/VGS depends on waveform, duration, device and parasitics | **OPEN transient risk** — do not call the clamp event a deterministic violation or PASS without measured gate/source/drain waveforms and as-built confirmation |
-| D5/D10 exact C571370 High Diode SMAJ20A | Primary PDF confirms band=cathode, VRWM 20 V, VBR 22.2–24.5 V @ 1 mA, VC max 32.4 V @ IPP 12.3 A for 10/1000 µs at 25 °C | Conditioned primary rating is compatible with 15 V nominal | Simulation/as-built D5 and D10 pad orientation, source impedance and actual waveform remain OPEN | **EVIDENCE BLOCKER** — primary ratings are closed; numeric pad mapping, both-rail simulation and measured waveforms are not |
-| J1 receptacle (exact C283540 TYPE-C-31-M-17) | Primary Rev A drawing confirms 5 A, 20 V, 100 VAC/min, 10,000 cycles and −30…+80 °C; stable distributor mirror binds C283540 | Conditioned rating has margin at 15 V / 0.41 A | Numeric project pin/shell mapping, incoming orientation and continuity remain OPEN | **EVIDENCE BLOCKER** — do not energize for PD until incoming-part mapping/continuity is verified |
-| JOUT — JST B6B-XH-A(LF)(SN) | 250 V, 3 A/contact (JLCPCB catalog, C144397) | Pass, wide margin | Pass, wide margin | Pass |
-| C1 (10 µF, C13585) | 50 V X5R (JLCPCB catalog) | Pass | Pass | Pass |
-| C2, C35 (100 nF, exact C14663 CC0603KRX7R9BB104) | 50 V X7R (manufacturer specification) | Pass | Pass | Pass |
-| C30, C34 (1 µF, C15849) | 50 V X5R (JLCPCB catalog) — note: exceeds the 16 V figure in zudo-pd's own component notes, which was a legacy value, not this verified part's actual rating | Pass | Pass | Pass |
-| R11–R16, R19, R20 (chip resistors) | 75 V (JLCPCB catalog, 0603 thick-film series) | Pass | Pass | Pass |
+| U1 STUSB4500QTR — VDD pin | Manufacturer-authored DS12499 Rev 8 mirror states 28 V absolute max and 4.1–22 V operating range; mirror evidence remains `UNSOURCED` under the primary-only trust policy. Canonical: [`fact-stusb-vdd-absolute-max`](/docs/components/records/stusb4500qtr/#fact-stusb-vdd-absolute-max), [`fact-stusb-supplies`](/docs/components/records/stusb4500qtr/#fact-stusb-supplies) | Conditioned arithmetic is below the stated operating ceiling, but trust closure is OPEN | The 32.4 V conditioned D5 table point would exceed the stated 28 V absolute maximum; the actual waveform is unresolved | **EVIDENCE BLOCKER (UNSOURCED)** — require primary evidence plus simulation and measured VDD waveform |
+| U1 STUSB4500QTR — CC1/CC2/CC1DB/CC2DB pins | Manufacturer-authored Rev 8 mirror states 22 V short-to-VBUS protection; primary trust remains OPEN. Canonical: [`fact-stusb-cc-absolute-max`](/docs/components/records/stusb4500qtr/#fact-stusb-cc-absolute-max) | Conditioned only | Generator topology does not place CC pins directly on `VBUS_IN`, but as-built continuity is unverified | OPEN |
+| Q1 UMW AO3401A, exact C347476 | VDS absolute max **−30 V**, VGS absolute max **±12 V** (UMW manufacturer specification); this exact orderable must not be attributed to AOS. Canonical: [`fact-umw-ao3401a-vds`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vds), [`fact-umw-ao3401a-vgs`](/docs/components/records/umw-ao3401a/#fact-umw-ao3401a-vgs) | Ideal steady VBEN-low divider gives VGS = `−15×100k/(100k+150k)` = **−6.0 V** (and −8.0 V at a 20 V mis-contract) | A static 32.4 V divider calculation gives −12.96 V, but C35 is gate-to-source and the nominal `(100k∥150k)×100nF` time constant is about 6 ms; actual VDS/VGS depends on waveform, duration, device and parasitics | **OPEN transient risk** — do not call the clamp event a deterministic violation or PASS without measured gate/source/drain waveforms and as-built confirmation |
+| D5/D10 exact C571370 High Diode SMAJ20A | Primary PDF confirms band=cathode, VRWM 20 V, VBR 22.2–24.5 V @ 1 mA, VC max 32.4 V @ IPP 12.3 A for 10/1000 µs at 25 °C. Canonical: [`fact-high-diode-smaj20a-standoff`](/docs/components/records/high-diode-smaj20a/#fact-high-diode-smaj20a-standoff), [`fact-high-diode-smaj20a-breakdown`](/docs/components/records/high-diode-smaj20a/#fact-high-diode-smaj20a-breakdown), [`fact-high-diode-smaj20a-clamp`](/docs/components/records/high-diode-smaj20a/#fact-high-diode-smaj20a-clamp) | Conditioned primary rating is compatible with 15 V nominal | Simulation/as-built D5 and D10 pad orientation, source impedance and actual waveform remain OPEN | **EVIDENCE BLOCKER** — primary ratings are closed; numeric pad mapping, both-rail simulation and measured waveforms are not |
+| J1 receptacle (exact C283540 TYPE-C-31-M-17) | Primary Rev A drawing confirms 5 A, 20 V, 100 VAC/min, 10,000 cycles and −30…+80 °C; stable distributor mirror binds C283540. Canonical: [`fact-type-c-31-m-17-ratings`](/docs/components/records/type-c-31-m-17/#fact-type-c-31-m-17-ratings), [`fact-type-c-31-m-17-current`](/docs/components/records/type-c-31-m-17/#fact-type-c-31-m-17-current) | Conditioned rating has margin at 15 V / 0.41 A | Numeric project pin/shell mapping, incoming orientation and continuity remain OPEN | **EVIDENCE BLOCKER** — do not energize for PD until incoming-part mapping/continuity is verified |
+| JOUT — JST B6B-XH-A(LF)(SN) | 250 V, 3 A/contact (JLCPCB catalog, C144397). Canonical: [`fact-jst-b6b-xh-a-voltage`](/docs/components/records/jst-b6b-xh-a/#fact-jst-b6b-xh-a-voltage), [`fact-jst-b6b-xh-a-current`](/docs/components/records/jst-b6b-xh-a/#fact-jst-b6b-xh-a-current) | Pass, wide margin | Pass, wide margin | Pass |
+| C1 (10 µF, C13585) | 50 V X5R (JLCPCB catalog). Canonical: [`fact-c13585-voltage`](/docs/components/records/c13585/#fact-c13585-voltage) | Pass | Pass | Pass |
+| C2, C35 (100 nF, exact C14663 CC0603KRX7R9BB104) | 50 V X7R (manufacturer specification). Canonical: [`fact-c14663-voltage`](/docs/components/records/c14663/#fact-c14663-voltage) | Pass | Pass | Pass |
+| C30, C34 (1 µF, C15849) | 50 V X5R (JLCPCB catalog) — note: exceeds the 16 V figure in zudo-pd's own component notes, which was a legacy value, not this verified part's actual rating. Canonical: [`fact-c15849-voltage`](/docs/components/records/c15849/#fact-c15849-voltage) | Pass | Pass | Pass |
+| R11–R16, R19, R20 (chip resistors) | 75 V (JLCPCB catalog, 0603 thick-film series). Canonical: [`fact-c25803-voltage`](/docs/components/records/c25803/#fact-c25803-voltage), [`fact-c22807-voltage`](/docs/components/records/c22807/#fact-c22807-voltage) | Pass | Pass | Pass |
 | R17, R18 (DNP, C23186) | 75 V | N/A — never populated on a powered build | N/A | Pass (DNP) |
 | D6, D7 (DNP, C85382 PESD24VS1UB) | VRWM 24 V per Nexperia part family (matches zudo-pd's board-split-decision citation) | N/A — enclosed/production-build option only, never fitted on the bring-up build | N/A | Not evaluated against worst-case — optional provision only |
 
@@ -96,6 +105,15 @@ during a clamp event depends on the real waveform and gate/source dynamics. Nomi
 arithmetic is useful for planning, but it is not a fitted-chain PASS. Primary exact-part
 evidence, simulation, incoming/as-built continuity checks, and bench waveforms are required.
 Track that safety gate in [input-protection evidence blocker #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).
+
+The two conditioned overages named above are published as calculations, each with the
+exact conditions under which its number means anything:
+[`calc-stusb-vdd-clamp-overage`](/docs/components/integration/#calc-stusb-vdd-clamp-overage)
+and
+[`calc-q1-vds-clamp-overage`](/docs/components/integration/#calc-q1-vds-clamp-overage).
+Neither is a waveform measurement, and
+[`rule-rail-envelope`](/docs/components/integration/#rule-rail-envelope) says so in its
+own words.
 
 :::note
 The retained Rev 8 mirror distinguishes the 22 V operating ceiling from the 28 V
@@ -117,3 +135,11 @@ contact mapping, orientation, or incoming continuity.
   passives, the D5/D6/D7 TVS/ESD parts, and the JOUT connector.
 - [Board P — USB-PD Front End](./board-p-front-end.mdx) for the full component list
   and net table.
+- The canonical component records behind every row above, each with its sources,
+  coverage domains and pin maps:
+  [STUSB4500QTR](/docs/components/records/stusb4500qtr/),
+  [AO3401A](/docs/components/records/umw-ao3401a/),
+  [SMAJ20A](/docs/components/records/high-diode-smaj20a/),
+  [TYPE-C-31-M-17](/docs/components/records/type-c-31-m-17/),
+  [B6B-XH-A(LF)(SN)](/docs/components/records/jst-b6b-xh-a/). The full set is in the
+  [catalog](/docs/components/catalog/).
