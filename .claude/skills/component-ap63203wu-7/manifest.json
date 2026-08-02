@@ -64,7 +64,8 @@
       "package": "IND-SMD_L4.0-W4.0_FNR40XXS",
       "source_ids": [
         "src-fnr-series-mirror",
-        "src-fnr-generator"
+        "src-fnr-generator",
+        "src-fnr-series-official"
       ],
       "fact_ids": [
         "fact-fnr-manufacturer",
@@ -87,7 +88,6 @@
         "int-ap63203-power-stage"
       ],
       "open_domains": [
-        "inductance-dcr-srf-current-package",
         "project-load-and-temperature"
       ]
     },

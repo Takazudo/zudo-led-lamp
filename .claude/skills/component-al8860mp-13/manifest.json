@@ -34,7 +34,8 @@
         "fact-al8860-inductance-max",
         "fact-al8860-faults",
         "fact-al8860-layout",
-        "fact-al8860-project-nets"
+        "fact-al8860-project-nets",
+        "fact-al8860-duty-band"
       ],
       "interaction_ids": [
         "int-al8860-control",
@@ -90,7 +91,8 @@
       "package": "IND-SMD_L7.0-W6.6_FXL0630",
       "source_ids": [
         "src-fxl-series-mirror",
-        "src-fxl-generator"
+        "src-fxl-generator",
+        "src-fxl-series-official"
       ],
       "fact_ids": [
         "fact-fxl-manufacturer",
@@ -127,7 +129,8 @@
       "package": "SMA_L4.3-W2.6-LS5.0-FD",
       "source_ids": [
         "src-ro-ss26-mirror",
-        "src-ss26-generator"
+        "src-ss26-generator",
+        "src-ss26-primary-attempt"
       ],
       "fact_ids": [
         "fact-ss26-manufacturer",
