@@ -198,6 +198,12 @@ export function validateVrml(contents: string, recordId: string, modelName: stri
   if (!/^\s*#VRML V2\.0 utf8/mu.test(contents)) {
     fail("ADAPTER_CONTRACT", "model is not supported VRML 2.0", { recordId, model: modelName });
   }
+  if (/\.\.[/\\]/u.test(withoutComments)) {
+    fail("PATH_CONTAINMENT", "model contains a traversal sequence", {
+      recordId,
+      model: modelName,
+    });
+  }
   if (/(?:https?:|file:|javascript:|data:)|\burl\s|\b(?:Inline|Script|EXTERNPROTO|PROTO|ImageTexture|MovieTexture|AudioClip|Anchor|WWWInline|LoadSensor|ROUTE|IMPORT|EXPORT|USE|IS)\b/iu.test(withoutComments)) {
     fail("PUBLICATION_POLICY", "model contains a resource-loading or executable VRML construct", {
       recordId,

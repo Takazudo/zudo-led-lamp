@@ -38,6 +38,7 @@
 import {
   bulletList,
   code,
+  component,
   containerComponent,
   evidenceAnchor,
   heading,
@@ -53,6 +54,7 @@ import {
   text,
   type TableRow,
 } from "../mdx.ts";
+import { encodeModelDescriptor, MODEL_ASSET_BASE } from "../model-descriptor.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
 import { joinSafe, literal, safeText, type SafeText } from "../text.ts";
 import {
@@ -109,6 +111,7 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
     ...orientation(record),
     ...subordinateSection(record),
     ...identitySection(record),
+    ...packageModelSection(record),
     ...placementSection(record),
     ...coverageSection(record, index),
     ...factsSection(record, index),
@@ -151,6 +154,25 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
     },
     body,
   );
+}
+
+function packageModelSection(record: PublicRecord): RootContent[] {
+  const footprint = record.reference.footprint;
+  const modelName = String(footprint.modelPath).split("/").at(-1);
+  if (modelName === undefined) throw new Error("Published model path has no basename");
+  const descriptor = encodeModelDescriptor({
+    version: 1,
+    packageId: footprint.packageId,
+    packageLabel: footprint.footprintName,
+    modelUrl: `${MODEL_ASSET_BASE}${modelName}`,
+    offset: footprint.offset,
+    rotation: footprint.rotation,
+    scale: footprint.scale,
+  });
+  return [
+    heading(2, literal("Package model")),
+    component("PackageModelViewer", { descriptor }),
+  ];
 }
 
 function orientation(record: PublicRecord): RootContent[] {

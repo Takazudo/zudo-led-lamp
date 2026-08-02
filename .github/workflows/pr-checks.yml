@@ -44,6 +44,8 @@ on:
       - "footprints/**/*.kicad_mod"
       - "CLAUDE.md"
       - "**/CLAUDE.md"
+      - "footprints/**/*.wrl"
+      - "footprints/**/*.step"
       - ".github/workflows/pr-checks.yml"
 
 concurrency:
@@ -113,6 +115,10 @@ jobs:
         working-directory: doc
         run: pnpm check
 
+      - name: Published package models are safe and up to date
+        working-directory: doc
+        run: pnpm check:models
+
       # The component-docs generator's own suites: publication matrix, branded
       # types, adapter joins, renderers, denied-field canaries. They run before
       # the build because a matrix regression is easier to read as a failing
@@ -145,6 +151,10 @@ jobs:
             echo "::endgroup::"
             exit "$status"
           fi
+
+      - name: Package model viewer browser smoke
+        working-directory: doc
+        run: pnpm test:model-viewer:browser
 
       # LINK INTEGRITY — the decision, because neither obvious option is right.
       #
@@ -195,8 +205,8 @@ jobs:
       #                      a stale committed copy is invisible downstream.
       - name: Generated output is committed and up to date
         run: |
-          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json
-          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json
+          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews/models
+          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews/models
 
       # The SECOND generation run, which makes this pair the two-run
       # idempotency check: `build` projected and wrote the tree, this

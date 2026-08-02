@@ -104,6 +104,10 @@ describe("preview assets fail closed", () => {
       "#VRML V2.0 utf8\nShape { url \"relative-model.wrl\" }",
       "#VRML V2.0 utf8\nROUTE A.out TO B.in",
     ]) rejects(() => validateVrml(payload, "rec-hostile", "hostile.wrl"), "PUBLICATION_POLICY");
+    rejects(
+      () => validateVrml('#VRML V2.0 utf8\nShape { name "../../private/model.wrl" }', "rec-hostile", "hostile.wrl"),
+      "PATH_CONTAINMENT",
+    );
   });
 
   it("allows harmless URLs in generator comments but not live nodes", () => {
