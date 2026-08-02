@@ -19,7 +19,7 @@ Protect the design from plausible-looking but wrong component claims. Treat the 
 
 ## Creating or updating records
 
-Copy `assets/component-skill-template/`, retain every required file, and follow [schema.json](references/schema.json). Give subordinate records independent IDs, sources, facts, locators, routing cases, and pin maps. Store normalized short evidence extracts, not vendor PDFs. Put temporary downloads only in ignored `tmp/pdfs/` and remove them after extraction.
+Copy `assets/component-skill-template/`, retain every required file, and follow `references/schema.json`. Give subordinate records independent IDs, sources, facts, locators, routing cases, and pin maps. Store normalized short evidence extracts, not vendor PDFs. Put temporary downloads only in ignored `tmp/pdfs/` and remove them after extraction.
 
 Run the validator and unit tests after edits:
 
