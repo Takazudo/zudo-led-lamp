@@ -53,6 +53,7 @@
 import { readFile } from "node:fs/promises";
 
 import { ComponentDocsError } from "../core/errors.ts";
+import { byCodeUnit } from "../core/ids.ts";
 import { PublicationPolicy } from "../core/publication.ts";
 import {
   assertNoLeaks,
@@ -351,7 +352,24 @@ function assertSitemapUnchanged(targets: readonly ScanTarget[]): void {
   }
 }
 
-/** One built HTML page per generated record, plus landing, catalog and index. */
+/**
+ * The section pages the projection emits alongside one page per record.
+ *
+ * Deliberately one explicit list rather than a count. The extra-page check below
+ * derives its expectation from `.length`, so adding a section page means editing
+ * this list only. It was previously a literal `+ 3`, which passed the
+ * missing-page check and failed the extra-page check with a bare pair of numbers
+ * the moment #63 added the integration route — a real page looked like an
+ * intruder, and the error did not say which one.
+ */
+const SECTION_PAGES: readonly string[] = [
+  "dist/docs/components/index.html",
+  "dist/docs/components/catalog/index.html",
+  "dist/docs/components/records/index.html",
+  "dist/docs/components/integration/index.html",
+];
+
+/** One built HTML page per generated record, plus the section pages. */
 function assertPageCoverage(model: PublicViewModel, targets: readonly ScanTarget[]): number {
   const pages = new Set(
     targets
@@ -360,29 +378,26 @@ function assertPageCoverage(model: PublicViewModel, targets: readonly ScanTarget
       .map((target) => target.label),
   );
 
-  const missing: string[] = [];
+  const expected = new Set<string>(SECTION_PAGES);
   for (const record of model.records) {
-    const expected = `dist/docs/components/records/${record.identity.slug}/index.html`;
-    if (!pages.has(expected)) missing.push(expected);
-  }
-  for (const expected of [
-    "dist/docs/components/index.html",
-    "dist/docs/components/catalog/index.html",
-    "dist/docs/components/records/index.html",
-  ]) {
-    if (!pages.has(expected)) missing.push(expected);
+    expected.add(`dist/docs/components/records/${record.identity.slug}/index.html`);
   }
 
+  const missing = [...expected].filter((page) => !pages.has(page)).sort(byCodeUnit);
   if (missing.length > 0) {
     throw new ComponentDocsError("PUBLICATION_POLICY", `${missing.length} generated page(s) did not build`, {
       missing: missing.slice(0, 20),
     });
   }
-  if (pages.size !== model.records.length + 3) {
+
+  // Name the intruders. "built 36, projected 35" tells whoever is reading CI
+  // that something is wrong but not what, and the answer is the whole point.
+  const unexpected = [...pages].filter((page) => !expected.has(page)).sort(byCodeUnit);
+  if (unexpected.length > 0) {
     throw new ComponentDocsError(
       "PUBLICATION_POLICY",
       "the built tree has pages the projection did not produce",
-      { built: pages.size, projected: model.records.length + 3 },
+      { built: pages.size, projected: expected.size, unexpected: unexpected.slice(0, 20) },
     );
   }
   return pages.size;

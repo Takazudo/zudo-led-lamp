@@ -37,6 +37,7 @@ import {
   FIXTURE_MATRIX,
   FIXTURE_SELECTION,
   fixtureBundle,
+  fixtureIntegrationRules,
   fixtureInventory,
 } from "./provider-fixtures.ts";
 import { GUARD_REJECTED_TEXT, HOSTILE_TEXT, fixtureModel } from "./fixtures.ts";
@@ -238,7 +239,7 @@ describe("diagnostics stay actionable without repeating the value that failed", 
             position === 0 ? { ...fact, value: true } : fact,
           ),
       }),
-    ]);
+    ], fixtureIntegrationRules());
     projectIndex(index, new PublicationPolicy(FIXTURE_MATRIX, FIXTURE_SELECTION));
   }
 
