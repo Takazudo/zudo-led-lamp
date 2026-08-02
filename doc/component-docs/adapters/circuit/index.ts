@@ -1,36 +1,60 @@
 /**
  * The circuit adapter: `.claude/skills/**` evidence to the public view model.
  *
- * V1 scope (this wave) is deliberately narrow. It reads the central inventory
- * and every owner manifest, proves the joins, asserts the selection is fresh,
- * and returns identity plus corpus counts. Facts, sources, coverage,
- * interactions and pin maps are declared in the view model and populated by
- * issue #59; integration rules by #63. Nothing about the SHAPE changes when
- * they land — only the arrays stop being empty.
+ * The joins live in `evidence.ts`; this module is the projection. It decides
+ * what a published record contains, routes every value through the publication
+ * policy, and sanitises every string and URL on the way out. Nothing here
+ * repairs, summarises or re-states evidence: a value that cannot be published
+ * as it stands fails the build.
  *
  * Ordering is inventory-line order, then parents before their subordinates.
  * The inventory is generated identity truth, so its order is already stable
  * and reviewable; deriving order from anything else (MPN, manufacturer) would
- * reshuffle pages whenever a part is renamed.
+ * reshuffle pages whenever a part is renamed. Within a record, sources and
+ * facts follow the manifest's own order — that order is curated (primary
+ * source first) and re-sorting would throw the curation away.
  */
 
 import { anchor, byCodeUnit, recordSlug, type Slug } from "../../core/ids.ts";
+import { classifyUrl, type SafeUrl } from "../../core/url.ts";
 import { fail } from "../../core/errors.ts";
-import { safeText } from "../../core/text.ts";
+import { safeText, type SafeText } from "../../core/text.ts";
 import { VIEW_MODEL_VERSION } from "../../core/view-model.ts";
 import type { ComponentDataAdapter, ProjectionContext } from "../../core/adapter.ts";
+import type { FieldKey, PublicationPolicy } from "../../core/publication.ts";
 import type {
   CorpusSummary,
+  PublicAliases,
+  PublicCoverage,
+  PublicFact,
+  PublicFactValue,
+  PublicFactValueEntry,
+  PublicInteraction,
+  PublicPinMap,
   PublicRecord,
   PublicRecordIdentity,
+  PublicSource,
   PublicViewModel,
 } from "../../core/view-model.ts";
 import { CIRCUIT_PUBLICATION_MATRIX } from "./matrix.ts";
 import { CIRCUIT_SELECTION } from "./selection.ts";
-import { BUNDLE_FILES, INTEGRATION_RULES_FILE, INVENTORY_FILE, SKILLS_ROOT } from "./paths.ts";
+import { INTEGRATION_RULES_FILE, INVENTORY_FILE } from "./paths.ts";
 import { readProviderJson } from "./read.ts";
 import { createPythonValidator } from "./validate.ts";
-import { join } from "node:path";
+import {
+  indexEvidence,
+  readBundle,
+  readInventory,
+  type EvidenceIndex,
+  type IndexedRecord,
+  type Inventory,
+  type InventoryLine,
+  type ProviderCoverage,
+  type ProviderFact,
+  type ProviderInteraction,
+  type ProviderPinMap,
+  type ProviderSource,
+} from "./evidence.ts";
 
 /** The frozen component-spec contract this adapter is written against. */
 export const CIRCUIT_CONTRACT_VERSION = 1;
@@ -49,125 +73,88 @@ export function createCircuitAdapter(): ComponentDataAdapter {
   };
 }
 
-// --- provider shapes -------------------------------------------------------
-// Narrow structural reads only. The Python validator already enforced the
-// frozen contract; re-stating it here would be the weaker second validator the
-// epic forbids. These types exist to make the joins type-checked, not to
-// re-validate the data.
-
-type InventoryLine = {
-  line_id: string;
-  mpn: string;
-  manufacturer: string;
-  lcsc: string;
-  package: string;
-  dnp: boolean;
-  owner_skill: string;
-  identity_state: string;
-  source_state: string;
-  function: string;
-  placements: { board: string; refdes: string }[];
-};
-
-type Inventory = {
-  schema_version: number;
-  assertions: { orderable_lines: number; fitted_lines: number; dnp_or_hand_fit_lines: number };
-  lines: InventoryLine[];
-};
-
-type ManifestRecord = {
-  record_id: string;
-  line_id: string;
-  kind: "standalone" | "subordinate";
-  parent_record_id: string | null;
-  source_ids: string[];
-  fact_ids: string[];
-  interaction_ids: string[];
-  open_domains: string[];
-};
-
 async function project(context: ProjectionContext): Promise<PublicViewModel> {
-  const { policy } = context;
+  const index = await readEvidenceIndex();
+  const model = projectIndex(index, context.policy);
+  // Read so a missing integration bundle fails now rather than in #63.
+  await readProviderJson(INTEGRATION_RULES_FILE);
+  return model;
+}
 
-  const inventory = (await readProviderJson(INVENTORY_FILE)) as Inventory;
-  if (inventory.schema_version !== CIRCUIT_CONTRACT_VERSION) {
-    fail("ADAPTER_CONTRACT", "inventory schema_version is not the contract this adapter reads", {
-      expected: CIRCUIT_CONTRACT_VERSION,
-      actual: inventory.schema_version,
-    });
-  }
-
+/** The adapter's only I/O: the inventory plus every bundle it names. */
+export async function readEvidenceIndex(): Promise<EvidenceIndex> {
+  const inventory = await readInventory(INVENTORY_FILE);
   const ownerSkills = uniqueInOrder(inventory.lines.map((line) => line.owner_skill));
-  const lineById = new Map(inventory.lines.map((line) => [line.line_id, line]));
+  const bundles = await Promise.all(ownerSkills.map(readBundle));
+  return indexEvidence(inventory, bundles);
+}
 
-  const manifestRecords: ManifestRecord[] = [];
-  const sourceIds: string[] = [];
-  const counts = { facts: 0, coverage: 0, pinMaps: 0, pins: 0 };
-  const interactionIds = new Set<string>();
-
-  for (const skill of ownerSkills) {
-    const bundle = await readBundle(skill);
-    manifestRecords.push(...bundle.records);
-    sourceIds.push(...bundle.sourceIds);
-    counts.facts += bundle.factCount;
-    counts.coverage += bundle.coverageCount;
-    counts.pinMaps += bundle.pinMapCount;
-    counts.pins += bundle.pinCount;
-    for (const id of bundle.interactionIds) interactionIds.add(id);
-  }
+/**
+ * The projection itself: pure, so every publication rule below can be proved
+ * against a fixture corpus without a filesystem, a subprocess, or the real
+ * evidence.
+ */
+export function projectIndex(index: EvidenceIndex, policy: PublicationPolicy): PublicViewModel {
+  const { inventory } = index;
 
   // Fatal when the committed selection names something the provider lost, and
   // when the corpus size moved. Must run before anything is projected.
   policy.assertSelectionFresh(
-    manifestRecords.map((record) => record.record_id),
-    sourceIds,
+    index.records.map((entry) => entry.record.record_id),
+    index.sourceIds,
   );
 
-  const selected = manifestRecords.filter((record) => policy.isRecordSelected(record.record_id));
+  const selected = index.records.filter((entry) => policy.isRecordSelected(entry.record.record_id));
   const ordered = orderRecords(selected, inventory.lines);
+  assertSelectionIsClosed(ordered, index, policy);
+
   const slugByRecordId = new Map(
-    ordered.map((record) => [record.record_id, recordSlug(record.record_id)]),
+    ordered.map((entry) => [entry.record.record_id, recordSlug(entry.record.record_id)]),
   );
 
-  const records: PublicRecord[] = ordered.map((record) => {
-    const line = lineById.get(record.line_id);
-    if (!line) {
-      fail("ADAPTER_CONTRACT", `record ${record.record_id} references an unknown inventory line`, {
-        recordId: record.record_id,
-        lineId: record.line_id,
-      });
+  /**
+   * An interaction is published on exactly one page.
+   *
+   * `core/pipeline.ts` asserts anchor uniqueness across the whole site, and
+   * that is the right rule: an anchor is a provider ID verbatim, so a reader
+   * holding an interaction ID must be able to build one URL for it. Six of the
+   * interactions name a standalone record and its subordinates; publishing all
+   * of them on every participant's page would put the same fragment on four
+   * pages. The canonical home is the first participant in publication order,
+   * which is the standalone parent in every case. The full participant list
+   * stays on the interaction itself, so a subordinate page can still link to
+   * it.
+   */
+  const canonicalInteractionRecord = new Map<string, string>();
+  for (const entry of ordered) {
+    for (const interactionId of entry.interactionIds) {
+      if (!canonicalInteractionRecord.has(interactionId)) {
+        canonicalInteractionRecord.set(interactionId, entry.record.record_id);
+      }
     }
-    return {
-      identity: buildIdentity(record, line, slugByRecordId, policy),
-      // Populated by #59 / #63. The shape is already frozen; only the arrays grow.
-      aliases: { mpn: [], lcsc: [], manufacturer: [], function: [] },
-      sources: [],
-      facts: [],
-      coverage: [],
-      interactions: [],
-      pinMaps: [],
-    };
-  });
+  }
+
+  const records: PublicRecord[] = ordered.map((entry) =>
+    projectRecord(entry, index, slugByRecordId, canonicalInteractionRecord, policy),
+  );
 
   const corpus: CorpusSummary = {
-    ownerBundles: ownerSkills.length,
-    records: manifestRecords.length,
-    standaloneRecords: manifestRecords.filter((record) => record.kind === "standalone").length,
-    subordinateRecords: manifestRecords.filter((record) => record.kind === "subordinate").length,
-    sources: sourceIds.length,
-    facts: counts.facts,
-    coverageDomains: counts.coverage,
-    interactions: interactionIds.size,
-    pinMaps: counts.pinMaps,
-    pins: counts.pins,
+    ownerBundles: index.ownerSkills.length,
+    records: index.records.length,
+    standaloneRecords: index.records.filter((entry) => entry.record.kind === "standalone").length,
+    subordinateRecords: index.records.filter((entry) => entry.record.kind === "subordinate").length,
+    sources: index.totals.sources,
+    facts: index.totals.facts,
+    coverageDomains: index.totals.coverage,
+    interactions: index.totals.interactions,
+    pinMaps: index.totals.pinMaps,
+    pins: index.totals.pins,
     inventoryLines: inventory.assertions.orderable_lines,
     fittedLines: inventory.assertions.fitted_lines,
     dnpOrHandFitLines: inventory.assertions.dnp_or_hand_fit_lines,
   };
 
-  assertCorpusMatchesInventory(corpus, inventory);
-  // Read so a missing integration bundle fails now rather than in #63.
-  await readProviderJson(INTEGRATION_RULES_FILE);
+  assertCorpusMatchesInventory(corpus, inventory, index);
 
   return {
     version: VIEW_MODEL_VERSION,
@@ -181,12 +168,38 @@ async function project(context: ProjectionContext): Promise<PublicViewModel> {
   };
 }
 
-function buildIdentity(
-  record: ManifestRecord,
-  line: InventoryLine,
+// --- per-record projection -------------------------------------------------
+
+function projectRecord(
+  entry: IndexedRecord,
+  index: EvidenceIndex,
   slugByRecordId: ReadonlyMap<string, Slug>,
-  policy: ProjectionContext["policy"],
+  canonicalInteractionRecord: ReadonlyMap<string, string>,
+  policy: PublicationPolicy,
+): PublicRecord {
+  const recordId = entry.record.record_id;
+
+  return {
+    identity: buildIdentity(entry, slugByRecordId, policy),
+    aliases: projectAliases(entry, policy),
+    sources: entry.sources.map((source) => projectSource(source, policy)),
+    facts: entry.facts.map((fact) => projectFact(fact, policy)),
+    coverage: entry.coverage.map((domain) => projectCoverage(domain, policy)),
+    interactions: entry.interactionIds
+      .filter((interactionId) => canonicalInteractionRecord.get(interactionId) === recordId)
+      .map((interactionId) =>
+        projectInteraction(interactionOf(index, interactionId), policy),
+      ),
+    pinMaps: entry.pinMaps.map((pinMap) => projectPinMap(pinMap, policy)),
+  };
+}
+
+function buildIdentity(
+  entry: IndexedRecord,
+  slugByRecordId: ReadonlyMap<string, Slug>,
+  policy: PublicationPolicy,
 ): PublicRecordIdentity {
+  const { record, line } = entry;
   const slug = slugByRecordId.get(record.record_id);
   if (slug === undefined) {
     fail("IDENTITY_COLLISION", `no slug for record ${record.record_id}`, {
@@ -254,78 +267,410 @@ function buildIdentity(
   };
 }
 
-async function readBundle(skill: string) {
-  const dir = join(SKILLS_ROOT, skill);
-  // Read by name, not by position: a tuple destructure of BUNDLE_FILES would
-  // silently misalign if that list is ever reordered.
-  const read = async <T>(file: (typeof BUNDLE_FILES)[number]): Promise<T> =>
-    (await readProviderJson(join(dir, file))) as T;
+function projectAliases(entry: IndexedRecord, policy: PublicationPolicy): PublicAliases {
+  const { route } = entry;
+  const list = (values: readonly string[], field: string): SafeText[] =>
+    values.map((value) => safeText(value, { field: `${route.route_id}.${field}` }));
 
-  const [manifest, sources, facts, coverage, routing, interactions, pinMap] =
-    await Promise.all([
-      read<{ records: ManifestRecord[] }>("manifest.json"),
-      read<{ sources: { source_id: string }[] }>("sources.json"),
-      read<{ facts: unknown[] }>("facts.json"),
-      read<{ coverage: unknown[] }>("coverage.json"),
-      // Not projected until #59; read so a missing or malformed routing bundle
-      // fails now rather than three issues later.
-      read<{ routes: unknown[] }>("routing.json"),
-      read<{ interactions: { interaction_id: string }[] }>("interactions.json"),
-      read<{ pin_maps: { pins: unknown[] }[] }>("pin-map.json"),
-    ]);
+  // Agent-steering text, denied by the matrix: recorded as withheld so the
+  // preflight report shows the generator saw it and dropped it.
+  recordWithheld(policy, "routing.positivePrompts");
+  recordWithheld(policy, "routing.negativePrompts");
 
   return {
-    routeCount: routing.routes.length,
-    records: manifest.records,
-    sourceIds: sources.sources.map((source) => source.source_id),
-    factCount: facts.facts.length,
-    coverageCount: coverage.coverage.length,
-    interactionIds: interactions.interactions.map((entry) => entry.interaction_id),
-    pinMapCount: pinMap.pin_maps.length,
-    pinCount: pinMap.pin_maps.reduce((sum, entry) => sum + entry.pins.length, 0),
+    mpn: policy.publishRequired("alias.mpn", list(route.aliases.mpn, "aliases.mpn")),
+    lcsc: policy.publishRequired("alias.lcsc", list(route.aliases.lcsc, "aliases.lcsc")),
+    manufacturer: policy.publishRequired(
+      "alias.manufacturer",
+      list(route.aliases.manufacturer, "aliases.manufacturer"),
+    ),
+    function: policy.publishRequired(
+      "alias.function",
+      list(route.aliases.function, "aliases.function"),
+    ),
   };
+}
+
+function projectSource(source: ProviderSource, policy: PublicationPolicy): PublicSource {
+  const at = (field: string): string => `${source.source_id}.${field}`;
+
+  recordWithheld(policy, "source.sha256");
+  recordWithheld(policy, "source.evidenceExtract");
+  recordWithheld(policy, "source.alternateAuthoritativeUrl");
+  recordWithheld(policy, "source.physicalPdfPageIndex");
+
+  return {
+    sourceId: policy.publishRequired(
+      "source.sourceId",
+      safeText(source.source_id, { field: at("source_id") }),
+    ),
+    anchor: anchor(source.source_id),
+    documentTitle: policy.publishRequired(
+      "source.documentTitle",
+      safeText(source.document_title, { field: at("document_title") }),
+    ),
+    documentNumber: policy.publishRequired(
+      "source.documentNumber",
+      safeText(source.document_number, { field: at("document_number") }),
+    ),
+    revision: policy.publishRequired(
+      "source.revision",
+      safeText(source.revision, { field: at("revision") }),
+    ),
+    documentDate: policy.publishRequired(
+      "source.documentDate",
+      safeText(source.document_date, { field: at("document_date") }),
+    ),
+    retrievalDate: policy.publishRequired(
+      "source.retrievalDate",
+      safeText(source.retrieval_date, { field: at("retrieval_date") }),
+    ),
+    authorityClass: policy.publishRequired(
+      "source.authorityClass",
+      safeText(source.authority_class, { field: at("authority_class") }),
+    ),
+    // Published whenever the URL is, so a SOURCE UNAVAILABLE document always
+    // renders with its unavailability next to the link.
+    availability: policy.publishRequired(
+      "source.availability",
+      safeText(source.availability, { field: at("availability") }),
+    ),
+    locator: policy.publishRequired(
+      "source.locator",
+      safeText(source.locator, { field: at("locator") }),
+    ),
+    printedPageLabel: policy.publishRequired(
+      "source.printedPageLabel",
+      safeText(source.printed_page_label, { field: at("printed_page_label") }),
+    ),
+    url: projectSourceUrl(source, policy),
+  };
+}
+
+/**
+ * Classify a source's citation URL and record the decision for preflight.
+ *
+ * The URL string is recorded only when it is published. A denial already
+ * carries its reason and its source ID, which is all a maintainer needs, and
+ * the report is a committed file — echoing a URL that policy just refused to
+ * republish (an un-opted-in link, a machine path, a `file:` locator) would put
+ * it in the repository anyway.
+ */
+function projectSourceUrl(source: ProviderSource, policy: PublicationPolicy): SafeUrl | null {
+  const deny = (reason: string): null => {
+    policy.recordUrlUsage({ sourceId: source.source_id, url: "", decision: "DENY", reason });
+    return null;
+  };
+
+  if (!policy.isSourceLinkable(source.source_id)) {
+    return deny("SOURCE_NOT_LINKABLE");
+  }
+
+  const classified = classifyUrl(source.authoritative_url);
+  if (classified.decision === "DENY") {
+    return deny(classified.reason);
+  }
+
+  policy.recordUrlUsage({
+    sourceId: source.source_id,
+    url: classified.url,
+    decision: "ALLOW",
+    reason: "ABSOLUTE_HTTP_URL",
+  });
+  return policy.publish("source.authoritativeUrl", classified.url) ?? null;
+}
+
+function projectFact(fact: ProviderFact, policy: PublicationPolicy): PublicFact {
+  const at = (field: string): string => `${fact.fact_id}.${field}`;
+
+  return {
+    factId: policy.publishRequired(
+      "fact.factId",
+      safeText(fact.fact_id, { field: at("fact_id") }),
+    ),
+    anchor: anchor(fact.fact_id),
+    recordId: safeText(fact.record_id, { field: at("record_id") }),
+    sourceId: safeText(fact.source_id, { field: at("source_id") }),
+    factClass: policy.publishRequired("fact.class", safeText(fact.class, { field: at("class") })),
+    value: policy.publishRequired("fact.value", projectFactValue(fact)),
+    unit: policy.publishRequired("fact.unit", safeText(fact.unit, { field: at("unit") })),
+    conditions: policy.publishRequired(
+      "fact.conditions",
+      safeText(fact.conditions, { field: at("conditions") }),
+    ),
+    locator: policy.publishRequired(
+      "fact.locator",
+      safeText(fact.locator, { field: at("locator") }),
+    ),
+    provenance: policy.publishRequired(
+      "fact.provenance",
+      safeText(fact.provenance, { field: at("provenance") }),
+    ),
+    verdict: policy.publishRequired(
+      "fact.verdict",
+      safeText(fact.verdict, { field: at("verdict") }),
+    ),
+    // Fact IDs are globally unique, so a dependency is a resolvable anchor even
+    // when it points at another record's page. `evidence.ts` has already proved
+    // every edge resolves and that the graph has no cycle.
+    dependsOn: policy.publishRequired(
+      "fact.dependsOn",
+      fact.depends_on.map((id) => safeText(id, { field: at("depends_on") })),
+    ),
+    // Empty for every raw fact; an evaluable arithmetic expression for the 29
+    // calculated ones. Empty is legal here and nowhere else.
+    expression: policy.publishRequired(
+      "fact.expression",
+      safeText(fact.expression, { field: at("expression"), allowEmpty: true }),
+    ),
+  };
+}
+
+/**
+ * Preserve the value's JSON shape. A number stays a number, a string stays a
+ * string, and an object becomes sorted key/value entries — never a stringified
+ * blob, which is the lossy coercion the contract forbids. Anything else is a
+ * shape this projection has no honest rendering for, so it stops the build
+ * rather than guessing.
+ */
+function projectFactValue(fact: ProviderFact): PublicFactValue {
+  const field = `${fact.fact_id}.value`;
+  const raw = fact.value;
+
+  if (typeof raw === "number") {
+    if (!Number.isFinite(raw)) {
+      fail("ADAPTER_CONTRACT", "fact value is not a finite number", { factId: fact.fact_id });
+    }
+    return raw;
+  }
+  if (typeof raw === "string") {
+    return safeText(raw, { field });
+  }
+  if (typeof raw === "object" && raw !== null && !Array.isArray(raw)) {
+    const entries: PublicFactValueEntry[] = Object.keys(raw as Record<string, unknown>)
+      .sort(byCodeUnit)
+      .map((key) => {
+        const nested = (raw as Record<string, unknown>)[key];
+        if (typeof nested !== "number" && typeof nested !== "string") {
+          fail("ADAPTER_CONTRACT", "structured fact value has a non-scalar member", {
+            factId: fact.fact_id,
+            key,
+          });
+        }
+        return {
+          key: safeText(key, { field: `${field}.key` }),
+          value:
+            typeof nested === "number" ? nested : safeText(nested, { field: `${field}.${key}` }),
+        };
+      });
+    if (entries.length === 0) {
+      fail("ADAPTER_CONTRACT", "structured fact value is empty", { factId: fact.fact_id });
+    }
+    return entries;
+  }
+
+  fail("ADAPTER_CONTRACT", "fact value has an unsupported JSON shape", {
+    factId: fact.fact_id,
+    shape: raw === null ? "null" : Array.isArray(raw) ? "array" : typeof raw,
+  });
+}
+
+function projectCoverage(domain: ProviderCoverage, policy: PublicationPolicy): PublicCoverage {
+  const at = (field: string): string => `${domain.coverage_id}.${field}`;
+
+  if (domain.status !== "COVERED" && domain.status !== "OPEN") {
+    fail("ADAPTER_CONTRACT", "coverage status is neither COVERED nor OPEN", {
+      coverageId: domain.coverage_id,
+      status: domain.status,
+    });
+  }
+
+  return {
+    coverageId: policy.publishRequired(
+      "coverage.coverageId",
+      safeText(domain.coverage_id, { field: at("coverage_id") }),
+    ),
+    anchor: anchor(domain.coverage_id),
+    recordId: safeText(domain.record_id, { field: at("record_id") }),
+    domain: policy.publishRequired(
+      "coverage.domain",
+      safeText(domain.domain, { field: at("domain") }),
+    ),
+    status: policy.publishRequired("coverage.status", domain.status),
+    // An OPEN domain must carry its reason, or the page reads as a clean bill
+    // of health the evidence never gave.
+    reason: policy.publishRequired(
+      "coverage.reason",
+      safeText(domain.reason, { field: at("reason") }),
+    ),
+    factIds: policy.publishRequired(
+      "coverage.factIds",
+      domain.fact_ids.map((id) => safeText(id, { field: at("fact_ids") })),
+    ),
+    // Legitimately empty on an OPEN domain whose only evidence is NOT
+    // APPLICABLE. Empty means "no fact blocks this", never "nothing is open".
+    blockingFactIds: policy.publishRequired(
+      "coverage.blockingFactIds",
+      domain.blocking_fact_ids.map((id) => safeText(id, { field: at("blocking_fact_ids") })),
+    ),
+  };
+}
+
+function projectInteraction(
+  interaction: ProviderInteraction,
+  policy: PublicationPolicy,
+): PublicInteraction {
+  const at = (field: string): string => `${interaction.interaction_id}.${field}`;
+
+  return {
+    interactionId: policy.publishRequired(
+      "interaction.interactionId",
+      safeText(interaction.interaction_id, { field: at("interaction_id") }),
+    ),
+    anchor: anchor(interaction.interaction_id),
+    recordIds: policy.publishRequired(
+      "interaction.recordIds",
+      interaction.record_ids.map((id) => safeText(id, { field: at("record_ids") })),
+    ),
+    factIds: policy.publishRequired(
+      "interaction.factIds",
+      interaction.fact_ids.map((id) => safeText(id, { field: at("fact_ids") })),
+    ),
+    conditions: policy.publishRequired(
+      "interaction.conditions",
+      safeText(interaction.conditions, { field: at("conditions") }),
+    ),
+    verdict: policy.publishRequired(
+      "interaction.verdict",
+      safeText(interaction.verdict, { field: at("verdict") }),
+    ),
+  };
+}
+
+function projectPinMap(pinMap: ProviderPinMap, policy: PublicationPolicy): PublicPinMap {
+  const at = (field: string): string => `${pinMap.pin_map_id}.${field}`;
+
+  // Internal review state; denied by the matrix.
+  recordWithheld(policy, "pinMap.reviewedBy");
+
+  return {
+    pinMapId: policy.publishRequired(
+      "pinMap.pinMapId",
+      safeText(pinMap.pin_map_id, { field: at("pin_map_id") }),
+    ),
+    anchor: anchor(pinMap.pin_map_id),
+    recordId: safeText(pinMap.record_id, { field: at("record_id") }),
+    symbol: policy.publishRequired(
+      "pinMap.symbol",
+      safeText(pinMap.symbol, { field: at("symbol") }),
+    ),
+    footprint: policy.publishRequired(
+      "pinMap.footprint",
+      safeText(pinMap.footprint, { field: at("footprint") }),
+    ),
+    pins: policy.publishRequired(
+      "pinMap.pins",
+      pinMap.pins.map((pin) => ({
+        symbolPin: safeText(pin.symbol_pin, { field: at("pin.symbol_pin") }),
+        name: safeText(pin.name, { field: at("pin.name") }),
+        footprintPad: safeText(pin.footprint_pad, { field: at("pin.footprint_pad") }),
+        function: safeText(pin.function, { field: at("pin.function") }),
+      })),
+    ),
+  };
+}
+
+// --- selection and ordering ------------------------------------------------
+
+/**
+ * Selection has to be closed under the links a published page renders.
+ *
+ * Publishing a record while withholding its source would put an unprovenanced
+ * number on a page; publishing an interaction that names an unpublished record
+ * would render a link to nowhere. Both are selection mistakes rather than
+ * something to paper over by dropping evidence, so they stop the build with
+ * the exact IDs to add or remove.
+ */
+function assertSelectionIsClosed(
+  ordered: readonly IndexedRecord[],
+  index: EvidenceIndex,
+  policy: PublicationPolicy,
+): void {
+  const publishedRecords = new Set(ordered.map((entry) => entry.record.record_id));
+  const unselectedSources: string[] = [];
+  const danglingInteractions: string[] = [];
+  const danglingDependencies: string[] = [];
+
+  for (const entry of ordered) {
+    for (const source of entry.sources) {
+      if (!policy.isSourceSelected(source.source_id)) {
+        unselectedSources.push(`${entry.record.record_id}:${source.source_id}`);
+      }
+    }
+    for (const fact of entry.facts) {
+      for (const dependency of fact.depends_on) {
+        const target = index.factById.get(dependency);
+        if (target === undefined || !publishedRecords.has(target.record_id)) {
+          danglingDependencies.push(`${fact.fact_id}:${dependency}`);
+        }
+      }
+    }
+    for (const interactionId of entry.interactionIds) {
+      const interaction = interactionOf(index, interactionId);
+      for (const recordId of interaction.record_ids) {
+        if (!publishedRecords.has(recordId)) {
+          danglingInteractions.push(`${interactionId}:${recordId}`);
+        }
+      }
+    }
+  }
+
+  if (unselectedSources.length > 0) {
+    fail("STALE_SELECTION", "a published record cites a source that is not selected", {
+      references: unselectedSources.sort(byCodeUnit),
+    });
+  }
+  if (danglingDependencies.length > 0) {
+    fail("STALE_SELECTION", "a published fact depends on a fact that is not published", {
+      references: danglingDependencies.sort(byCodeUnit),
+    });
+  }
+  if (danglingInteractions.length > 0) {
+    fail("STALE_SELECTION", "a published interaction names a record that is not published", {
+      references: [...new Set(danglingInteractions)].sort(byCodeUnit),
+    });
+  }
 }
 
 /** Inventory-line order, parents before their own subordinates. */
 function orderRecords(
-  records: readonly ManifestRecord[],
+  records: readonly IndexedRecord[],
   lines: readonly InventoryLine[],
-): ManifestRecord[] {
-  const lineIndex = new Map(lines.map((line, index) => [line.line_id, index]));
-  const rank = (record: ManifestRecord): number =>
-    lineIndex.get(record.line_id) ?? Number.MAX_SAFE_INTEGER;
+): IndexedRecord[] {
+  const lineIndex = new Map(lines.map((line, position) => [line.line_id, position]));
+  const rank = (entry: IndexedRecord): number =>
+    lineIndex.get(entry.record.line_id) ?? Number.MAX_SAFE_INTEGER;
+  const order = (left: IndexedRecord, right: IndexedRecord): number =>
+    rank(left) - rank(right) || byCodeUnit(left.record.record_id, right.record.record_id);
 
-  const standalone = records
-    .filter((record) => record.kind === "standalone")
-    .sort((left, right) => rank(left) - rank(right) || byCodeUnit(left.record_id, right.record_id));
+  const standalone = records.filter((entry) => entry.record.kind === "standalone").sort(order);
 
-  const childrenByParent = new Map<string, ManifestRecord[]>();
-  const orphans: ManifestRecord[] = [];
-  for (const record of records) {
-    if (record.kind !== "subordinate") continue;
-    const parent = record.parent_record_id;
-    if (parent === null) {
-      orphans.push(record);
-      continue;
-    }
+  const childrenByParent = new Map<string, IndexedRecord[]>();
+  for (const entry of records) {
+    if (entry.record.kind !== "subordinate") continue;
+    // `evidence.ts` has already proved every subordinate names an existing
+    // standalone parent, so a null here is impossible by construction.
+    const parent = entry.record.parent_record_id as string;
     const bucket = childrenByParent.get(parent) ?? [];
-    bucket.push(record);
+    bucket.push(entry);
     childrenByParent.set(parent, bucket);
   }
-  if (orphans.length > 0) {
-    fail("ADAPTER_CONTRACT", "subordinate record has no parent_record_id", {
-      recordIds: orphans.map((record) => record.record_id).sort(byCodeUnit),
-    });
-  }
 
-  const ordered: ManifestRecord[] = [];
+  const ordered: IndexedRecord[] = [];
   for (const parent of standalone) {
     ordered.push(parent);
-    const children = (childrenByParent.get(parent.record_id) ?? []).sort(
-      (left, right) => rank(left) - rank(right) || byCodeUnit(left.record_id, right.record_id),
-    );
-    ordered.push(...children);
-    childrenByParent.delete(parent.record_id);
+    ordered.push(...(childrenByParent.get(parent.record.record_id) ?? []).sort(order));
+    childrenByParent.delete(parent.record.record_id);
   }
 
   // A subordinate whose parent is not selected would silently vanish; that is
@@ -339,7 +684,37 @@ function orderRecords(
   return ordered;
 }
 
-function assertCorpusMatchesInventory(corpus: CorpusSummary, inventory: Inventory): void {
+// --- helpers ---------------------------------------------------------------
+
+/**
+ * Count one value of a denied field for the preflight report.
+ *
+ * The value itself is never handed to the policy: if the matrix entry were
+ * flipped to PUBLISH, this call would have to be rewritten to pass the real
+ * value, so a publication decision can never take effect by accident.
+ */
+function recordWithheld(policy: PublicationPolicy, key: FieldKey): void {
+  if (policy.decision(key) !== "DENY") {
+    fail("PUBLICATION_POLICY", `field ${key} is counted as withheld but is not denied`, { key });
+  }
+  policy.publish(key, undefined);
+}
+
+function interactionOf(index: EvidenceIndex, interactionId: string): ProviderInteraction {
+  const interaction = index.interactionById.get(interactionId);
+  if (interaction === undefined) {
+    fail("ADAPTER_CONTRACT", "record lists an interaction the provider does not have", {
+      interactionId,
+    });
+  }
+  return interaction;
+}
+
+function assertCorpusMatchesInventory(
+  corpus: CorpusSummary,
+  inventory: Inventory,
+  index: EvidenceIndex,
+): void {
   if (inventory.lines.length !== inventory.assertions.orderable_lines) {
     fail("ADAPTER_CONTRACT", "inventory line count disagrees with its own assertion", {
       lines: inventory.lines.length,
@@ -351,6 +726,14 @@ function assertCorpusMatchesInventory(corpus: CorpusSummary, inventory: Inventor
       standalone: corpus.standaloneRecords,
       subordinate: corpus.subordinateRecords,
       total: corpus.records,
+    });
+  }
+  // One routing entry per record is what makes aliases a total function; a
+  // mismatch means some record would publish without search terms.
+  if (index.totals.routes !== corpus.records) {
+    fail("ADAPTER_CONTRACT", "route count does not match the record count", {
+      routes: index.totals.routes,
+      records: corpus.records,
     });
   }
 }

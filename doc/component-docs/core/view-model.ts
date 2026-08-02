@@ -112,9 +112,32 @@ export type PublicSource = {
 };
 
 /**
- * One fact. Value keeps its original JSON shape: a number stays a number so
- * the page can render `42` and not `"42"`, and unit/conditions stay separate
- * so nothing has to be re-parsed out of prose.
+ * One key/value pair of a structured fact value.
+ *
+ * Entries are sorted by key with `byCodeUnit` so the rendered order is stable
+ * across machines — JSON object key order is an artefact of how the evidence
+ * file was written, not a claim the evidence makes.
+ */
+export type PublicFactValueEntry = {
+  readonly key: SafeText;
+  readonly value: number | SafeText;
+};
+
+/**
+ * A fact value in its original JSON shape.
+ *
+ * A number stays a number so the page renders `42` and not `"42"`, and an
+ * object stays an object: three facts in this corpus record a distributor
+ * identity binding as `{lcsc, manufacturer, mpn, variant}`, and flattening
+ * that into one string would be exactly the lossy coercion the contract
+ * forbids. There is no fourth shape — a boolean, array or null value is a
+ * fatal `ADAPTER_CONTRACT`, not something to guess a rendering for.
+ */
+export type PublicFactValue = number | SafeText | readonly PublicFactValueEntry[];
+
+/**
+ * One fact. Value keeps its original JSON shape, and unit/conditions stay
+ * separate fields so nothing has to be re-parsed out of prose.
  */
 export type PublicFact = {
   readonly factId: SafeText;
@@ -122,7 +145,7 @@ export type PublicFact = {
   readonly recordId: SafeText;
   readonly sourceId: SafeText;
   readonly factClass: SafeText;
-  readonly value: number | SafeText;
+  readonly value: PublicFactValue;
   readonly unit: SafeText;
   readonly conditions: SafeText;
   readonly locator: SafeText;
