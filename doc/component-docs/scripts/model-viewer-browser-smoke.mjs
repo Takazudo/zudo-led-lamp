@@ -393,10 +393,30 @@ async function exerciseDialogGeometry(cdp, width, height) {
     const triggerSelector = `[data-component-preview-enlarge="${kind}"]`;
     const dialogSelector = `[data-component-preview-dialog="${kind}"]`;
     await waitFor(cdp, `getComputedStyle(document.querySelector(${JSON.stringify(triggerSelector)})).display !== 'none'`);
+    if (kind === "model") {
+      await evaluate(cdp, `(() => {
+        window.__zldDialogReadyRenderCount = null;
+        const observer = new MutationObserver(() => {
+          const root = document.querySelector('[data-model-viewer-instance="dialog"]');
+          if (root?.dataset.viewerState !== 'ready') return;
+          window.__zldDialogReadyRenderCount = Number(root.dataset.renderCount ?? 0);
+          observer.disconnect();
+        });
+        observer.observe(document.querySelector(${JSON.stringify(dialogSelector)}), {
+          subtree: true,
+          childList: true,
+          attributes: true,
+          attributeFilter: ['data-viewer-state'],
+        });
+      })()`);
+    }
     await evaluate(cdp, `document.querySelector(${JSON.stringify(triggerSelector)}).click()`);
     await waitFor(cdp, `document.querySelector(${JSON.stringify(dialogSelector)})?.open`);
     if (kind === "model") {
       await waitFor(cdp, `document.querySelector('[data-model-viewer-instance="dialog"]')?.dataset.viewerState === 'ready'`, 20_000);
+      await waitFor(cdp, `window.__zldDialogReadyRenderCount !== null`);
+      assertEqual(await evaluate(cdp, `window.__zldDialogReadyRenderCount > 0`), true, "model ready state is published after its first render");
+      await waitForCanvasSize(cdp, "dialog");
     }
 
     const report = await evaluate(cdp, `(() => {
@@ -635,6 +655,20 @@ async function exerciseViewerInteractions(cdp, instance = "inline", testResize =
 
 async function renderCount(cdp, instance = "inline") {
   return Number(await evaluate(cdp, `document.querySelector('[data-model-viewer-instance=${JSON.stringify(instance)}]')?.dataset.renderCount ?? 0`));
+}
+
+async function waitForCanvasSize(cdp, instance) {
+  const rootSelector = `[data-model-viewer-instance="${instance}"]`;
+  await waitFor(cdp, `(() => {
+    const viewport = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)});
+    const canvas = viewport?.querySelector('canvas');
+    if (!viewport || !canvas) return false;
+    const ratio = Math.min(devicePixelRatio, 2);
+    const expectedWidth = Math.max(1, viewport.clientWidth) * ratio;
+    const expectedHeight = Math.max(1, viewport.clientHeight) * ratio;
+    return Math.abs(canvas.width - expectedWidth) <= Math.max(4, expectedWidth * 0.01)
+      && Math.abs(canvas.height - expectedHeight) <= Math.max(4, expectedHeight * 0.01);
+  })()`);
 }
 
 async function waitForRenderIdle(cdp, label, instance = "inline") {
