@@ -120,40 +120,48 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-| Fact                                                                       | Value                                         | Unit   | Conditions                                                                | Verdict                         | Provenance   | Evidence                                                                           |
-| -------------------------------------------------------------------------- | --------------------------------------------- | ------ | ------------------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-umw-ao3401a-vds" />`fact-umw-ao3401a-vds`         | -30                                           | `V`    | drain-source absolute maximum, Ta=25 degC                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum table row VDS](#src-umw-ao3401a)         |
-| <EvidenceAnchor id="fact-umw-ao3401a-vgs" />`fact-umw-ao3401a-vgs`         | 12                                            | `V`    | magnitude of gate-source absolute maximum                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum table row VGS +/-12 V](#src-umw-ao3401a) |
-| <EvidenceAnchor id="fact-umw-ao3401a-current" />`fact-umw-ao3401a-current` | -4.2 A continuous at Ta=25 degC; -30 A pulsed | `NONE` | package/thermal test conditions; not a guaranteed Board P load capability | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum table rows ID and IDM](#src-umw-ao3401a) |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value                                         | Unit   | Conditions                                                                | Verdict                         | Provenance   | Evidence                                                                           |
+  | -------------------------------------------------------------------------- | --------------------------------------------- | ------ | ------------------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-umw-ao3401a-vds" />`fact-umw-ao3401a-vds`         | -30                                           | `V`    | drain-source absolute maximum, Ta=25 degC                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum table row VDS](#src-umw-ao3401a)         |
+  | <EvidenceAnchor id="fact-umw-ao3401a-vgs" />`fact-umw-ao3401a-vgs`         | 12                                            | `V`    | magnitude of gate-source absolute maximum                                 | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum table row VGS +/-12 V](#src-umw-ao3401a) |
+  | <EvidenceAnchor id="fact-umw-ao3401a-current" />`fact-umw-ao3401a-current` | -4.2 A continuous at Ta=25 degC; -30 A pulsed | `NONE` | package/thermal test conditions; not a guaranteed Board P load capability | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum table rows ID and IDM](#src-umw-ao3401a) |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                             | Value                                                                                       | Unit   | Conditions                                                        | Verdict                         | Provenance   | Evidence                                                                     |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-umw-ao3401a-rdson" />`fact-umw-ao3401a-rdson`           | 50 mOhm max at VGS=-10 V ID=-4.2 A; 65 mOhm max at -4.5 V/-4 A; 120 mOhm max at -2.5 V/-1 A | `NONE` | Ta=25 degC electrical-characteristic test points                  | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 2 electrical table rows RDS(on)](#src-umw-ao3401a)    |
-| <EvidenceAnchor id="fact-umw-ao3401a-threshold" />`fact-umw-ao3401a-threshold`   | -0.4 to -1.3                                                                                | `V`    | VDS=VGS, ID=-250 uA; onset only, not usable load drive            | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 2 electrical table row VGS(th)](#src-umw-ao3401a)     |
-| <EvidenceAnchor id="fact-umw-ao3401a-body-diode" />`fact-umw-ao3401a-body-diode` | IS -2.2 A max; VSD -1 V max at IS=-1 A, VGS=0                                               | `NONE` | body-diode direction follows source-to-drain for P-channel symbol | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 2 electrical table body-diode rows](#src-umw-ao3401a) |
+<EvidenceTable label="facts">
+  | Fact                                                                             | Value                                                                                       | Unit   | Conditions                                                        | Verdict                         | Provenance   | Evidence                                                                     |
+  | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-umw-ao3401a-rdson" />`fact-umw-ao3401a-rdson`           | 50 mOhm max at VGS=-10 V ID=-4.2 A; 65 mOhm max at -4.5 V/-4 A; 120 mOhm max at -2.5 V/-1 A | `NONE` | Ta=25 degC electrical-characteristic test points                  | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 2 electrical table rows RDS(on)](#src-umw-ao3401a)    |
+  | <EvidenceAnchor id="fact-umw-ao3401a-threshold" />`fact-umw-ao3401a-threshold`   | -0.4 to -1.3                                                                                | `V`    | VDS=VGS, ID=-250 uA; onset only, not usable load drive            | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 2 electrical table row VGS(th)](#src-umw-ao3401a)     |
+  | <EvidenceAnchor id="fact-umw-ao3401a-body-diode" />`fact-umw-ao3401a-body-diode` | IS -2.2 A max; VSD -1 V max at IS=-1 A, VGS=0                                               | `NONE` | body-diode direction follows source-to-drain for P-channel symbol | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 2 electrical table body-diode rows](#src-umw-ao3401a) |
+</EvidenceTable>
 
 ### THERMAL\_SOA
 
 Thermal and safe-operating-area behaviour: how much the part may dissipate, and under what mounting and ambient conditions.
 
-| Fact                                                                       | Value                                                                               | Unit   | Conditions                                                           | Verdict                         | Provenance   | Evidence                                                                                     |
-| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-umw-ao3401a-thermal" />`fact-umw-ao3401a-thermal` | RthetaJA 90 degC/W t\<=10 s; 125 degC/W steady; RthetaJC 60 degC/W; TJ max 150 degC | `NONE` | datasheet mounting/test assumptions; Board P copper differs          | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum/thermal rows](#src-umw-ao3401a)                    |
-| <EvidenceAnchor id="fact-umw-ao3401a-soa" />`fact-umw-ao3401a-soa`         | use Figure 9 pulse-width/DC boundaries and Figure 10 transient thermal impedance    | `NONE` | single-pulse curves at stated ambient; verify actual inrush waveform | NEEDS BENCH                     | PRIMARY-SPEC | [src-umw-ao3401a: Figures 9-10 maximum SOA and transient thermal response](#src-umw-ao3401a) |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value                                                                               | Unit   | Conditions                                                           | Verdict                         | Provenance   | Evidence                                                                                     |
+  | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-umw-ao3401a-thermal" />`fact-umw-ao3401a-thermal` | RthetaJA 90 degC/W t\<=10 s; 125 degC/W steady; RthetaJC 60 degC/W; TJ max 150 degC | `NONE` | datasheet mounting/test assumptions; Board P copper differs          | PASS - primary-source confirmed | PRIMARY-SPEC | [src-umw-ao3401a: page 1 absolute maximum/thermal rows](#src-umw-ao3401a)                    |
+  | <EvidenceAnchor id="fact-umw-ao3401a-soa" />`fact-umw-ao3401a-soa`         | use Figure 9 pulse-width/DC boundaries and Figure 10 transient thermal impedance    | `NONE` | single-pulse curves at stated ambient; verify actual inrush waveform | NEEDS BENCH                     | PRIMARY-SPEC | [src-umw-ao3401a: Figures 9-10 maximum SOA and transient thermal response](#src-umw-ao3401a) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                                 | Value                                     | Unit   | Conditions                                                               | Verdict                         | Provenance     | Evidence                                                                                                                               |
-| ------------------------------------------------------------------------------------ | ----------------------------------------- | ------ | ------------------------------------------------------------------------ | ------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-umw-ao3401a-manufacturer" />`fact-umw-ao3401a-manufacturer` | UMW (Youtai Semiconductor)                | `NONE` | exact C347476 orderable; exclude AOS and other AO3401A vendors           | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-umw-ao3401a: document title block and logo](#src-umw-ao3401a)                                                                     |
-| <EvidenceAnchor id="fact-umw-ao3401a-pinout" />`fact-umw-ao3401a-pinout`             | 1 Gate, 2 Source, 3 Drain                 | `NONE` | SOT-23 top-view device pin figure                                        | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-umw-ao3401a: page 1 pin figure, pins 1-3](#src-umw-ao3401a)                                                                       |
-| <EvidenceAnchor id="fact-umw-ao3401a-project-nets" />`fact-umw-ao3401a-project-nets` | Q1.1=Q1\_G; Q1.2=VBUS\_IN; Q1.3=VBUS\_OUT | `NONE` | current Board P generated schematic source at immutable revision 410bc1a | NOT APPLICABLE                  | PROJECT-CHOICE | [src-umw-ao3401a-board-p-generator: COMPONENTS row Q1 and NETS rows Q1\_G, VBUS\_IN and VBUS\_OUT](#src-umw-ao3401a-board-p-generator) |
+<EvidenceTable label="facts">
+  | Fact                                                                                 | Value                                     | Unit   | Conditions                                                               | Verdict                         | Provenance     | Evidence                                                                                                                               |
+  | ------------------------------------------------------------------------------------ | ----------------------------------------- | ------ | ------------------------------------------------------------------------ | ------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-umw-ao3401a-manufacturer" />`fact-umw-ao3401a-manufacturer` | UMW (Youtai Semiconductor)                | `NONE` | exact C347476 orderable; exclude AOS and other AO3401A vendors           | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-umw-ao3401a: document title block and logo](#src-umw-ao3401a)                                                                     |
+  | <EvidenceAnchor id="fact-umw-ao3401a-pinout" />`fact-umw-ao3401a-pinout`             | 1 Gate, 2 Source, 3 Drain                 | `NONE` | SOT-23 top-view device pin figure                                        | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-umw-ao3401a: page 1 pin figure, pins 1-3](#src-umw-ao3401a)                                                                       |
+  | <EvidenceAnchor id="fact-umw-ao3401a-project-nets" />`fact-umw-ao3401a-project-nets` | Q1.1=Q1\_G; Q1.2=VBUS\_IN; Q1.3=VBUS\_OUT | `NONE` | current Board P generated schematic source at immutable revision 410bc1a | NOT APPLICABLE                  | PROJECT-CHOICE | [src-umw-ao3401a-board-p-generator: COMPONENTS row Q1 and NETS rows Q1\_G, VBUS\_IN and VBUS\_OUT](#src-umw-ao3401a-board-p-generator) |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -168,11 +176,13 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 3
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function        |
-  | ---------- | ---- | ------------- | --------------- |
-  | `1`        | `G`  | `1`           | gate/Q1\_G      |
-  | `2`        | `S`  | `2`           | source/VBUS\_IN |
-  | `3`        | `D`  | `3`           | drain/VBUS\_OUT |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function        |
+    | ---------- | ---- | ------------- | --------------- |
+    | `1`        | `G`  | `1`           | gate/Q1\_G      |
+    | `2`        | `S`  | `2`           | source/VBUS\_IN |
+    | `3`        | `D`  | `3`           | drain/VBUS\_OUT |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

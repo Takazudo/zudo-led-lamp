@@ -81,36 +81,44 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
 
-| Fact                                                                         | Value         | Unit   | Conditions                        | Verdict                         | Provenance   | Evidence                                                                     |
-| ---------------------------------------------------------------------------- | ------------- | ------ | --------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c21189-rated-current" />`fact-c21189-rated-current` | 1             | `A`    | 0603 jumper rated current         | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal) |
-| <EvidenceAnchor id="fact-c21189-temperature" />`fact-c21189-temperature`     | -55 to +155 C | `NONE` | 0603 jumper operating temperature | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal) |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value         | Unit   | Conditions                        | Verdict                         | Provenance   | Evidence                                                                     |
+  | ---------------------------------------------------------------------------- | ------------- | ------ | --------------------------------- | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c21189-rated-current" />`fact-c21189-rated-current` | 1             | `A`    | 0603 jumper rated current         | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal) |
+  | <EvidenceAnchor id="fact-c21189-temperature" />`fact-c21189-temperature`     | -55 to +155 C | `NONE` | 0603 jumper operating temperature | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal) |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                                 | Value                 | Unit   | Conditions                                 | Verdict                         | Provenance   | Evidence                                                                     |
-| ------------------------------------------------------------------------------------ | --------------------- | ------ | ------------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c21189-jumper-resistance" />`fact-c21189-jumper-resistance` | less than 50 milliohm | `NONE` | 0603 jumper; do not model as an ideal zero | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal) |
+<EvidenceTable label="facts">
+  | Fact                                                                                 | Value                 | Unit   | Conditions                                 | Verdict                         | Provenance   | Evidence                                                                     |
+  | ------------------------------------------------------------------------------------ | --------------------- | ------ | ------------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c21189-jumper-resistance" />`fact-c21189-jumper-resistance` | less than 50 milliohm | `NONE` | 0603 jumper; do not model as an ideal zero | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal) |
+</EvidenceTable>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-| Fact                                                                               | Value                                                         | Unit   | Conditions                                                 | Verdict                         | Provenance   | Evidence                                                                            |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------ | ---------------------------------------------------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c21189-overload-current" />`fact-c21189-overload-current` | 2                                                             | `A`    | 0603 jumper maximum overload current                       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal)        |
-| <EvidenceAnchor id="fact-c21189-pulse-caveat" />`fact-c21189-pulse-caveat`         | Jumper pulse energy at the installed CCDB waveform is unknown | `NONE` | rated/overload current alone does not specify pulse energy | NEEDS BENCH                     | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 jumper row](#src-c21189-uniroyal) |
+<EvidenceTable label="facts">
+  | Fact                                                                               | Value                                                         | Unit   | Conditions                                                 | Verdict                         | Provenance   | Evidence                                                                            |
+  | ---------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------ | ---------------------------------------------------------- | ------------------------------- | ------------ | ----------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c21189-overload-current" />`fact-c21189-overload-current` | 2                                                             | `A`    | 0603 jumper maximum overload current                       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 row](#src-c21189-uniroyal)        |
+  | <EvidenceAnchor id="fact-c21189-pulse-caveat" />`fact-c21189-pulse-caveat`         | Jumper pulse energy at the installed CCDB waveform is unknown | `NONE` | rated/overload current alone does not specify pulse energy | NEEDS BENCH                     | PRIMARY-SPEC | [src-c21189-uniroyal: page 5, Ratings table, 0603 jumper row](#src-c21189-uniroyal) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                         | Value                                                                                  | Unit   | Conditions                        | Verdict                         | Provenance       | Evidence                                                                                                       |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------ | --------------------------------- | ------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-c21189-manufacturer" />`fact-c21189-manufacturer`   | UNI-ROYAL                                                                              | `NONE` | exact orderable 0603WAF0000T5E    | PASS - primary-source confirmed | PRIMARY-SPEC     | [Section evidence, src-c21189-uniroyal: page 2, Scope paragraph 1.1 and Part No. System](#src-c21189-uniroyal) |
-| <EvidenceAnchor id="fact-c21189-ccdb-topology" />`fact-c21189-ccdb-topology` | Fitted R19/R20 bridge CC1/CC2 to CC1DB/CC2DB; R17/R18 external-Rd 5.1k options are DNP | `NONE` | current generated Board P netlist | NOT APPLICABLE                  | REFERENCE-DESIGN | [src-c21189-generator: NETS mapping, rows CC1, CC2, CC1DB and CC2DB](#src-c21189-generator)                    |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value                                                                                  | Unit   | Conditions                        | Verdict                         | Provenance       | Evidence                                                                                                       |
+  | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------ | --------------------------------- | ------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-c21189-manufacturer" />`fact-c21189-manufacturer`   | UNI-ROYAL                                                                              | `NONE` | exact orderable 0603WAF0000T5E    | PASS - primary-source confirmed | PRIMARY-SPEC     | [Section evidence, src-c21189-uniroyal: page 2, Scope paragraph 1.1 and Part No. System](#src-c21189-uniroyal) |
+  | <EvidenceAnchor id="fact-c21189-ccdb-topology" />`fact-c21189-ccdb-topology` | Fitted R19/R20 bridge CC1/CC2 to CC1DB/CC2DB; R17/R18 external-Rd 5.1k options are DNP | `NONE` | current generated Board P netlist | NOT APPLICABLE                  | REFERENCE-DESIGN | [src-c21189-generator: NETS mapping, rows CC1, CC2, CC1DB and CC2DB](#src-c21189-generator)                    |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -125,10 +133,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name         | Footprint pad | Function         |
-  | ---------- | ------------ | ------------- | ---------------- |
-  | `1`        | `terminal-1` | `1`           | passive terminal |
-  | `2`        | `terminal-2` | `2`           | passive terminal |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name         | Footprint pad | Function         |
+    | ---------- | ------------ | ------------- | ---------------- |
+    | `1`        | `terminal-1` | `1`           | passive terminal |
+    | `2`        | `terminal-2` | `2`           | passive terminal |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

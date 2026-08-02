@@ -105,59 +105,71 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-| Fact                                                                         | Value | Unit | Conditions                                       | Verdict   | Provenance | Evidence                                                                               |
-| ---------------------------------------------------------------------------- | ----- | ---- | ------------------------------------------------ | --------- | ---------- | -------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-ss26-reverse-voltage" />`fact-ss26-reverse-voltage` | 60    | `V`  | repetitive peak reverse and DC blocking, TA=25 C | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRRM and VDC](#src-ro-ss26-mirror) |
-| <EvidenceAnchor id="fact-ss26-rms-voltage" />`fact-ss26-rms-voltage`         | 42    | `V`  | maximum RMS voltage                              | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRMS](#src-ro-ss26-mirror)         |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value | Unit | Conditions                                       | Verdict   | Provenance | Evidence                                                                               |
+  | ---------------------------------------------------------------------------- | ----- | ---- | ------------------------------------------------ | --------- | ---------- | -------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-ss26-reverse-voltage" />`fact-ss26-reverse-voltage` | 60    | `V`  | repetitive peak reverse and DC blocking, TA=25 C | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRRM and VDC](#src-ro-ss26-mirror) |
+  | <EvidenceAnchor id="fact-ss26-rms-voltage" />`fact-ss26-rms-voltage`         | 42    | `V`  | maximum RMS voltage                              | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRMS](#src-ro-ss26-mirror)         |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                                         | Value | Unit | Conditions                                    | Verdict     | Provenance | Evidence                                                                                 |
-| ---------------------------------------------------------------------------- | ----- | ---- | --------------------------------------------- | ----------- | ---------- | ---------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-ss26-forward-voltage" />`fact-ss26-forward-voltage` | 0.7   | `V`  | maximum instantaneous VF at IF=2.0 A, TA=25 C | UNSOURCED   | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row SS26 VF](#src-ro-ss26-mirror)  |
-| <EvidenceAnchor id="fact-ss26-leakage-25c" />`fact-ss26-leakage-25c`         | 0.5   | `mA` | VR=60 V DC blocking, TA=25 C                  | UNSOURCED   | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row IR1 SS26](#src-ro-ss26-mirror) |
-| <EvidenceAnchor id="fact-ss26-leakage-100c" />`fact-ss26-leakage-100c`       | 50    | `mA` | VR=60 V DC blocking, TA=100 C                 | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row IR2 SS26](#src-ro-ss26-mirror) |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value | Unit | Conditions                                    | Verdict     | Provenance | Evidence                                                                                 |
+  | ---------------------------------------------------------------------------- | ----- | ---- | --------------------------------------------- | ----------- | ---------- | ---------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-ss26-forward-voltage" />`fact-ss26-forward-voltage` | 0.7   | `V`  | maximum instantaneous VF at IF=2.0 A, TA=25 C | UNSOURCED   | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row SS26 VF](#src-ro-ss26-mirror)  |
+  | <EvidenceAnchor id="fact-ss26-leakage-25c" />`fact-ss26-leakage-25c`         | 0.5   | `mA` | VR=60 V DC blocking, TA=25 C                  | UNSOURCED   | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row IR1 SS26](#src-ro-ss26-mirror) |
+  | <EvidenceAnchor id="fact-ss26-leakage-100c" />`fact-ss26-leakage-100c`       | 50    | `mA` | VR=60 V DC blocking, TA=100 C                 | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row IR2 SS26](#src-ro-ss26-mirror) |
+</EvidenceTable>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-| Fact                                                                     | Value | Unit | Conditions                   | Verdict   | Provenance | Evidence                                                                               |
-| ------------------------------------------------------------------------ | ----- | ---- | ---------------------------- | --------- | ---------- | -------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-ss26-surge-current" />`fact-ss26-surge-current` | 50    | `A`  | single 8.3 ms half-sine wave | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row IFSM and Figure 2](#src-ro-ss26-mirror) |
+<EvidenceTable label="facts">
+  | Fact                                                                     | Value | Unit | Conditions                   | Verdict   | Provenance | Evidence                                                                               |
+  | ------------------------------------------------------------------------ | ----- | ---- | ---------------------------- | --------- | ---------- | -------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-ss26-surge-current" />`fact-ss26-surge-current` | 50    | `A`  | single 8.3 ms half-sine wave | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row IFSM and Figure 2](#src-ro-ss26-mirror) |
+</EvidenceTable>
 
 ### THERMAL\_SOA
 
 Thermal and safe-operating-area behaviour: how much the part may dissipate, and under what mounting and ambient conditions.
 
-| Fact                                                                         | Value                                                              | Unit   | Conditions                                                    | Verdict     | Provenance | Evidence                                                                                                          |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------ | ------------------------------------------------------------- | ----------- | ---------- | ----------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-ss26-average-current" />`fact-ss26-average-current` | 2                                                                  | `A`    | 60 Hz sinewave resistive load, lead-temperature curve applies | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row IF(AV) and Figure 1 derating curve](#src-ro-ss26-mirror)           |
-| <EvidenceAnchor id="fact-ss26-thermal" />`fact-ss26-thermal`                 | RthetaJA 80 C/W typical; RthetaJL 20 C/W typical; TJ -55 to +150 C | `NONE` | datasheet mounting conditions not fully specified             | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table rows thermal resistance and junction temperature](#src-ro-ss26-mirror) |
+<EvidenceTable label="facts">
+  | Fact                                                                         | Value                                                              | Unit   | Conditions                                                    | Verdict     | Provenance | Evidence                                                                                                          |
+  | ---------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------ | ------------------------------------------------------------- | ----------- | ---------- | ----------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-ss26-average-current" />`fact-ss26-average-current` | 2                                                                  | `A`    | 60 Hz sinewave resistive load, lead-temperature curve applies | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row IF(AV) and Figure 1 derating curve](#src-ro-ss26-mirror)           |
+  | <EvidenceAnchor id="fact-ss26-thermal" />`fact-ss26-thermal`                 | RthetaJA 80 C/W typical; RthetaJL 20 C/W typical; TJ -55 to +150 C | `NONE` | datasheet mounting conditions not fully specified             | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table rows thermal resistance and junction temperature](#src-ro-ss26-mirror) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                                       | Value                                                    | Unit   | Conditions                                                                                        | Verdict        | Provenance     | Evidence                                                                                                                     |
-| -------------------------------------------------------------------------- | -------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------- | -------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-ss26-manufacturer" />`fact-ss26-manufacturer`     | R+O                                                      | `NONE` | inventory brand claim for exact C7420363                                                          | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: title block and Maximum Ratings table row SS26](#src-ro-ss26-mirror)                                    |
-| <EvidenceAnchor id="fact-ss26-polarity" />`fact-ss26-polarity`             | cathode band denotes cathode; opposite terminal is anode | `NONE` | SMA package                                                                                       | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: Mechanical Data row Polarity and function Figure](#src-ro-ss26-mirror)                                  |
-| <EvidenceAnchor id="fact-ss26-package" />`fact-ss26-package`               | SMA DO-214AC, cathode band orientation                   | `NONE` | surface-mount package                                                                             | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: Package Outline Dimensions table and Figure suggested pad layout](#src-ro-ss26-mirror)                  |
-| <EvidenceAnchor id="fact-ss26-project-nets" />`fact-ss26-project-nets`     | 15                                                       | `V`    | nominal V15 net label; D11.1 anode=LED\_N and D11.2 cathode=V15; switching overshoot not bounded  | NOT APPLICABLE | PROJECT-CHOICE | [src-ss26-generator: Header polarity statement, COMPONENTS table row D11, and NETS rows LED\_N and V15](#src-ss26-generator) |
-| <EvidenceAnchor id="fact-ss26-voltage-margin" />`fact-ss26-voltage-margin` | 45                                                       | `V`    | mirror 60 V rating minus nominal V15 only; switch overshoot and source transient unresolved       | NEEDS BENCH    | CALCULATED     | [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-reverse-voltage minus fact-ss26-project-nets             |
-| <EvidenceAnchor id="fact-ss26-current-margin" />`fact-ss26-current-margin` | 1.3696969696969696                                       | `A`    | mirror 2 A average rating minus calculated AL8860 peak; thermal waveform applicability unresolved | NEEDS BENCH    | CALCULATED     | [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-average-current minus fact-al8860-peak-current           |
+<EvidenceTable label="facts">
+  | Fact                                                                       | Value                                                    | Unit   | Conditions                                                                                        | Verdict        | Provenance     | Evidence                                                                                                                     |
+  | -------------------------------------------------------------------------- | -------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------- | -------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-ss26-manufacturer" />`fact-ss26-manufacturer`     | R+O                                                      | `NONE` | inventory brand claim for exact C7420363                                                          | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: title block and Maximum Ratings table row SS26](#src-ro-ss26-mirror)                                    |
+  | <EvidenceAnchor id="fact-ss26-polarity" />`fact-ss26-polarity`             | cathode band denotes cathode; opposite terminal is anode | `NONE` | SMA package                                                                                       | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: Mechanical Data row Polarity and function Figure](#src-ro-ss26-mirror)                                  |
+  | <EvidenceAnchor id="fact-ss26-package" />`fact-ss26-package`               | SMA DO-214AC, cathode band orientation                   | `NONE` | surface-mount package                                                                             | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: Package Outline Dimensions table and Figure suggested pad layout](#src-ro-ss26-mirror)                  |
+  | <EvidenceAnchor id="fact-ss26-project-nets" />`fact-ss26-project-nets`     | 15                                                       | `V`    | nominal V15 net label; D11.1 anode=LED\_N and D11.2 cathode=V15; switching overshoot not bounded  | NOT APPLICABLE | PROJECT-CHOICE | [src-ss26-generator: Header polarity statement, COMPONENTS table row D11, and NETS rows LED\_N and V15](#src-ss26-generator) |
+  | <EvidenceAnchor id="fact-ss26-voltage-margin" />`fact-ss26-voltage-margin` | 45                                                       | `V`    | mirror 60 V rating minus nominal V15 only; switch overshoot and source transient unresolved       | NEEDS BENCH    | CALCULATED     | [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-reverse-voltage minus fact-ss26-project-nets             |
+  | <EvidenceAnchor id="fact-ss26-current-margin" />`fact-ss26-current-margin` | 1.3696969696969696                                       | `A`    | mirror 2 A average rating minus calculated AL8860 peak; thermal waveform applicability unresolved | NEEDS BENCH    | CALCULATED     | [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-average-current minus fact-al8860-peak-current           |
+</EvidenceTable>
 
 ## Calculation dependencies
 
 These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
 
-| Fact                                                    | Expression                                             | Depends on                                                                                                                                                             |
-| ------------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`fact-ss26-voltage-margin`](#fact-ss26-voltage-margin) | `fact_ss26_reverse_voltage - fact_ss26_project_nets`   | [`fact-ss26-reverse-voltage`](#fact-ss26-reverse-voltage), [`fact-ss26-project-nets`](#fact-ss26-project-nets)                                                         |
-| [`fact-ss26-current-margin`](#fact-ss26-current-margin) | `fact_ss26_average_current - fact_al8860_peak_current` | [`fact-ss26-average-current`](#fact-ss26-average-current), [`fact-al8860-peak-current`](/docs/components/records/al8860mp-13/#fact-al8860-peak-current) on AL8860MP-13 |
+<EvidenceTable label="calculation-dependencies">
+  | Fact                                                    | Expression                                             | Depends on                                                                                                                                                             |
+  | ------------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [`fact-ss26-voltage-margin`](#fact-ss26-voltage-margin) | `fact_ss26_reverse_voltage - fact_ss26_project_nets`   | [`fact-ss26-reverse-voltage`](#fact-ss26-reverse-voltage), [`fact-ss26-project-nets`](#fact-ss26-project-nets)                                                         |
+  | [`fact-ss26-current-margin`](#fact-ss26-current-margin) | `fact_ss26_average_current - fact_al8860_peak_current` | [`fact-ss26-average-current`](#fact-ss26-average-current), [`fact-al8860-peak-current`](/docs/components/records/al8860mp-13/#fact-al8860-peak-current) on AL8860MP-13 |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -172,10 +184,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function                  |
-  | ---------- | ---- | ------------- | ------------------------- |
-  | `1`        | `A`  | `1`           | anode at LED\_N           |
-  | `2`        | `K`  | `2`           | cathode/banded end at V15 |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function                  |
+    | ---------- | ---- | ------------- | ------------------------- |
+    | `1`        | `A`  | `1`           | anode at LED\_N           |
+    | `2`        | `K`  | `2`           | cathode/banded end at V15 |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

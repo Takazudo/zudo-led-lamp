@@ -41,6 +41,7 @@ import type { SafeUrl } from "./url.ts";
 export const ALLOWED_COMPONENT_ATTRIBUTES = {
   EvidenceAnchor: ["id"],
   EvidenceDetails: ["label"],
+  EvidenceTable: ["label"],
   CategoryNav: ["category"],
 } as const satisfies Record<string, readonly string[]>;
 
@@ -180,6 +181,26 @@ export function table(header: readonly SafeText[], rows: readonly TableRow[]): R
       })),
     ],
   };
+}
+
+/**
+ * The same table, inside its own scroll container.
+ *
+ * A table wide enough to need this is wide because the evidence is: dropping a
+ * column to fit a phone would drop a claim. So every column stays, the
+ * container scrolls, and the page body does not. `label` selects the container
+ * width in `global.css` and is never shown to a reader — it is a slug, because
+ * an attribute value is all evidence text is forbidden to be.
+ *
+ * Defined here rather than in a renderer so the wrapper and the table it wraps
+ * cannot drift apart: there is one way to emit a scrollable table.
+ */
+export function scrollableTable(
+  label: string,
+  header: readonly SafeText[],
+  rows: readonly TableRow[],
+): RootContent {
+  return containerComponent("EvidenceTable", { label }, [table(header, rows)]);
 }
 
 /**

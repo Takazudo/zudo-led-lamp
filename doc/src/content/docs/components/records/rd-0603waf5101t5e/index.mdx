@@ -108,46 +108,56 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-| Fact                                                             | Value | Unit | Conditions                                                                                                         | Verdict                         | Provenance   | Evidence                                                                                                         |
-| ---------------------------------------------------------------- | ----- | ---- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-rd-voltage-cap" />`fact-rd-voltage-cap` | 75    | `V`  | 0603 package-family maximum-working-voltage cap only; exact-part RCWV is the lower of this cap and sqrt(P times R) | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 5, Ratings table, 0603 row and RCWV note](#src-rd-uniroyal-smd-sp-001) |
+<EvidenceTable label="facts">
+  | Fact                                                             | Value | Unit | Conditions                                                                                                         | Verdict                         | Provenance   | Evidence                                                                                                         |
+  | ---------------------------------------------------------------- | ----- | ---- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-rd-voltage-cap" />`fact-rd-voltage-cap` | 75    | `V`  | 0603 package-family maximum-working-voltage cap only; exact-part RCWV is the lower of this cap and sqrt(P times R) | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 5, Ratings table, 0603 row and RCWV note](#src-rd-uniroyal-smd-sp-001) |
+</EvidenceTable>
 
 ### RECOMMENDED\_OPERATION
 
 The range the manufacturer intends the part to be used in. Always narrower than the absolute maximum.
 
-| Fact                                                               | Value | Unit | Conditions                                                                                        | Verdict                         | Provenance   | Evidence                                                                                                                                                       |
-| ------------------------------------------------------------------ | ----- | ---- | ------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-rd-power" />`fact-rd-power`               | 0.1   | `W`  | 0603 WA normal-size rating, ambient at or below 70 C; derate above 70 C                           | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed pages 2 and 4, Part No. System and resistance-range table](#src-rd-uniroyal-smd-sp-001)                                   |
-| <EvidenceAnchor id="fact-rd-rcwv-squared" />`fact-rd-rcwv-squared` | 510   | `V2` | P times R for the exact 0.1 W, 5.1 kOhm part; sqrt gives about 22.6 V, below the 75 V package cap | PASS - primary-source confirmed | CALCULATED   | [src-rd-uniroyal-smd-sp-001: printed page 5, RCWV equation and 0603 ratings row; calculated from fact-rd-power and fact-rd-value](#src-rd-uniroyal-smd-sp-001) |
+<EvidenceTable label="facts">
+  | Fact                                                               | Value | Unit | Conditions                                                                                        | Verdict                         | Provenance   | Evidence                                                                                                                                                       |
+  | ------------------------------------------------------------------ | ----- | ---- | ------------------------------------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-rd-power" />`fact-rd-power`               | 0.1   | `W`  | 0603 WA normal-size rating, ambient at or below 70 C; derate above 70 C                           | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed pages 2 and 4, Part No. System and resistance-range table](#src-rd-uniroyal-smd-sp-001)                                   |
+  | <EvidenceAnchor id="fact-rd-rcwv-squared" />`fact-rd-rcwv-squared` | 510   | `V2` | P times R for the exact 0.1 W, 5.1 kOhm part; sqrt gives about 22.6 V, below the 75 V package cap | PASS - primary-source confirmed | CALCULATED   | [src-rd-uniroyal-smd-sp-001: printed page 5, RCWV equation and 0603 ratings row; calculated from fact-rd-power and fact-rd-value](#src-rd-uniroyal-smd-sp-001) |
+</EvidenceTable>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-| Fact                                                         | Value | Unit    | Conditions                                                           | Verdict                         | Provenance   | Evidence                                                                                                           |
-| ------------------------------------------------------------ | ----- | ------- | -------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| <EvidenceAnchor id="fact-rd-value" />`fact-rd-value`         | 5.1   | `kOhm`  | 5101 code: 510 times 10 to power 1                                   | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 2, Section 2.4 resistance-value code](#src-rd-uniroyal-smd-sp-001)       |
-| <EvidenceAnchor id="fact-rd-tolerance" />`fact-rd-tolerance` | 1     | `%`     | F tolerance code                                                     | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 2, Section 2.3 tolerance code](#src-rd-uniroyal-smd-sp-001)              |
-| <EvidenceAnchor id="fact-rd-tcr" />`fact-rd-tcr`             | 100   | `ppm/C` | 0603 resistance above 10 Ohm, measured from 25 C to test temperature | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 6, Temperature Coefficient table, 0603 row](#src-rd-uniroyal-smd-sp-001) |
+<EvidenceTable label="facts">
+  | Fact                                                         | Value | Unit    | Conditions                                                           | Verdict                         | Provenance   | Evidence                                                                                                           |
+  | ------------------------------------------------------------ | ----- | ------- | -------------------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+  | <EvidenceAnchor id="fact-rd-value" />`fact-rd-value`         | 5.1   | `kOhm`  | 5101 code: 510 times 10 to power 1                                   | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 2, Section 2.4 resistance-value code](#src-rd-uniroyal-smd-sp-001)       |
+  | <EvidenceAnchor id="fact-rd-tolerance" />`fact-rd-tolerance` | 1     | `%`     | F tolerance code                                                     | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 2, Section 2.3 tolerance code](#src-rd-uniroyal-smd-sp-001)              |
+  | <EvidenceAnchor id="fact-rd-tcr" />`fact-rd-tcr`             | 100   | `ppm/C` | 0603 resistance above 10 Ohm, measured from 25 C to test temperature | PASS - primary-source confirmed | PRIMARY-SPEC | [src-rd-uniroyal-smd-sp-001: printed page 6, Temperature Coefficient table, 0603 row](#src-rd-uniroyal-smd-sp-001) |
+</EvidenceTable>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-| Fact                                                               | Value                                                                              | Unit   | Conditions                                                                                      | Verdict                         | Provenance     | Evidence                                                                                                         |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------- | ------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
-| <EvidenceAnchor id="fact-rd-manufacturer" />`fact-rd-manufacturer` | UNI-ROYAL                                                                          | `NONE` | exact 0603WAF5101T5E part-number decode                                                         | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-rd-uniroyal-smd-sp-001: title block and Section 2 Part No. System](#src-rd-uniroyal-smd-sp-001)             |
-| <EvidenceAnchor id="fact-rd-pinout" />`fact-rd-pinout`             | two-terminal non-polar resistor; pads 1 and 2                                      | `NONE` | project symbol and R0603 footprint                                                              | NOT APPLICABLE                  | PROJECT-CHOICE | [src-rd-board-p-generator: COMPONENTS rows R17/R18 and R0603 footprint selection](#src-rd-board-p-generator)     |
-| <EvidenceAnchor id="fact-rd-fit-state" />`fact-rd-fit-state`       | DNP at R17/R18; internal dead-battery Rd path selected through fitted CCDB bridges | `NONE` | current generator connectivity; do not fit external Rd without re-auditing parallel termination | NEEDS BENCH                     | PROJECT-CHOICE | [src-rd-board-p-generator: COMPONENTS rows R17/R18 and NETS CC1/CC2 with CC1DB/CC2DB](#src-rd-board-p-generator) |
+<EvidenceTable label="facts">
+  | Fact                                                               | Value                                                                              | Unit   | Conditions                                                                                      | Verdict                         | Provenance     | Evidence                                                                                                         |
+  | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------- | ------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+  | <EvidenceAnchor id="fact-rd-manufacturer" />`fact-rd-manufacturer` | UNI-ROYAL                                                                          | `NONE` | exact 0603WAF5101T5E part-number decode                                                         | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-rd-uniroyal-smd-sp-001: title block and Section 2 Part No. System](#src-rd-uniroyal-smd-sp-001)             |
+  | <EvidenceAnchor id="fact-rd-pinout" />`fact-rd-pinout`             | two-terminal non-polar resistor; pads 1 and 2                                      | `NONE` | project symbol and R0603 footprint                                                              | NOT APPLICABLE                  | PROJECT-CHOICE | [src-rd-board-p-generator: COMPONENTS rows R17/R18 and R0603 footprint selection](#src-rd-board-p-generator)     |
+  | <EvidenceAnchor id="fact-rd-fit-state" />`fact-rd-fit-state`       | DNP at R17/R18; internal dead-battery Rd path selected through fitted CCDB bridges | `NONE` | current generator connectivity; do not fit external Rd without re-auditing parallel termination | NEEDS BENCH                     | PROJECT-CHOICE | [src-rd-board-p-generator: COMPONENTS rows R17/R18 and NETS CC1/CC2 with CC1DB/CC2DB](#src-rd-board-p-generator) |
+</EvidenceTable>
 
 ## Calculation dependencies
 
 These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
 
-| Fact                                            | Expression                             | Depends on                                                           |
-| ----------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------- |
-| [`fact-rd-rcwv-squared`](#fact-rd-rcwv-squared) | `fact_rd_power * fact_rd_value * 1000` | [`fact-rd-power`](#fact-rd-power), [`fact-rd-value`](#fact-rd-value) |
+<EvidenceTable label="calculation-dependencies">
+  | Fact                                            | Expression                             | Depends on                                                           |
+  | ----------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------- |
+  | [`fact-rd-rcwv-squared`](#fact-rd-rcwv-squared) | `fact_rd_power * fact_rd_value * 1000` | [`fact-rd-power`](#fact-rd-power), [`fact-rd-value`](#fact-rd-value) |
+</EvidenceTable>
 
 ## Pin maps
 
@@ -162,10 +172,12 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 - **Pins:** 2
 
 <EvidenceDetails label="pin-assignments">
-  | Symbol pin | Name | Footprint pad | Function            |
-  | ---------- | ---- | ------------- | ------------------- |
-  | `1`        | `1`  | `1`           | CC1/CC2 when fitted |
-  | `2`        | `2`  | `2`           | ground when fitted  |
+  <EvidenceTable label="pin-assignments">
+    | Symbol pin | Name | Footprint pad | Function            |
+    | ---------- | ---- | ------------- | ------------------- |
+    | `1`        | `1`  | `1`           | CC1/CC2 when fitted |
+    | `2`        | `2`  | `2`           | ground when fitted  |
+  </EvidenceTable>
 </EvidenceDetails>
 
 ## Interactions

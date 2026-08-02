@@ -30,15 +30,15 @@ import {
   paragraph,
   routeCodeLink,
   routeLink,
+  scrollableTable,
   space,
   strong,
-  table,
   text,
   type TableRow,
 } from "../mdx.ts";
 import { anchor } from "../ids.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
-import { literal, type SafeText } from "../text.ts";
+import { joinSafe, literal, type SafeText } from "../text.ts";
 import {
   agentResourceDestination,
   aliasTerms,
@@ -107,7 +107,8 @@ export function renderCatalog(model: PublicViewModel): GeneratedPage {
 
     heading(2, literal("Parts at a glance")),
     evidenceAnchor(anchor(CATALOG_INDEX_ANCHOR)),
-    table(
+    scrollableTable(
+      "parts-index",
       [
         literal("Part"),
         literal("Record"),
@@ -201,8 +202,13 @@ function entry(record: PublicRecord): RootContent[] {
   ];
 
   const agentResource = agentResourceDestination(record);
+  // The part is named INSIDE each link rather than only in the heading above
+  // it. This page carries 64 links whose text would otherwise be one of two
+  // phrases repeated 32 times each, and a screen reader's link list — or any
+  // reader tabbing through — sees link text without the heading that gave it
+  // its subject.
   const links: PhrasingContent[] = [
-    routeLink(recordRoute(identity.slug), literal("Record details")),
+    routeLink(recordRoute(identity.slug), linkLabel(identity.mpn, "record details")),
   ];
   // Only linked when the owning bundle is actually known — see
   // `agentResourceDestination`. A stand-in link to the resource index would read
@@ -212,7 +218,7 @@ function entry(record: PublicRecord): RootContent[] {
       space(),
       text(literal("—")),
       space(),
-      routeLink(agentResource, literal("Raw agent resource")),
+      routeLink(agentResource, linkLabel(identity.mpn, "raw agent resource")),
     );
   }
 
@@ -272,6 +278,11 @@ function termList(terms: readonly SafeText[]): PhrasingContent[] {
     list.push(code(term));
   }
   return list;
+}
+
+/** `<MPN> record details` — the part first, so the link reads as a subject. */
+function linkLabel(mpn: SafeText, purpose: string): SafeText {
+  return joinSafe([mpn, literal(purpose)], " ");
 }
 
 function labelled(label: string, description: string): PhrasingContent[] {
