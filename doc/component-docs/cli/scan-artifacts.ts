@@ -83,7 +83,11 @@ import type { PublicViewModel } from "../core/view-model.ts";
  * same reason. `corpus.test.ts` owns the exact numbers.
  */
 const MINIMUM_OWNED_CANARIES = 100;
-const MINIMUM_OWNED_FILES = 30;
+// Above what the non-`dist` owned surfaces contribute on their own (the MDX
+// tree, preflight and the two slices), so losing every built page cannot clear
+// the floor. `assertPageCoverage` is the exact check; this is the backstop that
+// keeps the floor from being satisfiable by one surface.
+const MINIMUM_OWNED_FILES = 60;
 const MINIMUM_SITE_CANARIES = 100;
 const MINIMUM_SITE_FILES = 150;
 

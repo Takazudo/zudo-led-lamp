@@ -263,6 +263,37 @@ describe("the site-wide subtraction excuses only what another source publishes",
   it("keeps everything when no other source publishes any of it", () => {
     assert.equal(subtractPublishedElsewhere(canaries, []).length, 2);
   });
+
+  it("never lets a match straddle two artifacts", () => {
+    // Two files that each hold half of a canary do not between them publish it.
+    // Joined with a space they would, and the canary would be dropped — a
+    // silent hole in the very check that decides what gets searched for.
+    const split = harvestCanaries([{ positive: ["alpha bravo charlie delta"] }], {
+      deniedKeys: ["positive"],
+    });
+    assert.equal(split.length, 1);
+    const halves: readonly ScanTarget[] = [
+      { label: "a.mdx", text: "alpha bravo" },
+      { label: "b.mdx", text: "charlie delta" },
+    ];
+    assert.equal(subtractPublishedElsewhere(split, halves).length, 1);
+  });
+
+  it("never lets a positive control be satisfied by two artifacts jointly", () => {
+    assert.throws(
+      () =>
+        assertPositiveControls(
+          [
+            { label: "a.html", text: "AL8860MP" },
+            { label: "b.html", text: "-13 driver" },
+          ],
+          [{ label: "mpn", value: "AL8860MP-13" }],
+          "test",
+        ),
+      (error: unknown) =>
+        error instanceof ComponentDocsError && error.code === "PUBLICATION_POLICY",
+    );
+  });
 });
 
 describe("the scan fails closed rather than passing vacuously", () => {

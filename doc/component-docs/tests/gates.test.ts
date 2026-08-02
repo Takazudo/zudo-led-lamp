@@ -301,13 +301,15 @@ describe("the canary set cannot quietly become empty", () => {
   });
 
   it("maps no provider key to a field the matrix publishes", () => {
-    for (const [key, providerKey] of Object.entries(PROVIDER_KEY_FOR_DENIED_FIELD)) {
+    // The converse of the test above: this table going stale in the other
+    // direction would leave a canary walking a key whose field is now public,
+    // and the scan would fail on a correct build.
+    for (const key of Object.keys(PROVIDER_KEY_FOR_DENIED_FIELD)) {
       assert.equal(
         CIRCUIT_PUBLICATION_MATRIX[key as FieldKey],
         "DENY",
         `${key} is mapped as denied here but published by the matrix`,
       );
-      void providerKey;
     }
   });
 

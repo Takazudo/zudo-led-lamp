@@ -70,13 +70,29 @@ const REPORTED_LIMIT = 20;
 
 /** A value that must not appear in any published artifact. */
 export type Canary = {
-  /** The value as the provider recorded it. */
+  /**
+   * The value as the provider recorded it. Present for tests and debugging —
+   * failure messages deliberately report `path` instead, because they land in
+   * CI logs.
+   */
   readonly value: string;
   /** Normalised form; this is what is actually searched for. */
   readonly normalized: string;
   /** Dotted path of the denied key it was reached through, for the report. */
   readonly path: string;
 };
+
+/**
+ * Separator for the concatenated corpora below.
+ *
+ * A space would let a match straddle two independent values — which in a
+ * subtraction means silently dropping a real canary, and in a positive control
+ * means passing because two artifacts each hold half of it. NUL survives
+ * `normalizeForScan` (it is neither whitespace, nor a backslash, nor a
+ * character reference) and `safeText` rejects it outright, so no published
+ * string can contain one.
+ */
+const CORPUS_SEPARATOR = "\\u0000";
 
 /** One artifact, as the scanner sees it. */
 export type ScanTarget = {
@@ -241,7 +257,7 @@ export function harvestCanaries(
   options: HarvestOptions,
 ): readonly Canary[] {
   const denied = new Set(options.deniedKeys);
-  const deniedValues = new Map<string, string>();
+  const deniedValues = new Map<string, { value: string; path: string }>();
   const publishedValues: string[] = [];
 
   const walk = (node: unknown, path: string, underDenied: boolean): void => {
@@ -249,7 +265,7 @@ export function harvestCanaries(
       const normalized = normalizeForScan(node);
       if (normalized === "") return;
       if (underDenied) {
-        if (!deniedValues.has(normalized)) deniedValues.set(normalized, `${path} = ${node}`);
+        if (!deniedValues.has(normalized)) deniedValues.set(normalized, { value: node, path });
       } else {
         publishedValues.push(normalized);
       }
@@ -268,15 +284,13 @@ export function harvestCanaries(
 
   for (const [index, root] of roots.entries()) walk(root, `[${index}]`, false);
 
-  // One blob joined by a separator no provider string contains, so a match can
-  // never straddle two independent published values.
-  const publishedBlob = publishedValues.join(" ");
+  const publishedBlob = publishedValues.join(CORPUS_SEPARATOR);
 
   const canaries: Canary[] = [];
-  for (const [normalized, provenance] of deniedValues) {
+  for (const [normalized, origin] of deniedValues) {
     if (isNonCanary(normalized)) continue;
     if (publishedBlob.includes(normalized)) continue;
-    canaries.push({ value: provenance, normalized, path: provenance.split(" = ")[0] as string });
+    canaries.push({ value: origin.value, normalized, path: origin.path });
   }
   return canaries;
 }
@@ -307,7 +321,7 @@ export function subtractPublishedElsewhere(
 ): readonly Canary[] {
   const blob = corpus
     .map((target) => (target.text === null ? "" : normalizeForScan(target.text)))
-    .join(" ");
+    .join(CORPUS_SEPARATOR);
   return canaries.filter((canary) => !blob.includes(canary.normalized));
 }
 
@@ -479,7 +493,7 @@ export function assertPositiveControls(
 ): void {
   const haystack = targets
     .map((target) => (target.text === null ? "" : normalizeForScan(target.text)))
-    .join(" ");
+    .join(CORPUS_SEPARATOR);
 
   const missing = controls
     .filter((control) => !haystack.includes(normalizeForScan(control.value)))

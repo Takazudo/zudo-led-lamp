@@ -31,7 +31,16 @@ real_home_state() {
 BEFORE="$(real_home_state)"
 
 SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/component-docs-doc-skill-XXXXXX")"
-trap 'rm -rf "$SANDBOX"' EXIT
+
+# Guarded because the cleanup is a recursive delete of a variable: an empty or
+# reassigned SANDBOX would take the whole of $TMPDIR with it.
+cleanup() {
+  case "$SANDBOX" in
+    */component-docs-doc-skill-*) rm -rf "$SANDBOX" ;;
+    *) echo "refusing to clean an unexpected sandbox path: $SANDBOX" >&2 ;;
+  esac
+}
+trap cleanup EXIT
 
 mkdir -p "$SANDBOX/home"
 
