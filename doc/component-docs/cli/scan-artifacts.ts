@@ -477,7 +477,11 @@ async function main(): Promise<void> {
   const agentTargets =
     agentSkillRoot === null ? [] : await readScanTargets(agentSkillRoot, "agent-skill");
   if (agentSkillRoot !== null) {
-    assertRequiredRoutes(agentTargets, REQUIRED_AGENT_ROUTES, `docs-to-agent corpus at ${agentSkillRoot}`);
+    assertRequiredRoutes(
+      agentTargets,
+      REQUIRED_AGENT_ROUTES,
+      `docs-to-agent corpus at ${agentSkillRoot}`,
+    );
   }
 
   // --- OWNED tier: full canary set, artifacts this feature writes -----------

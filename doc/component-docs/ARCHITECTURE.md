@@ -672,11 +672,27 @@ type stripping cover both.
 `core/**` is the provider-neutral local API. It depends on: a `ComponentDataAdapter`
 (id, contract version, supported view-model versions, a `ValidationRunner` callback,
 an `InstanceSelection`, a `PublicationMatrix`, and a `project()` function), plus a
-generated-root path. It contains no reference to Python, `.claude`, LCSC, KiCad or
-this repository's layout.
+generated-root path. It contains no reference to Python, `.claude`, KiCad, a file
+layout, a storage format, or a validator runtime — the only `.claude` mentions under
+`core/` are comments, two of which describe the *site's* own generated route shape
+rather than this provider.
 
-`adapters/circuit/**` is the only provider-specific code. A different provider is a
-sibling directory.
+**Neutral about the provider, not about the domain.** Measured at #66: `core/` is
+free of provider mechanics, but the view model it freezes is an *electronic-component*
+one. `PublicRecordIdentity` carries `mpn`, `manufacturer`, `lcsc`, `packageName` and
+`dnp`; `PublicPlacement` carries `board` and `refdes`; `corpus` counts
+`inventoryLines` and `dnpOrHandFitLines`; `FIELD_KEYS` includes `record.lcsc` and
+`alias.lcsc`; and `render/catalog.ts` labels a column "Orderable ID". An earlier
+version of this section claimed `core/**` had no reference to LCSC. It does, in
+`core/view-model.ts` and `core/publication.ts`, and always has.
+
+That is a reasonable design — the renderers have to name what they render — but it
+sets the real reuse boundary. A second **source of component evidence** is a sibling
+adapter directory and no change under `core/`. A second **domain** is not: it needs
+the view model, the field keys and the renderers generalised first, which is a
+larger job than writing an adapter and should be costed as one.
+
+`adapters/circuit/**` is the only provider-specific code.
 
 **Package extraction is deliberately deferred.** This epic does not modify or
 release `@takazudo/zfb`, `@takazudo/zudo-doc`, or any other repository/package. The

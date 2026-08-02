@@ -46,12 +46,31 @@ Everything rests on one split, and the dependency arrow only ever points one way
 | **Adapter** | `component-docs/adapters/circuit/` | your file layout, your schema, your validator |
 
 The core never imports a provider module, never spawns a process, never mentions a
-concrete data format, and never touches a provider file path. A second provider is a
-**sibling adapter directory** and zero changes under `core/`.
+concrete data format, and never touches a provider file path. A second **source of the
+same kind of data** is a sibling adapter directory and zero changes under `core/`.
 
 Keeping that arrow one-way is what makes the core reusable at all. If you find
-yourself adding a provider-specific field to a core type, the design has slipped —
-push it back into the adapter and project it into a neutral shape instead.
+yourself adding a *provider mechanic* — a path, a file format, a subprocess — to a core
+type, the design has slipped; push it back into the adapter.
+
+:::caution[Neutral about the provider, not about the domain]
+Be honest with yourself about which kind of reuse you are buying. This project's core
+is free of provider mechanics, but the view model it freezes is an
+**electronic-component** one: identities carry `mpn`, `manufacturer`, `lcsc`,
+`packageName` and `dnp`; placements carry `board` and `refdes`; the field-key union
+includes `record.lcsc`.
+
+So a second supplier of *component* evidence really is just a new adapter. A different
+**domain** is not — it needs the view model, the field keys and the renderers
+generalised first, which is a substantially larger job. Scope your adoption against
+that distinction before you start, not after.
+
+If you are adopting into a different domain, the parts that transfer unchanged are the
+ones below that never mention a record: the three publication gates, the branded-type
+sanitiser, the preflight report, the emit/ownership rules, and the canary scan. Those
+are the expensive parts to get right, and they are the reason the pattern is worth
+copying even when the view model is not.
+:::
 
 ### What the adapter must supply
 
@@ -359,6 +378,11 @@ The core is the provider-neutral local API. Here it depends only on an adapter o
 and a generated-root path, and contains no reference to the project's data format,
 storage layout or validator runtime. That is what makes extraction *possible* — and it
 is still deliberately **not done**.
+
+What would ship is therefore a **component-documentation** core, not a general
+evidence-projection framework: as noted above, the view model is domain-shaped. Naming
+that honestly at extraction matters more than it does today, because a package name
+sets an expectation that a local directory does not.
 
 The reason is worth being precise about, because it is the one place a normally strict
 rule is suspended.

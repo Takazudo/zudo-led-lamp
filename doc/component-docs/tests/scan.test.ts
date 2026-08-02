@@ -347,7 +347,7 @@ describe("the scan fails closed rather than passing vacuously", () => {
     );
   });
 
-  it("names the missing routes without needing the files to be readable", () => {
+  it("counts an unreadable file as present, because labels decide", () => {
     // Labels alone decide this, so a binary or unreadable file still counts as
     // present — the claim is about what the corpus contains, not what it says.
     assert.doesNotThrow(() =>
