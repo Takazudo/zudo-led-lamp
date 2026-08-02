@@ -67,8 +67,10 @@ import {
   agentResourceDestination,
   aliasTerms,
   catalogEntryRoute,
+  entryValue,
   factDestination,
   factValue,
+  factValueEntries,
   fitLabel,
   glossFor,
   openDomainSummary,
@@ -416,13 +418,36 @@ function factClassBlock(
 function factRow(fact: PublicFact, record: PublicRecord, index: RecordIndex): TableRow {
   return [
     [inlineEvidenceAnchor(fact.anchor), code(fact.factId)],
-    [text(factValue(fact))],
+    valueCell(fact),
     [code(fact.unit)],
     [text(fact.conditions)],
     [text(fact.verdict)],
     [text(fact.provenance)],
     evidenceCell(fact, record),
   ];
+}
+
+/**
+ * A fact's value, scalar or structured.
+ *
+ * Three facts record an object rather than a scalar — the distributor-identity
+ * bindings, whose value is `{lcsc, manufacturer, mpn, variant}`. The evidence
+ * contract forbids flattening those into one string, so each pair is rendered as
+ * `key=value`, keys as code because they are field names. A reader can still see
+ * every component of the identity, and a search for the LCSC code still finds
+ * the row.
+ */
+function valueCell(fact: PublicFact): PhrasingContent[] {
+  const entries = factValueEntries(fact.value);
+  if (entries === null) return [text(factValue(fact))];
+  if (entries.length === 0) return [text(literal("no value recorded"))];
+
+  const cell: PhrasingContent[] = [];
+  for (const [position, entry] of entries.entries()) {
+    if (position > 0) cell.push(text(literal(";")), space());
+    cell.push(code(entry.key), text(literal("=")), text(entryValue(entry, fact.factId)));
+  }
+  return cell;
 }
 
 /**
@@ -630,18 +655,19 @@ function interactionSection(record: PublicRecord, index: RecordIndex): RootConte
         literal(
           "Behaviour that is not a property of this part alone. Each interaction names the " +
             "records it spans, the conditions it holds under, and how far it has been " +
-            "confirmed. An interaction is published against one record; the other records it " +
-            "names are linked from here.",
+            "confirmed. An interaction that spans several parts appears on every one of " +
+            "their pages, under the same identifier, because it is equally a fact about each.",
         ),
       ),
     ]),
   ];
 
-  if (record.interactions.length === 0) {
+  const interactions = index.interactionsByRecordId.get(record.identity.recordId) ?? [];
+  if (interactions.length === 0) {
     return [...head, paragraph([text(literal("No interaction is published for this record."))])];
   }
 
-  return [...head, ...record.interactions.flatMap((entry) => interactionEntry(entry, record, index))];
+  return [...head, ...interactions.flatMap((entry) => interactionEntry(entry, record, index))];
 }
 
 function interactionEntry(
@@ -735,9 +761,13 @@ function sourceEntry(source: PublicSource): RootContent[] {
     field("Document date", [text(source.documentDate)]),
     field("Retrieved", [text(source.retrievalDate)]),
     field("Authority", [text(source.authorityClass)]),
-    field("Availability", [text(source.availability)]),
     field("Locator", [text(source.locator)]),
     field("Printed page", [text(source.printedPageLabel)]),
+    // Availability sits immediately before the link it qualifies. Twelve of the
+    // corpus's sources publish a perfectly well-formed URL and are still
+    // recorded as unretrievable; separating the two invites a reader to follow
+    // the link and assume the document backs the facts citing it.
+    field("Availability", [text(source.availability)]),
   ];
 
   details.push(
@@ -860,6 +890,7 @@ function legendSection(record: PublicRecord): RootContent[] {
  */
 function agentResourceSection(record: PublicRecord): RootContent[] {
   const ownerSkill = ownerSkillOf(record);
+  const destination = agentResourceDestination(record);
 
   return [
     heading(2, literal("Raw agent resource")),
@@ -873,15 +904,20 @@ function agentResourceSection(record: PublicRecord): RootContent[] {
       ),
     ]),
     paragraph(
-      ownerSkill === null
+      // No fallback link when the owner is unknown. A link to the resource index
+      // would look like the owning bundle and lead somewhere else, and a
+      // convincingly wrong link is worse than a stated absence.
+      destination === null || ownerSkill === null
         ? [
-            routeLink(
-              agentResourceDestination(record),
-              literal("Browse the published agent resources"),
+            text(
+              literal(
+                "The owning bundle is not identified in the published model, so no reciprocal " +
+                  "link can be given for this record.",
+              ),
             ),
           ]
         : [
-            routeLink(agentResourceDestination(record), literal("Open the owning bundle")),
+            routeLink(destination, literal("Open the owning bundle")),
             space(),
             code(ownerSkill),
           ],
