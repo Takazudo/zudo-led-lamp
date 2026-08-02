@@ -155,10 +155,12 @@ characters, and anything absurdly long.
 Publish the **original string**, never a normalised one: normalisation changes a URL
 that your evidence may have locked a hash against.
 
-For assets, the safe V1 answer is to publish **none** — no PDFs, no arbitrary files
-from the data tree. Record that as an explicit decision (a field key with a `DENY`)
-rather than leaving it merely unimplemented, so the next person sees a decision
-instead of a gap.
+For assets, the safe V1 default is to publish **none** — no PDFs and no arbitrary
+files from the data tree. Record that as an explicit decision (a field key with a
+`DENY`) rather than leaving it merely unimplemented, so the next person sees a
+decision instead of a gap. This project keeps that default for evidence files; its
+separate reviewed generators make only the narrow footprint-SVG and selected-WRL
+preview exceptions described below.
 
 ## The preflight report
 
@@ -268,6 +270,21 @@ the review surface and makes "what did this evidence change actually publish?"
 unanswerable from the diff. Choose deliberately, then wire CI to match — the two
 decisions are not independent.
 
+### Component reference assets are another generated surface
+
+For this project, onboarding a component also selects a reader-facing document and
+package previews. Keep that selection explicit in the adapter's committed selection:
+choose every published source, exactly one inspected document source and its truthful
+kind (`datasheet`, `specification`, or `drawing`), and the reviewed footprint/model
+pair. A URL ending in `.pdf` is not sufficient evidence that it is a datasheet.
+
+Commit the generated footprint SVGs and manifest plus the selected public WRL files,
+not only the generated MDX and preflight report. Regeneration must start from a
+canonical footprint that has a matching same-basename STEP and WRL model pair; the
+browser may use one format while the other remains an audit requirement. Make the
+preview checks part of the same pre-push gate as generation, so a record cannot gain a
+page with a missing or stale preview.
+
 ## Build and watch wiring
 
 Prefer **package scripts** over a build-tool plugin hook.
@@ -283,6 +300,12 @@ generate    validate -> project -> render -> emit
 check       dry run; nonzero on drift
 build       generate && <site build>          # generation precedes the content snapshot
 ```
+
+In this repository, `pnpm b4push` also checks footprint previews and public models,
+then performs type, component, build, freshness, and artifact-scan checks. It is a
+local credential-free gate. The CI workflow runs its committed-output/link checks
+afterward; only its final Cloudflare preview deploy is credential-gated, so unavailable
+credentials never turn a skipped validation step into a passing build.
 
 For watch mode:
 

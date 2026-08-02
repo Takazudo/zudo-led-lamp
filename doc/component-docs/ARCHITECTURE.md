@@ -22,14 +22,19 @@ routes, 33 pin maps, 140 pins**, plus **6 cross-component rules** in
 `circuit-spec-integration`; 29 inventory lines fitted, 3 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
 fails the build.
+They are current reviewed corpus assertions and must be refreshed together when the
+selection changes. The dated measurements under §14 are historical verification notes,
+not a second runtime count gate; update one only when repeating that stated baseline.
 
 ## 2. Directory ownership
 
 | Path | Owner | Rule |
 |---|---|---|
 | `doc/component-docs/` | this feature | all generator code, tests, this document |
-| `doc/src/content/docs/components/` | **generator, exclusively** | never hand-edit; every file is rewritten from evidence |
+| `doc/src/content/docs/components/` | **generator, exclusively** | committed; never hand-edit; every file is rewritten from evidence |
 | `doc/component-docs/preflight.json` | generator | committed, deterministic, reviewable |
+| `doc/public/assets/component-previews/footprints/` | footprint-preview generator | committed SVG assets and manifest; never hand-edit |
+| `doc/public/assets/component-previews/models/` | model generator | committed selected WRL assets; never hand-edit |
 | `doc/src/chrome-bindings.tsx` | this feature | MDX component registry |
 | `doc/src/styles/global.css` | site | an appended presentation block for the generated pages (`.zld-evidence-anchor`, plus the `.zld-evidence-table` scroll container and its long-token wrapping, added by #62) |
 | `doc/zfb.config.ts` | site | `chromeBindingsModule`, `docHistoryExclude` |
@@ -94,10 +99,10 @@ adapter directory and no change under `core/`.
 | `scan:doc-skill` | `bash component-docs/scripts/scan-doc-skill.sh` | same scan over an isolated docs-to-agent corpus |
 | `test:components` | `node --experimental-strip-types --test "component-docs/tests/*.test.ts"` | unit + integration |
 | `dev:components` | `… component-docs/cli/generate.ts --watch` | debounced regeneration |
-| `build` | `pnpm generate:components && zfb build` | generation precedes the content snapshot |
+| `build` | `pnpm generate:models && pnpm generate:components && zfb build` | public models and component generation precede the content snapshot |
 | `dev` | `pnpm generate:components && run-p dev:zfb dev:history dev:components` | seeded, then watched |
 | `check` | `zfb check` (unchanged) | typechecks `component-docs/**` via `tsconfig.json` `include` |
-| `b4push` | `pnpm check && pnpm test:components && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill` | local gate |
+| `b4push` | `pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm build && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill` | local credential-free gate; CI deploy follows only after its extra drift/link checks |
 
 **Why not a `zfb` plugin.** `@takazudo/zfb/plugins` does expose a supported
 composition seam (`setup` / `preBuild` / `postBuild` / `devMiddleware` /
@@ -749,7 +754,7 @@ adoption guide is #66's deliverable.
 python3 .claude/skills/component-spec-audit/scripts/validate.py     PASS: 32 lines; offline=True
 python3 -m unittest discover -s .claude/skills/component-spec-audit/scripts -p 'test_*.py'
 python3 .claude/skills/circuit-spec-integration/scripts/check_forward_tests.py
-pnpm --dir doc run test:components        113 tests, 0 failures
+pnpm --dir doc run test:components        457 tests, 0 failures
 pnpm --dir doc run generate:components    32/32 records, 81/81 sources, 1 page
 pnpm --dir doc run check:components       generated output is up to date
 pnpm --dir doc run check                  tsc — no errors
@@ -770,7 +775,7 @@ Additionally proven:
 ### Re-verified at #64 (Wave 4)
 
 ```
-pnpm --dir doc run test:components   371 tests, 0 failures
+pnpm --dir doc run test:components   457 tests, 0 failures
 pnpm --dir doc run scan:artifacts    OWNED 226 canaries x 73 artifacts, 0 hits
                                      SITE  222 canaries x 195 artifacts, 0 hits
 pnpm --dir doc run scan:doc-skill    isolated corpus, 0 hits; real $HOME untouched

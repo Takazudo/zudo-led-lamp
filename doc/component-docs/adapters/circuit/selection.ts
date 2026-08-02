@@ -4,8 +4,8 @@
  * Default-zero means this list, not a filter: a record or source that does not
  * appear here is never read into the view model, whatever the repository makes
  * visible. Every ID is spelled out so that adding a component to the project
- * does NOT silently add a public page — the build keeps working and the new
- * part stays unpublished until someone appends it here.
+ * does NOT silently add a public page — the reviewed `expect` assertions fail
+ * the build until someone explicitly updates this selection and its counts.
  *
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
