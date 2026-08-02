@@ -475,7 +475,10 @@ function evidenceChainBlock(
         literal(
           "The stages a claim passes through, in order. A settled stage says nothing about any " +
             "stage after it: a manufacturer document confirming a limit is not an inspection of " +
-            "the assembled board, and neither is a measurement.",
+            "the assembled board, and neither is a measurement. A stage with no facts against " +
+            "it is not one nobody got round to filling in: nothing has been established there " +
+            "yet, so the rule's conditions and its refusal above are the whole of what is known " +
+            "about it.",
         ),
       ),
     ]),
@@ -490,8 +493,13 @@ function evidenceChainRow(stage: PublicRuleEvidenceStage, index: RecordIndex): T
   return [
     [text(stage.stage)],
     [text(stage.status)],
+    // Five of the nine real stages are OPEN with nothing recorded against them.
+    // "none recorded" reads as an unfilled cell; this says which of the two it
+    // is. Same distinction the record pages draw for an open coverage domain
+    // with no blocking fact, and for the same reason: nothing addresses these,
+    // so the prose above the table is the only content the row has.
     stage.factIds.length === 0
-      ? [text(literal("none recorded"))]
+      ? [text(literal("no fact is recorded at this stage"))]
       : joinCells(
           stage.factIds.map((factId) => factReference(index, factId, NO_CURRENT_RECORD)),
         ),

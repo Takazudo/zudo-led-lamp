@@ -13,6 +13,8 @@
  */
 
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { describe, it } from "node:test";
 
 import { ComponentDocsError } from "../core/errors.ts";
@@ -22,6 +24,7 @@ import { projectIntegrationRules } from "../adapters/circuit/integration.ts";
 import { INTEGRATION_INDEX_ANCHOR, renderIntegration } from "../core/render/integration.ts";
 import { buildRecordIndex } from "../core/render/shared.ts";
 import { assertAnchorIntegrity } from "../core/pipeline.ts";
+import { GENERATED_ROOT } from "../adapters/circuit/paths.ts";
 import {
   FIXTURE_MATRIX,
   FIXTURE_SELECTION,
@@ -388,7 +391,10 @@ describe("integration page", () => {
     assert.ok(page.includes("## Source-to-bench evidence chain") || page.includes("### Source-to-bench evidence chain"));
     assert.ok(page.includes("official-source"));
     assert.ok(page.includes("| bench "));
-    assert.ok(page.includes("none recorded"));
+    assert.ok(page.includes("no fact is recorded at this stage"));
+    // The wording this replaced ("none recorded") read as an unfilled cell
+    // rather than as an established absence — see the barren-stage suite below.
+    assert.ok(!page.includes("none recorded"));
   });
 
   it("never synthesises a rolled-up verdict", () => {
@@ -456,5 +462,45 @@ describe("record pages link back to the rules that name them", () => {
       ),
     };
     throwsWith(() => assertAnchorIntegrity(collided), "IDENTITY_COLLISION");
+  });
+});
+
+describe("evidence-chain stages with nothing recorded against them", () => {
+  it("says what an empty stage means instead of leaving the row bare", () => {
+    // Structurally the same case as an open coverage domain with no blocking
+    // fact, which the record pages already handle explicitly: nothing addresses
+    // the stage, so the surrounding text is the only content the row has, and a
+    // bare cell reads as "not filled in yet" rather than "not established".
+    const barren = model.integration.flatMap((rule) =>
+      rule.evidenceChain.filter((stage) => stage.factIds.length === 0),
+    );
+    // Guard against a vacuous pass: with no empty stage this proves nothing.
+    assert.ok(barren.length > 0, "the fixture has no empty evidence-chain stage");
+
+    for (const stage of barren) {
+      assert.ok(page.includes(stage.stage), `${stage.stage} is missing from the page`);
+      assert.ok(page.includes(stage.status), `${stage.stage} does not state its status`);
+    }
+    assert.equal(page.split("no fact is recorded at this stage").length - 1, barren.length);
+    assert.ok(page.includes("nothing has been established there yet"));
+  });
+
+  it("marks every barren stage on the committed page for the real corpus", async () => {
+    // The fixture carries one; the real chain carries five, and those five are
+    // the ones a reader actually meets. The committed page is deterministic and
+    // `check:components` proves it is fresh, so asserting on it is cheap.
+    const committed = await readFile(
+      join(GENERATED_ROOT, "integration", "index.mdx"),
+      "utf8",
+    );
+    for (const stage of ["pcb-orientation", "bom-cpl", "as-built", "programmed", "bench"]) {
+      assert.ok(
+        new RegExp(`^\\| ${stage}\\s+\\| OPEN\\s+\\| no fact is recorded at this stage`, "mu").test(
+          committed,
+        ),
+        `${stage} does not render as an explicitly-empty OPEN stage`,
+      );
+    }
+    assert.equal(committed.split("no fact is recorded at this stage").length - 1, 5);
   });
 });
