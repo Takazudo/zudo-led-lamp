@@ -191,10 +191,17 @@ describe("record page — structure", () => {
     assert.ok(!driverPage.includes("## Subordinate record"), "a standalone record must not claim one");
   });
 
-  it("links back to the raw agent resource without restating it", () => {
+  it("links the owning bundle, not the agent-resource index", () => {
+    // `ownerSkill` has landed, so both surfaces now name the bundle and link it
+    // directly. The distinction still matters: a link to the resource index
+    // would read as this record's bundle and go somewhere else, and a
+    // convincingly wrong link is worse than a stated absence.
     assert.ok(driverPage.includes("## Raw agent resource"));
-    assert.ok(driverPage.includes("(/docs/claude-skills/"));
     assert.ok(driverPage.includes("the bundle is right and this page is stale"));
+    assert.ok(driverPage.includes(`(/docs/claude-skills/${FIXTURE_IDS.ownerSkill}/)`));
+    assert.ok(catalogPage.includes(`(/docs/claude-skills/${FIXTURE_IDS.ownerSkill}/)`));
+    assert.ok(!driverPage.includes("(/docs/claude-skills/)"));
+    assert.ok(!catalogPage.includes("(/docs/claude-skills/)"));
   });
 });
 
@@ -225,10 +232,13 @@ describe("record page — evidence semantics", () => {
     assert.ok(driverPage.includes("`fact-fixture-future-class`"));
   });
 
-  it("renders a structured value flattened by the adapter, not an object", () => {
-    assert.ok(
-      driverPage.includes("lcsc=C100001; manufacturer=Fixture Semiconductor; mpn=FX8860MP-13"),
-    );
+  it("renders a structured value as its several parts, never coerced or stringified", () => {
+    // The evidence contract forbids flattening the distributor-identity objects,
+    // so each pair has to survive as a pair.
+    assert.ok(driverPage.includes("`lcsc`=C100001"));
+    assert.ok(driverPage.includes("`manufacturer`=Fixture Semiconductor"));
+    assert.ok(driverPage.includes("`mpn`=FX8860MP-13"));
+    assert.ok(driverPage.includes("`variant`=exact orderable driver"));
     assert.ok(!driverPage.includes("[object Object]"));
   });
 
@@ -308,6 +318,30 @@ describe("record page — evidence semantics", () => {
         `[\`${FIXTURE_IDS.senseRecord}\`](/docs/components/records/${FIXTURE_IDS.senseSlug}/)`,
       ),
     );
+  });
+
+  it("shows a shared interaction on every participant, not only where it is attached", () => {
+    // The sense record's own `interactions` array is EMPTY in the fixture — the
+    // driver record carries the interaction they share. Reading `record.interactions`
+    // naively would leave this page claiming it takes part in nothing. Nine real
+    // record/interaction links depend on this.
+    const sense = recordOf(model, FIXTURE_IDS.senseRecord);
+    assert.equal(sense.interactions.length, 0, "fixture must exercise one-record attachment");
+    assert.ok(sensePage.includes(`### ${FIXTURE_IDS.interaction}`));
+    assert.ok(sensePage.includes(`<EvidenceAnchor id="${FIXTURE_IDS.interaction}" />`));
+    assert.ok(sensePage.includes(`\`${FIXTURE_IDS.senseRecord}\` (this record)`));
+    assert.ok(!sensePage.includes("No interaction is published for this record."));
+  });
+
+  it("renders a shared interaction exactly once per page", () => {
+    // Anchor uniqueness is now scoped per document, so the same id on two pages
+    // is correct — two copies on ONE page would not be.
+    for (const page of [driverPage, sensePage]) {
+      assert.equal(
+        page.split(`<EvidenceAnchor id="${FIXTURE_IDS.interaction}" />`).length - 1,
+        1,
+      );
+    }
   });
 });
 
