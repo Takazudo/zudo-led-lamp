@@ -141,7 +141,7 @@ JLCPCB splits components into **Basic** (common resistors/MLCCs — no extra fee
 fast across a reorder batch but is a real one-time cost on a first order. Board P's
 part count keeps this small by design: of the fitted parts in the
 [component list](./board-p-front-end.mdx#component-list-lcsc-parts-and-rough-cost),
-U1 (STUSB4500), J1 (the USB-C receptacle), D5 (SMAJ20A), and JOUT (the JST connector)
+U1 (STUSB4500), J1 (the USB-C receptacle), D5 (SMAJ20A), and JOUT1 (the JST connector)
 are the ones most likely to be Extended-tier; most of the resistors and MLCCs are
 commodity 0603/0805/1206 parts that are typically Basic-tier at JLCPCB (verify each
 part's actual tier at order time — tier assignment can change).
@@ -162,20 +162,20 @@ using this sequence:
 1. **NVM programming, on a 5 V-only source.** Program the chip per the factory-default
    trap rule above. Confirm via read-back before proceeding.
 2. **First 15 V-capable charger plug-in, Board P still standalone (nothing connected to
-   `JOUT`).** Probe the debug pogo pads (`J3`): pad 4 (`VBUS_IN`) should read ≈15 V once
+   `JOUT1`).** Probe the debug pogo pads (`J3`): pad 4 (`VBUS_IN`) should read ≈15 V once
    negotiated, pad 3 (`VREG_2V7`) should read ≈2.7 V regardless of negotiation state
    (confirms the chip itself is alive even before checking negotiation), pad 8
    (`VBEN`/VBUS_EN_SNK) should be pulled low once negotiation succeeds.
-3. **Confirm the load switch, not just the chip.** `VBUS_OUT` (at `JOUT` pins 1/2, or a
+3. **Confirm the load switch, not just the chip.** `VBUS_OUT` (at `JOUT1` pins 1/2, or a
    test point if Board P's layout adds one) should read 0 V until the 15 V contract is
    live, then track `VBUS_IN` closely once `VBEN` asserts. A chip that negotiates
    correctly but a switch that never turns on points at the Q1 gate network, not the
    STUSB4500.
-4. **Only after standalone bring-up passes, connect a downstream board to `JOUT`** and
+4. **Only after standalone bring-up passes, connect a downstream board to `JOUT1`** and
    re-verify the same measurements with a real load present — a downstream board's
    input capacitance or inrush current can reveal problems (like the multi-port-charger
    negotiation collapse pattern in
-   [Charger Compatibility](./charger-compatibility.mdx)) invisible with `JOUT`
+   [Charger Compatibility](./charger-compatibility.mdx)) invisible with `JOUT1`
    unloaded.
 
 :::tip

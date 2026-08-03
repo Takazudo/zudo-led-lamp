@@ -48,13 +48,13 @@ flowchart TD;
     Q1["Q1 AO3401A\nload switch"];
     D5["D5 SMAJ20A\n20V standoff, 32.4V clamp"];
     J2P["J2/J3 pogo pads\nNVM I2C + debug"];
-    JOUT["JOUT B6B-XH-A 6P"];
+    JOUT1["JOUT1 B6B-XH-A 6P"];
     J1 --> U1;
     U1 -->|"VBEN"| Q1;
     D5 --- U1;
     J2P --- U1;
-    Q1 --> JOUT;
-    U1 -->|"ATT / PDOK"| JOUT;
+    Q1 --> JOUT1;
+    U1 -->|"ATT / PDOK"| JOUT1;
   end;
 
   subgraph BL["Board L — driver + control + LED array"];
@@ -85,7 +85,7 @@ flowchart TD;
   end;
 
   CHG -->|"USB-C cable"| J1;
-  JOUT -->|"switched 15V x2, GND x2, ATT, PDOK"| J2L;
+  JOUT1 -->|"switched 15V x2, GND x2, ATT, PDOK"| J2L;
 ```
 
 ## Board split

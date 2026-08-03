@@ -42,7 +42,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | R15, R16 | 2 | 4.7 kΩ ±1% | [C23162](https://jlcpcb.com/partdetail/C23162) | 0603 | **Basic** | 7,433,362 | I2C pull-ups |
 | R19, R20 | 2 | 0 Ω | [C21189](https://jlcpcb.com/partdetail/C21189) | 0603 | **Basic** | 6,153,233 | CC1DB/CC2DB bridges |
 | R21 | 1 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | RESET pull-down (run state); shares Board L's reel. Added by the design review with the J2.4 reset line |
-| JOUT | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Downstream interface |
+| JOUT1 | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Downstream interface |
 | J2, J3 | — | Pogo pads 1x4 / 1x8 | — | Bare copper | — | — | NVM I2C + debug, no part |
 
 **DNP — footprint only, not populated:**
@@ -61,7 +61,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | U4 | 1 | AP63203WU-7 | [C780769](https://jlcpcb.com/partdetail/C780769) | TSOT-23-6 | Extended | 11,392 | 3.3 V synchronous buck, 3.8–32 V |
 | D10 | 1 | SMAJ20A | [C571370](https://jlcpcb.com/partdetail/C571370) | SMA | Extended | **3,770** | Local 15 V input TVS; numeric pad/orientation and actual waveform OPEN |
 | D11 | 1 | SS26 | [C7420363](https://jlcpcb.com/partdetail/C7420363) | SMA | *Preferred* | 282,808 | Catch diode, 60 V/2 A Schottky |
-| L1 | 1 | FXL0630-330-M 33 µH | [C177245](https://jlcpcb.com/partdetail/C177245) | SMD 7x6.6 mm | Extended | 228,367 | LED buck inductor, 2.5 A sat, 310 mΩ |
+| L1 | 1 | FXL0630-330-M 33 µH | [C177245](https://jlcpcb.com/partdetail/C177245) | SMD 7x6.6 mm | Extended | 228,367 | LED buck inductor, 2.1 A max-design Isat (retained value; the 2.5 A figure is a typical-labeled catalogue column), 310 mΩ |
 | L2 | 1 | FNR4030S4R7MT 4.7 µH | [C167874](https://jlcpcb.com/partdetail/C167874) | SMD 4x4 mm | Extended | 252,195 | Logic buck inductor, shielded, 78 mΩ |
 | RS1 | 1 | RLP25FEER200 200 mΩ ±1% 2 W | [C459674](https://jlcpcb.com/partdetail/C459674) | 2512 | Extended | **20,654** | High-side sense → 500 mA |
 | R30–R37 | 8 | 33 Ω ±1% 1 W | [C2934070](https://jlcpcb.com/partdetail/C2934070) | 2512 | Extended | 85,468 | Per-string ballast — upsized from a 250 mW 1206 by the design review (the 1206 exceeded its rating at the worst-case 90 mA string) |
@@ -75,7 +75,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | C19 | 1 | CL10A105KB8NNNC 1 µF 50 V | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | **Basic** | 5,979,916 | MCU VDD bulk |
 | RT1 | 1 | NCP18XH103F03RB 10 kΩ B=3380 K | [C13564](https://jlcpcb.com/partdetail/C13564) | 0603 | Extended | 398,625 | NTC, placed inside the LED array |
 | F1 | 1 | BSMD1206-075-30V | [C976305](https://jlcpcb.com/partdetail/C976305) | 1206 | Extended | 73,979 | PPTC, 750 mA hold / 1.5 A trip / 30 V |
-| J2 | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Board P interface (mirrors JOUT) |
+| J2 | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Board P interface (mirrors JOUT1) |
 | SW1 | 1 | EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | THT, panel bushing | Extended | **4,566** | Rotary encoder; detent/pulse count unresolved, see #32 |
 | LED1–LED24 | 24 | HL-AM-2835H421W-S1-08-HR3 (2800–3100 K) | [C210315](https://jlcpcb.com/partdetail/C210315) | SMD2835-2P | Extended | 399,813 | 3000 K, CRI 80, 29 lm typ @ 60 mA |
 
@@ -84,7 +84,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | Ref | Suggested part | LCSC | Package | Tier | Stock | Note |
 |---|---|---|---|---|---|---|
 | J3 | PZ254V-11-05P 1x5P | [C492404](https://jlcpcb.com/partdetail/C492404) | THT 2.54 mm | Extended | 251,600 | SWD. Hand-fit a pin strip during bring-up rather than paying an Extended fee for a debug-only connector — the same reasoning that put pogo pads on Board P |
-| J4 | (generic 1x3 strip) | — | THT 2.54 mm | — | — | UART debug pads |
+| J4 | Pogo pads 1x3 | — | Bare copper | — | — | UART debug, no part — same bare-copper style as Board P's J2/J3 |
 
 ## Sourcing risks
 
