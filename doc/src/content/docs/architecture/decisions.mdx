@@ -51,8 +51,11 @@ thermal budget around.
 
 **3-series, not 4-series.** [Headroom analysis](/docs/research/led-candidates/#voltage-headroom-analysis)
 called 4s "tight". Against this part's datasheet Vf ceiling of 3.2 V, a 4s string is
-12.8 V, putting the buck at **85% duty** — outside the AL8860's recommended 25–75% band.
-3s plus ballast lands at 74%.
+12.8 V, putting the buck at **~88% duty** by the datasheet's own equations — far outside
+the AL8860's recommended 25–75% DSW band. 3s plus ballast lands at **77%**: 2 points
+above the band rather than inside it, and far below the 98% DSW(MAX). See
+[Board L](./board-l.mdx#al8860-constant-current-driver) for the worked figures — the
+older 85%/74% pair used `Vout/Vin` without the diode and resistive terms.
 
 ## Current sharing between parallel strings
 
@@ -76,8 +79,12 @@ branch peak stays at 98% of the absolute maximum (see board-l's current-sharing 
 against the primary-confirmed 306 mW limit).
 
 33 Ω specifically is a two-sided optimisation: larger ballast improves sharing but pushes
-the duty cycle past the driver's recommended band; smaller ballast does the reverse. 33 Ω
-is the largest value that keeps duty at or under 75% at nominal Vf.
+the duty cycle further past the driver's recommended band; smaller ballast does the
+reverse. 33 Ω puts nominal duty at **77%** — accepted 2 points above the 25–75% DSW band
+for the sharing it buys. It is **not** "the largest value that keeps duty under 75%": no
+ballast value on this rail does that, because 3s alone is already at 69–81% across the
+Vf bin. If Gate 4 shows a duty-band problem, 22 Ω pulls nominal to ~72% at the cost of
+~40% worse current sharing.
 
 ## LED driver IC
 
@@ -129,7 +136,7 @@ what it refuses to promote to a PASS.
 | Slot | Chosen | Reasoning |
 |---|---|---|
 | Sense resistor RS1 | 200 mΩ 2512 ([C459674](https://jlcpcb.com/partdetail/C459674), [record](/docs/components/records/rlp25feer200/)) | `I = 0.1/Rs` → exactly 500 mA. 50 mW on a 2 W part |
-| Inductor L1 | 33 µH ([C177245](https://jlcpcb.com/partdetail/C177245), [record](/docs/components/records/fxl0630-330-m/)) | ~440 kHz switching, 1.69 µs on-time (above the 500 ns minimum), 2.5 A saturation against 0.6 A peak |
+| Inductor L1 | 33 µH ([C177245](https://jlcpcb.com/partdetail/C177245), [record](/docs/components/records/fxl0630-330-m/)) | ~440 kHz switching, 1.69 µs on-time (above the 500 ns minimum), 2.1 A max-design Isat against 0.6 A peak |
 | Catch diode D11 | SS26 60 V ([C7420363](https://jlcpcb.com/partdetail/C7420363), [record](/docs/components/records/ro-ss26/)) | Rejected SS24 (40 V) — it leaves zero margin against the AL8860's own 40 V input ceiling for a negligible price difference, exactly as the [driver research](/docs/research/driver-ics/) argued |
 | Input caps | 10 µF 1206 + 100 nF 0603 | Datasheet asks 10 µF or higher X7R; see the [X5R deviation note](./bom.mdx#extended-part-fee-economics) |
 
@@ -174,7 +181,7 @@ AP63203 is fixed-output, needs no divider, and its inductor is a 250,000-unit pa
 
 The [MCU research](/docs/research/mcu-candidates/) frames this as cost versus toolchain
 friction and calls it "a preference call, not a technical blocker". At prototype
-quantity the cost axis is noise: the whole spread is about **$1**, against ¥8,930 of
+quantity the cost axis is noise: the whole spread is about **$1**, against ¥8,460 of
 Extended-part setup fees. Toolchain friction, by contrast, is paid in hours during
 bring-up.
 
@@ -299,10 +306,20 @@ hardware guarantee. The wrinkle the research could not know — because the driv
 picked yet — is that the AL8860's CTRL pin **floats to ON**, so a pull-down is mandatory
 rather than merely prudent.
 
-The datasheet does not publish CTRL's internal bias current, so the pull-down alone is
-not provable. The soft-start capacitor is what makes the guarantee solid: the driver
+The 2026-08-01 review argued R21 *is* bounded: the AL8860's soft-start rate (1.5 ms/nF to
+charge CTRL) implies an internal bias current of ≤1.67 µA, which into 33 kΩ is ≤55 mV —
+3.6x below the 0.2 V off threshold. **That argument currently has no retained fact.**
+Neither the 1.5 ms/nF rate nor the ≤1.67 µA bound appears anywhere under
+`.claude/skills/component-al8860mp-13/`; the record's only CTRL fact is
+[`fact-al8860-ctrl`](/docs/components/records/al8860mp-13/#fact-al8860-ctrl), which gives
+the thresholds and the dimming range but no bias current. Under this project's own rule
+that `UNSOURCED` evidence cannot close a domain, **mechanism 1 is not closed** and
+[Gate 3](./next-steps.mdx#gate-3--board-l-power-section-alone-mcu-unprogrammed)'s CTRL
+measurement is a real gate, not a confirmation.
+
+The soft-start capacitor is the mechanism that stands on its own: the driver
 physically cannot reach full current for 150 ms, and the MCU takes control within about
-1–2 ms of power-on reset. Two mechanisms, one of which is datasheet-provable. An MCU
+1–2 ms of power-on reset. Two mechanisms, one of them currently evidence-backed. An MCU
 internal pull-down was rejected because it depends on firmware configuring it — which is
 the very window being protected.
 
@@ -348,7 +365,7 @@ draw.
 
 **Conditioned open point:** the PPTC's 30 V rating
 ([`fact-bhfuse-voltage-max`](/docs/components/records/bsmd1206-075-30v/#fact-bhfuse-voltage-max)) is
-**1.4 V below** the SMAJ20A's
+**2.4 V below** the SMAJ20A's
 32.4 V table value at 12.3 A, 10/1000 µs, and 25 °C. That subtraction is a useful
 screening lead, not an installed-waveform result or an accepted over-rating. Actual
 source impedance, clamp current, duration, parasitics, and fuse stress remain part of
@@ -360,10 +377,10 @@ the issue #34 simulation and bench gate.
 |---|---|---|
 | U1 STUSB4500 VDD, conditioned 4.4 V over its mirror-stated absolute maximum at the D5 table point | **UNSOURCED / waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/), [`calc-stusb-vdd-clamp-overage`](/docs/components/integration/#calc-stusb-vdd-clamp-overage) |
 | Q1 exact UMW (Youtai Semiconductor) AO3401A VDS, conditioned 2.4 V magnitude over absolute maximum at that table point | **Waveform OPEN**, not accepted | [ratings matrix](/docs/power/ratings-matrix/), [`calc-q1-vds-clamp-overage`](/docs/components/integration/#calc-q1-vds-clamp-overage) |
-| F1 PPTC, conditioned 1.4 V over its 30 V rating at that table point | **Waveform and pulse stress OPEN**, not accepted | this page, above; [`rule-rail-envelope`](/docs/components/integration/#rule-rail-envelope) |
+| F1 PPTC, conditioned 2.4 V over its 30 V rating at that table point | **Waveform and pulse stress OPEN**, not accepted | this page, above; [`rule-rail-envelope`](/docs/components/integration/#rule-rail-envelope) |
 | Duty cycle 81% at the LED bin's Vf maximum, above the AL8860's 25–75% recommended DSW band (guaranteed by design, now primary-confirmed) | steady state, bounded — 98% DSW(MAX) is the hard maximum | [Board L](./board-l.mdx#al8860-constant-current-driver) |
 | Even at zero Vf spread, the LED stage's datasheet worst-case peak current sits at 89.1% of the LED's absolute-maximum forward current — 98.0% at the locked 0.30 V acceptance limit | steady state, datasheet-bounded but bench-unverified (the composed peak carries a `NEEDS BENCH` verdict); residual driver-side headroom raised as [#52](https://github.com/Takazudo/zudo-led-lamp/issues/52) | [Board L](./board-l.mdx#led-array-and-the-brightness-number-ballast-and-current-sharing), [`calc-led-hot-branch-headroom`](/docs/components/integration/#calc-led-hot-branch-headroom) |
-| ~~R21's ability to hold CTRL low is not datasheet-provable~~ **Resolved: yes** — the soft-start spec bounds CTRL bias current at ≤1.67 µA, ≤55 mV into 33 kΩ, 3.6x below the 0.2 V off threshold | Gate 3 (probe TP1) kept as confirmation only | [Board L](./board-l.mdx#mcu-knob-and-dimming-path-safe-default-off) |
+| R21's ability to hold CTRL low rests on a soft-start-derived ≤1.67 µA CTRL bias bound that **no retained fact carries** — the AL8860 record has no soft-start rate and no bias-current fact | **UNSOURCED**, not closed; Gate 3 (probe TP1) is a real gate, not a confirmation. C21's 150 ms soft-start is the independent mechanism that does stand | [Board L](./board-l.mdx#mcu-knob-and-dimming-path-safe-default-off), this page above |
 | The whole Board P topology has never run on hardware | as-built and bench evidence OPEN | [input-protection evidence gate](https://github.com/Takazudo/zudo-led-lamp/issues/34) |
 
 Each of those conditioned figures is published as a calculation on the
