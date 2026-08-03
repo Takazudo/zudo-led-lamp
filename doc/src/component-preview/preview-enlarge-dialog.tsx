@@ -3,16 +3,18 @@
 /** @jsxRuntime automatic */
 /** @jsxImportSource preact */
 
+import type { ComponentChildren, JSX, RefObject } from "preact";
+
 import { ENLARGE_DIALOG_STYLE } from "@takazudo/zudo-doc/island-types";
 import { AFTER_NAVIGATE_EVENT } from "@takazudo/zudo-doc/transitions";
 import { useModalDialog } from "@takazudo/zudo-doc/use-modal-dialog";
 
 export type PreviewEnlargeDialogProps = {
-  readonly children: React.ReactNode;
+  readonly children: ComponentChildren;
   readonly isOpen: boolean;
   readonly labelId: string;
   readonly onClose: () => void;
-  readonly returnFocusRef: React.RefObject<HTMLElement | null>;
+  readonly returnFocusRef: RefObject<HTMLElement>;
   readonly title: string;
   readonly variant: "footprint" | "model";
 };
@@ -36,6 +38,11 @@ export function PreviewEnlargeDialog({
     returnFocusRef,
   });
 
+  // zudo-doc still declares this hook's handler with the ambient React namespace,
+  // while its shared base tsconfig types JSX as preact since 5.0.0 — the two
+  // mouse-event shapes are structurally interchangeable at this call site.
+  const handleDialogClick = handleBackdropClick as unknown as JSX.MouseEventHandler<HTMLDialogElement>;
+
   return (
     <dialog
       ref={dialogRef}
@@ -43,7 +50,7 @@ export function PreviewEnlargeDialog({
       style={ENLARGE_DIALOG_STYLE}
       aria-labelledby={labelId}
       data-component-preview-dialog={variant}
-      onClick={handleBackdropClick}
+      onClick={handleDialogClick}
       onKeyDown={(event) => {
         if (event.key !== "Tab") return;
         const dialog = event.currentTarget;

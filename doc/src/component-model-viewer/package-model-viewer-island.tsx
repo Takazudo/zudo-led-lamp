@@ -3,6 +3,7 @@
 /** @jsxRuntime automatic */
 /** @jsxImportSource preact */
 
+import type { RefObject } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import { decodeModelDescriptor } from "../../component-docs/core/model-descriptor.ts";
@@ -47,7 +48,7 @@ function ModelViewerSurface({
   onEnlarge,
 }: {
   readonly encoded: string;
-  readonly enlargeTriggerRef?: React.RefObject<HTMLButtonElement | null>;
+  readonly enlargeTriggerRef?: RefObject<HTMLButtonElement>;
   readonly instance: ViewerInstance;
   readonly onEnlarge?: () => void;
 }) {
