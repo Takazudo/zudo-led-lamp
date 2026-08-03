@@ -97,11 +97,38 @@ plugin workflow this page mandates.
 copies byte-identical (`cmp -s`). Part identity then comes only from the schematic, which
 `scripts/schgen/schgen_core.py` emits per instance from the spec's LCSC column.
 
-**This edit is gated on Docker.** `doc/component-docs/footprint-previews/check.ts` verifies
-a per-package `canonicalInputSha256` over the footprint bytes, so any edit requires
-`pnpm --dir doc generate:footprint-previews` with the pinned KiCad container. Until that
-runs, treat a generated BOM's part numbers as unverified and diff every line against
-[the BOM](./bom.mdx) by hand.
+**Editing a footprint means regenerating its preview.**
+`doc/component-docs/footprint-previews/check.ts` verifies a per-package
+`canonicalInputSha256` over the footprint bytes, so any `.kicad_mod` change must be
+followed by `pnpm --dir doc generate:footprint-previews`, which renders through the
+digest-pinned KiCad 9.0.9 container. That path is working — the container is cached and
+regeneration was verified to reproduce the committed SVG bytes exactly — so expect the
+cleanup diff to be the property deletions plus exactly 22 refreshed hashes in
+`manifest.json`. Do not hand-edit the manifest.
+
+Until the cleanup lands, treat a generated BOM's part numbers as unverified and diff every
+line against [the BOM](./bom.mdx) by hand.
+:::
+
+:::note[Docker is needed only for footprint previews]
+Nothing on the board path needs it. Schematic generation is pure Python,
+`scripts/schgen/verify.sh` uses a local `kicad-cli`, and layout, DRC and fab export are
+ordinary KiCad. `check:footprint-previews` verifies committed bytes with no KiCad at all —
+only *regeneration* requires the container.
+
+The pinned digest publishes **linux/amd64 only**, so an ARM host must emulate. The
+renderer passes `--platform linux/amd64` for exactly this reason; a first-time setup on
+Apple Silicon still needs the image pulled with the same flag:
+
+```sh
+docker pull --platform linux/amd64 kicad/kicad@sha256:e638b79b0321f29395a5b783e94bb9f3c73303e8da15da27b8f5cb4b67a37729
+```
+
+Emulated amd64 was verified to render byte-identical output, so the reproducibility
+contract holds on ARM. Note the renderer is pinned to KiCad **9.0.9** while the schematics
+are generated for KiCad **10** — deliberate, since the pin exists for byte reproducibility,
+not compatibility. A local KiCad 10 renders the same geometry but formats coordinates to
+six decimals instead of four, which changes every hash.
 :::
 
 ## Bring-up sequence
