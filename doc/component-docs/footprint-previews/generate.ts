@@ -10,6 +10,7 @@ import {
   EXPORT_THEME,
   FOOTPRINT_ROOT,
   KICAD_IMAGE,
+  KICAD_PLATFORM,
   KICAD_VERSION,
   PREVIEW_FORMAT_VERSION,
   PREVIEW_MANIFEST,
@@ -111,7 +112,13 @@ export async function generateFootprintPreviews(
 
 async function runContainer(arguments_: readonly string[], mount: string): Promise<string> {
   const { stdout, stderr } = await execFileAsync("docker", [
-    "run", "--rm", "--network", "none", "--mount", `type=bind,src=${mount},dst=/work`, KICAD_IMAGE,
+    // KICAD_IMAGE's manifest list carries linux/amd64 only — no arm64 entry — so on an
+    // ARM host (Apple Silicon, ARM CI) both pull and run fail with "no matching manifest
+    // for linux/arm64/v8" unless the platform is stated. Emulated amd64 was verified to
+    // reproduce the committed SVG bytes exactly, so pinning it here costs nothing on an
+    // amd64 host and is what makes the renderer portable.
+    "run", "--rm", "--platform", KICAD_PLATFORM, "--network", "none",
+    "--mount", `type=bind,src=${mount},dst=/work`, KICAD_IMAGE,
     ...arguments_,
   ], { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
   if (stderr.trim() !== "") process.stderr.write(stderr);
