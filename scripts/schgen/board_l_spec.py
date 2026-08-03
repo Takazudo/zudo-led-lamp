@@ -30,7 +30,9 @@ COMPONENTS = {
     'U3':   ('STM32G031F8P6', 'STM32G031F8P6', 'C529334', 'zudo-led-lamp:TSSOP-20_L6.5-W4.4-P0.65-LS6.4-BL', False, (76.2, 101.6)),
     'SW1':  ('EC11L1525G01', 'EC11 15-detent', 'C2991196', 'zudo-led-lamp:SW-TH_ALPS_EC11L1525G01', False, (165.1, 101.6)),
     'J3':   ('PZ254V-11-05P', 'SWD 1x5 (hand-fit)', 'C492404', 'zudo-led-lamp:HDR-TH_5P-P2.54-V-M', True, (203.2, 101.6)),
-    'J4':   ('Conn_1x03', 'UART pads', '', 'zudo-led-lamp:PogoPad_1x03_P2.54mm', True, (241.3, 101.6)),
+    # dnp=False like Board P's J2/J3 and TP1: a bare-copper pad group has no part to
+    # leave unpopulated. It is kept out of the BOM by its empty LCSC field instead.
+    'J4':   ('Conn_1x03', 'UART pads', '', 'zudo-led-lamp:PogoPad_1x03_P2.54mm', False, (241.3, 101.6)),
     'RT1':  ('NCP18XH103F03RB', 'NTC 10k B3380', 'C13564', 'zudo-led-lamp:R0603', False, (279.4, 101.6)),
     'C20':  (*_C100N, False, (317.5, 101.6)),
     'C24':  (*_C100N, False, (355.6, 101.6)),
