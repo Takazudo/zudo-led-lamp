@@ -18,7 +18,7 @@ flowchart LR;
   RS1["RS1 200mR 2512\nhigh-side sense"];
   U2["U2 AL8860MP-13\nVIN pin 8"];
   SETN["SET node\nU2 pin 1"];
-  L1["L1 33uH\n2.5A sat"];
+  L1["L1 33uH\n2.1A sat"];
   LEDP["LED_P\narray anode rail"];
   BAL["R30..R37\n8x 33R 2512 ballast"];
   STR["8 strings x 3 series\n24x HL-AM-2835H421W\n3000K, 62.5mA each"];
@@ -70,7 +70,7 @@ numbers, which the parts DB does not:
 
 | Parameter | Value (at IF = 60 mA) |
 |---|---|
-| Luminous flux, 2800–3100 K bin | **26 lm min, 29 lm typical** |
+| Luminous flux, 2800–3100 K bin | **27 lm min, 29 lm typical** |
 | CCT typical | 3000 K |
 | CRI (Ra) | 80 min |
 | Forward voltage | 2.6 V min, 3.2 V max (±0.1 V measurement tolerance) |
@@ -83,16 +83,19 @@ numbers, which the parts DB does not:
 
 3-series was chosen over 4-series. The [headroom analysis](/docs/research/led-candidates/#voltage-headroom-analysis)
 called 4s "tight"; with this part's datasheet Vf ceiling of 3.2 V a 4s string is 12.8 V,
-which puts the buck at **85% duty** — outside the AL8860's recommended 25–75% duty band
-(DS39014 Rev 5, "Recommended Duty Cycle Range"). 3s plus a ballast resistor lands at
-**74%**, just inside it.
+which puts the buck at **~88% duty** by the datasheet's own equations — far outside the
+AL8860's recommended 25–75% duty band (DS39014 Rev 5, "Recommended Duty Cycle Range").
+3s plus a ballast resistor lands at **77%**, 2 points above the band and far below the
+98% maximum — the trade this design accepts. (The worked figures are
+[below](#al8860-constant-current-driver); the naive `Vout/Vin` reading gives 85%/74% and
+understates both.)
 
 ### Brightness
 
 | | Value |
 |---|---|
 | Typical flux | 24 x 29 lm = **~700 lm** |
-| Worst-case bin | 24 x 26 lm = **624 lm** |
+| Worst-case bin | 24 x 27 lm = **648 lm** |
 | System efficacy | ~700 lm / 6.16 W = **114 lm/W** |
 
 For scale: a 60 W incandescent bulb is about 800 lm, and a typical decorative table lamp
@@ -343,12 +346,29 @@ default-off has to be built deliberately. Two independent mechanisms do it:
    power-on reset — two orders of magnitude inside that window. The same protection
    covers brown-out and watchdog resets.
 
-:::note[Pull-down bounded by the datasheet after all — verify anyway]
-The design review showed R21 *is* provable from the datasheet: the soft-start spec
-(1.5 ms/nF to charge CTRL) bounds the internal bias current at ≤1.67 µA, which into
-33 kΩ is **≤55 mV** — at least 3.6x below the 0.2 V off threshold, with PA6 Hi-Z at
-reset. Mechanism 1 stands on its own; mechanism 2 remains the independent backstop.
-Gate 3 still measures CTRL with the MCU held in reset as confirmation (probe TP1).
+:::caution[The pull-down's bound is asserted but not retained — Gate 3 is a real gate]
+The 2026-08-01 design review argued R21 *is* provable from the datasheet: the soft-start
+spec (1.5 ms/nF to charge CTRL) bounds the internal bias current at ≤1.67 µA, which into
+33 kΩ is **≤55 mV** — at least 3.6x below the 0.2 V off threshold, with PA6 Hi-Z at reset.
+
+**Neither input to that argument is in the evidence registry.** There is no soft-start
+rate and no CTRL bias-current fact anywhere under
+`.claude/skills/component-al8860mp-13/`; the only retained CTRL fact is
+[`fact-al8860-ctrl`](/docs/components/records/al8860mp-13/#fact-al8860-ctrl), which gives
+the 0.2 V off threshold, the 0.3–2.5 V analog range and the PWM guidance — no bias
+current. The ≤55 mV result therefore cannot be recomputed offline and, by this project's
+own rule, `UNSOURCED` evidence cannot close a domain.
+
+Worse, retaining the missing row would not rescue the argument. The soft-start rate is a
+**typical** characteristic; the AL8860 publishes no *guaranteed maximum* CTRL source
+current. A typical value cannot bound a worst case, so ≤1.67 µA is not a limit that can
+be designed against however it is sourced — it is an estimate. R21 remains good practice
+and almost certainly works; it is simply not a proof.
+
+So: **mechanism 2 (C21's 150 ms soft-start) is the one that stands on its own**, and
+mechanism 1 is a plausible but unevidenced bound. Gate 3's CTRL measurement with the MCU
+held in reset (probe TP1) is a gate on this design, not a formality. Closing mechanism 1
+properly means retaining the DS39014 soft-start row as a fact on the AL8860 record.
 :::
 
 ### Knob mapping
@@ -528,7 +548,7 @@ unchanged.
 ## Net-connectivity table
 
 Complete pin coverage for every active device. STM32G031F8P6 pin numbers are from ST
-DS12992 Rev 3 Table 12 (TSSOP20 column); AL8860 from Diodes DS39014 Rev 5; AP63203 from
+DS12992 Rev 4 Table 12 (TSSOP20 column); AL8860 from Diodes DS39014 Rev 5; AP63203 from
 Diodes DS41326 Rev 3.
 
 ### Power input and protection
@@ -646,7 +666,7 @@ unverified), its two switch terminals are left unconnected; the design does not 
 
 | Ref | Part | Pins | Note |
 |---|---|---|---|
-| `J2` | B6B-XH-A(LF)(SN) | 6 | Mirrors Board P's `JOUT` exactly — see [Board P](./board-p.mdx#jout-pin-assignment-locked) |
+| `J2` | B6B-XH-A(LF)(SN) | 6 | Mirrors Board P's `JOUT1` exactly — see [Board P](./board-p.mdx#jout1-pin-assignment-locked) |
 | `J3` | 1x5, 2.54 mm | SWDIO, SWCLK, NRST, 3V3, GND | **Footprint only.** Hand-fit a pin strip for bring-up; not in the assembly BOM |
 | `J4` | 1x3, 2.54 mm | TX, RX, GND | Footprint only |
 | `SW1` | EC11L1525G01 | A, C, B + lugs | Panel-mount encoder |
@@ -669,8 +689,46 @@ datasheets) and made these changes, reflected above:
 5. **`LED_P` acknowledged as a switching node** — the whole LED array switches, and
    the layout guidance now says so.
 6. An **open-string cascade** note: the driver holds *total* current, so each open
-   string raises the survivors' share (1 open → 71 mA/string, 3 opens → 100 mA, past
-   the LED package rating). One open is tolerable; more is a slow cascade.
+   string raises the survivors' share. See the corrected numbers below — the original
+   "one open is tolerable" reading used nominal mean current and does not survive the
+   datasheet worst case.
+
+### Open-branch cascade — one open LED already exceeds the absolute maximum
+
+The AL8860 regulates **total** current, so an open branch does not reduce output — it
+redistributes. Re-running the published
+[`calc-led-hot-branch-peak`](/docs/components/integration/#calc-led-hot-branch-peak) with
+the branch count as a free parameter (same model, same retained inputs, hot branch at
+minimum ballast tolerance and the rest at maximum):
+
+| Branches | Vf spread | Hot branch, peak | vs 90 mA abs max | Hot branch, mean | vs 90 mA |
+|---|---|---|---|---|---|
+| 8 (intact) | 0 V | 80.18 mA | 89.1% | 66.81 mA | 74.2% |
+| 8 (intact) | 0.30 V | 88.19 mA | 98.0% | 74.83 mA | 83.1% |
+| **7 (one open)** | **0 V** | **91.60 mA** | **101.8%** | 76.33 mA | 84.8% |
+| **7 (one open)** | **0.30 V** | **99.45 mA** | **110.5%** | 84.18 mA | 93.5% |
+| 6 (two open) | 0.30 V | 114.44 mA | 127.2% | 96.64 mA | 107.4% |
+| 5 (three open) | 0.30 V | 135.41 mA | 150.5% | 106.74 mA | 126.7% |
+
+**One open LED already puts the survivors over the 90 mA absolute maximum on a peak
+basis**, even with perfectly matched strings — the earlier "1 open → 71 mA/string" figure
+was the nominal *mean* (500/7), not the datasheet worst-case peak, and understated it.
+On a mean basis one open is still inside the limit (84.8–93.5%), so the failure mode is
+accelerated ageing of the survivors, not immediate loss.
+
+The AL8860's open-load protection does **not** help: it acts only when the entire LED
+path opens ([`fact-al8860-faults`](/docs/components/records/al8860mp-13/#fact-al8860-faults)).
+One branch of eight is still a valid load, so regulation simply continues at the same
+total current. Raising the ballast does not help either — total regulated current is
+unchanged.
+
+The only real mitigations are lowering the total setpoint (RS1 240 mΩ gives ~417 mA and
+holds the seven-branch worst case to 84.18 mA, at the cost of ~17% brightness and a new
+BOM line) or per-branch current limiting. **Neither is applied**: this is a post-fault
+condition on a lamp that is already visibly degraded, and the normal-operation headroom
+it shares a root cause with is the open decision tracked in
+[#52](https://github.com/Takazudo/zudo-led-lamp/issues/52). Recorded here so the number is
+not lost; the setpoint decision belongs to that issue.
 
 ## Power budget
 
@@ -687,7 +745,7 @@ Against the 45 W / 3.0 A PD contract cap.
 | *Logic rail input* | 15 V | 7.4 mA | *0.11 W* |
 | F1 PPTC (90 mΩ typical) | — | 409 mA | 0.02 W |
 | **Board L total** | 15 V | **409 mA** | **6.14 W** |
-| Board P — Q1 conduction (50 mΩ) | — | 409 mA | 0.008 W |
+| Board P — Q1 conduction (65 mΩ @ V_GS −4.5 V) | — | 409 mA | 0.011 W |
 | Board P — U1 quiescent (160 µA) | 15 V | 0.16 mA | 0.002 W |
 | Board P — R11 100 kΩ gate pull-up | 15 V | 0.15 mA | 0.002 W |
 | **System total** | 15 V | **~410 mA** | **~6.16 W** |
@@ -762,5 +820,5 @@ bench thermal reading.
 - [Modulation algorithms](/docs/research/modulation-algorithms/) — gamma, flicker thresholds, the three approaches
 - [Safe default-OFF](/docs/research/control-safety/) — the hardware-not-firmware principle
 - Diodes Incorporated DS39014 Rev 5 (AL8860) and DS41326 Rev 3 (AP63200/1/3/5)
-- ST DS12992 Rev 3 (STM32G031x4/x6/x8), Table 12 pin assignment
+- ST DS12992 Rev 4 (STM32G031x4/x6/x8), Table 12 pin assignment
 - Honglitronic B-17-A-0596 Rev A/2 (HL-AM-2835H421W-S1-08-HR3)

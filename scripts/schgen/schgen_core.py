@@ -176,7 +176,11 @@ def generate(spec):
         body.append(f'\t\t(at {X:g} {Y:g} 0)')
         body.append('\t\t(unit 1)')
         body.append('\t\t(exclude_from_sim no)')
-        body.append('\t\t(in_bom yes)')
+        # An orderable line always carries an LCSC number; the bare-copper pad groups
+        # (pogo pads, test pads) never do. next-steps.mdx requires those to be ABSENT
+        # from the assembly BOM/CPL, not present with a blank part number, so they are
+        # emitted in_bom=no. They stay on_board=yes -- they are real board features.
+        body.append(f'\t\t(in_bom {"yes" if lcsc else "no"})')
         body.append('\t\t(on_board yes)')
         body.append(f'\t\t(dnp {"yes" if dnp else "no"})')
         body.append(f'\t\t(uuid "{new_uuid(f"{spec.PROJECT_NAME}:{ref}:instance")}")')

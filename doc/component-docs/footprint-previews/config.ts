@@ -4,6 +4,9 @@ import { DOC_ROOT, FOOTPRINT_MASTER_ROOT, FOOTPRINT_ROOT } from "../adapters/cir
 
 export const KICAD_IMAGE = "kicad/kicad@sha256:e638b79b0321f29395a5b783e94bb9f3c73303e8da15da27b8f5cb4b67a37729";
 export const KICAD_VERSION = "9.0.9";
+// The pinned digest publishes linux/amd64 only; stated explicitly so ARM hosts emulate
+// rather than failing manifest resolution. Verified to render byte-identical output.
+export const KICAD_PLATFORM = "linux/amd64";
 export const EXPORT_LAYERS = ["F.Cu", "F.Silkscreen", "F.Fabrication", "F.Courtyard"] as const;
 export const EXPORT_THEME = "KiCad Default";
 export const EXPORT_OPTIONS = ["--black-and-white"] as const;
