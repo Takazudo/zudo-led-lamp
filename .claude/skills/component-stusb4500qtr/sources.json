@@ -100,14 +100,14 @@
       "document_date": "2022-11",
       "authoritative_url": "https://www.st.com/resource/en/datasheet/stusb4500.pdf",
       "alternate_authoritative_url": "https://www.st.com/en/interfaces-and-transceivers/stusb4500.html",
-      "retrieval_date": "2026-08-02",
+      "retrieval_date": "2026-08-14",
       "authority_class": "MANUFACTURER_PRIMARY",
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
       "availability": "SOURCE UNAVAILABLE",
       "physical_pdf_page_index": 0,
       "printed_page_label": "1",
       "locator": "Cover title block and Section 7.1 Table 20 rows; direct st.com retrieval attempted for primary-only trust recovery per issue #43",
-      "evidence_extract": "Primary-trust recovery attempted 2026-08-02 via WebFetch: the canonical st.com datasheet PDF path (retried), the STUSB4500 product page, and the st.com flyer PDF (a same-domain control document) all timed out. A community.st.com forum-attachment mirror of the same PDF loaded but redirected to the forum homepage instead of serving the file. No bytes were obtained, so primary authority could not be established or compared against the retained archive.org mirror (src-stusb-ds12499/src-stusb-ds12499-ratings); mirror authority and dependent UNSOURCED verdicts remain unchanged."
+      "evidence_extract": "Primary-trust recovery attempted 2026-08-02 via WebFetch (canonical st.com datasheet PDF path, STUSB4500 product page, st.com flyer PDF: all timed out; a community.st.com forum-attachment mirror redirected to the forum homepage) and re-attempted 2026-08-14 via direct curl (HTTP/2 request to the canonical datasheet PDF failed with a stream INTERNAL_ERROR; HTTP/1.1 retries of the datasheet PDF and the product page timed out after 120 s and 45 s with 0 bytes, while control fetches to assets.nexperia.com and example.com returned HTTP 200, so general egress was up). No bytes were obtained on either date, so primary authority could not be established or compared against the retained archive.org mirror (src-stusb-ds12499/src-stusb-ds12499-ratings); mirror authority and dependent UNSOURCED verdicts remain unchanged."
     },
     {
       "source_id": "src-stusb-um2650-primary-attempt",
@@ -118,14 +118,14 @@
       "document_date": "2023-01-23",
       "authoritative_url": "https://www.st.com/resource/en/user_manual/um2650-the-stusb4500-software-programing-guide-stmicroelectronics.pdf",
       "alternate_authoritative_url": "https://www.st.com/resource/en/user_manual/dm00664189-the-stusb4500-software-programing-guide-stmicroelectronics.pdf",
-      "retrieval_date": "2026-08-02",
+      "retrieval_date": "2026-08-14",
       "authority_class": "MANUFACTURER_PRIMARY",
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
       "availability": "SOURCE UNAVAILABLE",
       "physical_pdf_page_index": 0,
       "printed_page_label": "1",
       "locator": "Cover title block and Sections 3.22-3.26 register tables; direct st.com retrieval attempted for primary-only trust recovery per issue #43",
-      "evidence_extract": "Primary-trust recovery attempted 2026-08-02 via WebFetch: the canonical st.com UM2650 PDF path (retried), the legacy dm00664189-numbered UM2650 PDF path, and the USB-PD controllers documentation listing page all timed out. No bytes were obtained, so primary authority could not be established or compared against the retained archive.org mirror (src-stusb-um2650); mirror authority and dependent UNSOURCED verdicts remain unchanged."
+      "evidence_extract": "Primary-trust recovery attempted 2026-08-02 via WebFetch (canonical st.com UM2650 PDF path, legacy dm00664189-numbered path, and the USB-PD controllers documentation listing page all timed out) and re-attempted 2026-08-14 via direct curl (HTTP/1.1 request to the canonical UM2650 PDF timed out after 45 s with 0 bytes, in the same run in which every st.com path timed out while control fetches to assets.nexperia.com and example.com returned HTTP 200). No bytes were obtained on either date, so primary authority could not be established or compared against the retained archive.org mirror (src-stusb-um2650); mirror authority and dependent UNSOURCED verdicts remain unchanged."
     },
     {
       "source_id": "src-stusb-board-p-generator",

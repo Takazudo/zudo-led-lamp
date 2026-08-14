@@ -6,7 +6,7 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "identity/package/pinout",
       "status": "OPEN",
-      "reason": "Exact DS12499 Rev 8 bytes are reproducibly retained from a manufacturer-document mirror, but primary-only trust and project symbol/footprint/as-built evidence remain open for fact-stusb-manufacturer, fact-stusb-order-code, and fact-stusb-pin-states; a dated 2026-08-02 direct st.com retrieval (fact-stusb-ds12499-primary-attempt) found the primary source unavailable, so all remain UNSOURCED",
+      "reason": "Exact DS12499 Rev 8 bytes are reproducibly retained from a manufacturer-document mirror, but primary-only trust and project symbol/footprint/as-built evidence remain open for fact-stusb-manufacturer, fact-stusb-order-code, and fact-stusb-pin-states; dated 2026-08-02 and 2026-08-14 direct st.com retrievals (fact-stusb-ds12499-primary-attempt) found the primary source unavailable, so all remain UNSOURCED",
       "fact_ids": ["fact-stusb-manufacturer", "fact-stusb-order-code", "fact-stusb-pin-states", "fact-stusb-ds12499-primary-attempt"],
       "blocking_fact_ids": ["fact-stusb-manufacturer", "fact-stusb-order-code", "fact-stusb-pin-states", "fact-stusb-ds12499-primary-attempt"]
     },
@@ -15,7 +15,7 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "unpowered/reset/startup/normal/fault/disconnect behavior",
       "status": "OPEN",
-      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust in these mirror bytes has not been established, and state behavior still requires programmed/as-built bench confirmation for fact-stusb-ccdb, fact-stusb-disch, fact-stusb-vbus-vs-disch, fact-stusb-vben, fact-stusb-load-time, fact-stusb-state-sequence, fact-stusb-nvm-load, fact-stusb-volatile-pdo, fact-stusb-discharge-registers, and fact-stusb-fault-status; a dated 2026-08-02 direct st.com retrieval (fact-stusb-ds12499-primary-attempt, fact-stusb-um2650-primary-attempt) found both primary sources unavailable, so all remain UNSOURCED",
+      "reason": "Exact DS12499 Rev 8 and UM2650 Rev 3 bytes are reproducibly retained from mirrors; primary-only trust in these mirror bytes has not been established, and state behavior still requires programmed/as-built bench confirmation for fact-stusb-ccdb, fact-stusb-disch, fact-stusb-vbus-vs-disch, fact-stusb-vben, fact-stusb-load-time, fact-stusb-state-sequence, fact-stusb-nvm-load, fact-stusb-volatile-pdo, fact-stusb-discharge-registers, and fact-stusb-fault-status; dated 2026-08-02 and 2026-08-14 direct st.com retrievals (fact-stusb-ds12499-primary-attempt, fact-stusb-um2650-primary-attempt) found both primary sources unavailable, so all remain UNSOURCED",
       "fact_ids": ["fact-stusb-ccdb", "fact-stusb-disch", "fact-stusb-vbus-vs-disch", "fact-stusb-vben", "fact-stusb-load-time", "fact-stusb-state-sequence", "fact-stusb-nvm-load", "fact-stusb-volatile-pdo", "fact-stusb-discharge-registers", "fact-stusb-fault-status", "fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"],
       "blocking_fact_ids": ["fact-stusb-ccdb", "fact-stusb-disch", "fact-stusb-vbus-vs-disch", "fact-stusb-vben", "fact-stusb-load-time", "fact-stusb-state-sequence", "fact-stusb-nvm-load", "fact-stusb-volatile-pdo", "fact-stusb-discharge-registers", "fact-stusb-fault-status", "fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"]
     },
@@ -42,7 +42,7 @@
       "record_id": "rec-stusb4500qtr",
       "domain": "safe power/provisioning/bench discriminators",
       "status": "OPEN",
-      "reason": "Operating/state mirror bytes are available, but primary-only trust for fact-stusb-supplies, fact-stusb-vdd-absolute-max, fact-stusb-cc-absolute-max, and fact-stusb-vbus-pin-absolute-max, plus project NVM/readback/power-cycle evidence and bench waveforms, remain open; a dated 2026-08-02 direct st.com retrieval (fact-stusb-ds12499-primary-attempt, fact-stusb-um2650-primary-attempt) found both primary sources unavailable, so all remain UNSOURCED",
+      "reason": "Operating/state mirror bytes are available, but primary-only trust for fact-stusb-supplies, fact-stusb-vdd-absolute-max, fact-stusb-cc-absolute-max, and fact-stusb-vbus-pin-absolute-max, plus project NVM/readback/power-cycle evidence and bench waveforms, remain open; dated 2026-08-02 and 2026-08-14 direct st.com retrievals (fact-stusb-ds12499-primary-attempt, fact-stusb-um2650-primary-attempt) found both primary sources unavailable, so all remain UNSOURCED",
       "fact_ids": ["fact-stusb-supplies", "fact-stusb-vdd-absolute-max", "fact-stusb-cc-absolute-max", "fact-stusb-vbus-pin-absolute-max", "fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"],
       "blocking_fact_ids": ["fact-stusb-supplies", "fact-stusb-vdd-absolute-max", "fact-stusb-cc-absolute-max", "fact-stusb-vbus-pin-absolute-max", "fact-stusb-ds12499-primary-attempt", "fact-stusb-um2650-primary-attempt"]
     },
