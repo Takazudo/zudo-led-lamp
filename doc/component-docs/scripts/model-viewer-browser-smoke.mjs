@@ -641,6 +641,7 @@ async function exerciseViewerInteractions(cdp, instance = "inline", testResize =
   before = await renderCount(cdp, instance);
   await setViewportAndMedia(cdp, 1200, "light", false);
   await waitFor(cdp, `Number(document.querySelector(${JSON.stringify(rootSelector)}).dataset.renderCount) > ${before}`);
+  await waitForCanvasSize(cdp, instance);
   const resized = await evaluate(cdp, `(() => {
     const canvas = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport] canvas`)});
     const viewport = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)});
