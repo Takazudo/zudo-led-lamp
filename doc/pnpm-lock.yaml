@@ -24,8 +24,8 @@ importers:
         specifier: 2.5.1
         version: 2.5.1(@takazudo/zfb@2.5.1)
       '@takazudo/zudo-doc':
-        specifier: ^5.5.1
-        version: 5.5.1(@takazudo/zdtp@0.4.10(preact@10.29.7))(@takazudo/zfb-md-wasm@2.5.1)(@takazudo/zfb-runtime@2.5.1(@takazudo/zfb@2.5.1))(@takazudo/zfb@2.5.1)(@takazudo/zudo-doc-history-server@5.5.2)(@types/node@22.20.1)(diff@8.0.4)(katex@0.16.47)(preact@10.29.7)(zod@4.4.3)
+        specifier: ^5.5.2
+        version: 5.5.2(@takazudo/zdtp@0.4.10(preact@10.29.7))(@takazudo/zfb-md-wasm@2.5.1)(@takazudo/zfb-runtime@2.5.1(@takazudo/zfb@2.5.1))(@takazudo/zfb@2.5.1)(@takazudo/zudo-doc-history-server@5.5.2)(@types/node@22.20.1)(diff@8.0.4)(katex@0.16.47)(preact@10.29.7)(zod@4.4.3)
       '@takazudo/zudo-doc-history-server':
         specifier: ^5.5.2
         version: 5.5.2
@@ -973,8 +973,8 @@ packages:
     resolution: {integrity: sha512-aopYylBNVGpbO3t2A7JT9Qic8DkgsI4MLAEU/0lavCtu9qKxFVOz5Wje7tdeL4q16RsLycgAJEbTFduJKEhqdw==}
     hasBin: true
 
-  '@takazudo/zudo-doc@5.5.1':
-    resolution: {integrity: sha512-s98uWUF1kss8o/5Jtv0x+7HZpLOl6Br55Gjv0rIzADH/pqQnZcf6ZvPQp06M769qdsJi6U4s2BGp9BcsxZi/Pg==}
+  '@takazudo/zudo-doc@5.5.2':
+    resolution: {integrity: sha512-Cn5x8YAjJbPrZ/zSJf9PtptPpT9+Ab6zBl4KUKfb7nAP3xwyualIBMb+/G8cItw7s5G7o80BZ9pNbkYcVh5uGA==}
     hasBin: true
     peerDependencies:
       '@takazudo/zdtp': ^0.4.10
@@ -2829,7 +2829,7 @@ snapshots:
 
   '@takazudo/zudo-doc-history-server@5.5.2': {}
 
-  '@takazudo/zudo-doc@5.5.1(@takazudo/zdtp@0.4.10(preact@10.29.7))(@takazudo/zfb-md-wasm@2.5.1)(@takazudo/zfb-runtime@2.5.1(@takazudo/zfb@2.5.1))(@takazudo/zfb@2.5.1)(@takazudo/zudo-doc-history-server@5.5.2)(@types/node@22.20.1)(diff@8.0.4)(katex@0.16.47)(preact@10.29.7)(zod@4.4.3)':
+  '@takazudo/zudo-doc@5.5.2(@takazudo/zdtp@0.4.10(preact@10.29.7))(@takazudo/zfb-md-wasm@2.5.1)(@takazudo/zfb-runtime@2.5.1(@takazudo/zfb@2.5.1))(@takazudo/zfb@2.5.1)(@takazudo/zudo-doc-history-server@5.5.2)(@types/node@22.20.1)(diff@8.0.4)(katex@0.16.47)(preact@10.29.7)(zod@4.4.3)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@22.20.1)
       '@takazudo/zfb': 2.5.1

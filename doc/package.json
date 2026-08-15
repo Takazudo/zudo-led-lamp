@@ -42,7 +42,7 @@
     "@takazudo/zfb-adapter-cloudflare": "2.5.1",
     "@takazudo/zfb-md-wasm": "2.5.1",
     "@takazudo/zfb-runtime": "2.5.1",
-    "@takazudo/zudo-doc": "^5.5.1",
+    "@takazudo/zudo-doc": "^5.5.2",
     "@takazudo/zudo-doc-history-server": "^5.5.2",
     "diff": "^8.0.3",
     "gray-matter": "^4.0.0",
