@@ -28,11 +28,20 @@ set -euo pipefail
 #
 # ## What this suppresses, and what it refuses to
 #
-# Exactly one class is suppressed: a same-page `#fragment` reported against a
-# file in the generated tree. Everything else fails — including a `zfb warn:`
-# line whose SHAPE is not recognised. That last part is deliberate: if zfb
-# changes its warning format, an unrecognised line has to turn CI red rather
-# than silently switch this gate off.
+# Two classes are suppressed:
+#
+# 1. A same-page `#fragment` reported against a file in the generated tree.
+#
+# 2. The three progress messages printed by `doc-history-server` through the
+#    plugin host: resolved content directory, processing count, and generated
+#    history count/timing. zfb labels all plugin stdout as warnings even though
+#    these lines are informational. Match only those complete message shapes;
+#    any other plugin stdout remains unexpected and fails this gate.
+#
+# Everything else fails — including a `zfb warn:` line whose SHAPE is not
+# recognised. That last part is deliberate: if zfb changes its warning format,
+# an unrecognised line has to turn CI red rather than silently switch this gate
+# off.
 #
 # Usage: bash check-zfb-link-warnings.sh <build-log>
 #   Locally:  pnpm build 2>&1 | tee /tmp/doc-build.log
@@ -57,11 +66,14 @@ cleanup() {
 trap cleanup EXIT
 
 KNOWN="$WORK/known-false.txt"
+KNOWN_PLUGIN_INFO="$WORK/known-false-plugin-info.txt"
 UNEXPECTED="$WORK/unexpected.txt"
 : >"$KNOWN"
+: >"$KNOWN_PLUGIN_INFO"
 : >"$UNEXPECTED"
 
-awk -v known="$KNOWN" -v unexpected="$UNEXPECTED" -v tree="$GENERATED_TREE" '
+awk -v known="$KNOWN" -v known_plugin_info="$KNOWN_PLUGIN_INFO" \
+    -v unexpected="$UNEXPECTED" -v tree="$GENERATED_TREE" '
   BEGIN { prefix = "zfb warn: "; sep = ": broken link: " }
   index($0, prefix) != 1 { next }
   {
@@ -75,18 +87,29 @@ awk -v known="$KNOWN" -v unexpected="$UNEXPECTED" -v tree="$GENERATED_TREE" '
         next
       }
     }
+
+    plugin_info = \
+      rest ~ /^\[plugin-host stdout\] doc-history-server: content-dir resolved to \/.*\/src\/content\/docs$/ || \
+      rest ~ /^\[plugin-host stdout\] Processing default: [0-9]+ files in \/.*\/src\/content\/docs$/ || \
+      rest ~ /^\[plugin-host stdout\] Generated [0-9]+ history files in [0-9]+([.][0-9]+)?s$/
+    if (plugin_info) {
+      print > known_plugin_info
+      next
+    }
+
     print > unexpected
   }
 ' "$LOG"
 
 known_count=$(wc -l <"$KNOWN")
+known_plugin_info_count=$(wc -l <"$KNOWN_PLUGIN_INFO")
 unexpected_count=$(wc -l <"$UNEXPECTED")
 
 if [ "$unexpected_count" -ne 0 ]; then
   echo "$unexpected_count zfb warning(s) outside the known-false class:" >&2
   cat "$UNEXPECTED" >&2
   if [ -n "${GITHUB_ACTIONS:-}" ]; then
-    echo "::error::${unexpected_count} zfb link warning(s) are not the known-false generated-anchor class — a hand-authored link is broken, or zfb changed its warning format."
+    echo "::error::${unexpected_count} zfb warning(s) are not a known-false class (generated-anchor link or doc-history progress) — a hand-authored link is broken, plugin output changed, or zfb changed its warning format."
   fi
   exit 1
 fi
@@ -96,7 +119,14 @@ echo "  suppressed  $known_count same-page fragment warning(s) in $GENERATED_TRE
 echo "              (false by construction — zfb resolves fragments against heading"
 echo "               anchors only; assertLinkIntegrity proves these fatally on the"
 echo "               view model. The count tracks markup choices, not link health.)"
+echo "  suppressed  $known_plugin_info_count doc-history progress warning(s)"
+echo "              (informational plugin stdout that zfb labels as warnings; only"
+echo "               the three complete known message shapes are accepted.)"
 if [ "$known_count" -gt 0 ]; then
   echo "  sample:"
   head -5 "$KNOWN" | sed 's/^/    /'
+fi
+if [ "$known_plugin_info_count" -gt 0 ]; then
+  echo "  plugin info sample:"
+  head -5 "$KNOWN_PLUGIN_INFO" | sed 's/^/    /'
 fi

@@ -641,6 +641,9 @@ async function exerciseViewerInteractions(cdp, instance = "inline", testResize =
   before = await renderCount(cdp, instance);
   await setViewportAndMedia(cdp, 1200, "light", false);
   await waitFor(cdp, `Number(document.querySelector(${JSON.stringify(rootSelector)}).dataset.renderCount) > ${before}`);
+  await waitForCanvasSize(cdp, instance);
+  await waitForRenderSettled(cdp, instance);
+  await waitForCanvasSize(cdp, instance);
   const resized = await evaluate(cdp, `(() => {
     const canvas = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport] canvas`)});
     const viewport = document.querySelector(${JSON.stringify(`${rootSelector} [data-model-viewer-viewport]`)});
@@ -676,6 +679,23 @@ async function waitForRenderIdle(cdp, label, instance = "inline") {
   const count = await renderCount(cdp, instance);
   await delay(250);
   assertEqual(await renderCount(cdp, instance), count, label);
+}
+
+async function waitForRenderSettled(cdp, instance = "inline", timeout = 10_000) {
+  const deadline = Date.now() + timeout;
+  let previous = await renderCount(cdp, instance);
+  let stableSince = Date.now();
+  while (Date.now() < deadline) {
+    await delay(100);
+    const current = await renderCount(cdp, instance);
+    if (current !== previous) {
+      previous = current;
+      stableSince = Date.now();
+      continue;
+    }
+    if (Date.now() - stableSince >= 750) return;
+  }
+  throw new Error(`${instance} viewer did not settle after resize`);
 }
 
 async function pressKey(cdp, key, code, keyCode, modifiers = 0) {
