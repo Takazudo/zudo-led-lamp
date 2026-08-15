@@ -178,12 +178,14 @@ jobs:
       # evidence tables in a component dropped the count 4324 -> 2536 with no
       # change in link health. The number tracks presentation, not link health.
       #
-      # This step therefore suppresses exactly one class — a same-page
-      # `#fragment` against a file in the generated tree — and fails on
-      # everything else, including a warning whose shape it does not recognise,
-      # so a zfb format change turns CI red instead of silently disarming the
-      # gate. Proven both ways locally: a real broken link in a hand-authored
-      # page leaves `pnpm build` at exit 0 and makes this step exit 1.
+      # This step therefore suppresses two known-false classes: same-page
+      # `#fragment` warnings against generated files, and the three complete
+      # doc-history progress-message shapes that zfb labels as warnings. It
+      # fails on everything else, including a warning whose shape it does not
+      # recognise, so a zfb or plugin-output change turns CI red instead of
+      # silently disarming the gate. Proven both ways locally: a real broken
+      # link in a hand-authored page leaves `pnpm build` at exit 0 and makes
+      # this step exit 1.
       - name: Hand-authored links resolve
         working-directory: doc
         run: bash component-docs/scripts/check-zfb-link-warnings.sh "$RUNNER_TEMP/$BUILD_LOG_NAME"
