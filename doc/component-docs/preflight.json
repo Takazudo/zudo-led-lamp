@@ -5,8 +5,8 @@
     "contractVersion": 1
   },
   "records": {
-    "available": 32,
-    "selected": 32,
+    "available": 33,
+    "selected": 33,
     "slugs": [
       "al8860mp-13",
       "ap63203wu-7",
@@ -23,16 +23,17 @@
       "c23162",
       "c23179",
       "c25803",
+      "c2832269",
       "c2934070",
       "c2991196",
       "c4216",
       "c492404",
+      "c492405",
       "c529334",
       "cl21a226maqnnne",
       "fnr4030s4r7mt",
       "fxl0630-330-m",
       "high-diode-smaj20a",
-      "jst-b6b-xh-a",
       "pesd24vs1ub",
       "rd-0603waf5101t5e",
       "rlp25feer200",
@@ -43,9 +44,9 @@
     ]
   },
   "sources": {
-    "available": 81,
-    "selected": 81,
-    "linkable": 81,
+    "available": 85,
+    "selected": 85,
+    "linkable": 85,
     "ids": [
       "src-al8860-ds39014",
       "src-al8860-generator",
@@ -77,6 +78,9 @@
       "src-c23179-generator",
       "src-c23179-uniroyal",
       "src-c25803-uniroyal",
+      "src-c2832269-drawing",
+      "src-c2832269-lcsc",
+      "src-c2832269-page",
       "src-c2934070-generator",
       "src-c2934070-spec",
       "src-c2991196-encoder-rc",
@@ -89,6 +93,9 @@
       "src-c492404-drawing",
       "src-c492404-generator",
       "src-c492404-page",
+      "src-c492405-drawing",
+      "src-c492405-lcsc",
+      "src-c492405-page",
       "src-c529334-ds",
       "src-c529334-es",
       "src-c529334-generator",
@@ -102,8 +109,6 @@
       "src-fxl-series-official",
       "src-high-diode-c571370",
       "src-high-diode-primary",
-      "src-jst-xh",
-      "src-jst-xh-header",
       "src-pesd24vs1ub",
       "src-rd-board-p-generator",
       "src-rd-c23186",
@@ -134,343 +139,343 @@
     {
       "key": "record.recordId",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.slug",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.kind",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.parentRecordId",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.lineId",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.ownerSkill",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.mpn",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.manufacturer",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.lcsc",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.package",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.function",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.identityState",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.sourceState",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.dnp",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "record.placements",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "alias.mpn",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "alias.lcsc",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "alias.manufacturer",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "alias.function",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "routing.positivePrompts",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 32
+      "withheld": 33
     },
     {
       "key": "routing.negativePrompts",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 32
+      "withheld": 33
     },
     {
       "key": "source.sourceId",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.documentTitle",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.documentNumber",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.revision",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.documentDate",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.retrievalDate",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.authorityClass",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.availability",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.locator",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.printedPageLabel",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.physicalPdfPageIndex",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 81
+      "withheld": 85
     },
     {
       "key": "source.authoritativeUrl",
       "decision": "PUBLISH",
-      "emitted": 81,
+      "emitted": 85,
       "withheld": 0
     },
     {
       "key": "source.alternateAuthoritativeUrl",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 81
+      "withheld": 85
     },
     {
       "key": "source.sha256",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 81
+      "withheld": 85
     },
     {
       "key": "source.evidenceExtract",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 81
+      "withheld": 85
     },
     {
       "key": "fact.factId",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.class",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.value",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.unit",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.conditions",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.locator",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.provenance",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.verdict",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.dependsOn",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "fact.expression",
       "decision": "PUBLISH",
-      "emitted": 369,
+      "emitted": 377,
       "withheld": 0
     },
     {
       "key": "coverage.coverageId",
       "decision": "PUBLISH",
-      "emitted": 109,
+      "emitted": 112,
       "withheld": 0
     },
     {
       "key": "coverage.domain",
       "decision": "PUBLISH",
-      "emitted": 109,
+      "emitted": 112,
       "withheld": 0
     },
     {
       "key": "coverage.status",
       "decision": "PUBLISH",
-      "emitted": 109,
+      "emitted": 112,
       "withheld": 0
     },
     {
       "key": "coverage.reason",
       "decision": "PUBLISH",
-      "emitted": 109,
+      "emitted": 112,
       "withheld": 0
     },
     {
       "key": "coverage.factIds",
       "decision": "PUBLISH",
-      "emitted": 109,
+      "emitted": 112,
       "withheld": 0
     },
     {
       "key": "coverage.blockingFactIds",
       "decision": "PUBLISH",
-      "emitted": 109,
+      "emitted": 112,
       "withheld": 0
     },
     {
       "key": "interaction.interactionId",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 63,
       "withheld": 0
     },
     {
       "key": "interaction.recordIds",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 63,
       "withheld": 0
     },
     {
       "key": "interaction.factIds",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 63,
       "withheld": 0
     },
     {
       "key": "interaction.conditions",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 63,
       "withheld": 0
     },
     {
       "key": "interaction.verdict",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 63,
       "withheld": 0
     },
     {
@@ -608,91 +613,91 @@
     {
       "key": "reference.document.sourceId",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.document.documentTitle",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.document.label",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.document.authorityClass",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.document.url",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.document.availability",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.document.documentKind",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "reference.footprint.packageId",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.footprint.name",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.footprint.path",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.model.path",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.model.offset",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.model.rotation",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.model.scale",
       "decision": "PUBLISH",
-      "emitted": 54,
+      "emitted": 56,
       "withheld": 0
     },
     {
       "key": "reference.package.recordIds",
       "decision": "PUBLISH",
-      "emitted": 22,
+      "emitted": 23,
       "withheld": 0
     },
     {
@@ -704,19 +709,19 @@
     {
       "key": "asset.datasheetPdf",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "asset.footprintPreview",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
       "key": "asset.modelPreview",
       "decision": "PUBLISH",
-      "emitted": 32,
+      "emitted": 33,
       "withheld": 0
     },
     {
@@ -908,6 +913,24 @@
       "reason": "ABSOLUTE_HTTP_URL"
     },
     {
+      "sourceId": "src-c2832269-drawing",
+      "url": "https://www.xfconn.com/uploads/soft/20240726/4-240H6142542948.pdf",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c2832269-lcsc",
+      "url": "https://www.lcsc.com/product-detail/C2832269.html",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c2832269-page",
+      "url": "https://www.xfconn.com/index.php?a=index&aid=1953&c=View&m=home",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
       "sourceId": "src-c2934070-generator",
       "url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py",
       "decision": "ALLOW",
@@ -976,6 +999,24 @@
     {
       "sourceId": "src-c492404-page",
       "url": "https://www.xfconn.com/index.php?a=index&aid=1738&c=View&m=home",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c492405-drawing",
+      "url": "https://www.xfconn.com/uploads/soft/20240711/4-240G11122102R.pdf",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c492405-lcsc",
+      "url": "https://www.lcsc.com/product-detail/C492405.html",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c492405-page",
+      "url": "https://www.xfconn.com/Product/1737.html",
       "decision": "ALLOW",
       "reason": "ABSOLUTE_HTTP_URL"
     },
@@ -1054,18 +1095,6 @@
     {
       "sourceId": "src-high-diode-primary",
       "url": "http://www.h-diode.com/upload/202506/10/202506100145085933.pdf",
-      "decision": "ALLOW",
-      "reason": "ABSOLUTE_HTTP_URL"
-    },
-    {
-      "sourceId": "src-jst-xh",
-      "url": "https://www.jst.com/wp-content/uploads/2025/06/eXH.pdf",
-      "decision": "ALLOW",
-      "reason": "ABSOLUTE_HTTP_URL"
-    },
-    {
-      "sourceId": "src-jst-xh-header",
-      "url": "https://www.jst.com/wp-content/uploads/2025/06/eXH.pdf",
       "decision": "ALLOW",
       "reason": "ABSOLUTE_HTTP_URL"
     },
@@ -1215,13 +1244,13 @@
     }
   ],
   "counts": {
-    "generatedPages": 36,
-    "publishedCoverageDomains": 109,
-    "publishedFacts": 369,
+    "generatedPages": 37,
+    "publishedCoverageDomains": 112,
+    "publishedFacts": 377,
     "publishedIntegrationRules": 6,
-    "publishedInteractions": 50,
+    "publishedInteractions": 51,
     "publishedPinMaps": 33,
-    "publishedRecords": 32,
-    "publishedSources": 81
+    "publishedRecords": 33,
+    "publishedSources": 85
   }
 }

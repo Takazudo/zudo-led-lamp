@@ -22,7 +22,7 @@ A component record answers questions about one part. These rules answer the ones
 <EvidenceTable label="rules-index">
   | Rule                                                          | Domain                 | Records | Facts | Verdict     |
   | ------------------------------------------------------------- | ---------------------- | ------- | ----- | ----------- |
-  | [`rule-rail-envelope`](#rule-rail-envelope)                   | rail-envelope          | 12      | 19    | UNSOURCED   |
+  | [`rule-rail-envelope`](#rule-rail-envelope)                   | rail-envelope          | 13      | 22    | UNSOURCED   |
   | [`rule-usb-pd-nvm-load-switch`](#rule-usb-pd-nvm-load-switch) | usb-pd-nvm-load-switch | 9       | 18    | UNSOURCED   |
   | [`rule-al8860-led-stage`](#rule-al8860-led-stage)             | al8860-led-stage       | 7       | 25    | NEEDS BENCH |
   | [`rule-ap63203-logic-stage`](#rule-ap63203-logic-stage)       | ap63203-logic-stage    | 4       | 16    | UNSOURCED   |
@@ -41,7 +41,7 @@ A component record answers questions about one part. These rules answer the ones
 
 **This rule refuses to conclude:** Do not declare the complete rail safe while STUSB primary trust, project mapping, actual clamp/source-impedance waveform, and harness/as-built evidence remain open.
 
-**Conditions:** Separate legal 5/15 V operation, 20 V mis-contract, and transient clamp behavior; harness current and upstream source impedance remain independent conditions.
+**Conditions:** Separate legal 5/15 V operation, 20 V mis-contract, and transient clamp behavior; connector-pair current, direct-board mechanics, and upstream source impedance remain independent conditions.
 
 **Records this rule spans:**
 
@@ -52,7 +52,8 @@ A component record answers questions about one part. These rules answer the ones
 - [`rec-bsmd1206-075-30v`](/docs/components/records/bsmd1206-075-30v/) — BSMD1206-075-30V
 - [`rec-al8860mp-13`](/docs/components/records/al8860mp-13/) — AL8860MP-13
 - [`rec-ap63203wu-7`](/docs/components/records/ap63203wu-7/) — AP63203WU-7
-- [`rec-jst-b6b-xh-a`](/docs/components/records/jst-b6b-xh-a/) — B6B-XH-A(LF)(SN)
+- [`rec-c492405`](/docs/components/records/c492405/) — PZ254V-11-06P
+- [`rec-c2832269`](/docs/components/records/c2832269/) — PM254V-11-06-H85
 - [`rec-c13585`](/docs/components/records/c13585/) — CL31A106KBHNNNE
 - [`rec-c14663`](/docs/components/records/c14663/) — CC0603KRX7R9BB104
 - [`rec-c15849`](/docs/components/records/c15849/) — CL10A105KB8NNNC
@@ -74,7 +75,10 @@ A component record answers questions about one part. These rules answer the ones
 - [`fact-ap63203-vin-recommended-max`](/docs/components/records/ap63203wu-7/#fact-ap63203-vin-recommended-max) on AP63203WU-7
 - [`fact-ap63203-vin-absolute-dc`](/docs/components/records/ap63203wu-7/#fact-ap63203-vin-absolute-dc) on AP63203WU-7
 - [`fact-ap63203-vin-transient`](/docs/components/records/ap63203wu-7/#fact-ap63203-vin-transient) on AP63203WU-7
-- [`fact-jst-b6b-xh-a-current`](/docs/components/records/jst-b6b-xh-a/#fact-jst-b6b-xh-a-current) on B6B-XH-A(LF)(SN)
+- [`fact-c492405-current`](/docs/components/records/c492405/#fact-c492405-current) on PZ254V-11-06P
+- [`fact-c492405-voltage`](/docs/components/records/c492405/#fact-c492405-voltage) on PZ254V-11-06P
+- [`fact-c2832269-current`](/docs/components/records/c2832269/#fact-c2832269-current) on PM254V-11-06-H85
+- [`fact-c2832269-voltage`](/docs/components/records/c2832269/#fact-c2832269-voltage) on PM254V-11-06-H85
 - [`fact-c13585-voltage`](/docs/components/records/c13585/#fact-c13585-voltage) on CL31A106KBHNNNE
 - [`fact-c14663-voltage`](/docs/components/records/c14663/#fact-c14663-voltage) on CC0603KRX7R9BB104
 - [`fact-c15849-voltage`](/docs/components/records/c15849/#fact-c15849-voltage) on CL10A105KB8NNNC

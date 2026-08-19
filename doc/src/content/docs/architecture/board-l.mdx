@@ -12,7 +12,7 @@ the switched 15 V rail from [Board P](./board-p.mdx) and nothing else.
 
 ```mermaid
 flowchart LR;
-  J2["J2 B6B-XH-A 6P\n15V x2, GND x2, ATT, PDOK"];
+  J2["J2 PM254V female 6P\n15V x2, GND x2, ATT, PDOK"];
   F1["F1 PPTC\n750mA hold / 30V"];
   V15["V15 rail\nD10 SMAJ20A\nC10 C11 10uF"];
   RS1["RS1 200mR 2512\nhigh-side sense"];
@@ -666,7 +666,7 @@ unverified), its two switch terminals are left unconnected; the design does not 
 
 | Ref | Part | Pins | Note |
 |---|---|---|---|
-| `J2` | B6B-XH-A(LF)(SN) | 6 | Mirrors Board P's `JOUT1` exactly — see [Board P](./board-p.mdx#jout1-pin-assignment-locked) |
+| `J2` | PM254V-11-06-H85 female, C2832269 | 6 | Direct mate for Board P's PZ254V-11-06P male `JOUT1`; mirrors its pin map exactly — see [Board P](./board-p.mdx#jout1-pin-assignment-locked) |
 | `J3` | 1x5, 2.54 mm | SWDIO, SWCLK, NRST, 3V3, GND | **Footprint only.** Hand-fit a pin strip for bring-up; not in the assembly BOM |
 | `J4` | 1x3, 2.54 mm | TX, RX, GND | Footprint only |
 | `SW1` | EC11L1525G01 | A, C, B + lugs | Panel-mount encoder |

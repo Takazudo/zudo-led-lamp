@@ -7,6 +7,8 @@ sidebar_position: 40
 This is the **final** BOM, not a candidate list. Every C-number below was re-verified
 individually against the local JLCPCB parts database (snapshot dated **2026-07-25**;
 per-part data-fetch dates within the snapshot range from 2026-05-23 to 2026-07-03).
+The XFCN `JOUT1`/`J2` mating pair was separately checked against live JLCPCB/LCSC
+inventory and manufacturer drawings on **2026-08-20**; its rows carry that date.
 
 Every fitted line below also has a canonical component record — the exact orderable
 identity, every board placement, the sources behind it and which coverage domains are
@@ -42,7 +44,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | R15, R16 | 2 | 4.7 kΩ ±1% | [C23162](https://jlcpcb.com/partdetail/C23162) | 0603 | **Basic** | 7,433,362 | I2C pull-ups |
 | R19, R20 | 2 | 0 Ω | [C21189](https://jlcpcb.com/partdetail/C21189) | 0603 | **Basic** | 6,153,233 | CC1DB/CC2DB bridges |
 | R21 | 1 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | RESET pull-down (run state); shares Board L's reel. Added by the design review with the J2.4 reset line |
-| JOUT1 | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Downstream interface |
+| JOUT1 | 1 | PZ254V-11-06P male | [C492405](https://jlcpcb.com/partdetail/XFCN-PZ254V_1106P/C492405) | THT 1x6, 2.54 mm | Extended | 98,021 (live 2026-08-20) | Direct Board L interface; unkeyed, verify pin 1 |
 | J2, J3 | — | Pogo pads 1x4 / 1x8 | — | Bare copper | — | — | NVM I2C + debug, no part |
 
 **DNP — footprint only, not populated:**
@@ -75,7 +77,7 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | C19 | 1 | CL10A105KB8NNNC 1 µF 50 V | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | **Basic** | 5,979,916 | MCU VDD bulk |
 | RT1 | 1 | NCP18XH103F03RB 10 kΩ B=3380 K | [C13564](https://jlcpcb.com/partdetail/C13564) | 0603 | Extended | 398,625 | NTC, placed inside the LED array |
 | F1 | 1 | BSMD1206-075-30V | [C976305](https://jlcpcb.com/partdetail/C976305) | 1206 | Extended | 73,979 | PPTC, 750 mA hold / 1.5 A trip / 30 V |
-| J2 | 1 | B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT XH 2.5 mm | Extended | 47,935 | Board P interface (mirrors JOUT1) |
+| J2 | 1 | PM254V-11-06-H85 female | [C2832269](https://jlcpcb.com/partdetail/XFCN-PM254V_11_06H85/C2832269) | THT 1x6, 2.54 mm | Extended | 42,315 (live 2026-08-20) | Direct mate for Board P JOUT1; mirrors its pin map |
 | SW1 | 1 | EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | THT, panel bushing | Extended | **4,566** | Rotary encoder; detent/pulse count unresolved, see #32 |
 | LED1–LED24 | 24 | HL-AM-2835H421W-S1-08-HR3 (2800–3100 K) | [C210315](https://jlcpcb.com/partdetail/C210315) | SMD2835-2P | Extended | 399,813 | 3000 K, CRI 80, 29 lm typ @ 60 mA |
 
@@ -112,11 +114,11 @@ separate PCBA jobs, which they must be.
 | of which **Preferred** | 0 | 1 |
 | of which **Extended** | **5** | **13** |
 
-Board P Extended lines: `C2678061`, `C347476`, `C283540`, `C571370`, `C144397` — one
+Board P Extended lines: `C2678061`, `C347476`, `C283540`, `C571370`, `C492405` — one
 fewer than the original plan, because the C1711 → C14663 100 nF swap was applied.
 
 Board L Extended lines: `C500782`, `C529334`, `C780769`, `C571370`, `C177245`,
-`C167874`, `C459674`, `C2934070`, `C13564`, `C976305`, `C144397`, `C2991196`, `C210315`.
+`C167874`, `C459674`, `C2934070`, `C13564`, `C976305`, `C2832269`, `C2991196`, `C210315`.
 
 | | Value |
 |---|---|
@@ -148,8 +150,8 @@ Two more are available if the budget matters:
 - Dropping `RT1` (NTC) and `F1` (PPTC) would save ¥940 and remove the thermal-derate
   and over-current protections. Both were added deliberately; this is the price of them.
 - Ordering both boards as a single panelised PCBA job, if JLCPCB permits it for the
-  design, would collapse the two shared Extended lines (`C571370`, `C144397`) from four
-  charges to two — ¥940 saved. Confirm with JLCPCB rather than assuming.
+  design, would collapse the shared `C571370` TVS line from two charges to one — ¥470
+  saved. The two connector halves are different orderables and do not collapse.
 
 ## Parts explicitly not on this BOM
 

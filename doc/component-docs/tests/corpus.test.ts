@@ -38,51 +38,50 @@ function record(slug: string): PublicRecord {
 }
 
 describe("the corpus normalizes to the figures the epic states", () => {
-  it("counts 13 bundles and 32 records, 23 standalone and 9 subordinate", () => {
+  it("counts 13 bundles and 33 records, 24 standalone and 9 subordinate", () => {
     assert.equal(model.corpus.ownerBundles, 13);
-    assert.equal(model.corpus.records, 32);
-    assert.equal(model.corpus.standaloneRecords, 23);
+    assert.equal(model.corpus.records, 33);
+    assert.equal(model.corpus.standaloneRecords, 24);
     assert.equal(model.corpus.subordinateRecords, 9);
-    assert.equal(model.corpus.inventoryLines, 32);
-    assert.equal(model.corpus.fittedLines, 29);
+    assert.equal(model.corpus.inventoryLines, 33);
+    assert.equal(model.corpus.fittedLines, 30);
     assert.equal(model.corpus.dnpOrHandFitLines, 3);
   });
 
-  it("counts 81 sources, 369 facts, 109 coverage domains, 50 interactions", () => {
-    assert.equal(model.corpus.sources, 81);
-    assert.equal(model.corpus.facts, 369);
-    assert.equal(model.corpus.coverageDomains, 109);
-    assert.equal(model.corpus.interactions, 50);
+  it("counts 85 sources, 377 facts, 112 coverage domains, 51 interactions", () => {
+    assert.equal(model.corpus.sources, 85);
+    assert.equal(model.corpus.facts, 377);
+    assert.equal(model.corpus.coverageDomains, 112);
+    assert.equal(model.corpus.interactions, 51);
   });
 
-  it("counts 32 routes, 33 pin maps and 140 pins", () => {
-    assert.equal(index.totals.routes, 32);
+  it("counts 33 routes, 33 pin maps and 140 pins", () => {
+    assert.equal(index.totals.routes, 33);
     assert.equal(model.corpus.pinMaps, 33);
     assert.equal(model.corpus.pins, 140);
   });
 
   it("publishes every instance without duplicating or dropping one", () => {
-    assert.equal(model.records.length, 32);
-    assert.equal(sum(model.records, (entry) => entry.sources.length), 81);
-    assert.equal(sum(model.records, (entry) => entry.facts.length), 369);
-    assert.equal(sum(model.records, (entry) => entry.coverage.length), 109);
+    assert.equal(model.records.length, 33);
+    assert.equal(sum(model.records, (entry) => entry.sources.length), 85);
+    assert.equal(sum(model.records, (entry) => entry.facts.length), 377);
+    assert.equal(sum(model.records, (entry) => entry.coverage.length), 112);
     assert.equal(sum(model.records, (entry) => entry.pinMaps.length), 33);
     assert.equal(
       sum(model.records, (entry) => sum(entry.pinMaps, (map) => map.pins.length)),
       140,
     );
 
-    // Interactions are the one relation that fans out: 50 distinct interactions
-    // land on 59 record pages, because six of them name a standalone and its
-    // subordinates and every participant must show its own involvement.
+    // Interactions are the one relation that fans out: 51 distinct interactions
+    // land on 63 record pages because every participant shows its involvement.
     const interactions = model.records.flatMap((entry) => entry.interactions);
-    assert.equal(interactions.length, 59);
-    assert.equal(new Set(interactions.map((entry) => entry.interactionId)).size, 50);
+    assert.equal(interactions.length, 63);
+    assert.equal(new Set(interactions.map((entry) => entry.interactionId)).size, 51);
   });
 
   it("gives every record a unique, route-safe slug and page-unique anchors", () => {
     const slugs = model.records.map((entry) => entry.identity.slug);
-    assert.equal(new Set(slugs).size, 32);
+    assert.equal(new Set(slugs).size, 33);
     for (const slug of slugs) assert.match(slug, SLUG_PATTERN);
 
     // Anchors become HTML ids, so uniqueness is a per-document invariant.
@@ -99,7 +98,7 @@ describe("the corpus normalizes to the figures the epic states", () => {
       assert.equal(new Set(anchors).size, anchors.length, entry.identity.slug);
       total += anchors.length;
     }
-    assert.equal(total, 32 + 81 + 369 + 109 + 59 + 33);
+    assert.equal(total, 33 + 85 + 377 + 112 + 63 + 33);
 
     // Record-scoped anchors stay globally unique — each belongs to one page.
     const scoped = model.records.flatMap((entry) => [
@@ -184,17 +183,16 @@ describe("the real records the epic calls out", () => {
     assert.ok(record("c492404").coverage.length > 0);
   });
 
-  it("keeps both pin maps of the record that has two", () => {
-    const header = record("jst-b6b-xh-a");
-    assert.equal(header.pinMaps.length, 2);
-    assert.equal(new Set(header.pinMaps.map((map) => map.pinMapId)).size, 2);
-    for (const map of header.pinMaps) assert.equal(map.recordId, "rec-jst-b6b-xh-a");
-    // Exactly one record has more than one; the rest have exactly one each.
-    const withMany = model.records.filter((entry) => entry.pinMaps.length > 1);
-    assert.deepEqual(
-      withMany.map((entry) => entry.identity.slug),
-      ["jst-b6b-xh-a"],
-    );
+  it("publishes one six-pin map for each half of the mated board-header pair", () => {
+    const male = record("c492405");
+    const female = record("c2832269");
+    assert.equal(male.pinMaps.length, 1);
+    assert.equal(female.pinMaps.length, 1);
+    assert.equal(male.pinMaps[0]?.recordId, "rec-c492405");
+    assert.equal(female.pinMaps[0]?.recordId, "rec-c2832269");
+    assert.equal(male.pinMaps[0]?.pins.length, 6);
+    assert.equal(female.pinMaps[0]?.pins.length, 6);
+    assert.equal(model.records.some((entry) => entry.pinMaps.length !== 1), false);
   });
 
   it("publishes the large passive bundle as eleven separate records", () => {
@@ -225,13 +223,13 @@ describe("the real records the epic calls out", () => {
   it("publishes open coverage, both with and without applicable blockers", () => {
     const coverage = model.records.flatMap((entry) => entry.coverage);
     const open = coverage.filter((entry) => entry.status === "OPEN");
-    assert.equal(coverage.filter((entry) => entry.status === "COVERED").length, 44);
-    assert.equal(open.length, 65);
+    assert.equal(coverage.filter((entry) => entry.status === "COVERED").length, 45);
+    assert.equal(open.length, 67);
 
     const withBlockers = open.filter((entry) => entry.blockingFactIds.length > 0);
     const withoutBlockers = open.filter((entry) => entry.blockingFactIds.length === 0);
     assert.equal(withBlockers.length, 39);
-    assert.equal(withoutBlockers.length, 26);
+    assert.equal(withoutBlockers.length, 28);
 
     // An open domain never publishes without saying why it is open.
     for (const entry of open) assert.notEqual(entry.reason, "");
@@ -267,8 +265,8 @@ describe("the real records the epic calls out", () => {
 
   it("keeps numeric, string and structured fact values in their own shapes", () => {
     const values = model.records.flatMap((entry) => entry.facts).map((fact) => fact.value);
-    assert.equal(values.filter((value) => typeof value === "number").length, 195);
-    assert.equal(values.filter((value) => typeof value === "string").length, 171);
+    assert.equal(values.filter((value) => typeof value === "number").length, 198);
+    assert.equal(values.filter((value) => typeof value === "string").length, 176);
     assert.equal(values.filter((value) => Array.isArray(value)).length, 3);
 
     const identity = model.records
@@ -431,7 +429,7 @@ describe("denied evidence never reaches the public model", () => {
     }
   });
 
-  it("publishes only http(s) citation URLs, and records all 81 decisions", () => {
+  it("publishes only http(s) citation URLs, and records all 85 decisions", () => {
     const report = policy.buildReport({
       viewModelVersion: model.version,
       providerId: "circuit-component-spec",
@@ -441,8 +439,8 @@ describe("denied evidence never reaches the public model", () => {
       selectedSlugs: [],
       counts: {},
     });
-    assert.equal(report.urls.length, 81);
-    assert.equal(report.urls.filter((entry) => entry.decision === "ALLOW").length, 81);
+    assert.equal(report.urls.length, 85);
+    assert.equal(report.urls.filter((entry) => entry.decision === "ALLOW").length, 85);
 
     for (const source of model.records.flatMap((entry) => entry.sources)) {
       assert.ok(source.url, `${source.sourceId} has no URL`);

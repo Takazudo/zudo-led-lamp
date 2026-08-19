@@ -6,20 +6,20 @@ sidebar_position: 40
 
 Board P (PD front end) and the LED/control board are separate PCBs per the epic's board-split decision. This page evaluates connector families for that link — power (15V, contract cap 3A) plus whatever status/signal lines the architecture pass ends up needing (e.g. an ATT/PDOK line per the Board-P audit). All parts lookup-verified against the local JLCPCB DB (fetched 2026-07-25; per-part lookup dates noted).
 
-## Candidate 1 — JST XH, 6-pin (zudo-pd baseline)
+## Candidate 1 — XFCN direct 2.54 mm male/female pair (selected)
 
 | Spec | Value |
 |---|---|
-| Part | B6B-XH-A(LF)(SN) (C144397) |
-| Pitch | 2.5mm |
-| Rating | 250V / **3A per contact** |
+| Part | PZ254V-11-06P male (C492405) + PM254V-11-06-H85 female (C2832269) |
+| Pitch | 2.54mm |
+| Rating | 250V / **3A per contact** on both halves |
 | Pins | 6 |
-| Stock (tier) | 47,935, [partdetail](https://jlcpcb.com/partdetail/C144397) |
+| Stock (tier) | 98,021 male / 42,315 female on 2026-08-20; [male](https://jlcpcb.com/partdetail/XFCN-PZ254V_1106P/C492405), [female](https://jlcpcb.com/partdetail/XFCN-PM254V_11_06H85/C2832269) |
 
-This is the connector zudo-pd used, with **power contacts doubled** (2 of the 6 pins ganged per rail, both for the 15V feed and the return) specifically because a single XH contact's 3A rating sits with zero margin against this project's 3A contract cap. That leaves 2 of the 6 pins for signal/status.
+The manufacturer drawings explicitly specify the reciprocal PZ254/PM254 single-row series as mates. Power contacts remain doubled (2 of the 6 pins ganged per rail for both the 15V feed and return), leaving 2 pins for signal/status.
 
-**Pros:** proven in the sibling project, cheap, small footprint, positive-locking housing, widely stocked.
-**Cons:** a single contact has no headroom at all over the 3A cap — doubling is mandatory, not optional, and it consumes 4 of the 6 available pins just for power+return before any signal line is added.
+**Pros:** cheap, compact, amply stocked, exact manufacturer-matched pair, and no cable housing/contact/wire/crimp BOM.
+**Cons:** unkeyed and not latching; PCB alignment, pin-1 polarity, standoff, and mechanical retention become part of the board/enclosure design. A single contact has no headroom over the 3A contract cap, so doubling remains mandatory for that envelope.
 
 ## Candidate 2 — JST VH, 2-pin (headroom alternative)
 
@@ -52,12 +52,12 @@ Included to show that XH isn't an outlier — most connectors in this 2–2.5mm 
 
 | Connector | Pitch | Per-contact rating | Margin over 3A cap | Doubling needed? | Pin count used for power+return |
 |---|---|---|---|---|---|
-| JST XH (C144397) | 2.5mm | 3A | None | Yes (zudo-pd already does this) | 4 of 6 |
+| XFCN PZ254V/PM254V (C492405/C2832269) | 2.54mm | 3A | None | Yes | 4 of 6 |
 | JST VH (C160315) | 3.96mm | 10A | 3.3× | No | 2 |
 | Molex KK 2510 (C2847671) | 2.54mm | 3A | None | Yes | 4 of 4 (no pins left for signal without a larger variant) |
 
 ## Questions the architecture pass must answer
 
-- Is XH's proven-but-zero-margin doubling scheme (already validated by zudo-pd's design, though that project's PCBAs were never bench-confirmed per issue #5) acceptable here, or does the LED board's higher continuous current profile (vs. the PD board's own downstream) justify the headroom VH offers?
+- Is the selected pair's zero-contract-margin doubling scheme acceptable here, or does the LED board's actual 410 mA load and 205 mA/contact split make VH's extra headroom unnecessary?
 - How many signal/status lines actually need to cross this connector (ATT/PDOK status, anything else)? That fixes whether XH's remaining 2 pins are enough, or whether VH needs a companion small-signal connector.
-- Board-edge space and mechanical stacking (is this a stacked or side-by-side board arrangement?) — XH's smaller footprint vs. VH's larger one may be decided by enclosure/board-outline constraints not yet fixed at this research stage.
+- Board-edge space, direct-board alignment, standoff, polarity, and retention must be fixed in the PCB/enclosure layout before the unkeyed pair is energized.

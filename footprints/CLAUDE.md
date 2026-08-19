@@ -78,3 +78,9 @@ EasyEDA-derived footprints are already drawn in JLCPCB's pin-1 convention. When 
 ## Downloaded inventory (initial batch, all 32 BOM lines)
 
 All fitted + DNP + footprint-only parts from both boards were downloaded 2026-08-01, including J3's suggested pin header (C492404). 3D models (`--3d`, both `.step` and `.wrl`) were downloaded for all parts; every footprint's model reference was verified to resolve.
+
+The 2026-08-20 connector update adds the exact XFCN direct-mating pair: Board P
+`JOUT1` uses male `PZ254V-11-06P` (`C492405`,
+`HDR-TH_6P-P2.54-V-M`) and Board L `J2` uses female
+`PM254V-11-06-H85` (`C2832269`, `HDR-TH_6P-P2.54-V-F`). Both canonical
+footprint locations and both STEP/WRL models must remain byte-aligned.

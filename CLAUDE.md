@@ -5,7 +5,7 @@ Use `.claude/skills/component-spec-audit` whenever circuit, schematic, PCB, BOM,
 Load every matching exact owner skill, including first-class subordinate records:
 
 - `component-stusb4500qtr`: STUSB4500QTR, PESD24VS1UB,115, and the DNP external-Rd resistors.
-- `component-umw-ao3401a-c347476`, `component-type-c-31-m-17`, `component-high-diode-smaj20a-c571370`, and `component-jst-b6b-xh-a`: Board P switching, receptacle, TVS, and harness header.
+- `component-umw-ao3401a-c347476`, `component-type-c-31-m-17`, `component-high-diode-smaj20a-c571370`, and `component-xfcn-board-headers`: Board P switching, receptacle, TVS, and the PZ254V/PM254V board-to-board header pair.
 - `component-project-passives`: exact Samsung/Yageo MLCC and UNI-ROYAL resistor lines assigned there.
 - `component-al8860mp-13`: AL8860 plus its sense resistor, inductor, and exact R+O catch diode.
 - `component-ap63203wu-7`: AP63203 plus its inductor and exact output MLCC.

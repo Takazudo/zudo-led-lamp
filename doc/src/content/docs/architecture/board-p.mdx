@@ -23,8 +23,8 @@ optimisation was recommended here and has since been applied at KiCad capture:
 
 1. **Load re-check.** Board P was margined against the 3.0 A contract cap. Board L
    actually draws **~410 mA** (see [Power budget](./board-l.mdx#power-budget)). Every
-   current-dependent number on Board P — Q1 conduction loss, JOUT1 contact loading, the
-   XH derate — improves by roughly 7x against the original analysis. No part needs
+   current-dependent number on Board P — Q1 conduction loss and JOUT1 contact loading —
+   improves by roughly 7x against the original analysis. No electrical limit needs
    changing.
 2. **The conditioned clamp point propagates downstream.** The exact D5/D10 SMAJ20A
    primary row gives VC max 32.4 V only at IPP 12.3 A for a 10/1000 µs waveform at
@@ -77,8 +77,12 @@ Reference designators are Board P's own.
 
 ## JOUT1 pin assignment (locked)
 
-Board L's `J2` must mirror this exactly. Both ends are the same part
-([C144397](https://jlcpcb.com/partdetail/C144397)), joined by a 6-way XH harness.
+Board L's `J2` must mirror this exactly. Board P uses the XFCN
+[PZ254V-11-06P male header (C492405)](https://jlcpcb.com/partdetail/XFCN-PZ254V_1106P/C492405),
+and Board L uses its XFCN
+[PM254V-11-06-H85 female mate (C2832269)](https://jlcpcb.com/partdetail/XFCN-PM254V_11_06H85/C2832269).
+The pair mates directly; it is unkeyed, so both pin-1 marks and the installed board
+orientation must be verified before power.
 
 | Pin | Net | Direction (from Board P) | Board L destination |
 |---|---|---|---|
@@ -106,7 +110,7 @@ connector, and an input pin costs nothing. Firmware does not act on it in v1.
 | Part | Limit | At 410 mA / 15 V | Verdict |
 |---|---|---|---|
 | Q1 UMW AO3401A (exact C347476) | 30 V VDS abs max, ±12 V VGS abs max, 4.2 A, 65 mΩ max @ VGS −4.5 V / ID −4 A | Conservative 25 °C conduction estimate `0.41² × 0.065` = **10.9 mW**; ideal steady VGS = −6.0 V (100k/150k divider) | Nominal conduction is low, but temperature, PCB thermal path and the dynamic clamp waveform remain open. A 20 V mis-contract gives ideal steady VGS = −8.0 V; do not treat the 32.4 V clamp event as accepted without waveform/duration analysis |
-| JOUT1 XH contacts | 3 A/contact | 205 mA per paired contact | Pass, 14x derated margin |
+| JOUT1/J2 XFCN header pair | 3 A/contact, 250 V | 205 mA per paired contact at the 410 mA Board L load | Pass electrically, 14x nameplate margin; direct-board alignment and polarity remain a layout/bench gate |
 | U1 STUSB4500 VDD | Rev 8 mirror states 28 V abs max, 22 V operating | 15 V | Nominal conditioned check passes; primary trust and transient waveform remain an **EVIDENCE BLOCKER (UNSOURCED)** |
 | J1 receptacle C283540 | Primary Rev A drawing: 20 V, 5 A | 15 V, 0.41 A | Rating check has margin; numeric pin/shell mapping and incoming continuity remain an evidence gate |
 

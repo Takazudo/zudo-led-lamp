@@ -61,10 +61,10 @@ describe("footprint preview export transforms", () => {
 });
 
 describe("footprint preview no-KiCad drift check", () => {
-  it("accepts the committed 22-package, 32-record alias set", async () => {
+  it("accepts the committed 23-package, 33-record alias set", async () => {
     await checkFootprintPreviews(selections);
-    assert.equal(selections.length, 22);
-    assert.equal(new Set(selections.flatMap((entry) => entry.recordIds)).size, 32);
+    assert.equal(selections.length, 23);
+    assert.equal(new Set(selections.flatMap((entry) => entry.recordIds)).size, 33);
   });
 
   it("fails on missing, extra, stale input/output, unsafe output, and changed alias reuse", async () => {

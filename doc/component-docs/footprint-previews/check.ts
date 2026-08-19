@@ -24,7 +24,7 @@ export async function checkFootprintPreviews(
   if (!rootStat.isDirectory() || rootStat.isSymbolicLink()) throw new Error("footprint preview root must be a real directory");
   const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as FootprintPreviewManifest;
   assertMetadata(manifest);
-  if (manifest.packages.length !== 22 || selections.length !== 22) throw new Error("manifest and selection must contain exactly 22 packages");
+  if (manifest.packages.length !== 23 || selections.length !== 23) throw new Error("manifest and selection must contain exactly 23 packages");
   const expectedFiles = new Set(["manifest.json", ...selections.map((entry) => `${entry.footprintName}.svg`)]);
   const actualFiles = await readdir(root);
   for (const filename of actualFiles) if (!expectedFiles.has(filename)) throw new Error(`extra footprint preview output: ${filename}`);
@@ -73,5 +73,5 @@ function pickSelection(entry: FootprintPreviewManifest["packages"][number]): Foo
 
 if (process.argv[1] !== undefined && basename(process.argv[1]) === "check.ts") {
   await checkFootprintPreviews();
-  process.stdout.write("22 committed footprint previews are current and safe\n");
+  process.stdout.write("23 committed footprint previews are current and safe\n");
 }

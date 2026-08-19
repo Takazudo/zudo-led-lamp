@@ -149,7 +149,7 @@ per-part rating evidence and the one part this audit swapped out.
 | R21 | 10 kΩ | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | RESET pull-down (run state); shares Board L's reel | 10,726,008 |
 | J2 | Pogo pads, 1×4 | — (bare copper, no part) | Custom SMD | NVM I2C programming | $0 |
 | J3 | Pogo pads, 1×8 | — (bare copper, no part) | Custom SMD | Debug pads | $0 |
-| JOUT1 | JST B6B-XH-A(LF)(SN) | [C144397](https://jlcpcb.com/partdetail/C144397) | THT, 2.5 mm pitch | Downstream interface connector | 47,935 |
+| JOUT1 | XFCN PZ254V-11-06P male | [C492405](https://jlcpcb.com/partdetail/XFCN-PZ254V_1106P/C492405) | THT 1x6, 2.54 mm | Direct downstream board interface | 98,021 (live 2026-08-20) |
 
 **DNP (footprint only, not populated):**
 
@@ -164,9 +164,10 @@ Board P exposes exactly what a "switched 15 V sink module" needs to hand off:
 **switched 15 V (paired, 2 pins), GND (paired, 2 pins), and two optional open-drain
 status flags** — ATT (cable attached) and PDOK (live 15 V PD contract). This mirrors
 the interface contract zudo-pd's Board A uses toward its own downstream board, reusing
-the same connector choice (JST B6B-XH-A(LF)(SN), 6-pin, 2.5 mm pitch, 3 A/contact) for
-the same reasons: polarized/shrouded housing, genuine-JST stock at JLCPCB, and
-through-hole anchoring appropriate for a power connector.
+an XFCN PZ254V-11-06P male (6-pin, 2.54 mm pitch, 3 A/contact) that directly mates with
+Board L's PM254V-11-06-H85 female. Both exact parts were in ample stock when checked on
+2026-08-20. The pair removes the unresolved cable BOM, but it is unkeyed: layout alignment,
+pin-1 orientation, standoff, and retention are explicit pre-power gates.
 
 :::note
 The exact downstream consumer (LED power stage, control board, or a single combined
@@ -177,7 +178,7 @@ reuse guidance states.
 :::
 
 **Current-rating math** (same method zudo-pd used for its A↔B interface): worst case
-is the PD contract cap of 3.0 A at 15 V. The XH connector is rated 3.0 A/contact; at an
+is the PD contract cap of 3.0 A at 15 V. The XFCN pair is rated 3.0 A/contact; at an
 80% continuous derate that is 2.4 A/contact. Two contacts per power rail give 4.8 A
 derated capacity against a 3.0 A load — each contact carries 1.5 A, 50% of nameplate,
 for a 1.6× derated margin (2.0× nameplate). GND uses the identical two-contact math.

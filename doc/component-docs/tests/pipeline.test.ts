@@ -32,10 +32,10 @@ describe("the real circuit adapter", () => {
 
     // Corpus figures the epic states. A mismatch means evidence moved and the
     // committed selection needs review — exactly what should fail a build.
-    assert.equal(result.report.records.available, 32);
-    assert.equal(result.report.records.selected, 32);
-    assert.equal(result.report.sources.available, 81);
-    assert.equal(result.report.sources.selected, 81);
+    assert.equal(result.report.records.available, 33);
+    assert.equal(result.report.records.selected, 33);
+    assert.equal(result.report.sources.available, 85);
+    assert.equal(result.report.sources.selected, 85);
     assert.equal(result.report.viewModelVersion, VIEW_MODEL_VERSION);
     assert.equal(result.report.provider.id, "circuit-component-spec");
 

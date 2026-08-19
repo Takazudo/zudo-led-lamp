@@ -65,14 +65,14 @@ describe("open coverage never reads as safety", () => {
     const open = model.records.flatMap((record) =>
       record.coverage.filter((entry) => entry.status === "OPEN"),
     );
-    assert.equal(open.length, 65);
+    assert.equal(open.length, 67);
     // The hard case: open because NOTHING addresses the domain, so there is no
     // fact to show and no blocker to blame.
     const barren = open.filter(
       (entry) => entry.factIds.length === 0 && entry.blockingFactIds.length === 0,
     );
     assert.equal(barren.length, 25);
-    assert.equal(open.filter((entry) => entry.blockingFactIds.length === 0).length, 26);
+    assert.equal(open.filter((entry) => entry.blockingFactIds.length === 0).length, 28);
   });
 
   it("gives every open domain a reason, and every barren one a reason with content", () => {
@@ -201,36 +201,21 @@ describe("relationships stay visible on the page, not just in the model", () => 
     }
   });
 
-  it("keeps two pin maps distinguishable on the one record that has them", () => {
-    const header = model.records.find((record) => record.identity.slug === "jst-b6b-xh-a");
-    assert.ok(header);
-    assert.equal(header.pinMaps.length, 2);
-    const page = pages.get("jst-b6b-xh-a");
-    assert.ok(page);
-    for (const map of header.pinMaps) {
+  it("keeps both halves of the mated header pair independently traceable", () => {
+    for (const slug of ["c492405", "c2832269"]) {
+      const header = model.records.find((record) => record.identity.slug === slug);
+      assert.ok(header);
+      assert.equal(header.pinMaps.length, 1);
+      const page = pages.get(slug);
+      assert.ok(page);
+      const map = header.pinMaps[0];
+      assert.ok(map);
       assert.ok(page.includes(map.pinMapId), `pin map ${map.pinMapId} is not identified`);
       assert.ok(page.includes(map.anchor), `pin map ${map.pinMapId} has no anchor`);
-    }
-
-    // The two maps share a symbol and a footprint — one connector, mated at
-    // both ends of the harness — so what tells them apart is the pin FUNCTIONS
-    // (Board P nets on one, Board L nets on the other). If the page rendered
-    // only one of them, or rendered the same table twice, a reader wiring the
-    // harness would take the wrong end's net names.
-    const [first, second] = header.pinMaps;
-    assert.ok(first && second);
-    const functionsOf = (map: typeof first): string =>
-      map.pins.map((pin) => pin.function).join("|");
-    assert.notEqual(functionsOf(first), functionsOf(second), "the two pin maps are identical");
-    // Through the scanner's normaliser, because the table escapes `_` and pads
-    // its cells — the same reason a raw substring comparison is the wrong tool
-    // against generated output anywhere else.
-    const rendered = normalizeForScan(page);
-    for (const map of header.pinMaps) {
       const distinctive = map.pins[0]?.function;
       assert.ok(distinctive);
       assert.ok(
-        rendered.includes(normalizeForScan(distinctive)),
+        normalizeForScan(page).includes(normalizeForScan(distinctive)),
         `pin map ${map.pinMapId} did not render its pins`,
       );
     }

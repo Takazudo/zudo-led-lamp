@@ -389,11 +389,11 @@
       "reviewer": "issue-25 foreground integration review"
     },
     {
-      "record_id": "rec-jst-b6b-xh-a",
-      "pin_map_id": "pinmap-jst-b6b-xh-a",
-      "canonical_sha256": "d3ee7f28d979d9d7eb66522957a21ea8242e104c35b5b989f7b967c3ea0f47f8",
+      "record_id": "rec-c492405",
+      "pin_map_id": "pinmap-c492405",
+      "canonical_sha256": "b054ccfbc97acd54e839c14b174987fa56c119150d0bc51a03539f6f23ea47fa",
       "evidence_fact_ids": [
-        "fact-jst-b6b-xh-a-harness"
+        "fact-c492405-dimensions"
       ],
       "trust_status": "PROJECT-LOCKED",
       "critical_pins": [
@@ -434,14 +434,14 @@
           "function": "Board P GND conductor B"
         }
       ],
-      "reviewer": "issue-25 foreground integration review"
+      "reviewer": "2026-08-20 XFCN connector replacement review"
     },
     {
-      "record_id": "rec-jst-b6b-xh-a",
-      "pin_map_id": "pinmap-jst-b6b-xh-a-board-l",
-      "canonical_sha256": "c51d49e4062c6171435880759d09b6a16268c46efb08320ef99643d7ab2fd72b",
+      "record_id": "rec-c2832269",
+      "pin_map_id": "pinmap-c2832269",
+      "canonical_sha256": "af08afdb63cf29a5f7d71db91e0652d42dfea7fe97a14c67108e5dc8485077f6",
       "evidence_fact_ids": [
-        "fact-jst-b6b-xh-a-harness"
+        "fact-c2832269-dimensions"
       ],
       "trust_status": "PROJECT-LOCKED",
       "critical_pins": [
@@ -482,7 +482,7 @@
           "function": "Board L GND conductor B"
         }
       ],
-      "reviewer": "issue-25 foreground integration review"
+      "reviewer": "2026-08-20 XFCN connector replacement review"
     },
     {
       "record_id": "rec-c13564",

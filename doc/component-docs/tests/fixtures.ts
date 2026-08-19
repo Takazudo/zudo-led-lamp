@@ -19,7 +19,7 @@
  *     matching the seven real cross-record calculations;
  *   - `fact-fixture-identity` carries a structured object flattened to text,
  *     matching the three real dict-valued facts;
- *   - one record carries two pin maps, matching `rec-jst-b6b-xh-a`;
+ *   - one fixture record carries two pin maps to exercise repeated maps;
  *   - one source is `SOURCE UNAVAILABLE` with no publishable URL, matching the
  *     twelve real unavailable sources.
  *

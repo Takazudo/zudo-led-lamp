@@ -10,7 +10,7 @@
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
  * of quietly publishing a different set. They are the same corpus figures the
- * epic states (32 records, 81 sources), plus the six cross-component rules —
+ * epic states (33 records, 85 sources), plus the six cross-component rules —
  * those are not instance-selected, but their number is asserted for the same
  * reason, because a rule appearing or vanishing changes what the integration
  * page claims about the whole design.
@@ -30,7 +30,7 @@ import type { InstanceSelection } from "../../core/publication.ts";
  * and updating both this artifact and the selection in one review.
  */
 export const CIRCUIT_DOCUMENT_VERIFICATION = {
-  checkedOn: "2026-08-03",
+  checkedOn: "2026-08-20",
   expectedContent: "PDF",
   downloadedPdfSourceIds: [
     "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
@@ -38,7 +38,8 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
     "src-c13585-page", "src-c14663-yageo", "src-c15849-page",
     "src-c25803-uniroyal", "src-c22807-uniroyal", "src-c23179-uniroyal",
     "src-c23162-uniroyal", "src-c21189-uniroyal", "src-c17414-uniroyal",
-    "src-c4216-uniroyal", "src-c22775-uniroyal", "src-jst-xh",
+    "src-c4216-uniroyal", "src-c22775-uniroyal", "src-c492405-drawing",
+    "src-c2832269-drawing",
     "src-bhfuse-1206", "src-al8860-ds39014", "src-rlp25-spec",
     "src-fxl-series-mirror", "src-ro-ss26-mirror", "src-ap6320x-ds41326",
     "src-fnr-series-mirror", "src-samsung-cl21-product", "src-c492404-drawing",
@@ -76,8 +77,9 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "rec-c17414", // standalone: 0805W8F1002T5E
     "rec-c4216", // standalone: 0603WAF3302T5E
     "rec-c22775", // standalone: 0603WAF1000T5E
-    // component-jst-b6b-xh-a
-    "rec-jst-b6b-xh-a", // standalone: B6B-XH-A(LF)(SN)
+    // component-xfcn-board-headers
+    "rec-c492405", // standalone: PZ254V-11-06P (Board P male)
+    "rec-c2832269", // standalone: PM254V-11-06-H85 (Board L female)
     // component-bhfuse-bsmd1206-075-30v
     "rec-bsmd1206-075-30v", // standalone: BSMD1206-075-30V
     // component-al8860mp-13
@@ -147,9 +149,13 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c4216-generator", // rec-c4216
     "src-c22775-uniroyal", // rec-c22775
     "src-c22775-generator", // rec-c22775
-    // component-jst-b6b-xh-a
-    "src-jst-xh", // rec-jst-b6b-xh-a
-    "src-jst-xh-header", // rec-jst-b6b-xh-a
+    // component-xfcn-board-headers
+    "src-c492405-drawing", // rec-c492405
+    "src-c492405-page", // rec-c492405
+    "src-c492405-lcsc", // rec-c492405
+    "src-c2832269-drawing", // rec-c2832269
+    "src-c2832269-page", // rec-c2832269
+    "src-c2832269-lcsc", // rec-c2832269
     // component-bhfuse-bsmd1206-075-30v
     "src-bhfuse-1206", // rec-bsmd1206-075-30v
     "src-bhfuse-generator", // rec-bsmd1206-075-30v
@@ -240,8 +246,12 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c4216-generator",
     "src-c22775-uniroyal",
     "src-c22775-generator",
-    "src-jst-xh",
-    "src-jst-xh-header",
+    "src-c492405-drawing",
+    "src-c492405-page",
+    "src-c492405-lcsc",
+    "src-c2832269-drawing",
+    "src-c2832269-page",
+    "src-c2832269-lcsc",
     "src-bhfuse-1206",
     "src-bhfuse-generator",
     "src-al8860-ds39014",
@@ -309,7 +319,8 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     { recordId: "rec-c17414", sourceId: "src-c17414-uniroyal", documentKind: "specification" },
     { recordId: "rec-c4216", sourceId: "src-c4216-uniroyal", documentKind: "specification" },
     { recordId: "rec-c22775", sourceId: "src-c22775-uniroyal", documentKind: "specification" },
-    { recordId: "rec-jst-b6b-xh-a", sourceId: "src-jst-xh", documentKind: "specification" },
+    { recordId: "rec-c492405", sourceId: "src-c492405-drawing", documentKind: "drawing" },
+    { recordId: "rec-c2832269", sourceId: "src-c2832269-drawing", documentKind: "drawing" },
     { recordId: "rec-bsmd1206-075-30v", sourceId: "src-bhfuse-1206", documentKind: "datasheet" },
     { recordId: "rec-al8860mp-13", sourceId: "src-al8860-ds39014", documentKind: "datasheet" },
     { recordId: "rec-rlp25feer200", sourceId: "src-rlp25-spec", documentKind: "specification" },
@@ -327,8 +338,8 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   ],
 
   expect: {
-    records: 32,
-    sources: 81,
+    records: 33,
+    sources: 85,
     integrationRules: 6,
   },
 };

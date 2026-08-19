@@ -327,18 +327,20 @@ the very window being protected.
 
 | | |
 |---|---|
-| **Chosen** | JST XH 6-pin ([C144397](https://jlcpcb.com/partdetail/C144397)), power contacts doubled |
+| **Chosen** | Direct XFCN 2.54 mm 1x6 pair: [PZ254V-11-06P male C492405](https://jlcpcb.com/partdetail/XFCN-PZ254V_1106P/C492405) + [PM254V-11-06-H85 female C2832269](https://jlcpcb.com/partdetail/XFCN-PM254V_11_06H85/C2832269), power contacts doubled |
 | **Rejected** | JST VH 2-pin ([C160315](https://jlcpcb.com/partdetail/C160315)) plus a signal connector |
 | **Rejected** | Molex KK 2510 ([C2847671](https://jlcpcb.com/partdetail/C2847671)) |
 
-The [interconnect research](/docs/research/led-interconnect/) framed this as XH's
-zero-margin 3 A contact rating versus VH's 10 A headroom. That framing assumed the load
-was the 3 A contract cap. **It is 410 mA.** Each doubled XH contact carries 205 mA — 6.8%
+The [interconnect research](/docs/research/led-interconnect/) framed the small-header
+class's 3 A contact rating against VH's 10 A headroom. That framing assumed the load
+was the 3 A contract cap. **It is 410 mA.** Each doubled contact carries 205 mA — 6.8%
 of nameplate, a **14x** derated margin. The headroom problem VH exists to solve does not
 occur in this design.
 
-XH also wins on pin count: this design needs six conductors (2 power + 2 ground + ATT +
-PDOK), which is exactly one XH housing, versus VH plus a companion signal connector.
+The selected direct header pair also fits the six required conductors exactly (2 power +
+2 ground + ATT + PDOK) and eliminates the previously unresolved cable housing, crimps,
+wire, and completed-harness BOM. Its tradeoff is mechanical: it is unkeyed and requires
+reviewed PCB alignment, standoff, and retention.
 
 Molex KK was never a real alternative — the research page includes it explicitly to show
 the 3 A-per-contact ceiling is a whole-class property, not an XH quirk.

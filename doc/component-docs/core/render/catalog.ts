@@ -228,7 +228,7 @@ function entry(record: PublicRecord): RootContent[] {
 /**
  * A subordinate record's relationship, stated rather than implied.
  *
- * Nine of the 32 records exist only as part of another part's audit — a sense
+ * Nine of the 33 records exist only as part of another part's audit — a sense
  * resistor whose tolerance sets a driver's output current, a catch diode chosen
  * for one converter. They are listed as their own rows because they are their
  * own orderable lines, so each row has to say which of the two it is.

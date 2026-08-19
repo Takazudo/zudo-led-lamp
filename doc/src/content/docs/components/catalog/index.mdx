@@ -38,7 +38,8 @@ Four columns describe state. None of them is a grade, and there is deliberately 
   | <EvidenceAnchor id="rec-c23162" />[0603WAF4701T5E](/docs/components/records/c23162/)                                     | `rec-c23162`             | 4.7 kOhm resistor                | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
   | <EvidenceAnchor id="rec-c21189" />[0603WAF0000T5E](/docs/components/records/c21189/)                                     | `rec-c21189`             | zero-Ohm CCDB bridge             | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
   | <EvidenceAnchor id="rec-c17414" />[0805W8F1002T5E](/docs/components/records/c17414/)                                     | `rec-c17414`             | 10 kOhm resistor                 | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
-  | <EvidenceAnchor id="rec-jst-b6b-xh-a" />[B6B-XH-A(LF)(SN)](/docs/components/records/jst-b6b-xh-a/)                       | `rec-jst-b6b-xh-a`       | board-to-board harness header    | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 2 of 3       |
+  | <EvidenceAnchor id="rec-c492405" />[PZ254V-11-06P](/docs/components/records/c492405/)                                    | `rec-c492405`            | male board-to-board header       | Fitted          | VERIFIED   | AVAILABLE          | 2 of 3       |
+  | <EvidenceAnchor id="rec-c2832269" />[PM254V-11-06-H85](/docs/components/records/c2832269/)                               | `rec-c2832269`           | female board-to-board header     | Fitted          | VERIFIED   | AVAILABLE          | 2 of 3       |
   | <EvidenceAnchor id="rec-bsmd1206-075-30v" />[BSMD1206-075-30V](/docs/components/records/bsmd1206-075-30v/)               | `rec-bsmd1206-075-30v`   | 750 mA PPTC fuse                 | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 3       |
   | <EvidenceAnchor id="rec-al8860mp-13" />[AL8860MP-13](/docs/components/records/al8860mp-13/)                              | `rec-al8860mp-13`        | buck LED driver                  | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 4       |
   | <EvidenceAnchor id="rec-rlp25feer200" />[RLP25FEER200](/docs/components/records/rlp25feer200/) (subordinate)             | `rec-rlp25feer200`       | 200 mOhm current-sense resistor  | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
@@ -337,24 +338,43 @@ One entry per record, carrying the orderable identity and every board placement.
 
 [0805W8F1002T5E record details](/docs/components/records/c17414/) — [0805W8F1002T5E raw agent resource](/docs/claude-skills/component-project-passives/)
 
-### B6B-XH-A(LF)(SN)
+### PZ254V-11-06P
 
-- **Record ID:** `rec-jst-b6b-xh-a`
+- **Record ID:** `rec-c492405`
 - **Kind:** standalone — audited in its own right
-- **Manufacturer:** JST
-- **Function:** board-to-board harness header
-- **Orderable ID:** `C144397`
-- **Package:** `CONN-TH_6P-P2.50_B6B-XH-A-LF-SN`
-- **Inventory line:** `line-c144397`
-- **Also known as:** `B6B-XH-A`, `six-circuit XH header`
-- **Owner skill:** `component-jst-b6b-xh-a`
-- **Placements:** board-p JOUT1; board-l J2
+- **Manufacturer:** XFCN
+- **Function:** male board-to-board header
+- **Orderable ID:** `C492405`
+- **Package:** `HDR-TH_6P-P2.54-V-M`
+- **Inventory line:** `line-c492405`
+- **Also known as:** `Board P male board-to-board header`, `JOUT1 male header`, `Board P JOUT1 male header`
+- **Owner skill:** `component-xfcn-board-headers`
+- **Placements:** board-p JOUT1
 - **Fit:** Fitted
-- **Identity state:** UNRESOLVED
-- **Source state:** SOURCE UNAVAILABLE
+- **Identity state:** VERIFIED
+- **Source state:** AVAILABLE
 - **Open coverage domains:** 2 open of 3 published
 
-[B6B-XH-A(LF)(SN) record details](/docs/components/records/jst-b6b-xh-a/) — [B6B-XH-A(LF)(SN) raw agent resource](/docs/claude-skills/component-jst-b6b-xh-a/)
+[PZ254V-11-06P record details](/docs/components/records/c492405/) — [PZ254V-11-06P raw agent resource](/docs/claude-skills/component-xfcn-board-headers/)
+
+### PM254V-11-06-H85
+
+- **Record ID:** `rec-c2832269`
+- **Kind:** standalone — audited in its own right
+- **Manufacturer:** XFCN
+- **Function:** female board-to-board header
+- **Orderable ID:** `C2832269`
+- **Package:** `HDR-TH_6P-P2.54-V-F`
+- **Inventory line:** `line-c2832269`
+- **Also known as:** `Board L female board-to-board header`, `J2 female header`, `Board L J2 female header`
+- **Owner skill:** `component-xfcn-board-headers`
+- **Placements:** board-l J2
+- **Fit:** Fitted
+- **Identity state:** VERIFIED
+- **Source state:** AVAILABLE
+- **Open coverage domains:** 2 open of 3 published
+
+[PM254V-11-06-H85 record details](/docs/components/records/c2832269/) — [PM254V-11-06-H85 raw agent resource](/docs/claude-skills/component-xfcn-board-headers/)
 
 ### BSMD1206-075-30V
 

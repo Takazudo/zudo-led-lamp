@@ -3231,14 +3231,14 @@
 				)
 				(embedded_fonts no)
 			)
-		(symbol "zudo-led-lamp:B6B-XH-A"
+		(symbol "zudo-led-lamp:PZ254V-11-06P"
 				(exclude_from_sim no)
 				(in_bom yes)
 				(on_board yes)
 				(in_pos_files yes)
 				(duplicate_pin_numbers_are_jumpers no)
-				(property "Reference" "U"
-					(at 0 10.16 0)
+				(property "Reference" "H"
+					(at 0 11.43 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(effects
@@ -3247,8 +3247,8 @@
 						)
 					)
 				)
-				(property "Value" "B6B-XH-A"
-					(at 0 0 0)
+				(property "Value" "PZ254V-11-06P"
+					(at 0 -11.43 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(effects
@@ -3257,8 +3257,8 @@
 						)
 					)
 				)
-				(property "Footprint" "zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN"
-					(at 0 -2.54 0)
+				(property "Footprint" "zudo-led-lamp:HDR-TH_6P-P2.54-V-M"
+					(at 0 -13.97 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(hide yes)
@@ -3268,8 +3268,8 @@
 						)
 					)
 				)
-				(property "Datasheet" "https://lcsc.com/product-detail/XH-Connectors_JST-Sales-America_B6B-XH-A-LF-SN_JST-Sales-America-B6B-XH-A-LF-SN_C144397.html"
-					(at 0 -5.08 0)
+				(property "Datasheet" "https://lcsc.com/product-detail/New-Arrivals_XFCN-PZ254V-11-06P_C492405.html"
+					(at 0 -16.51 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(hide yes)
@@ -3290,8 +3290,8 @@
 						)
 					)
 				)
-				(property "Manufacturer" "JST"
-					(at 0 -7.62 0)
+				(property "Manufacturer" "XFCN(兴飞)"
+					(at 0 -19.05 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(hide yes)
@@ -3301,8 +3301,8 @@
 						)
 					)
 				)
-				(property "MPN" "B6B-XH-A(LF)(SN)"
-					(at 0 -10.16 0)
+				(property "MPN" "PZ254V-11-06P"
+					(at 0 -21.59 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(hide yes)
@@ -3312,8 +3312,8 @@
 						)
 					)
 				)
-				(property "LCSC Part" "C144397"
-					(at 0 -12.7 0)
+				(property "LCSC Part" "C492405"
+					(at 0 -24.13 0)
 					(show_name no)
 					(do_not_autoplace no)
 					(hide yes)
@@ -3323,7 +3323,7 @@
 						)
 					)
 				)
-				(property "ki_keywords" "Wire To Board / Wire To Wire Connector"
+				(property "ki_keywords" "Pin Headers"
 					(at 0 0 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -3334,10 +3334,10 @@
 						)
 					)
 				)
-				(symbol "B6B-XH-A_0_1"
+				(symbol "PZ254V-11-06P_0_1"
 					(rectangle
-						(start -8.89 0)
-						(end 8.89 -5.08)
+						(start -1.27 8.89)
+						(end 3.81 -8.89)
 						(stroke
 							(width 0)
 							(type default)
@@ -3346,9 +3346,20 @@
 							(type background)
 						)
 					)
-					(pin passive line
-						(at -6.35 5.08 270)
-						(length 5.08)
+					(circle
+						(center 0 7.62)
+						(radius 0.38)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(pin unspecified line
+						(at -3.81 6.35 0)
+						(length 2.54)
 						(name "1"
 							(effects
 								(font
@@ -3364,9 +3375,9 @@
 							)
 						)
 					)
-					(pin passive line
-						(at -3.81 5.08 270)
-						(length 5.08)
+					(pin unspecified line
+						(at -3.81 3.81 0)
+						(length 2.54)
 						(name "2"
 							(effects
 								(font
@@ -3382,9 +3393,9 @@
 							)
 						)
 					)
-					(pin passive line
-						(at -1.27 5.08 270)
-						(length 5.08)
+					(pin unspecified line
+						(at -3.81 1.27 0)
+						(length 2.54)
 						(name "3"
 							(effects
 								(font
@@ -3400,9 +3411,9 @@
 							)
 						)
 					)
-					(pin passive line
-						(at 1.27 5.08 270)
-						(length 5.08)
+					(pin unspecified line
+						(at -3.81 -1.27 0)
+						(length 2.54)
 						(name "4"
 							(effects
 								(font
@@ -3418,9 +3429,9 @@
 							)
 						)
 					)
-					(pin passive line
-						(at 3.81 5.08 270)
-						(length 5.08)
+					(pin unspecified line
+						(at -3.81 -3.81 0)
+						(length 2.54)
 						(name "5"
 							(effects
 								(font
@@ -3436,9 +3447,9 @@
 							)
 						)
 					)
-					(pin passive line
-						(at 6.35 5.08 270)
-						(length 5.08)
+					(pin unspecified line
+						(at -3.81 -6.35 0)
+						(length 2.54)
 						(name "6"
 							(effects
 								(font
@@ -5183,7 +5194,7 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:B6B-XH-A")
+		(lib_id "zudo-led-lamp:PZ254V-11-06P")
 		(at 317.5 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5192,18 +5203,18 @@
 		(dnp no)
 		(uuid "741972f5-d7c4-53d3-bbe8-e5b70c1cea95")
 		(property "Reference" "JOUT1"
-			(at 330.2 86.36 0)
+			(at 317.5 77.47 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "B6B-XH-A(LF)(SN)"
-			(at 317.5 96.52 0)
+		(property "Value" "2.54mm 1x6 male"
+			(at 317.5 100.33 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN"
+		(property "Footprint" "zudo-led-lamp:HDR-TH_6P-P2.54-V-M"
 			(at 317.5 88.9 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -5217,7 +5228,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C144397"
+		(property "LCSC" "C492405"
 			(at 317.5 96.52 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -5719,19 +5730,19 @@
 	)
 	(global_label "VBUS_OUT"
 		(shape passive)
-		(at 311.15 83.82 90)
+		(at 313.69 82.55 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
 		(uuid "1a0a7bae-d137-5c73-a30d-7da34fbdb0b3")
 	)
 	(global_label "VBUS_OUT"
 		(shape passive)
-		(at 313.69 83.82 90)
+		(at 313.69 85.09 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
 		(uuid "5e608cf4-8439-53b4-82dd-e6b0d9f1c143")
 	)
@@ -5917,10 +5928,10 @@
 	)
 	(global_label "ATT"
 		(shape passive)
-		(at 316.23 83.82 90)
+		(at 313.69 87.63 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
 		(uuid "da7bc5ad-19f4-5960-892d-5a9c290f7831")
 	)
@@ -5944,10 +5955,10 @@
 	)
 	(global_label "PDOK"
 		(shape passive)
-		(at 318.77 83.82 90)
+		(at 313.69 90.17 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
 		(uuid "a8f3e629-d119-5da2-9bfb-2b72c85fe80f")
 	)
@@ -6160,19 +6171,19 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 321.31 83.82 90)
+		(at 313.69 92.71 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
 		(uuid "477f1986-b40f-593b-a20e-af71e76480f3")
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 323.85 83.82 90)
+		(at 313.69 95.25 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
 		(uuid "7cc45946-aa23-5827-b800-8980582546b1")
 	)

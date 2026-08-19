@@ -4,9 +4,9 @@
     {
       "rule_id": "rule-rail-envelope",
       "domain": "rail-envelope",
-      "record_ids": ["rec-type-c-31-m-17", "rec-stusb4500qtr", "rec-high-diode-smaj20a", "rec-umw-ao3401a", "rec-bsmd1206-075-30v", "rec-al8860mp-13", "rec-ap63203wu-7", "rec-jst-b6b-xh-a", "rec-c13585", "rec-c14663", "rec-c15849", "rec-cl21a226maqnnne"],
-      "fact_ids": ["fact-type-c-31-m-17-ratings", "fact-stusb-supplies", "fact-stusb-vdd-absolute-max", "fact-stusb-cc-absolute-max", "fact-stusb-vbus-pin-absolute-max", "fact-high-diode-smaj20a-clamp", "fact-umw-ao3401a-vds", "fact-umw-ao3401a-vgs", "fact-bhfuse-voltage-max", "fact-al8860-vin-recommended-max", "fact-al8860-vin-absolute-max", "fact-ap63203-vin-recommended-max", "fact-ap63203-vin-absolute-dc", "fact-ap63203-vin-transient", "fact-jst-b6b-xh-a-current", "fact-c13585-voltage", "fact-c14663-voltage", "fact-c15849-voltage", "fact-cl21-voltage"],
-      "conditions": "Separate legal 5/15 V operation, 20 V mis-contract, and transient clamp behavior; harness current and upstream source impedance remain independent conditions.",
+      "record_ids": ["rec-type-c-31-m-17", "rec-stusb4500qtr", "rec-high-diode-smaj20a", "rec-umw-ao3401a", "rec-bsmd1206-075-30v", "rec-al8860mp-13", "rec-ap63203wu-7", "rec-c492405", "rec-c2832269", "rec-c13585", "rec-c14663", "rec-c15849", "rec-cl21a226maqnnne"],
+      "fact_ids": ["fact-type-c-31-m-17-ratings", "fact-stusb-supplies", "fact-stusb-vdd-absolute-max", "fact-stusb-cc-absolute-max", "fact-stusb-vbus-pin-absolute-max", "fact-high-diode-smaj20a-clamp", "fact-umw-ao3401a-vds", "fact-umw-ao3401a-vgs", "fact-bhfuse-voltage-max", "fact-al8860-vin-recommended-max", "fact-al8860-vin-absolute-max", "fact-ap63203-vin-recommended-max", "fact-ap63203-vin-absolute-dc", "fact-ap63203-vin-transient", "fact-c492405-current", "fact-c492405-voltage", "fact-c2832269-current", "fact-c2832269-voltage", "fact-c13585-voltage", "fact-c14663-voltage", "fact-c15849-voltage", "fact-cl21-voltage"],
+      "conditions": "Separate legal 5/15 V operation, 20 V mis-contract, and transient clamp behavior; connector-pair current, direct-board mechanics, and upstream source impedance remain independent conditions.",
       "verdict": "UNSOURCED",
       "refusal": "Do not declare the complete rail safe while STUSB primary trust, project mapping, actual clamp/source-impedance waveform, and harness/as-built evidence remain open.",
       "conditioned_calculations": [

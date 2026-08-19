@@ -17,7 +17,7 @@ _R10K = ('0805W8F1002T5E', '10k', 'C17414', 'zudo-led-lamp:R0805')
 
 COMPONENTS = {
     # power input and LED driver (top row)
-    'J2':   ('B6B-XH-A', 'B6B-XH-A(LF)(SN)', 'C144397', 'zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN', False, (38.1, 50.8)),
+    'J2':   ('PM254V-11-06-H85', '2.54mm 1x6 female', 'C2832269', 'zudo-led-lamp:HDR-TH_6P-P2.54-V-F', False, (38.1, 50.8)),
     'F1':   ('BSMD1206-075-30V', 'PPTC 750mA/30V', 'C976305', 'zudo-led-lamp:F1206', False, (88.9, 50.8)),
     'D10':  ('SMAJ20A_C571370', 'SMAJ20A', 'C571370', 'zudo-led-lamp:SMA_L4.2-W2.6-LS5.3-RD', False, (127, 50.8)),
     'U2':   ('AL8860MP-13', 'AL8860MP-13', 'C500782', 'zudo-led-lamp:MSOP-8_L3.0-W3.0-P0.65-LS4.9-BL-EP1.8', False, (177.8, 50.8)),

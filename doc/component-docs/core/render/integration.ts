@@ -25,7 +25,7 @@
  *     calculator on the page that can disagree with the evidence.
  *   - **Every ID is a link.** A rule names records and facts that live on other
  *     pages; naming them without linking would leave a reader to guess which of
- *     32 record pages holds `fact-c22807-r12-topology`.
+ *     33 record pages holds `fact-c22807-r12-topology`.
  */
 
 import {

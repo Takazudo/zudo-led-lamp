@@ -126,7 +126,7 @@ async function runContainer(arguments_: readonly string[], mount: string): Promi
 }
 
 function assertSelection(selections: readonly FootprintSelection[]): void {
-  if (selections.length !== 22) throw new Error(`expected exactly 22 selected packages, got ${selections.length}`);
+  if (selections.length !== 23) throw new Error(`expected exactly 23 selected packages, got ${selections.length}`);
   const names = new Set<string>();
   const records = new Set<string>();
   for (const selection of selections) {
@@ -138,10 +138,10 @@ function assertSelection(selections: readonly FootprintSelection[]): void {
       records.add(recordId);
     }
   }
-  if (records.size !== 32) throw new Error(`expected aliases to cover 32 records, got ${records.size}`);
+  if (records.size !== 33) throw new Error(`expected aliases to cover 33 records, got ${records.size}`);
 }
 
 if (process.argv[1] !== undefined && basename(process.argv[1]) === "generate.ts") {
   await generateFootprintPreviews();
-  process.stdout.write(`Generated 22 footprint previews in ${relative(process.cwd(), PREVIEW_ROOT)}\n`);
+  process.stdout.write(`Generated 23 footprint previews in ${relative(process.cwd(), PREVIEW_ROOT)}\n`);
 }

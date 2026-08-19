@@ -5,7 +5,7 @@
       "reviewer": "issue-21 family evidence review",
       "review_log": "review-artifacts/issue-21.md",
       "review_log_sha256": "d0a88bdd21e2c03d42e06b2b394b99cff4f9809ff23493ff98169e9d99804ddf",
-      "review_ids": ["review-jst-b6b-xh-a-current", "review-pesd-pinout", "review-umw-ao3401a-pinout", "review-stusb-vben", "review-umw-ao3401a-vds", "review-umw-ao3401a-thermal"]
+      "review_ids": ["review-pesd-pinout", "review-umw-ao3401a-pinout", "review-stusb-vben", "review-umw-ao3401a-vds", "review-umw-ao3401a-thermal"]
     },
     {
       "reviewer": "issue-23 family evidence review",
@@ -27,7 +27,6 @@
     }
   ],
   "fact_locks": [
-    {"review_id":"review-jst-b6b-xh-a-current","sha256":"1c2c3566010322e8aa303f1e2ee1bda22dbaa17d85f90fd70f45321a3a0603dc"},
     {"review_id":"review-c492404-rating","sha256":"edd6fdeeec8e61a1576c149a499e7e2bd15cc1237e0e1c4c5fc7f18a2c2441e8"},
     {"review_id":"review-pesd-pinout","sha256":"05b947b884296e5573dd89d60abdbc5f1430e12cf53af659a74b4f50490788e8"},
     {"review_id":"review-c210315-polarity","sha256":"8071a9ffd763a98a97504d375b004cf24fe1d69dcd8ca7ede0cd8a8703550378"},
@@ -55,19 +54,6 @@
     {"review_id":"review-c13564-max-current","sha256":"abff892e01c8e37dfcfa7b37f2ceacccaa6fd3d7c0efb1c61fa12acf98ea9ab3"}
   ],
   "reviews": [
-    {
-      "review_id": "review-jst-b6b-xh-a-current",
-      "domain": "connector",
-      "fact_id": "fact-jst-b6b-xh-a-current",
-      "source_id": "src-jst-xh",
-      "physical_pdf_page_index": 0,
-      "printed_page_label": "1",
-      "locator": "src-jst-xh: page 1 Specifications table row Current rating",
-      "evidence_extract": "3",
-      "conditions": "AC/DC maximum with applicable XH contact and wire-size conditions; harness selection can derate",
-      "reviewer": "issue-25 foreground destructive-risk review",
-      "status": "CONFIRMED"
-    },
     {
       "review_id": "review-c492404-rating",
       "domain": "connector",

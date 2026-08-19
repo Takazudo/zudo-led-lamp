@@ -28,7 +28,7 @@ COMPONENTS = {
     'R19':   ('0603WAF0000T5E', '0R', 'C21189', 'zudo-led-lamp:R0603', False, (114.3, 215.9)),
     'R20':   ('0603WAF0000T5E', '0R', 'C21189', 'zudo-led-lamp:R0603', False, (152.4, 215.9)),
     'R21':   ('0805W8F1002T5E', '10k', 'C17414', 'zudo-led-lamp:R0805', False, (266.7, 190.5)),
-    'JOUT1': ('B6B-XH-A', 'B6B-XH-A(LF)(SN)', 'C144397', 'zudo-led-lamp:CONN-TH_6P-P2.50_B6B-XH-A-LF-SN', False, (317.5, 88.9)),
+    'JOUT1': ('PZ254V-11-06P', '2.54mm 1x6 male', 'C492405', 'zudo-led-lamp:HDR-TH_6P-P2.54-V-M', False, (317.5, 88.9)),
     'J2':    ('Conn_1x04', 'PogoPad_1x4_NVM_I2C', '', 'zudo-led-lamp:PogoPad_1x04_P2.54mm', False, (317.5, 139.7)),
     'J3':    ('Conn_1x08', 'PogoPad_1x8_Debug', '', 'zudo-led-lamp:PogoPad_1x08_P2.54mm', False, (317.5, 190.5)),
 }

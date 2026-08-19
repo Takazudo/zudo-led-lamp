@@ -105,7 +105,7 @@ export type RecordIndex = {
   /**
    * Every interaction a record takes part in — not only the ones attached to it.
    *
-   * `PublicInteraction.recordIds` is plural: 6 of this corpus's 50 interactions
+   * `PublicInteraction.recordIds` is plural: 9 of this corpus's 51 interactions
    * span 2-4 records, a parent and its subordinates. Whether the adapter
    * attaches such an interaction to all its participants or only to one is the
    * adapter's business, and it has changed once already. Reading
@@ -646,7 +646,7 @@ export function presentTerms(values: readonly SafeText[]): SafeText[] {
  * The evidence bundle a record belongs to.
  *
  * `PublicRecordIdentity.ownerSkill` is an approved addition owned by the
- * adapter (13 bundles across 32 lines, and `component-project-passives` alone
+ * adapter (13 bundles across 33 lines, and `component-project-passives` alone
  * owns 11, so it is not derivable from anything else the model publishes). The
  * read sits behind one accessor purely so this feature does not have to guess
  * at the exact moment that leaf lands.

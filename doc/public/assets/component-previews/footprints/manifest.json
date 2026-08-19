@@ -18,8 +18,8 @@
     "textPolicy": "suppress-all-fp-text-in-temporary-library",
     "postprocessor": "repository-svg-normalizer-v1"
   },
-  "canonicalInputSha256": "ab8c49234c81a2c388c5147b097b7d1e0b071773e552bece1091fa422127cc21",
-  "generatedOutputSha256": "da42977554ae7be247ed284705fee0613cd2de7c200381e58ec439b644b63527",
+  "canonicalInputSha256": "356ae1cad58f62e4f5562a296c73812dfd6aaddc899c91a62582757f779b3c58",
+  "generatedOutputSha256": "7d5289f5a897cad72617110ce8eb85406ecccf6801d35b01977f5705d32c6ccf",
   "packages": [
     {
       "packageId": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
@@ -130,15 +130,26 @@
       "generatedOutputSha256": "1ec092f45fe6d8281d62d2ff42adffb9c1a49a3eb07283c31ab3852a42bdb07a"
     },
     {
-      "packageId": "CONN-TH_6P-P2.50_B6B-XH-A-LF-SN",
-      "footprintName": "CONN-TH_6P-P2.50_B6B-XH-A-LF-SN",
-      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/CONN-TH_6P-P2.50_B6B-XH-A-LF-SN.kicad_mod",
+      "packageId": "HDR-TH_6P-P2.54-V-M",
+      "footprintName": "HDR-TH_6P-P2.54-V-M",
+      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/HDR-TH_6P-P2.54-V-M.kicad_mod",
       "recordIds": [
-        "rec-jst-b6b-xh-a"
+        "rec-c492405"
       ],
-      "assetPath": "/assets/component-previews/footprints/CONN-TH_6P-P2.50_B6B-XH-A-LF-SN.svg",
-      "canonicalInputSha256": "adeed40470f5bee17f086c62a7068deb109c33b8f49e4cc1740e96a5d6bbf226",
-      "generatedOutputSha256": "316450f5841c9f5156c3aafaca1ea5c0c335f3415052857fd6639cf8b76b25ad"
+      "assetPath": "/assets/component-previews/footprints/HDR-TH_6P-P2.54-V-M.svg",
+      "canonicalInputSha256": "dd769a497fa033a6e22bb281aeee6475cd71b0aad12203ff448172cce7d7511e",
+      "generatedOutputSha256": "623767a758483442d5755c98445bde7d95cd81a31a0af3a8eec5b9e54655676b"
+    },
+    {
+      "packageId": "HDR-TH_6P-P2.54-V-F",
+      "footprintName": "HDR-TH_6P-P2.54-V-F",
+      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/HDR-TH_6P-P2.54-V-F.kicad_mod",
+      "recordIds": [
+        "rec-c2832269"
+      ],
+      "assetPath": "/assets/component-previews/footprints/HDR-TH_6P-P2.54-V-F.svg",
+      "canonicalInputSha256": "be7f204f9be10593f64d1c6bac072cc3c1896db940b5c1942223ed868d0ccd65",
+      "generatedOutputSha256": "fff7d2fa2e80c939ef334ccc8ee4b1088914697c1d6f2ef7b8ed200a515a96fa"
     },
     {
       "packageId": "F1206",
