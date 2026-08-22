@@ -1,15 +1,16 @@
 # schgen — schematic generation from board spec modules
 
-`board-p` and `board-l` schematics (`boards/board-p/board-p.kicad_sch`,
-`boards/board-l/board-l.kicad_sch`) are not hand-drawn. Each is generated from
-a Python spec module (`board_p_spec.py`, `board_l_spec.py`) that lists
-components, positions, nets, and no-connects. The spec is the source of
-truth; the `.kicad_sch` file is a build artifact of it.
+The `board-p`, `board-l`, and `swd-adapter` schematics are not hand-drawn. Each
+is generated from a Python spec module (`board_p_spec.py`, `board_l_spec.py`,
+or `swd_adapter_spec.py`) that lists components, positions, nets, and
+no-connects. The spec is the source of truth; the `.kicad_sch` file is a build
+artifact of it.
 
 ## Files
 
-- `board_p_spec.py`, `board_l_spec.py` — per-board `COMPONENTS` / `NETS` /
-  `NO_CONNECT` tables. Edit these, not the `.kicad_sch` directly.
+- `board_p_spec.py`, `board_l_spec.py`, `swd_adapter_spec.py` — per-project
+  `COMPONENTS` / `NETS` / `NO_CONNECT` tables. Edit these, not the
+  `.kicad_sch` directly.
 - `schgen_core.py` — shared generator: reads symbols from
   `symbols/zudo-led-lamp.kicad_sym`, places components, and emits global
   labels for every net (no drawn wires) plus no-connect markers.
@@ -23,18 +24,17 @@ truth; the `.kicad_sch` file is a build artifact of it.
 
 ## Regen + verify workflow
 
-1. Edit the spec module (`board_p_spec.py` or `board_l_spec.py`) — add/move a
-   component, change a net, etc.
+1. Edit the relevant spec module — add/move a component, change a net, etc.
 2. Regenerate the schematic:
    ```
-   python3 scripts/schgen/gen_schematic.py board_p_spec   # or board_l_spec
+   python3 scripts/schgen/gen_schematic.py swd_adapter_spec
    ```
    This rewrites `boards/<board>/<board>.kicad_sch` in place. No KiCad
    install needed — `gen_schematic.py` only depends on `sexp.py`.
 3. Verify connectivity against a real netlist export (requires a local KiCad
    install with `kicad-cli` on `PATH`):
    ```
-   scripts/schgen/verify.sh board-p   # or board-l
+   scripts/schgen/verify.sh swd-adapter
    ```
    This runs `kicad-cli sch export netlist --format kicadsexpr` on the
    regenerated `.kicad_sch`, then diffs the result against the spec's `NETS`
@@ -56,7 +56,7 @@ exercise the real path.
 ## What CI checks instead
 
 CI cannot run kicad-cli, so it enforces a weaker but still useful invariant:
-**regen-idempotency**. It runs `gen_schematic.py` for both boards against the
+**regen-idempotency**. It runs `gen_schematic.py` for all three projects against the
 checked-out tree and fails the build if that changes anything under
 `boards/` (`git diff --exit-code boards/`). This catches "spec and committed
 schematic have drifted apart" — e.g. someone edited a spec module and forgot
