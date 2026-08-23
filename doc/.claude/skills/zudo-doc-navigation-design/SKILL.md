@@ -40,7 +40,7 @@ Each level narrows scope. Never jump levels — do not put a specific page direc
 | Header item | `categoryMatch` | Directory | Content pages |
 |---|---|---|---|
 | Getting Started | `getting-started` | `getting-started/` | introduction, installation |
-| Architecture | `architecture` | `architecture/` | overview, board-p, board-l, bom, decisions, next-steps |
+| Architecture | `architecture` | `architecture/` | overview, board-p, board-l, swd-adapter, bom, decisions, next-steps |
 | Power | `power` | `power/` | board-p-front-end, ratings-matrix, charger-compatibility, lessons-from-zudo-pd |
 | Research | `research` | `research/` | led-candidates, driver-ics, thermal-budget, led-interconnect, control-logic-rail, mcu-candidates, control-knob, modulation-algorithms, control-safety |
 | How-To | `how-to` | `how-to/` | ci-cloudflare-setup |

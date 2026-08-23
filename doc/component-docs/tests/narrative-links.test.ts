@@ -143,7 +143,7 @@ describe("owner bundles linking back to their record pages", () => {
     const byRoute = await anchorsByRoute();
     const bundles = await ownerSkillFiles();
 
-    // 13 owner bundles cover the 33 records. `component-spec-audit` and
+    // 13 owner bundles cover the 34 records. `component-spec-audit` and
     // `circuit-spec-integration` own none and are correctly excluded — the
     // filter above drops the first by name and the second by prefix.
     assert.equal(bundles.length, 13);
@@ -170,7 +170,7 @@ describe("owner bundles linking back to their record pages", () => {
     assert.deepEqual(broken, []);
     // One link per record, across all 13 bundles: the reciprocal of the record
     // pages' own link to their owning bundle, which completes the two-way path.
-    assert.equal(recordLinks, 33);
+    assert.equal(recordLinks, 34);
   });
 
   it("keeps the section in the body, never in the frontmatter block", async () => {

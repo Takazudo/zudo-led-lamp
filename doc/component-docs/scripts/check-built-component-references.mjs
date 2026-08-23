@@ -21,17 +21,17 @@ async function main() {
     .filter((entry) => entry.isDirectory() && !entry.isSymbolicLink())
     .map((entry) => entry.name)
     .sort();
-  assert.equal(recordDirectories.length, 33, "built site must contain exactly 33 component record routes");
+  assert.equal(recordDirectories.length, 34, "built site must contain exactly 34 component record routes");
 
   const manifest = JSON.parse(await readFile(join(FOOTPRINT_ROOT, "manifest.json"), "utf8"));
-  assert.equal(manifest.packages?.length, 23, "built footprint manifest must contain 23 packages");
+  assert.equal(manifest.packages?.length, 24, "built footprint manifest must contain 24 packages");
   const expectedFootprints = new Set(
     manifest.packages.map((entry) => {
       assert.match(entry.assetPath, /^\/assets\/component-previews\/footprints\/[A-Za-z0-9._+-]+\.svg$/u);
       return basename(entry.assetPath);
     }),
   );
-  assert.equal(expectedFootprints.size, 23, "built footprint manifest names must be unique");
+  assert.equal(expectedFootprints.size, 24, "built footprint manifest names must be unique");
 
   const referencedFootprints = new Set();
   const referencedModels = new Set();
@@ -111,7 +111,7 @@ async function main() {
   }
 
   assert.deepEqual([...referencedFootprints].sort(), [...expectedFootprints].sort(), "record pages must use exactly the manifest-selected SVGs");
-  assert.equal(referencedModels.size, 23, "record pages must deduplicate to exactly 23 selected WRLs");
+  assert.equal(referencedModels.size, 24, "record pages must deduplicate to exactly 24 selected WRLs");
 
   const actualPreviewFiles = await listFiles(PREVIEW_ROOT);
   const expectedPreviewFiles = new Set([
@@ -120,8 +120,8 @@ async function main() {
     ...[...referencedModels].map((name) => `models/${name}`),
   ]);
   assert.deepEqual(actualPreviewFiles, [...expectedPreviewFiles].sort(), "built preview output contains missing, extra, or unselected assets");
-  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".svg").length, 23);
-  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".wrl").length, 23);
+  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".svg").length, 24);
+  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".wrl").length, 24);
   assert.equal(actualPreviewFiles.some((path) => [".step", ".stp"].includes(extname(path).toLowerCase())), false, "STEP must not be browser-published");
 
   const catalog = await readFile(CATALOG, "utf8");
@@ -131,7 +131,7 @@ async function main() {
     "catalog index must not create or reference live preview UI",
   );
 
-  process.stdout.write("built component references passed: 33 records, 23 SVGs, 23 WRLs, 0 STEP; catalog viewer-free\n");
+  process.stdout.write("built component references passed: 34 records, 24 SVGs, 24 WRLs, 0 STEP; catalog viewer-free\n");
 }
 
 async function assertRegularDistFile(publicPath) {

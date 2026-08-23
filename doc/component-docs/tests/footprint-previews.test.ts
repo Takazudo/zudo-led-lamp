@@ -26,9 +26,9 @@ after(async () => {
 
 describe("footprint preview export transforms", () => {
   it("suppresses every footprint text form without changing other expressions", () => {
-    const source = `(footprint "x"\n  (fp_text reference "REF**)" (at 0 0) (effects (font (size 1 1))))\n  (fp_line (start 0 0) (end 1 1))\n  (fp_text user "%R" (at 0 0))\n)`;
+    const source = `(footprint "x"\n  (property "Reference" "REF**" (at 0 0) (effects (font (size 1 1))))\n  (fp_text reference "REF**)" (at 0 0) (effects (font (size 1 1))))\n  (fp_line (start 0 0) (end 1 1))\n  (fp_text user "%R" (at 0 0))\n)`;
     const result = suppressFootprintText(source);
-    assert.doesNotMatch(result, /fp_text|REF\*\*|%R/u);
+    assert.doesNotMatch(result, /fp_text|property|REF\*\*|%R/u);
     assert.match(result, /\(fp_line \(start 0 0\) \(end 1 1\)\)/u);
     assert.throws(() => suppressFootprintText("(footprint (fp_text user x)"), /unbalanced/u);
   });
@@ -61,10 +61,10 @@ describe("footprint preview export transforms", () => {
 });
 
 describe("footprint preview no-KiCad drift check", () => {
-  it("accepts the committed 23-package, 33-record alias set", async () => {
+  it("accepts the committed 24-package, 34-record alias set", async () => {
     await checkFootprintPreviews(selections);
-    assert.equal(selections.length, 23);
-    assert.equal(new Set(selections.flatMap((entry) => entry.recordIds)).size, 33);
+    assert.equal(selections.length, 24);
+    assert.equal(new Set(selections.flatMap((entry) => entry.recordIds)).size, 34);
   });
 
   it("fails on missing, extra, stale input/output, unsafe output, and changed alias reuse", async () => {

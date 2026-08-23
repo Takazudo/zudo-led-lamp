@@ -211,7 +211,7 @@ export async function runPipeline(
       // Distinct interactions, not attachments. Every other node type carries a
       // singular recordId and so is attached once, but an interaction is published on
       // each of its participating records — summing lengths would report this corpus's
-      // 51 interactions as 63 and break the corpus's asserted count.
+      // 51 interactions as 64 and break the corpus's asserted count.
       publishedInteractions: new Set(
         model.records.flatMap((record) =>
           record.interactions.map((entry) => entry.interactionId),

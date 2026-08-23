@@ -170,7 +170,7 @@ export const CIRCUIT_PUBLICATION_MATRIX: PublicationMatrix = {
 
   // Narrow capabilities used by the reference contract. The PDF is an
   // outbound audited URL; footprint/model preview paths are restricted by the
-  // 23-package manifest and validated before projection.
+  // 24-package manifest and validated before projection.
   "asset.datasheetPdf": "PUBLISH",
   "asset.footprintPreview": "PUBLISH",
   "asset.modelPreview": "PUBLISH",

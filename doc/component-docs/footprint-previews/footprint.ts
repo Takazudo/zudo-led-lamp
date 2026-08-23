@@ -1,4 +1,4 @@
-/** Removes every fp_text form while preserving all other canonical bytes verbatim. */
+/** Removes every footprint text/property form while preserving all other canonical bytes verbatim. */
 export function suppressFootprintText(source: string): string {
   const ranges: Array<readonly [number, number]> = [];
   let depth = 0;
@@ -19,7 +19,7 @@ export function suppressFootprintText(source: string): string {
       continue;
     }
     if (char === "(") {
-      if (/^\(fp_text\s/u.test(source.slice(index))) start = index;
+      if (/^\((?:fp_text|property)\s/u.test(source.slice(index))) start = index;
       depth += 1;
     } else if (char === ")") {
       depth -= 1;
@@ -38,7 +38,7 @@ export function suppressFootprintText(source: string): string {
   for (const [rangeStart, rangeEnd] of ranges.reverse()) {
     result = result.slice(0, rangeStart) + result.slice(rangeEnd);
   }
-  if (/\(fp_text\s/u.test(result)) throw new Error("failed to suppress footprint text");
+  if (/\((?:fp_text|property)\s/u.test(result)) throw new Error("failed to suppress footprint text");
   return result;
 }
 

@@ -16,10 +16,10 @@ The repository already holds validated component evidence as structured JSON und
 adds a **projection** of it into human documentation. It never re-states a fact in
 prose, never repairs a value, and never synthesises a component-wide verdict.
 
-Corpus as of this contract: **13 owner bundles, 33 records (24 standalone, 9
-subordinate), 85 sources, 377 facts, 112 coverage domains, 51 interactions, 33
-routes, 33 pin maps, 140 pins**, plus **6 cross-component rules** in
-`circuit-spec-integration`; 30 inventory lines fitted, 3 DNP/hand-fit.
+Corpus as of this contract: **13 owner bundles, 34 records (24 standalone, 10
+subordinate), 89 sources, 384 facts, 115 coverage domains, 51 interactions, 34
+routes, 34 pin maps, 160 pins**, plus **6 cross-component rules** in
+`circuit-spec-integration`; 30 inventory lines fitted, 4 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
 fails the build.
 They are current reviewed corpus assertions and must be refreshed together when the
@@ -66,7 +66,7 @@ adapters/circuit/           this repository's evidence provider
   paths.ts                  every path the adapter may touch
   validate.ts               python3 validate.py subprocess
   read.ts                   contained, symlink-refusing JSON reads
-  selection.ts              committed instance allowlist (33 records / 85 sources)
+  selection.ts              committed instance allowlist (34 records / 89 sources)
   matrix.ts                 committed per-field decisions
   integration.ts            cross-component rules: shapes, projection, closure
   evidence.ts               provider shapes, bundle reads, the joins (pure)
@@ -153,9 +153,9 @@ both. CI pins `node-version: 22`.
 
 ### Footprint preview assets
 
-The 23 package-level SVG previews under
+The 24 package-level SVG previews under
 `public/assets/component-previews/footprints/` are generated assets, shared by
-all 33 record aliases. Their `manifest.json` locks each canonical footprint
+all 34 record aliases. Their `manifest.json` locks each canonical footprint
 hash, output hash, record mapping, renderer, and export options. Catalog data
 therefore carries a stable asset path rather than duplicating SVG bytes per
 record.
@@ -253,13 +253,13 @@ Rules the shape enforces:
 **`PublicRecordIdentity.ownerSkill`** was added in #59: the owner bundle's name
 (`component-al8860mp-13`) is what lets a record page link back to its raw agent
 resource at `/docs/claude-skills/<name>/`, and it is not derivable — 13 owners
-cover 33 records and `component-project-passives` owns eleven of them.
+cover 34 records and `component-project-passives` owns eleven of them.
 `FIELD_KEYS` gained `record.ownerSkill` and the matrix publishes it; those bundle
 routes are already on the live site, so it publishes a route rather than a new
 fact.
 
 **One shape change since Wave 1.** `PublicFact["value"]` was frozen as
-`number | SafeText`. Three facts in the corpus record a distributor identity
+`number | SafeText`. Four facts in the corpus record a distributor identity
 binding as a JSON object (`{lcsc, manufacturer, mpn, variant}`), and #59 forbids
 flattening a value into a string, so the union widened to
 `number | SafeText | readonly PublicFactValueEntry[]` (`{key, value}` pairs,
@@ -270,7 +270,7 @@ fatal `ADAPTER_CONTRACT` — there is no fourth shape to guess at.
 ### Identity, ordering, errors
 
 - **Record slug** = record ID minus the `rec-` prefix (`rec-al8860mp-13` →
-  `al8860mp-13`). Verified unique across all 33 records. Derived from the ID and
+  `al8860mp-13`). Verified unique across all 34 records. Derived from the ID and
   never from the MPN, because MPNs contain commas and slashes (`PESD24VS1UB,115`).
   A slug that does not match `^[a-z][a-z0-9]*(-[a-z0-9]+)*$`, or that hits the
   reserved list (`index`, `404`, `assets`, `api`, `search`, `sitemap`, `robots`,
@@ -297,7 +297,7 @@ fatal `ADAPTER_CONTRACT` — there is no fourth shape to guess at.
   is curated (primary source first); coverage, pin maps and routes follow file
   order.
 - **An interaction is published on every record it names.** Nine of the 51
-  interactions name multiple records, so 51 interactions land on 63 record pages;
+  interactions name multiple records, so 51 interactions land on 64 record pages;
   a reader on `rec-fxl0630-330-m` has to see that it
   participates in the AL8860 power stage. This is why anchor uniqueness is scoped
   per page (see above): the same `#int-…` fragment appears on up to four pages,
@@ -751,14 +751,14 @@ adoption guide is #66's deliverable.
 ## 14. Verification performed
 
 ```
-python3 .claude/skills/component-spec-audit/scripts/validate.py     PASS: 33 lines; offline=True
+python3 .claude/skills/component-spec-audit/scripts/validate.py     PASS: 34 lines; offline=True
 python3 -m unittest discover -s .claude/skills/component-spec-audit/scripts -p 'test_*.py'
 python3 .claude/skills/circuit-spec-integration/scripts/check_forward_tests.py
 pnpm --dir doc run test:components        463 tests, 0 failures
-pnpm --dir doc run generate:components    33/33 records, 85/85 sources, 1 page
+pnpm --dir doc run generate:components    34/34 records, 89/89 sources, 38 pages
 pnpm --dir doc run check:components       generated output is up to date
 pnpm --dir doc run check                  tsc — no errors
-pnpm --dir doc run build                  90 pages
+pnpm --dir doc run build                  92 pages
 ```
 
 Additionally proven:
@@ -836,7 +836,7 @@ canonical `zudo-led-lamp.pretty` library. Before projection, the adapter require
   content rejected;
 - 512 KiB per footprint, 2 MiB per WRL, and 8 MiB for the selected aggregate.
 
-The 33 record mappings collapse to a reviewed 23-package manifest while retaining
+The 34 record mappings collapse to a reviewed 24-package manifest while retaining
 record-level lookup. Public paths identify only those manifest-selected footprint
 and WRL files. Same-basename STEP is validation evidence and is not published:
 browser preview loaders use WRL, while exposing both formats would double the

@@ -84,9 +84,9 @@ export async function readCircuitReferenceContract(
   }
 
   const packages = [...packagesByName.values()];
-  if (packages.length !== 23) {
-    fail("ADAPTER_CONTRACT", "preview manifest must contain exactly 23 packages", {
-      expected: 23,
+  if (packages.length !== 24) {
+    fail("ADAPTER_CONTRACT", "preview manifest must contain exactly 24 packages", {
+      expected: 24,
       actual: packages.length,
     });
   }

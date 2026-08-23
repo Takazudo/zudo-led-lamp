@@ -262,13 +262,16 @@ Behaviour that is not a property of this part alone. Each interaction names the 
 
 <EvidenceAnchor id="int-c492404-programming" />
 
-- **Records involved:** `rec-c529334` (this record), [`rec-c492404`](/docs/components/records/c492404/)
-- **Conditions:** J3 is DNP and exposes reset/SWD/power; verify fitment, orientation, target-power policy and debugger behavior before use
+- **Records involved:** `rec-c529334` (this record), [`rec-c492404`](/docs/components/records/c492404/), [`rec-c4749199`](/docs/components/records/c4749199/)
+- **Conditions:** Board L J3 and adapter J1/J2 are DNP; use a straight pin-for-pin 1x5 cable, power the target, align both pin-1 marks and the 20-pin shroud key, keep J1.19 isolated, and verify fitment, continuity, target sense and debugger behavior before use
 - **Verdict:** NEEDS BENCH
 
 **Facts this rests on:**
 
 - [`fact-c492404-topology`](/docs/components/records/c492404/#fact-c492404-topology) on PZ254V-11-05P
+- [`fact-c4749199-stlink-mapping`](/docs/components/records/c4749199/#fact-c4749199-stlink-mapping) on DS254P-2X10-L0
+- [`fact-c4749199-topology`](/docs/components/records/c4749199/#fact-c4749199-topology) on DS254P-2X10-L0
+- [`fact-c4749199-bench`](/docs/components/records/c4749199/#fact-c4749199-bench) on DS254P-2X10-L0
 - [`fact-c529334-reset`](#fact-c529334-reset)
 - [`fact-c529334-boot`](#fact-c529334-boot)
 - [`fact-c529334-debug`](#fact-c529334-debug)

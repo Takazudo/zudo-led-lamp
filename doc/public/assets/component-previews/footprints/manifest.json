@@ -18,8 +18,8 @@
     "textPolicy": "suppress-all-fp-text-in-temporary-library",
     "postprocessor": "repository-svg-normalizer-v1"
   },
-  "canonicalInputSha256": "356ae1cad58f62e4f5562a296c73812dfd6aaddc899c91a62582757f779b3c58",
-  "generatedOutputSha256": "7d5289f5a897cad72617110ce8eb85406ecccf6801d35b01977f5705d32c6ccf",
+  "canonicalInputSha256": "c00a5195b7f45ab147944980df1d49874d97149cfc8e5033c2ef8e396dda6ba1",
+  "generatedOutputSha256": "aa27326c7b939410f8faf4b3a8b5d9e6c6de84c68028b2958c52df77ddd1a207",
   "packages": [
     {
       "packageId": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
@@ -261,6 +261,17 @@
       "assetPath": "/assets/component-previews/footprints/HDR-TH_5P-P2.54-V-M.svg",
       "canonicalInputSha256": "254a1f12d6ec7dee733d754fdce97e304cab1d8887c975e68c092e0ae263e167",
       "generatedOutputSha256": "6f8b774cf911cf433f097708ec5aa9d57d3f478c3403244f0399b8413a11757b"
+    },
+    {
+      "packageId": "IDC-TH_20P-P2.54-V-R2-C10-S2.54",
+      "footprintName": "IDC-TH_20P-P2.54-V-R2-C10-S2.54",
+      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/IDC-TH_20P-P2.54-V-R2-C10-S2.54.kicad_mod",
+      "recordIds": [
+        "rec-c4749199"
+      ],
+      "assetPath": "/assets/component-previews/footprints/IDC-TH_20P-P2.54-V-R2-C10-S2.54.svg",
+      "canonicalInputSha256": "f0dc3d39da95222814f531f3a77d88ca44f5f9b561e81541b2e663fde6c73ea4",
+      "generatedOutputSha256": "e16182ea4db6495fa2278ce48da6ba0f143ca9dd2b1df695825fe6841b843bb8"
     },
     {
       "packageId": "SW-TH_ALPS_EC11L1525G01",

@@ -84,7 +84,7 @@ export type PublicRecordIdentity = {
   /**
    * The owner bundle that holds this record's evidence, e.g.
    * `component-al8860mp-13`. Not derivable from anything else here — 13 owners
-   * cover 33 records and one of them owns eleven — and it is what lets a record
+   * cover 34 records and one of them owns eleven — and it is what lets a record
    * page link back to its raw agent resource at `/docs/claude-skills/<name>/`.
    */
   readonly ownerSkill: SafeText;

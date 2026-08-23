@@ -906,6 +906,80 @@
       "reviewer": "issue-25 foreground integration review"
     },
     {
+      "record_id": "rec-c4749199",
+      "pin_map_id": "pinmap-c4749199",
+      "canonical_sha256": "9a8de986d91ee1eff89bd9ae86b42b3b9172d9b53b2e72d1dfdc79d49ab90a12",
+      "evidence_fact_ids": [
+        "fact-c4749199-mechanical",
+        "fact-c4749199-stlink-mapping",
+        "fact-c4749199-topology"
+      ],
+      "trust_status": "UNSOURCED",
+      "critical_pins": [
+        {
+          "symbol_pin": "1",
+          "name": "VAPP",
+          "footprint_pad": "1",
+          "function": "VAPP target-voltage sense to J2.4"
+        },
+        {
+          "symbol_pin": "2",
+          "name": "VAPP",
+          "footprint_pad": "2",
+          "function": "VAPP target-voltage sense to J2.4"
+        },
+        {
+          "symbol_pin": "3",
+          "name": "TRST",
+          "footprint_pad": "3",
+          "function": "GND for SWD ribbon noise reduction"
+        },
+        {
+          "symbol_pin": "5",
+          "name": "TDI",
+          "footprint_pad": "5",
+          "function": "GND for SWD ribbon noise reduction"
+        },
+        {
+          "symbol_pin": "7",
+          "name": "TMS_SWDIO",
+          "footprint_pad": "7",
+          "function": "SWDIO to J2.1"
+        },
+        {
+          "symbol_pin": "9",
+          "name": "TCK_SWCLK",
+          "footprint_pad": "9",
+          "function": "SWCLK to J2.2"
+        },
+        {
+          "symbol_pin": "13",
+          "name": "TDO_SWO",
+          "footprint_pad": "13",
+          "function": "optional SWO intentionally no connect"
+        },
+        {
+          "symbol_pin": "15",
+          "name": "NRST",
+          "footprint_pad": "15",
+          "function": "NRST to J2.3"
+        },
+        {
+          "symbol_pin": "19",
+          "name": "VDD_3V3_OUT",
+          "footprint_pad": "19",
+          "function": "debugger 3.3 V output intentionally no connect"
+        },
+        {
+          "symbol_pin": "20",
+          "name": "GND",
+          "footprint_pad": "20",
+          "function": "GND"
+        }
+      ],
+      "reviewer": "issue-104 drawing and numeric orientation audit 2026-08-23"
+    },
+    {
       "record_id": "rec-c492404",
       "pin_map_id": "pinmap-c492404",
       "canonical_sha256": "a67719853caa387658d6833839b4da36caf8ba1fd33b364528360d0e14b22d2a",

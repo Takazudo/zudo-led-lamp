@@ -8,7 +8,7 @@ This project uses [easyeda2kicad.py](https://github.com/uPesy/easyeda2kicad.py) 
 - **Footprints (KiCad library resolution path)**: `footprints/kicad/zudo-led-lamp.pretty/*.kicad_mod`
 - **3D models**: `footprints/kicad/zudo-led-lamp.3dshapes/*.{step,wrl}` — footprints reference the `.wrl` via `${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/`
 - **Symbols**: `symbols/zudo-led-lamp.kicad_sym` (single file containing all project symbols)
-- **KiCad projects**: `boards/board-p/` and `boards/board-l/` — one project per board (they are separate PCBA orders). Each has its own `sym-lib-table` / `fp-lib-table` registering library nickname `zudo-led-lamp` via `${KIPRJMOD}/../../...` paths into the shared root `symbols/` and `footprints/` dirs. Both projects MUST sit at the same depth (`boards/<name>/`) or the relative library and 3D paths break.
+- **KiCad projects**: `boards/board-p/`, `boards/board-l/`, and `boards/swd-adapter/` — one project per PCB/PCBA order. Each has its own `sym-lib-table` / `fp-lib-table` registering library nickname `zudo-led-lamp` via `${KIPRJMOD}/../../...` paths into the shared root `symbols/` and `footprints/` dirs. All projects MUST sit at the same depth (`boards/<name>/`) or the relative library and 3D paths break.
 
 ## Dual-location sync rule
 
