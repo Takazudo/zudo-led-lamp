@@ -758,7 +758,7 @@ pnpm --dir doc run test:components        463 tests, 0 failures
 pnpm --dir doc run generate:components    34/34 records, 89/89 sources, 38 pages
 pnpm --dir doc run check:components       generated output is up to date
 pnpm --dir doc run check                  tsc — no errors
-pnpm --dir doc run build                  90 pages
+pnpm --dir doc run build                  92 pages
 ```
 
 Additionally proven:
