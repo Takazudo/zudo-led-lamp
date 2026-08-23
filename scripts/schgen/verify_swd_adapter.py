@@ -44,19 +44,26 @@ def pcb_pad_map(path):
     footprints = find_all(board, 'footprint')
     require(len(footprints) == 2, f'adapter PCB must contain exactly two footprints, got {len(footprints)}')
     result = {}
+    geometry = {}
+    library_ids = {}
     rotations = {}
     for footprint in footprints:
         ref = reference_of(footprint)
         require(ref in {'J1', 'J2'}, f'unexpected adapter footprint {ref}')
+        library_ids[ref] = atom(footprint[1])
         at = find_all(footprint, 'at')[0]
         rotations[ref] = float(atom(at[3])) if len(at) > 3 else 0.0
         result[ref] = {}
+        geometry[ref] = {}
         for pad in find_all(footprint, 'pad'):
             number = atom(pad[1])
+            shape = atom(pad[3])
+            pad_at = find_all(pad, 'at')[0]
             net = find_all(pad, 'net')
             result[ref][number] = atom(net[0][1]) if net else 'NC'
+            geometry[ref][number] = (shape, float(atom(pad_at[1])), float(atom(pad_at[2])))
     require(rotations == {'J1': 0.0, 'J2': 0.0}, f'connector rotations changed: {rotations}')
-    return result
+    return result, geometry, library_ids
 
 
 def pad_geometry(path):
@@ -85,7 +92,16 @@ require(mapping_from_spec(swd_adapter_spec, 'J1') == expected_j1, 'adapter schem
 require(mapping_from_spec(swd_adapter_spec, 'J2') == expected_j2, 'adapter schematic J2 mapping drifted')
 require(mapping_from_spec(board_l_spec, 'J3') == expected_board_l_j3, 'Board L J3 order drifted')
 
-pcb = pcb_pad_map(ROOT / 'boards/swd-adapter/swd-adapter.kicad_pcb')
+pcb, pcb_geometry, pcb_library_ids = pcb_pad_map(
+    ROOT / 'boards/swd-adapter/swd-adapter.kicad_pcb'
+)
+require(
+    pcb_library_ids == {
+        'J1': 'zudo-led-lamp:IDC-TH_20P-P2.54-V-R2-C10-S2.54',
+        'J2': 'zudo-led-lamp:HDR-TH_5P-P2.54-V-M',
+    },
+    f'adapter PCB footprint assignment drifted: {pcb_library_ids}',
+)
 for ref, expected in (('J1', expected_j1), ('J2', expected_j2)):
     actual = {
         pin: ('NC' if net.startswith('unconnected-') else net)
@@ -101,6 +117,7 @@ require(j1_pads['1'] == ('rect', -11.43, 1.27), f'J1 pin 1 geometry drifted: {j1
 require(j1_pads['2'] == ('circle', -11.43, -1.27), f'J1 pin 2 geometry drifted: {j1_pads["2"]}')
 require(j1_pads['19'] == ('circle', 11.43, 1.27), f'J1 pin 19 geometry drifted: {j1_pads["19"]}')
 require(j1_pads['20'] == ('circle', 11.43, -1.27), f'J1 pin 20 geometry drifted: {j1_pads["20"]}')
+require(pcb_geometry['J1'] == j1_pads, 'J1 PCB pad geometry differs from the canonical footprint')
 key_text = [item for item in find_all(j1_tree, 'fp_text') if len(item) > 2 and atom(item[2]) == 'KEY']
 require(len(key_text) == 1, 'J1 shroud key marker is missing or ambiguous')
 key_at = find_all(key_text[0], 'at')[0]
@@ -109,6 +126,7 @@ require(float(atom(key_at[2])) > j1_pads['1'][2], 'J1 key marker is no longer on
 _, j2_pads = pad_geometry(ROOT / 'footprints/kicad/HDR-TH_5P-P2.54-V-M.kicad_mod')
 require(j2_pads['1'] == ('rect', -5.08, 0.0), f'J2 pin 1 geometry drifted: {j2_pads["1"]}')
 require(j2_pads['5'] == ('circle', 5.08, 0.0), f'J2 pin order drifted: {j2_pads["5"]}')
+require(pcb_geometry['J2'] == j2_pads, 'J2 PCB pad geometry differs from the canonical footprint')
 
 end_to_end = {'7': '1', '9': '2', '15': '3', '1': '4', '2': '4'}
 for j1_pin, one_by_five_pin in end_to_end.items():
