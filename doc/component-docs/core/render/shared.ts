@@ -646,7 +646,7 @@ export function presentTerms(values: readonly SafeText[]): SafeText[] {
  * The evidence bundle a record belongs to.
  *
  * `PublicRecordIdentity.ownerSkill` is an approved addition owned by the
- * adapter (13 bundles across 33 lines, and `component-project-passives` alone
+ * adapter (13 bundles across 34 lines, and `component-project-passives` alone
  * owns 11, so it is not derivable from anything else the model publishes). The
  * read sits behind one accessor purely so this feature does not have to guess
  * at the exact moment that leaf lands.

@@ -23,10 +23,10 @@ before(async () => {
 });
 
 describe("reviewed document shortcuts", () => {
-  it("selects exactly one explicit PDF-representing document for all 33 records", () => {
-    assert.equal(CIRCUIT_SELECTION.documentSelections.length, 33);
-    assert.equal(new Set(CIRCUIT_SELECTION.documentSelections.map((entry) => entry.recordId)).size, 33);
-    assert.equal(model.records.length, 33);
+  it("selects exactly one explicit PDF-representing document for all 34 records", () => {
+    assert.equal(CIRCUIT_SELECTION.documentSelections.length, 34);
+    assert.equal(new Set(CIRCUIT_SELECTION.documentSelections.map((entry) => entry.recordId)).size, 34);
+    assert.equal(model.records.length, 34);
     for (const record of model.records) {
       assert.match(record.reference.document.url, /^https?:\/\//u);
       assert.ok(["Datasheet PDF", "Specification PDF", "Mechanical drawing PDF"].includes(record.reference.document.label));
@@ -42,10 +42,10 @@ describe("reviewed document shortcuts", () => {
       ...CIRCUIT_DOCUMENT_VERIFICATION.downloadedPdfSourceIds,
       ...CIRCUIT_DOCUMENT_VERIFICATION.officialPdfContentSourceIds,
     ];
-    assert.equal(CIRCUIT_DOCUMENT_VERIFICATION.checkedOn, "2026-08-20");
+    assert.equal(CIRCUIT_DOCUMENT_VERIFICATION.checkedOn, "2026-08-23");
     assert.equal(CIRCUIT_DOCUMENT_VERIFICATION.expectedContent, "PDF");
-    assert.equal(verified.length, 33);
-    assert.equal(new Set(verified).size, 33);
+    assert.equal(verified.length, 34);
+    assert.equal(new Set(verified).size, 34);
     assert.deepEqual(
       [...verified].sort(),
       CIRCUIT_SELECTION.documentSelections.map((entry) => entry.sourceId).sort(),
@@ -82,11 +82,11 @@ describe("reviewed document shortcuts", () => {
 });
 
 describe("KiCad preview manifest", () => {
-  it("maps every record to one descriptor and collapses it to exactly 23 packages", () => {
-    assert.equal(model.records.filter((record) => record.reference.footprint.modelPath.endsWith(".wrl")).length, 33);
-    assert.equal(model.packagePreviews.length, 23);
-    assert.equal(new Set(model.packagePreviews.map((entry) => entry.packageId)).size, 23);
-    assert.equal(model.packagePreviews.flatMap((entry) => entry.recordIds).length, 33);
+  it("maps every record to one descriptor and collapses it to exactly 24 packages", () => {
+    assert.equal(model.records.filter((record) => record.reference.footprint.modelPath.endsWith(".wrl")).length, 34);
+    assert.equal(model.packagePreviews.length, 24);
+    assert.equal(new Set(model.packagePreviews.map((entry) => entry.packageId)).size, 24);
+    assert.equal(model.packagePreviews.flatMap((entry) => entry.recordIds).length, 34);
   });
 
   it("preserves non-zero Z rotations from the footprint", () => {

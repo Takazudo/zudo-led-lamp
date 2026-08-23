@@ -10,7 +10,7 @@
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
  * of quietly publishing a different set. They are the same corpus figures the
- * epic states (33 records, 85 sources), plus the six cross-component rules —
+ * epic states (34 records, 89 sources), plus the six cross-component rules —
  * those are not instance-selected, but their number is asserted for the same
  * reason, because a rule appearing or vanishing changes what the integration
  * page claims about the whole design.
@@ -30,7 +30,7 @@ import type { InstanceSelection } from "../../core/publication.ts";
  * and updating both this artifact and the selection in one review.
  */
 export const CIRCUIT_DOCUMENT_VERIFICATION = {
-  checkedOn: "2026-08-20",
+  checkedOn: "2026-08-23",
   expectedContent: "PDF",
   downloadedPdfSourceIds: [
     "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
@@ -44,7 +44,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
     "src-fxl-series-mirror", "src-ro-ss26-mirror", "src-ap6320x-ds41326",
     "src-fnr-series-mirror", "src-samsung-cl21-product", "src-c492404-drawing",
     "src-c2991196-spec", "src-c13564-current", "src-c210315-spec",
-    "src-c2934070-spec",
+    "src-c2934070-spec", "src-c4749199-drawing",
   ],
   // The official ST URL was independently parsed as the STM32G031x4/x6/x8
   // PDF during the same live audit. It remains separate because curl from the
@@ -94,6 +94,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     // component-stm32g031f8p6
     "rec-c529334", // standalone: STM32G031F8P6
     "rec-c492404", // subordinate: PZ254V-11-05P
+    "rec-c4749199", // subordinate: DS254P-2X10-L0
     // component-alps-ec11l1525g01
     "rec-c2991196", // standalone: EC11L1525G01
     // component-murata-ncp18xh103f03rb
@@ -186,6 +187,10 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c492404-page", // rec-c492404  (SOURCE UNAVAILABLE)
     "src-c492404-drawing", // rec-c492404
     "src-c492404-generator", // rec-c492404
+    "src-c4749199-lcsc", // rec-c4749199
+    "src-c4749199-drawing", // rec-c4749199
+    "src-c4749199-um1075", // rec-c4749199  (SOURCE UNAVAILABLE)
+    "src-c4749199-generator", // rec-c4749199
     // component-alps-ec11l1525g01
     "src-c2991196-spec", // rec-c2991196
     "src-c2991196-page", // rec-c2991196  (SOURCE UNAVAILABLE)
@@ -278,6 +283,10 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c492404-page",
     "src-c492404-drawing",
     "src-c492404-generator",
+    "src-c4749199-lcsc",
+    "src-c4749199-drawing",
+    "src-c4749199-um1075",
+    "src-c4749199-generator",
     "src-c2991196-spec",
     "src-c2991196-page",
     "src-c2991196-generator",
@@ -331,6 +340,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     { recordId: "rec-cl21a226maqnnne", sourceId: "src-samsung-cl21-product", documentKind: "specification" },
     { recordId: "rec-c529334", sourceId: "src-c529334-ds", documentKind: "datasheet" },
     { recordId: "rec-c492404", sourceId: "src-c492404-drawing", documentKind: "drawing" },
+    { recordId: "rec-c4749199", sourceId: "src-c4749199-drawing", documentKind: "drawing" },
     { recordId: "rec-c2991196", sourceId: "src-c2991196-spec", documentKind: "specification" },
     { recordId: "rec-c13564", sourceId: "src-c13564-current", documentKind: "specification" },
     { recordId: "rec-c210315", sourceId: "src-c210315-spec", documentKind: "specification" },
@@ -338,8 +348,8 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   ],
 
   expect: {
-    records: 33,
-    sources: 85,
+    records: 34,
+    sources: 89,
     integrationRules: 6,
   },
 };

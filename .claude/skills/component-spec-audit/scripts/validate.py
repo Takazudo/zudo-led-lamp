@@ -191,7 +191,11 @@ def parse_components(path):
 
 def generator_inventory(specs=None):
     grouped, excluded = {}, []
-    specs = specs or (("board-p", ROOT / "scripts/schgen/board_p_spec.py"), ("board-l", ROOT / "scripts/schgen/board_l_spec.py"))
+    specs = specs or (
+        ("board-p", ROOT / "scripts/schgen/board_p_spec.py"),
+        ("board-l", ROOT / "scripts/schgen/board_l_spec.py"),
+        ("swd-adapter", ROOT / "scripts/schgen/swd_adapter_spec.py"),
+    )
     for board, path in specs:
         components = parse_components(path)
         for refdes, item in components.items():
@@ -252,7 +256,7 @@ def contains_alias(query, alias):
 
 def looks_like_vendor_hint(token, known_vendor_tokens):
     folded = token.casefold()
-    if folded in {"board-p", "board-l"}:
+    if folded in {"board-p", "board-l", "swd-adapter"}:
         return False
     return (
         folded in known_vendor_tokens

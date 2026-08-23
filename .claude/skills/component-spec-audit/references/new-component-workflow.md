@@ -22,7 +22,8 @@ make the workflow progress; stop and obtain the missing design or review decisio
    python3 scripts/schgen/gen_schematic.py board_l_spec
    ```
 
-   Run `scripts/schgen/verify.sh board-p` or `scripts/schgen/verify.sh board-l` when
+   Run `scripts/schgen/verify.sh <project>` (for example `board-p`, `board-l`, or
+   `swd-adapter`) when
    `kicad-cli` is available; commit the edited spec and generated `.kicad_sch`
    together.
 2. Add or update the exact line in

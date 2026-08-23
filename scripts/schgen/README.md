@@ -19,6 +19,9 @@ artifact of it.
 - `gen_schematic.py` — CLI entry point: `generate()` a board from its spec.
 - `verify_netlist.py` — diffs a kicad-cli netlist export against a spec's
   `NETS`/`NO_CONNECT` tables and prints `PASS`/`FAIL`.
+- `verify_swd_adapter.py` — pure-Python end-to-end numeric orientation audit
+  from the ST-LINK/V2 20-pin footprint through the adapter and straight cable
+  to Board L J3; runs in CI.
 - `verify.sh` — wraps the kicad-cli export + `verify_netlist.py` call for one
   board. Local-only (see below); not run in CI.
 

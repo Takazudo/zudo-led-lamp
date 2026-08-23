@@ -1,6 +1,6 @@
 ---
 title: Prototype Architecture — Overview
-description: The locked prototype architecture for the lamp — two boards, a 24-LED warm-white array at 500mA, an AL8860 constant-current buck, an STM32G031 control MCU, and an EC11 knob mapped to brightness. Decisions, not options.
+description: The locked prototype architecture for the lamp — two lamp boards plus a separate SWD adapter, a 24-LED warm-white array at 500mA, an AL8860 constant-current buck, an STM32G031 control MCU, and an EC11 knob mapped to brightness. Decisions, not options.
 sidebar_position: 10
 ---
 
@@ -22,7 +22,7 @@ Treat the first build as the first real test, and follow the bring-up gates in
 
 | Parameter | Locked value |
 |---|---|
-| Board count | **2** — Board P (USB-PD front end) + Board L (driver, LEDs, control) |
+| Lamp board count | **2** — Board P (USB-PD front end) + Board L (driver, LEDs, control); the SWD adapter is a separate service accessory |
 | PD contract | 15 V / 3 A (45 W cap) |
 | System draw | **~6.2 W, ~410 mA** — 13.7% of the contract cap, **7.3x margin** |
 | LED array | **24x** SMD2835 warm white, 8 parallel strings of 3 series |

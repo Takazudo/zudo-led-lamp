@@ -34,8 +34,8 @@ export type ModelAssetResult = {
 export async function buildModelAssetPlan(): Promise<readonly ModelAssetPlanEntry[]> {
   const index = await readEvidenceIndex();
   const packages = index.references?.packages;
-  if (packages === undefined || packages.length !== 23) {
-    fail("ADAPTER_CONTRACT", "model publication requires exactly 23 selected packages", {
+  if (packages === undefined || packages.length !== 24) {
+    fail("ADAPTER_CONTRACT", "model publication requires exactly 24 selected packages", {
       actual: packages?.length ?? 0,
     });
   }

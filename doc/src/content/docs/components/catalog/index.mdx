@@ -50,6 +50,7 @@ Four columns describe state. None of them is a grade, and there is deliberately 
   | <EvidenceAnchor id="rec-cl21a226maqnnne" />[CL21A226MAQNNNE](/docs/components/records/cl21a226maqnnne/) (subordinate)    | `rec-cl21a226maqnnne`    | 22 uF 25 V buck output MLCC      | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
   | <EvidenceAnchor id="rec-c529334" />[STM32G031F8P6](/docs/components/records/c529334/)                                    | `rec-c529334`            | control MCU                      | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 5 of 5       |
   | <EvidenceAnchor id="rec-c492404" />[PZ254V-11-05P](/docs/components/records/c492404/) (subordinate)                      | `rec-c492404`            | hand-fit SWD header              | DNP or hand-fit | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
+  | <EvidenceAnchor id="rec-c4749199" />[DS254P-2X10-L0](/docs/components/records/c4749199/) (subordinate)                   | `rec-c4749199`           | ST-LINK/V2 20-pin adapter header | DNP or hand-fit | VERIFIED   | AVAILABLE          | 2 of 3       |
   | <EvidenceAnchor id="rec-c2991196" />[EC11L1525G01](/docs/components/records/c2991196/)                                   | `rec-c2991196`           | rotary encoder                   | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 6 of 6       |
   | <EvidenceAnchor id="rec-c13564" />[NCP18XH103F03RB](/docs/components/records/c13564/)                                    | `rec-c13564`             | 10 kOhm NTC thermistor           | Fitted          | VERIFIED   | AVAILABLE          | 5 of 6       |
   | <EvidenceAnchor id="rec-c4216" />[0603WAF3302T5E](/docs/components/records/c4216/)                                       | `rec-c4216`              | 33 kOhm resistor                 | Fitted          | UNRESOLVED | SOURCE UNAVAILABLE | 1 of 2       |
@@ -556,15 +557,34 @@ One entry per record, carrying the orderable identity and every board placement.
 - **Orderable ID:** `C492404`
 - **Package:** `HDR-TH_5P-P2.54-V-M`
 - **Inventory line:** `line-c492404`
-- **Also known as:** `Board L SWD header`
+- **Also known as:** `Board L SWD header`, `adapter 1x5 SWD header`
 - **Owner skill:** `component-stm32g031f8p6`
-- **Placements:** board-l J3
+- **Placements:** board-l J3; swd-adapter J2
 - **Fit:** DNP or hand-fit
 - **Identity state:** UNRESOLVED
 - **Source state:** SOURCE UNAVAILABLE
 - **Open coverage domains:** 1 open of 2 published
 
 [PZ254V-11-05P record details](/docs/components/records/c492404/) — [PZ254V-11-05P raw agent resource](/docs/claude-skills/component-stm32g031f8p6/)
+
+### DS254P-2X10-L0
+
+- **Record ID:** `rec-c4749199`
+- **Kind:** subordinate — audited as part of [`rec-c529334`](/docs/components/records/c529334/)
+- **Manufacturer:** DEALON
+- **Function:** ST-LINK/V2 20-pin adapter header
+- **Orderable ID:** `C4749199`
+- **Package:** `IDC-TH_20P-P2.54-V-R2-C10-S2.54`
+- **Inventory line:** `line-c4749199`
+- **Also known as:** `2x10 shrouded IDC header`
+- **Owner skill:** `component-stm32g031f8p6`
+- **Placements:** swd-adapter J1
+- **Fit:** DNP or hand-fit
+- **Identity state:** VERIFIED
+- **Source state:** AVAILABLE
+- **Open coverage domains:** 2 open of 3 published
+
+[DS254P-2X10-L0 record details](/docs/components/records/c4749199/) — [DS254P-2X10-L0 raw agent resource](/docs/claude-skills/component-stm32g031f8p6/)
 
 ### EC11L1525G01
 

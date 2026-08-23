@@ -70,6 +70,38 @@
       "open_domains": [
         "installed-header-and-programmer-state"
       ]
+    },
+    {
+      "record_id": "rec-c4749199",
+      "line_id": "line-c4749199",
+      "kind": "subordinate",
+      "parent_record_id": "rec-c529334",
+      "mpn": "DS254P-2X10-L0",
+      "manufacturer": "DEALON",
+      "lcsc": "C4749199",
+      "package": "IDC-TH_20P-P2.54-V-R2-C10-S2.54",
+      "source_ids": [
+        "src-c4749199-lcsc",
+        "src-c4749199-drawing",
+        "src-c4749199-um1075",
+        "src-c4749199-generator"
+      ],
+      "fact_ids": [
+        "fact-c4749199-manufacturer",
+        "fact-c4749199-identity",
+        "fact-c4749199-mechanical",
+        "fact-c4749199-rating",
+        "fact-c4749199-stlink-mapping",
+        "fact-c4749199-topology",
+        "fact-c4749199-bench"
+      ],
+      "interaction_ids": [
+        "int-c492404-programming"
+      ],
+      "open_domains": [
+        "stlink-v2-interface-source-lock",
+        "physical-fit-continuity-and-debug-state"
+      ]
     }
   ]
 }

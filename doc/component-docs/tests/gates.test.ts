@@ -65,7 +65,7 @@ describe("open coverage never reads as safety", () => {
     const open = model.records.flatMap((record) =>
       record.coverage.filter((entry) => entry.status === "OPEN"),
     );
-    assert.equal(open.length, 67);
+    assert.equal(open.length, 69);
     // The hard case: open because NOTHING addresses the domain, so there is no
     // fact to show and no blocker to blame.
     const barren = open.filter(
@@ -178,7 +178,7 @@ describe("relationships stay visible on the page, not just in the model", () => 
     const subordinates = model.records.filter(
       (record) => record.identity.kind === "subordinate",
     );
-    assert.equal(subordinates.length, 9);
+    assert.equal(subordinates.length, 10);
     for (const record of subordinates) {
       const page = pages.get(record.identity.slug);
       assert.ok(page);

@@ -46,13 +46,13 @@ describe("model viewer descriptor", () => {
     assert.throws(() => encodeModelDescriptor({ ...descriptor, modelUrl: "https://evil.invalid/model.wrl" }));
   });
 
-  it("projects 33 records onto 23 safe local package models and preserves rotations", async () => {
+  it("projects 34 records onto 24 safe local package models and preserves rotations", async () => {
     const adapter = createCircuitAdapter();
     const policy = new PublicationPolicy(adapter.matrix, adapter.selection);
     const model = await adapter.project({ policy });
-    assert.equal(model.records.length, 33);
-    assert.equal(model.packagePreviews.length, 23);
-    assert.equal(new Set(model.records.map((record) => record.reference.footprint.packageId)).size, 23);
+    assert.equal(model.records.length, 34);
+    assert.equal(model.packagePreviews.length, 24);
+    assert.equal(new Set(model.records.map((record) => record.reference.footprint.packageId)).size, 24);
     assert.ok(model.records.some((record) => Object.values(record.reference.footprint.rotation).some((value) => value !== 0)));
   });
 });

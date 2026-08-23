@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generator_specs": ["scripts/schgen/board_p_spec.py", "scripts/schgen/board_l_spec.py"],
-  "assertions": {"orderable_lines": 33, "fitted_lines": 30, "dnp_or_hand_fit_lines": 3},
+  "generator_specs": ["scripts/schgen/board_p_spec.py", "scripts/schgen/board_l_spec.py", "scripts/schgen/swd_adapter_spec.py"],
+  "assertions": {"orderable_lines": 34, "fitted_lines": 30, "dnp_or_hand_fit_lines": 4},
   "exclusions": [
     {"board":"board-p","refdes":"J2","reason":"bare-copper NVM/I2C pogo pads; no orderable/LCSC line"},
     {"board":"board-p","refdes":"J3","reason":"bare-copper debug pogo pads; no orderable/LCSC line"},
@@ -35,7 +35,8 @@
     {"line_id":"line-c167874","mpn":"FNR4030S4R7MT","manufacturer":"Changjiang Microelectronics Tech (cjiang)","lcsc":"C167874","package":"IND-SMD_L4.0-W4.0_FNR40XXS","dnp":false,"owner_skill":"component-ap63203wu-7","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"4.7 uH logic buck inductor","placements":[{"board":"board-l","refdes":"L2"}]},
     {"line_id":"line-c529334","mpn":"STM32G031F8P6","manufacturer":"STMicroelectronics","lcsc":"C529334","package":"TSSOP-20_L6.5-W4.4-P0.65-LS6.4-BL","dnp":false,"owner_skill":"component-stm32g031f8p6","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"control MCU","placements":[{"board":"board-l","refdes":"U3"}]},
     {"line_id":"line-c2991196","mpn":"EC11L1525G01","manufacturer":"Alps Alpine","lcsc":"C2991196","package":"SW-TH_ALPS_EC11L1525G01","dnp":false,"owner_skill":"component-alps-ec11l1525g01","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"rotary encoder","placements":[{"board":"board-l","refdes":"SW1"}]},
-    {"line_id":"line-c492404","mpn":"PZ254V-11-05P","manufacturer":"XFCN","lcsc":"C492404","package":"HDR-TH_5P-P2.54-V-M","dnp":true,"owner_skill":"component-stm32g031f8p6","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"hand-fit SWD header","placements":[{"board":"board-l","refdes":"J3"}]},
+    {"line_id":"line-c492404","mpn":"PZ254V-11-05P","manufacturer":"XFCN","lcsc":"C492404","package":"HDR-TH_5P-P2.54-V-M","dnp":true,"owner_skill":"component-stm32g031f8p6","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"hand-fit SWD header","placements":[{"board":"board-l","refdes":"J3"},{"board":"swd-adapter","refdes":"J2"}]},
+    {"line_id":"line-c4749199","mpn":"DS254P-2X10-L0","manufacturer":"DEALON","lcsc":"C4749199","package":"IDC-TH_20P-P2.54-V-R2-C10-S2.54","dnp":true,"owner_skill":"component-stm32g031f8p6","identity_state":"VERIFIED","source_state":"AVAILABLE","function":"ST-LINK/V2 20-pin adapter header","placements":[{"board":"swd-adapter","refdes":"J1"}]},
     {"line_id":"line-c13564","mpn":"NCP18XH103F03RB","manufacturer":"Murata","lcsc":"C13564","package":"R0603","dnp":false,"owner_skill":"component-murata-ncp18xh103f03rb","identity_state":"VERIFIED","source_state":"AVAILABLE","function":"10 kOhm NTC thermistor","placements":[{"board":"board-l","refdes":"RT1"}]},
     {"line_id":"line-c45783","mpn":"CL21A226MAQNNNE","manufacturer":"Samsung Electro-Mechanics","lcsc":"C45783","package":"C0805","dnp":false,"owner_skill":"component-ap63203wu-7","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"22 uF 25 V buck output MLCC","placements":[{"board":"board-l","refdes":"C16"},{"board":"board-l","refdes":"C17"}]},
     {"line_id":"line-c4216","mpn":"0603WAF3302T5E","manufacturer":"UNI-ROYAL","lcsc":"C4216","package":"R0603","dnp":false,"owner_skill":"component-project-passives","identity_state":"UNRESOLVED","source_state":"SOURCE UNAVAILABLE","function":"33 kOhm resistor","placements":[{"board":"board-l","refdes":"R21"}]},
