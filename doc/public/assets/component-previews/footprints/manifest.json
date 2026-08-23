@@ -18,8 +18,8 @@
     "textPolicy": "suppress-all-fp-text-in-temporary-library",
     "postprocessor": "repository-svg-normalizer-v1"
   },
-  "canonicalInputSha256": "c00a5195b7f45ab147944980df1d49874d97149cfc8e5033c2ef8e396dda6ba1",
-  "generatedOutputSha256": "aa27326c7b939410f8faf4b3a8b5d9e6c6de84c68028b2958c52df77ddd1a207",
+  "canonicalInputSha256": "2890c3ed7154ef4202c68e01b956c61442b05f9937550f580375ad44b9c36405",
+  "generatedOutputSha256": "71521e4a303cfca8484f3c6bd6192eaf3b3cb4c45fe2e7fd41e771a54fdbe651",
   "packages": [
     {
       "packageId": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
@@ -170,8 +170,8 @@
         "rec-al8860mp-13"
       ],
       "assetPath": "/assets/component-previews/footprints/MSOP-8_L3.0-W3.0-P0.65-LS4.9-BL-EP1.8.svg",
-      "canonicalInputSha256": "c9091d0ac5c83dbe54ecbfd189b4091731520d371868c8349ca67863e36f1445",
-      "generatedOutputSha256": "9c1808f72fa3e6961fca998695fde186253ad9b30c84dc2d64401b50bb811aa8"
+      "canonicalInputSha256": "45f581573fa81a098a606a3039add1308fde77b1b24d388ddb1d01a737278e3e",
+      "generatedOutputSha256": "2fb04963cc5c605dfd8eab7977c6516f2e73c6738b7b4343482c6540e6304a98"
     },
     {
       "packageId": "R2512",
@@ -259,8 +259,8 @@
         "rec-c492404"
       ],
       "assetPath": "/assets/component-previews/footprints/HDR-TH_5P-P2.54-V-M.svg",
-      "canonicalInputSha256": "254a1f12d6ec7dee733d754fdce97e304cab1d8887c975e68c092e0ae263e167",
-      "generatedOutputSha256": "6f8b774cf911cf433f097708ec5aa9d57d3f478c3403244f0399b8413a11757b"
+      "canonicalInputSha256": "4c3f655448f3aec1fe186eabad34fe0c04b89dcef75ccdb29c187a75caa43bf2",
+      "generatedOutputSha256": "f6a7e49233cf15efc7a1608b2c2862d2c8c9992d846ea10fbe2e9b13b311380b"
     },
     {
       "packageId": "IDC-TH_20P-P2.54-V-R2-C10-S2.54",
