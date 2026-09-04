@@ -89,7 +89,6 @@
 		)
 		(capping no)
 		(filling no)
-		(zone_defaults)
 		(pcbplotparams
 			(layerselection 0x00000000_00000000_55555555_5755f5ff)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
@@ -4668,7 +4667,7 @@
 	(footprint "zudo-led-lamp:HDR-TH_6P-P2.54-V-M"
 		(layer "F.Cu")
 		(uuid "baa6fdd4-42d6-4981-be18-8a5c254bcdfe")
-		(at 12.998 37.766)
+		(at 12.9 37.7)
 		(property "Reference" "JOUT1"
 			(at 5.08 -2.54 0)
 			(layer "F.SilkS")
