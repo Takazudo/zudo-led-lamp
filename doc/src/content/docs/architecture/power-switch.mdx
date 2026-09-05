@@ -82,12 +82,12 @@ footprint, CPL placement or fabricated 3D preview. J5 is an **on-board bare-copp
 feature**, excluded from the orderable BOM/CPL. Buy the switch separately as
 **DigiKey 360-1507-ND / NKK WR11AS**, then hand-wire it.
 
-:::warning[PCB layout still needs this interface]
-This change updates the schematic, generator and libraries. The existing
-`board-l.kicad_pcb` has not been routed or updated for J5. Import the schematic
-changes, place J5, route F1's output to J5.1 and J5.2 to V15, and remove any old
-F1-to-V15 bypass. Run DRC and inspect the manufactured netlist before fabrication.
-SW2 itself must never be imported as an on-board part.
+:::note[PCB interface is now routed]
+`board-l.kicad_pcb` includes J5 on the rear side: pad 1 connects to F1.2
+(`V15_FUSED`), and pad 2 returns to `V15`. The old direct F1-to-V15 copper
+connection has been removed. SW2 remains an external panel component.
+See [rear controls and enclosure handoff](./rear-controls.mdx) for placement,
+verification and the remaining mechanical prototype checks.
 :::
 
 ## What OFF and ON mean
