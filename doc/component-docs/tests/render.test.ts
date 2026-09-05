@@ -151,6 +151,7 @@ describe("record page — structure", () => {
       assert.equal(reference.document.authority, record.reference.document.authorityClass);
       assert.equal(reference.document.availability, record.reference.document.availability);
       assert.equal(reference.document.url, record.reference.document.url);
+      assert.ok(reference.footprint);
       assert.equal(reference.footprint.name, record.reference.footprint.footprintName);
       assert.equal(
         reference.footprint.assetUrl,

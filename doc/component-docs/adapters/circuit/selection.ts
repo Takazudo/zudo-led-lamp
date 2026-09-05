@@ -56,7 +56,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
 
 export const CIRCUIT_SELECTION: InstanceSelection = {
   recordIds: [
-    "rec-wr11as", // external panel rocker, no PCB previews
+    "rec-wr11as", // external panel rocker, independently selected real model
     // component-type-c-31-m-17
     "rec-type-c-31-m-17", // standalone: TYPE-C-31-M-17
     // component-stusb4500qtr
@@ -358,3 +358,17 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     integrationRules: 7,
   },
 };
+
+/** User-supplied NKK/CADENAS export, reviewed against WR.pdf B127 on 2026-09-06.
+ * Separate selection prevents an external model from inventing a PCB footprint. */
+export const CIRCUIT_EXTERNAL_MODELS = [{
+  recordId: "rec-wr11as",
+  name: "WR11AS",
+  modelName: "WR11AS.wrl",
+  modelSha256: "95a0cd40119b0601e929caa29f2faa04c5eb23f687a1193444d40381da84a393",
+  originalName: "WR11AS.stl",
+  originalSha256: "2917e08e2385bf3d1d0bf3f46104c4ece401c84fe50b4056710842b9430e4abe",
+  offset: { x: 0, y: 0, z: 0 },
+  rotation: { x: -90, y: 0, z: 0 },
+  scale: { x: 2.54, y: 2.54, z: 2.54 },
+}] as const;

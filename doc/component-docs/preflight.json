@@ -681,25 +681,43 @@
     {
       "key": "reference.model.path",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 59,
+      "withheld": 0
+    },
+    {
+      "key": "reference.model.name",
+      "decision": "PUBLISH",
+      "emitted": 1,
+      "withheld": 0
+    },
+    {
+      "key": "reference.model.originalName",
+      "decision": "PUBLISH",
+      "emitted": 1,
+      "withheld": 0
+    },
+    {
+      "key": "asset.sourceCad",
+      "decision": "PUBLISH",
+      "emitted": 1,
       "withheld": 0
     },
     {
       "key": "reference.model.offset",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 59,
       "withheld": 0
     },
     {
       "key": "reference.model.rotation",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 59,
       "withheld": 0
     },
     {
       "key": "reference.model.scale",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 59,
       "withheld": 0
     },
     {
@@ -729,7 +747,7 @@
     {
       "key": "asset.modelPreview",
       "decision": "PUBLISH",
-      "emitted": 34,
+      "emitted": 35,
       "withheld": 0
     },
     {

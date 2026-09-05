@@ -862,7 +862,13 @@ and an empty footprint; `footprint_pad` holds physical terminal IDs in this case
 Ordinary PCB identities retain all existing LCSC and KiCad asset checks.
 
 The public record reference has a null footprint only for validated external
-records; its page links the audited PDF and explains the absent PCB previews.
+records; its page links the audited PDF. A separately hash-locked
+`CIRCUIT_EXTERNAL_MODELS` selection now supplies the real WR11AS panel model,
+retained original STL download, and converted WRL. This leaves all PCB package
+requirements intact: 24 PCB WRLs plus one external WRL and one explicit STL
+download. The UI shows panel mounting instead of a fabricated footprint preview.
+Model descriptors distinguish external components from shared footprint geometry;
+closed schemas and local path restrictions apply to both.
 There remain **34 PCB records across 24 preview packages**, plus **one external
 record**. J5 is bare-copper PCB geometry, not a purchased component or public
 package preview. Historical verification reports above retain their original counts.

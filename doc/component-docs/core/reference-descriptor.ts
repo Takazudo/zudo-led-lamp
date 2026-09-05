@@ -11,10 +11,11 @@ export type ComponentReferencesDescriptor = {
     readonly availability: string;
     readonly url: string;
   };
+  readonly sourceCadUrl?: string;
   readonly footprint: {
     readonly name: string;
     readonly assetUrl: string;
-  };
+  } | null;
   /** Kept encoded so the same validated descriptor reaches the client island. */
   readonly modelDescriptor: string;
 };
@@ -50,13 +51,15 @@ export function decodeComponentReferencesDescriptor(encoded: string): ComponentR
 
 export function createComponentReferencesDescriptor(input: {
   readonly document: ComponentReferencesDescriptor["document"];
-  readonly footprintName: string;
+  readonly footprintName: string | null;
+  readonly sourceCadUrl?: string;
   readonly model: ModelViewerDescriptor;
 }): ComponentReferencesDescriptor {
   return {
     version: 1,
     document: input.document,
-    footprint: { name: input.footprintName, assetUrl: footprintAssetUrl(input.footprintName) },
+    footprint: input.footprintName === null ? null : { name: input.footprintName, assetUrl: footprintAssetUrl(input.footprintName) },
+    ...(input.sourceCadUrl === undefined ? {} : { sourceCadUrl: input.sourceCadUrl }),
     modelDescriptor: encodeModelDescriptor(input.model),
   };
 }
@@ -64,13 +67,19 @@ export function createComponentReferencesDescriptor(input: {
 export function assertComponentReferencesDescriptor(value: unknown): asserts value is ComponentReferencesDescriptor {
   if (typeof value !== "object" || value === null) throw new Error("Component references descriptor must be an object");
   const descriptor = value as Record<string, unknown>;
-  if (Object.keys(descriptor).sort().join(",") !== "document,footprint,modelDescriptor,version" || descriptor.version !== 1) {
+  const keys = Object.keys(descriptor).sort().join(",");
+  if (!["document,footprint,modelDescriptor,version", "document,footprint,modelDescriptor,sourceCadUrl,version"].includes(keys) || descriptor.version !== 1) {
     throw new Error("Component references descriptor has unexpected fields");
   }
   assertDocument(descriptor.document);
-  assertFootprint(descriptor.footprint);
+  if (descriptor.footprint !== null) assertFootprint(descriptor.footprint);
+  if (descriptor.sourceCadUrl !== undefined && (typeof descriptor.sourceCadUrl !== "string" || !/^\/assets\/component-previews\/models\/[A-Za-z0-9][A-Za-z0-9._+-]*\.stl$/u.test(descriptor.sourceCadUrl))) {
+    throw new Error("Source CAD download path is unsafe");
+  }
   if (typeof descriptor.modelDescriptor !== "string") throw new Error("Component references model descriptor is invalid");
-  decodeModelDescriptor(descriptor.modelDescriptor);
+  const model = decodeModelDescriptor(descriptor.modelDescriptor);
+  if ((descriptor.footprint === null) !== (model.kind === "external")) throw new Error("Model mounting kind disagrees with footprint");
+  if (descriptor.sourceCadUrl !== undefined && (model.kind !== "external" || descriptor.sourceCadUrl !== model.modelUrl.replace(/\.wrl$/u, ".stl"))) throw new Error("Source CAD download disagrees with selected model");
 }
 
 function assertDocument(value: unknown): asserts value is ComponentReferencesDescriptor["document"] {

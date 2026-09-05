@@ -39,7 +39,7 @@ describe("component references descriptor", () => {
     assert.throws(() => footprintAssetUrl("../escape"));
     const altered = {
       ...descriptor,
-      footprint: { ...descriptor.footprint, assetUrl: "/assets/component-previews/footprints/other.svg" },
+      footprint: { ...descriptor.footprint!, assetUrl: "/assets/component-previews/footprints/other.svg" },
     };
     assert.throws(() => encodeComponentReferencesDescriptor(altered));
   });
