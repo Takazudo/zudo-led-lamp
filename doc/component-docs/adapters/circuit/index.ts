@@ -214,7 +214,7 @@ function projectRecordReference(
   const recordId = entry.record.record_id;
   const document = references.documentsByRecordId.get(recordId);
   const footprint = references.packageByRecordId.get(recordId);
-  if (document === undefined || footprint === undefined) {
+  if (document === undefined || (footprint === undefined && entry.line.mounting !== "external")) {
     fail("ADAPTER_CONTRACT", "record has no complete reference descriptor", { recordId });
   }
   const classified = classifyUrl(document.source.authoritative_url);
@@ -226,8 +226,10 @@ function projectRecordReference(
     });
   }
   policy.publishRequired("asset.datasheetPdf", true);
-  policy.publishRequired("asset.footprintPreview", true);
-  policy.publishRequired("asset.modelPreview", true);
+  if (footprint !== undefined) {
+    policy.publishRequired("asset.footprintPreview", true);
+    policy.publishRequired("asset.modelPreview", true);
+  }
   const labels = {
     datasheet: "Datasheet PDF",
     specification: "Specification PDF",
@@ -243,7 +245,7 @@ function projectRecordReference(
       availability: policy.publishRequired("reference.document.availability", safeText(document.source.availability, { field: `${recordId}.reference.availability` })),
       documentKind: policy.publishRequired("reference.document.documentKind", document.documentKind),
     },
-    footprint: projectFootprint(footprint, policy),
+    footprint: footprint === undefined ? null : projectFootprint(footprint, policy),
   };
 }
 
@@ -319,7 +321,7 @@ function buildIdentity(
       "record.manufacturer",
       safeText(line.manufacturer, { field: "manufacturer" }),
     ),
-    lcsc: policy.publishRequired("record.lcsc", safeText(line.lcsc, { field: "lcsc" })),
+    lcsc: policy.publishRequired("record.lcsc", safeText(line.lcsc, { field: "lcsc", allowEmpty: line.mounting === "external" })),
     packageName: policy.publishRequired(
       "record.package",
       safeText(line.package, { field: "package" }),
@@ -652,7 +654,7 @@ function projectPinMap(pinMap: ProviderPinMap, policy: PublicationPolicy): Publi
     ),
     footprint: policy.publishRequired(
       "pinMap.footprint",
-      safeText(pinMap.footprint, { field: at("footprint") }),
+      safeText(pinMap.footprint, { field: at("footprint"), allowEmpty: pinMap.footprint === "" }),
     ),
     pins: policy.publishRequired(
       "pinMap.pins",

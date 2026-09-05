@@ -84,3 +84,21 @@ The 2026-08-20 connector update adds the exact XFCN direct-mating pair: Board P
 `HDR-TH_6P-P2.54-V-M`) and Board L `J2` uses female
 `PM254V-11-06-H85` (`C2832269`, `HDR-TH_6P-P2.54-V-F`). Both canonical
 footprint locations and both STEP/WRL models must remain byte-aligned.
+
+
+## External panel components
+
+A purchased, hand-wired panel component is not a PCB part. Declare it explicitly
+in the board spec's `EXTERNAL_COMPONENTS` before `NETS`, with exact MPN,
+manufacturer, package, supplier, order code and datasheet URL. Keep its LCSC and
+PCB footprint fields empty, but set inventory `mounting: external` with matching
+supplier/order code. The generator emits `in_bom yes` and `on_board no`.
+
+Use an exact manufacturer terminal symbol and evidence owner. Its pin map sets
+`mounting: external`, an empty `footprint`, and physical terminal numbers in
+`footprint_pad`. Record this meaning explicitly; do not fabricate PCB pads or
+STEP/WRL previews. Public selection still requires the record, sources and audited
+PDF; the generated page explains that PCB previews do not apply. Add separate
+bare-copper wire pads to both footprint library locations, with an inventory
+exclusion only for those real board features. Verify system assembly connectivity
+and PCB exclusion separately. All PCB-component asset requirements remain intact.

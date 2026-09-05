@@ -44,3 +44,11 @@ echo "exporting netlist for $board via kicad-cli..."
 kicad-cli sch export netlist --format kicadsexpr --output "$netlist_file" "$sch_file"
 
 python3 "$SCRIPT_DIR/verify_netlist.py" "$spec_module" "$netlist_file"
+
+# An isolated export-only copy includes external terminals for harness verification.
+if [[ "$board" == "board-l" ]]; then
+  python3 "$SCRIPT_DIR/verify_power_switch.py" --export-copy "$sch_file" "$tmp_dir/assembly.kicad_sch"
+  kicad-cli sch export netlist --format kicadsexpr --output "$tmp_dir/assembly.net" "$tmp_dir/assembly.kicad_sch"
+  python3 "$SCRIPT_DIR/verify_netlist.py" "$spec_module" "$tmp_dir/assembly.net" --assembly
+  python3 "$SCRIPT_DIR/verify_power_switch.py" --netlist "$tmp_dir/assembly.net"
+fi

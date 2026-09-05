@@ -66,3 +66,15 @@ schematic have drifted apart" — e.g. someone edited a spec module and forgot
 to regenerate, or hand-edited a `.kicad_sch` directly. It does **not** catch
 wiring mistakes; only a local `verify.sh` run (or opening the file in KiCad)
 does that.
+
+
+## External power rocker
+
+Board L declares WR11AS in `EXTERNAL_COMPONENTS`. The schematic keeps SW2 in the
+system BOM but emits `on_board no`, so the PCB netlist excludes it. J5 is the
+on-board solder-pad pair. `verify.sh board-l` checks the actual PCB export, then
+uses an isolated temporary copy with external parts enabled for an assembly
+export. It compares that complete netlist and runs `verify_power_switch.py` for
+terminal mapping, PCB exclusions and the open/closed power-feed graph. The original
+schematic stays untouched. CI runs the pure-Python assertions; hardware back-power,
+inrush and contact endurance still need the documented bench checks.

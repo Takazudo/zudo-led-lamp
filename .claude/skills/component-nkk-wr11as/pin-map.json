@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "pin_maps": [
+    {
+      "pin_map_id": "pinmap-wr11as",
+      "record_id": "rec-wr11as",
+      "symbol": "WR11AS",
+      "footprint": "",
+      "mounting": "external",
+      "pins": [
+        {
+          "symbol_pin": "1a",
+          "name": "COM",
+          "footprint_pad": "1a",
+          "function": "External solder lug; fused feed via Board L J5.1"
+        },
+        {
+          "symbol_pin": "1b",
+          "name": "NO",
+          "footprint_pad": "1b",
+          "function": "External solder lug; switched V15 return via Board L J5.2"
+        }
+      ],
+      "reviewed_by": "WR catalog B127 terminal diagram checked against generated SW2 and harness mapping; 2026-09-05"
+    }
+  ]
+}

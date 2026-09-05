@@ -8,6 +8,15 @@ The architecture is locked; the next phase is KiCad data, which was explicitly o
 scope for this epic. This page is the handover: what to build, in what order, with which
 tools, and which gates must pass before the next step is allowed.
 
+## Integrate the WR11AS harness before fabrication
+
+The schematic now includes external SW2 and bare solder points J5. The current
+PCB has not been updated: import J5, split F1→V15 into J5.1 fused feed / J5.2
+switched return, remove any bypass and run DRC/netlist review. Keep SW2 off-board
+and out of CPL; buy WR11AS separately. Follow the [mounting and bring-up sequence](./power-switch.mdx),
+including inrush, bounce, rail decay, low-current contact reliability and service
+back-power. These checks remain unperformed until hardware exists.
+
 ## Schematic capture order
 
 Capture Board P first even though it is the already-solved board — it forces the shared

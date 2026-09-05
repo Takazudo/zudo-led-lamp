@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "skill_id": "component-nkk-wr11as",
+  "records": [
+    {
+      "record_id": "rec-wr11as",
+      "line_id": "line-wr11as",
+      "kind": "standalone",
+      "parent_record_id": null,
+      "mpn": "WR11AS",
+      "manufacturer": "NKK Switches",
+      "lcsc": "",
+      "package": "Panel-mount solder lug",
+      "source_ids": [
+        "src-wr11as-datasheet",
+        "src-wr11as-generator"
+      ],
+      "fact_ids": [
+        "fact-wr11as-manufacturer",
+        "fact-wr11as-rating",
+        "fact-wr11as-terminals",
+        "fact-wr11as-mounting",
+        "fact-wr11as-seal",
+        "fact-wr11as-ambient",
+        "fact-wr11as-contact-resistance",
+        "fact-wr11as-project-nets",
+        "fact-wr11as-assembly"
+      ],
+      "interaction_ids": [
+        "int-wr11as-power-cut"
+      ],
+      "open_domains": [
+        "capacitive switching and contact wetting",
+        "assembled harness and OFF isolation"
+      ]
+    }
+  ]
+}

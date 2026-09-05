@@ -176,20 +176,23 @@ def generate(spec):
         body.append(f'\t\t(at {X:g} {Y:g} 0)')
         body.append('\t\t(unit 1)')
         body.append('\t\t(exclude_from_sim no)')
-        # An orderable line always carries an LCSC number; the bare-copper pad groups
-        # (pogo pads, test pads) never do. next-steps.mdx requires those to be ABSENT
-        # from the assembly BOM/CPL, not present with a blank part number, so they are
-        # emitted in_bom=no. They stay on_board=yes -- they are real board features.
-        body.append(f'\t\t(in_bom {"yes" if lcsc else "no"})')
-        body.append('\t\t(on_board yes)')
+        external = getattr(spec, 'EXTERNAL_COMPONENTS', {}).get(ref)
+        if external:
+            assert not lcsc and not fp, f'{ref}: external part must have no LCSC or PCB footprint'
+        body.append(f'\t\t(in_bom {"yes" if lcsc or external else "no"})')
+        body.append(f'\t\t(on_board {"no" if external else "yes"})')
         body.append(f'\t\t(dnp {"yes" if dnp else "no"})')
         body.append(f'\t\t(uuid "{new_uuid(f"{spec.PROJECT_NAME}:{ref}:instance")}")')
         props = [
             ('Reference', ref, ref_pos[0], ref_pos[1], False),
             ('Value', value, val_pos[0], val_pos[1], False),
             ('Footprint', fp, X, Y, True),
-            ('Datasheet', '', X, Y, True),
+            ('Datasheet', external['datasheet'] if external else '', X, Y, True),
         ]
+        if external:
+            for key, field in [('mpn', 'MPN'), ('manufacturer', 'Manufacturer'), ('supplier', 'Supplier'), ('order_code', 'Supplier Part')]:
+                props.append((field, external[key], X, Y, True))
+            props.append(('Assembly', 'External panel mount; hand wire via J5', X, Y, True))
         if lcsc:
             props.append(('LCSC', lcsc, X, Y + 7.62, True))
         for pname, pval, px, py, hide in props:

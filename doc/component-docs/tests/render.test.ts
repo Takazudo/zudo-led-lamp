@@ -135,6 +135,12 @@ describe("record page — structure", () => {
   it("renders one reviewed component-reference descriptor for every record, before evidence tables", () => {
     for (const record of model.records) {
       const page = pageFor(model, record.identity.recordId);
+      if (record.reference.footprint === null) {
+        assert.match(page, /External panel-mounted component/u);
+        assert.match(page, /Datasheet PDF/u);
+        assert.doesNotMatch(page, /<ComponentReferences/u);
+        continue;
+      }
       const descriptors = [...page.matchAll(/<ComponentReferences descriptor="([0-9a-f]+)"/gu)];
       assert.equal(descriptors.length, 1, `${record.identity.recordId} needs one component references block`);
       const encoded = descriptors[0]?.[1];

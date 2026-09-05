@@ -159,6 +159,14 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
 
 function componentReferencesSection(record: PublicRecord): RootContent[] {
   const footprint = record.reference.footprint;
+  if (footprint === null) {
+    const document = record.reference.document;
+    return [
+      heading(2, literal("Component references")),
+      paragraph([link(document.url, document.label), text(literal(" — ")), text(document.documentTitle)]),
+      paragraph([text(literal("External panel-mounted component, hand-wired to the PCB. No PCB footprint or package model applies. Consult the manufacturer drawing for panel cutout and terminal orientation."))]),
+    ];
+  }
   const modelName = String(footprint.modelPath).split("/").at(-1);
   if (modelName === undefined) throw new Error("Published model path has no basename");
   const document = record.reference.document;
@@ -269,7 +277,7 @@ function identitySection(record: PublicRecord): RootContent[] {
       field("Manufacturer part number", [code(identity.mpn)]),
       field("Manufacturer", [text(identity.manufacturer)]),
       field("Function", [text(identity.function)]),
-      field("Orderable ID", [code(identity.lcsc)]),
+      field("LCSC ID", [identity.lcsc ? code(identity.lcsc) : text(literal("Not assigned; order by exact manufacturer part number"))]),
       field("Package", [code(identity.packageName)]),
       field("Inventory line", [code(identity.lineId)]),
       // This record's route may be its LCSC code rather than its part number,
@@ -643,7 +651,7 @@ function pinMapSection(record: PublicRecord): RootContent[] {
     paragraph([
       text(
         literal(
-          "The mapping between the schematic symbol's pins and the footprint's pads, as " +
+          "The mapping between schematic pins and PCB pads, or physical terminals for an external part, as " +
             "recorded. A record may carry more than one map when the same part is documented " +
             "in more than one context.",
         ),
@@ -655,16 +663,16 @@ function pinMapSection(record: PublicRecord): RootContent[] {
     return [...head, paragraph([text(literal("No pin map is published for this record."))])];
   }
 
-  return [...head, ...record.pinMaps.flatMap((pinMap) => pinMapEntry(pinMap))];
+  return [...head, ...record.pinMaps.flatMap((pinMap) => pinMapEntry(pinMap, record.reference.footprint === null))];
 }
 
-function pinMapEntry(pinMap: PublicPinMap): RootContent[] {
+function pinMapEntry(pinMap: PublicPinMap, external = false): RootContent[] {
   const blocks: RootContent[] = [
     heading(3, pinMap.pinMapId),
     evidenceAnchor(pinMap.anchor),
     bulletList([
       field("Symbol", [code(pinMap.symbol)]),
-      field("Footprint", [code(pinMap.footprint)]),
+      field("Footprint", [external ? text(literal("Not applicable — external solder lugs")) : code(pinMap.footprint)]),
       field("Pins", [text(safeText(String(pinMap.pins.length), { field: "pin count" }))]),
     ]),
   ];
@@ -681,7 +689,7 @@ function pinMapEntry(pinMap: PublicPinMap): RootContent[] {
         [
           literal("Symbol pin"),
           literal("Name"),
-          literal("Footprint pad"),
+          literal(external ? "External terminal" : "Footprint pad"),
           literal("Function"),
         ],
         pinMap.pins.map((pin) => [

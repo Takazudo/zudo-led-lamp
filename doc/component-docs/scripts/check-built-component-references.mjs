@@ -21,7 +21,7 @@ async function main() {
     .filter((entry) => entry.isDirectory() && !entry.isSymbolicLink())
     .map((entry) => entry.name)
     .sort();
-  assert.equal(recordDirectories.length, 34, "built site must contain exactly 34 component record routes");
+  assert.equal(recordDirectories.length, 35, "built site must contain exactly 35 component record routes");
 
   const manifest = JSON.parse(await readFile(join(FOOTPRINT_ROOT, "manifest.json"), "utf8"));
   assert.equal(manifest.packages?.length, 24, "built footprint manifest must contain 24 packages");
@@ -37,6 +37,13 @@ async function main() {
   const referencedModels = new Set();
   for (const slug of recordDirectories) {
     const html = await readFile(join(RECORDS_ROOT, slug, "index.html"), "utf8");
+    if (slug === "wr11as") {
+      assert.match(html, /External panel-mounted component/);
+      assert.match(html, /https:\/\/www.nkkswitches.com\/pdf\/WR.pdf/);
+      assert.match(html, /Datasheet PDF/);
+      assert.doesNotMatch(html, /data-model-url=|alt="Footprint preview for/);
+      continue;
+    }
     const sections = extractReferenceSections(html);
     assert.equal(sections.length, 1, `${slug} must render exactly one Component references section`);
     const section = sections[0];
@@ -131,7 +138,7 @@ async function main() {
     "catalog index must not create or reference live preview UI",
   );
 
-  process.stdout.write("built component references passed: 34 records, 24 SVGs, 24 WRLs, 0 STEP; catalog viewer-free\n");
+  process.stdout.write("built component references passed: 35 records, 24 SVGs, 24 WRLs, 0 STEP; catalog viewer-free\n");
 }
 
 async function assertRegularDistFile(publicPath) {
