@@ -45,10 +45,7 @@ kicad-cli sch export netlist --format kicadsexpr --output "$netlist_file" "$sch_
 
 python3 "$SCRIPT_DIR/verify_netlist.py" "$spec_module" "$netlist_file"
 
-# An isolated export-only copy includes external terminals for harness verification.
+# The fitted switch is present in the normal PCB netlist.
 if [[ "$board" == "board-l" ]]; then
-  python3 "$SCRIPT_DIR/verify_power_switch.py" --export-copy "$sch_file" "$tmp_dir/assembly.kicad_sch"
-  kicad-cli sch export netlist --format kicadsexpr --output "$tmp_dir/assembly.net" "$tmp_dir/assembly.kicad_sch"
-  python3 "$SCRIPT_DIR/verify_netlist.py" "$spec_module" "$tmp_dir/assembly.net" --assembly
-  python3 "$SCRIPT_DIR/verify_power_switch.py" --netlist "$tmp_dir/assembly.net"
+  python3 "$SCRIPT_DIR/verify_power_switch.py" --netlist "$netlist_file"
 fi
