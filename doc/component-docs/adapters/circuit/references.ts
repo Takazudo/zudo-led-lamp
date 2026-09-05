@@ -66,6 +66,12 @@ export async function readCircuitReferenceContract(
   for (const recordId of selection.recordIds) {
     const entry = index.recordById.get(recordId);
     if (entry === undefined) fail("STALE_SELECTION", `missing record ${recordId}`, { recordId });
+    if (entry.line.mounting === "external") {
+      if (entry.line.lcsc !== "" || entry.pinMaps.length !== 1 || entry.pinMaps[0]?.footprint !== "") {
+        fail("ADAPTER_CONTRACT", "external component has a PCB identity or footprint", { recordId });
+      }
+      continue;
+    }
     const footprintName = canonicalFootprint(entry);
     let packageReference = packagesByName.get(footprintName);
     if (packageReference === undefined) {

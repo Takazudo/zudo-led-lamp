@@ -72,5 +72,7 @@ jobs:
           python3 scripts/schgen/gen_schematic.py board_l_spec
           python3 scripts/schgen/gen_schematic.py swd_adapter_spec
           git diff --exit-code boards/
+      - name: Verify external power switch topology
+        run: python3 scripts/schgen/verify_power_switch.py
       - name: Verify SWD adapter numeric orientation
         run: python3 scripts/schgen/verify_swd_adapter.py

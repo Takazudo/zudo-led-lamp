@@ -169,7 +169,7 @@ class ComponentDsl:
                     if isinstance(node, (ast.Attribute, ast.Lambda, ast.NamedExpr)) or (isinstance(node, ast.Call) and not (isinstance(node.func, ast.Name) and node.func.id == "range")):
                         self.error(node, "unsupported executable syntax in ignored NETS declaration")
                 for tail in tree.body[index + 1:]:
-                    require(not any(((isinstance(node, ast.Name) and node.id == "COMPONENTS") or (isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == "COMPONENTS")) and isinstance(node.ctx, ast.Store) for node in ast.walk(tail)), f"{self.path}:{getattr(tail, 'lineno', '?')}: COMPONENTS mutation after NETS is not allowed")
+                    require(not any(((isinstance(node, ast.Name) and node.id in ("COMPONENTS", "EXTERNAL_COMPONENTS")) or (isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id in ("COMPONENTS", "EXTERNAL_COMPONENTS"))) and isinstance(node.ctx, ast.Store) for node in ast.walk(tail)), f"{self.path}:{getattr(tail, 'lineno', '?')}: COMPONENTS mutation after NETS is not allowed")
                     if isinstance(tail, (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.While, ast.If, ast.With, ast.AsyncWith, ast.Try, ast.Expr)):
                         self.error(tail, "unsupported statement after NETS")
                     for node in ast.walk(tail):
@@ -197,16 +197,27 @@ def generator_inventory(specs=None):
         ("swd-adapter", ROOT / "scripts/schgen/swd_adapter_spec.py"),
     )
     for board, path in specs:
-        components = parse_components(path)
+        dsl = ComponentDsl(Path(path))
+        components = dsl.parse()
+        externals = dsl.env.get("EXTERNAL_COMPONENTS", {})
+        require(isinstance(externals, dict) and set(externals) <= set(components), "external components: unknown reference")
         for refdes, item in components.items():
             symbol, value, lcsc, footprint, dnp, _position = item
-            if not lcsc:
+            external = externals.get(refdes)
+            if external is not None:
+                required_keys(external, ("mpn", "manufacturer", "package", "supplier", "order_code", "datasheet"), f"external {refdes}")
+                require(not lcsc and not footprint and not dnp and external["mpn"] == symbol, f"external {refdes}: invalid PCB/LCSC/DNP identity")
+                require(all(isinstance(v, str) and v.strip() for v in external.values()), f"external {refdes}: blank identity")
+                key, mpn, package = "external:" + symbol, symbol, external["package"]
+            elif not lcsc:
                 excluded.append((board, refdes))
                 continue
-            mpn = expected_mpn(symbol, value, lcsc)
-            package = footprint.split(":", 1)[-1]
-            entry = grouped.setdefault(lcsc, {"mpn": mpn, "package": package, "symbols": set(), "placements": []})
+            else:
+                key, mpn, package = lcsc, expected_mpn(symbol, value, lcsc), footprint.split(":", 1)[-1]
+            entry = grouped.setdefault(key, {"mpn": mpn, "package": package, "symbols": set(), "placements": []})
             require(entry["mpn"] == mpn and entry["package"] == package, f"generator LCSC {lcsc}: conflicting identity")
+            if external is not None:
+                entry["external"] = external
             entry["symbols"].add(symbol)
             entry["placements"].append({"board": board, "refdes": refdes, "dnp": bool(dnp)})
     return grouped, excluded
@@ -220,6 +231,10 @@ def expected_mpn(symbol, value, lcsc):
     return symbol
 
 
+def inventory_key(line):
+    return "external:" + line["mpn"] if line.get("mounting") == "external" else line["lcsc"]
+
+
 def validate_inventory(data):
     required_keys(data, ("schema_version", "generator_specs", "assertions", "exclusions", "lines"), "inventory")
     assertions = data["assertions"]
@@ -228,16 +243,25 @@ def validate_inventory(data):
     lines = data["lines"]
     require(len(lines) == assertions["orderable_lines"], "inventory: orderable line count differs from reviewed assertion")
     require(len({line["line_id"] for line in lines}) == len(lines), "inventory: duplicate line_id ownership")
-    require(len({line["lcsc"] for line in lines}) == len(lines), "inventory: duplicate LCSC ownership")
+    require(len({inventory_key(line) for line in lines}) == len(lines), "inventory: duplicate LCSC ownership")
     generated, blank = generator_inventory()
-    require(set(generated) == {line["lcsc"] for line in lines}, "inventory: LCSC identity differs from generator specs")
+    require(set(generated) == {inventory_key(line) for line in lines}, "inventory: LCSC identity differs from generator specs")
     for line in lines:
         required_keys(line, ("line_id", "mpn", "manufacturer", "lcsc", "package", "dnp", "owner_skill", "identity_state", "source_state", "function", "placements"), line.get("line_id", "line"))
-        require(all(isinstance(line[key], str) and line[key].strip() for key in ("line_id", "mpn", "manufacturer", "lcsc", "package", "owner_skill", "function")), f"{line['line_id']}: blank identity field")
+        require(all(isinstance(line[key], str) and line[key].strip() for key in ("line_id", "mpn", "manufacturer", "package", "owner_skill", "function")), f"{line['line_id']}: blank identity field")
         require(ID.fullmatch(line["line_id"]), f"{line['line_id']}: invalid line ID")
         require(line["source_state"] in ("AVAILABLE", "SOURCE UNAVAILABLE"), f"{line['line_id']}: source availability state")
         require(line["identity_state"] in ("VERIFIED", "UNRESOLVED"), f"{line['line_id']}: identity state")
-        expected = generated[line["lcsc"]]
+        require(line.get("mounting", "pcb") in ("pcb", "external"), f"{line['line_id']}: unknown mounting")
+        if line.get("mounting") == "external":
+            require(line["lcsc"] == "" and not line["dnp"], f"{line['line_id']}: external identity must have no LCSC and be fitted")
+        else:
+            require(re.fullmatch(r"C[0-9]+", line["lcsc"]), f"{line['line_id']}: PCB line needs LCSC")
+        expected = generated[inventory_key(line)]
+        require(("external" in expected) == (line.get("mounting") == "external"), f"{line['line_id']}: mounting differs from generator")
+        if "external" in expected:
+            for key in ("manufacturer", "supplier", "order_code"):
+                require(line.get(key) == expected["external"][key], f"{line['line_id']}: external {key} mismatch")
         require(line["mpn"] == expected["mpn"], f"{line['line_id']}: wrong MPN against generator")
         require(line["package"] == expected["package"], f"{line['line_id']}: wrong package against generator")
         want_places = {(x["board"], x["refdes"], x["dnp"]) for x in expected["placements"]}
@@ -370,7 +394,7 @@ def validate_routing(lines, fixtures=None):
     for case in cases:
         line = by_id[case["line_id"]]
         queries = (line["mpn"], line["lcsc"], f"{line['manufacturer']} {line['mpn']}", f"{line['function']} {line['mpn']}")
-        for query in queries:
+        for query in filter(None, queries):
             require(resolve(query, lines) == [line["line_id"]], f"routing {line['line_id']}: positive query is not direct and unique: {query}")
         require(resolve(case["negative"], lines) == [], f"routing {line['line_id']}: negative query unexpectedly resolves")
 
@@ -499,7 +523,7 @@ def resolve_bundle_route(query, routes):
     entries = []
     for route in routes:
         for mpn in route["aliases"]["mpn"]:
-            for lcsc in route["aliases"]["lcsc"]:
+            for lcsc in (route["aliases"]["lcsc"] or [""]):
                 for manufacturer in route["aliases"]["manufacturer"]:
                     for function in route["aliases"]["function"]:
                         entries.append({"record_id": route["record_id"], "mpn": mpn, "lcsc": lcsc, "manufacturer": manufacturer, "function": function})
@@ -673,11 +697,11 @@ def validate_bundle(bundle, schema, allow_synthetic_line=False):
     for route in routes:
         required_keys(route, ("route_id", "record_id", "aliases", "positive", "negative"), "route")
         require(set(route["aliases"]) == {"mpn", "lcsc", "manufacturer", "function"}, f"{route['route_id']}: routing alias classes")
-        require(all(route["aliases"][key] for key in route["aliases"]), f"{route['route_id']}: blank routing aliases")
+        require(all(route["aliases"][key] for key in ("mpn", "manufacturer", "function")), f"{route['route_id']}: blank routing aliases")
         require(route["positive"] and route["negative"], f"{route['route_id']}: positive/negative routing fixtures")
         require(route["record_id"] in record_ids, f"{route['route_id']}: orphan route/unknown record ID")
         record = records_by_id[route["record_id"]]
-        require(record["mpn"] in route["aliases"]["mpn"] and record["lcsc"] in route["aliases"]["lcsc"] and record["manufacturer"] in route["aliases"]["manufacturer"], f"{route['route_id']}: exact identity aliases missing")
+        require(record["mpn"] in route["aliases"]["mpn"] and (record["lcsc"] in route["aliases"]["lcsc"] if record["lcsc"] else route["aliases"]["lcsc"] == []) and record["manufacturer"] in route["aliases"]["manufacturer"], f"{route['route_id']}: exact identity aliases missing")
         for query in route["positive"]:
             require(resolve_bundle_route(query, routes) == [route["record_id"]], f"{route['route_id']}: positive query does not resolve uniquely to its record: {query}")
         for mpn in route["aliases"]["mpn"]:
@@ -717,6 +741,8 @@ def canonical_pin_map(mapping):
             key=lambda pin: (pin["symbol_pin"], pin["footprint_pad"]),
         ),
     }
+    if mapping.get("mounting") == "external":
+        payload["mounting"] = "external"
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
@@ -748,15 +774,20 @@ def validate_pin_assets(aggregate, inventory, symbols_path=None, footprints_root
     for mapping in aggregate["pin_maps"]:
         record = records[mapping["record_id"]]
         line = lines[record["line_id"]]
-        generator_symbols = generated[line["lcsc"]]["symbols"]
+        generator_symbols = generated[inventory_key(line)]["symbols"]
         require(len(generator_symbols) == 1, f"{record['record_id']}: conflicting generator symbols")
         symbol = next(iter(generator_symbols))
         require(mapping["symbol"] == symbol, f"{record['record_id']}: pin map symbol differs from generator")
-        require(mapping["footprint"] == generated[line["lcsc"]]["package"], f"{record['record_id']}: pin map footprint differs from generator")
+        external = line.get("mounting") == "external"
+        require(mapping.get("mounting", "pcb") == ("external" if external else "pcb"), f"{record['record_id']}: pin map mounting mismatch")
+        require(mapping["footprint"] == ("" if external else generated[inventory_key(line)]["package"]), f"{record['record_id']}: pin map footprint differs from generator")
         block = sexp_named_block(symbol_text, "symbol", symbol)
         actual_symbol_pins = set(re.findall(r'\(number\s+"([^"\s]+)"', block))
         locked_symbol_pins = {pin["symbol_pin"] for pin in mapping["pins"]}
         require(locked_symbol_pins == actual_symbol_pins, f"{record['record_id']}: pin map differs from KiCad symbol {symbol}")
+        if external:
+            require(all(pin["footprint_pad"] == pin["symbol_pin"] for pin in mapping["pins"]), f"{record['record_id']}: external terminal mapping differs")
+            continue
         footprint_path = footprints_root / f"{mapping['footprint']}.kicad_mod"
         require(footprint_path.is_file(), f"{record['record_id']}: KiCad footprint missing")
         footprint = footprint_path.read_text(encoding="utf-8")
@@ -878,7 +909,7 @@ def validate_integration_artifacts(aggregate):
     fact_owners = {fact["fact_id"]: fact["record_id"] for fact in aggregate["facts"]}
     records = {record["record_id"] for record in aggregate["records"]}
     rules = load(integration / "references/rules.json")["rules"]
-    required_domains = {"rail-envelope", "usb-pd-nvm-load-switch", "al8860-led-stage", "ap63203-logic-stage", "ntc-adc-firmware", "source-to-bench-chain"}
+    required_domains = {"external lamp power switching", "rail-envelope", "usb-pd-nvm-load-switch", "al8860-led-stage", "ap63203-logic-stage", "ntc-adc-firmware", "source-to-bench-chain"}
     require(len({rule["rule_id"] for rule in rules}) == len(rules), "integration rules: duplicate rule ID")
     require({rule["domain"] for rule in rules} == required_domains, "integration rules: exact required domains")
     for rule in rules:

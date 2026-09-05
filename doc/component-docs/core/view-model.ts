@@ -246,7 +246,7 @@ export type PublicFootprintReference = {
 
 export type PublicRecordReference = {
   readonly document: PublicDocumentReference;
-  readonly footprint: PublicFootprintReference;
+  readonly footprint: PublicFootprintReference | null;
 };
 
 /** The deduplicated renderer input; records retain lookup through packageId. */

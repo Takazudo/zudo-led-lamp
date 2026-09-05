@@ -18,7 +18,7 @@ This record in the catalog: [BSMD1206-075-30V](/docs/components/catalog/#rec-bsm
 - **Manufacturer part number:** `BSMD1206-075-30V`
 - **Manufacturer:** BHFUSE
 - **Function:** 750 mA PPTC fuse
-- **Orderable ID:** `C976305`
+- **LCSC ID:** `C976305`
 - **Package:** `F1206`
 - **Inventory line:** `line-c976305`
 - **Also known as:** `Board L input resettable fuse`
@@ -176,7 +176,7 @@ A value this project recorded about how the part is used here — a chosen opera
   | <EvidenceAnchor id="fact-bhfuse-manufacturer" />`fact-bhfuse-manufacturer`       | BHFUSE                                          | `NONE` | exact BSMD1206-075-30V orderable identity                                            | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-bhfuse-1206: title block and Electrical Characteristics table row BSMD1206-075-30V](#src-bhfuse-1206)            |
   | <EvidenceAnchor id="fact-bhfuse-package" />`fact-bhfuse-package`                 | 1206/3216, nonpolar, marking G for 075 variants | `NONE` | surface-mount package                                                                | PASS - primary-source confirmed | PRIMARY-SPEC   | [src-bhfuse-1206: Physical Dimensions table row BSMD1206-075-30V and Figure recommended pad layout](#src-bhfuse-1206) |
   | <EvidenceAnchor id="fact-bhfuse-project-voltage" />`fact-bhfuse-project-voltage` | 15                                              | `V`    | nominal V15 net label only; upstream transient not bounded                           | NOT APPLICABLE                  | PROJECT-CHOICE | [src-bhfuse-generator: NETS row V15 and COMPONENTS table row F1](#src-bhfuse-generator)                               |
-  | <EvidenceAnchor id="fact-bhfuse-project-nets" />`fact-bhfuse-project-nets`       | F1.1=VBUS\_L; F1.2=V15                          | `NONE` | current generated Board L source                                                     | NOT APPLICABLE                  | PROJECT-CHOICE | [src-bhfuse-generator: COMPONENTS table row F1 and NETS rows VBUS\_L and V15](#src-bhfuse-generator)                  |
+  | <EvidenceAnchor id="fact-bhfuse-project-nets" />`fact-bhfuse-project-nets`       | F1.1=VBUS\_L; F1.2=V15\_FUSED                   | `NONE` | current generated Board L source                                                     | NOT APPLICABLE                  | PROJECT-CHOICE | [src-bhfuse-generator: COMPONENTS table row F1 and NETS rows VBUS\_L and V15](#src-bhfuse-generator)                  |
   | <EvidenceAnchor id="fact-bhfuse-voltage-margin" />`fact-bhfuse-voltage-margin`   | 15                                              | `V`    | 30 V maximum minus nominal V15; upstream surge and fault source impedance unresolved | NEEDS BENCH                     | CALCULATED     | [`src-bhfuse-1206`](#src-bhfuse-1206) — CALCULATED: fact-bhfuse-voltage-max minus fact-bhfuse-project-voltage         |
 </EvidenceTable>
 
@@ -192,7 +192,7 @@ These values were derived from other recorded facts rather than read from a docu
 
 ## Pin maps
 
-The mapping between the schematic symbol's pins and the footprint's pads, as recorded. A record may carry more than one map when the same part is documented in more than one context.
+The mapping between schematic pins and PCB pads, or physical terminals for an external part, as recorded. A record may carry more than one map when the same part is documented in more than one context.
 
 ### pinmap-bhfuse-075
 
@@ -204,10 +204,10 @@ The mapping between the schematic symbol's pins and the footprint's pads, as rec
 
 <EvidenceDetails label="pin-assignments">
   <EvidenceTable label="pin-assignments">
-    | Symbol pin | Name     | Footprint pad | Function                  |
-    | ---------- | -------- | ------------- | ------------------------- |
-    | `1`        | `VBUS_L` | `1`           | upstream input            |
-    | `2`        | `V15`    | `2`           | protected downstream rail |
+    | Symbol pin | Name        | Footprint pad | Function          |
+    | ---------- | ----------- | ------------- | ----------------- |
+    | `1`        | `VBUS_L`    | `1`           | upstream input    |
+    | `2`        | `V15_FUSED` | `2`           | fused switch feed |
   </EvidenceTable>
 </EvidenceDetails>
 
@@ -238,6 +238,7 @@ Behaviour that is not a property of this part alone. Each interaction names the 
 Rules that span several parts at once and are published in full on the integration page. Each rule's verdict below is that rule's own — it is a statement about the cross-component question, not about this part — and the exact wording of what the rule refuses to conclude is published with the rule itself.
 
 - [`rule-rail-envelope`](/docs/components/integration/#rule-rail-envelope) — rail-envelope — **rule verdict:** UNSOURCED — Whether every part on the input rail stays inside its own recorded limits across a legal power contract, a mis-contract, and a transient clamp event.
+- [`rule-wr11as-power-cut`](/docs/components/integration/#rule-wr11as-power-cut) — external lamp power switching — **rule verdict:** NEEDS BENCH
 
 [All cross-component rules](/docs/components/integration/)
 
@@ -266,14 +267,14 @@ Every document cited above, with its identification, when it was retrieved, and 
 
 - **Source ID:** `src-bhfuse-generator`
 - **Document number:** scripts/schgen/board\_l\_spec.py
-- **Revision:** 410bc1a342286dd6c205d6dcec0f248b8a963987
-- **Document date:** 2026-08-02
-- **Retrieved:** 2026-08-02
+- **Revision:** a29a046fc2bc7291704b297cf23a9be5bc000115
+- **Document date:** 2026-09-05
+- **Retrieved:** 2026-09-05
 - **Authority:** PROJECT\_GENERATOR
-- **Locator:** COMPONENTS table row F1 and NETS rows VBUS\_L and V15
+- **Locator:** COMPONENTS table row F1; NETS rows VBUS\_L and V15\_FUSED
 - **Printed page:** source file
 - **Availability:** AVAILABLE
-- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py)
+- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/a29a046fc2bc7291704b297cf23a9be5bc000115/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/a29a046fc2bc7291704b297cf23a9be5bc000115/scripts/schgen/board_l_spec.py)
 
 ## Legend
 

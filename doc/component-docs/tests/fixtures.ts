@@ -318,10 +318,10 @@ function model(
     provider: { id: t("fixture-provider"), contractVersion: 1 },
     corpus: corpus(records),
     records,
-    packagePreviews: records.map((record) => ({
+    packagePreviews: records.flatMap((record) => record.reference.footprint ? [{
       ...record.reference.footprint,
       recordIds: [record.identity.recordId],
-    })),
+    }] : []),
     integration,
   };
 }

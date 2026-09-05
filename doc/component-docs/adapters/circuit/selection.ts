@@ -10,7 +10,7 @@
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
  * of quietly publishing a different set. They are the same corpus figures the
- * epic states (34 records, 89 sources), plus the six cross-component rules —
+ * epic states (35 records, 91 sources), plus the seven cross-component rules —
  * those are not instance-selected, but their number is asserted for the same
  * reason, because a rule appearing or vanishing changes what the integration
  * page claims about the whole design.
@@ -33,6 +33,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
   checkedOn: "2026-08-23",
   expectedContent: "PDF",
   downloadedPdfSourceIds: [
+    "src-wr11as-datasheet", // PDF bytes/title checked 2026-09-05; prior verification dates retained below
     "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
     "src-rd-uniroyal-smd-sp-001", "src-umw-ao3401a", "src-high-diode-primary",
     "src-c13585-page", "src-c14663-yageo", "src-c15849-page",
@@ -55,6 +56,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
 
 export const CIRCUIT_SELECTION: InstanceSelection = {
   recordIds: [
+    "rec-wr11as", // external panel rocker, no PCB previews
     // component-type-c-31-m-17
     "rec-type-c-31-m-17", // standalone: TYPE-C-31-M-17
     // component-stusb4500qtr
@@ -105,6 +107,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   ],
 
   sourceIds: [
+    "src-wr11as-datasheet", "src-wr11as-generator",
     // component-type-c-31-m-17
     "src-type-c-c283540", // rec-type-c-31-m-17
     "src-type-c-primary-page", // rec-type-c-31-m-17
@@ -211,6 +214,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
 
   // Every selected source is a public http(s) document URL, so all are linkable.
   linkableSourceIds: [
+    "src-wr11as-datasheet", "src-wr11as-generator",
     "src-type-c-c283540",
     "src-type-c-primary-page",
     "src-type-c-primary-drawing",
@@ -311,6 +315,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   // SOURCE UNAVAILABLE. Normal generation is offline and trusts this committed
   // review decision; it never re-fetches these URLs.
   documentSelections: [
+    { recordId: "rec-wr11as", sourceId: "src-wr11as-datasheet", documentKind: "datasheet" },
     { recordId: "rec-type-c-31-m-17", sourceId: "src-type-c-c283540", documentKind: "drawing" },
     { recordId: "rec-stusb4500qtr", sourceId: "src-stusb-ds12499", documentKind: "datasheet" },
     { recordId: "rec-pesd24vs1ub", sourceId: "src-pesd24vs1ub", documentKind: "datasheet" },
@@ -348,8 +353,8 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   ],
 
   expect: {
-    records: 34,
-    sources: 89,
-    integrationRules: 6,
+    records: 35,
+    sources: 91,
+    integrationRules: 7,
   },
 };

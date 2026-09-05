@@ -30,6 +30,25 @@ fee arithmetic at the bottom of this page is only as good as the tier data on th
 you order.
 :::
 
+## External hand-assembly addition (2026-09-05)
+
+| Ref | Qty | Exact part | Supplier / order code | Assembly | Dated availability / cost |
+|---|---|---|---|---|---|
+| SW2 | 1 | **NKK WR11AS** | [DigiKey 360-1507-ND](https://www.digikey.com/en/products/detail/nkk-switches/WR11AS/379592) | Fitted panel rocker, hand-wired; no LCSC/CPL | 8 immediate + 94 factory; US$21.94 at quantity 1 |
+| J5 | 1 pad pair | Bare solder points | No purchased part | PCB feature only | No BOM line or assembly fee |
+| Harness | 2 wires | 22 AWG stranded copper, ≥60 V / 105 °C insulation | Cut each to ≤150 mm; insulated lugs and strain relief | Hand assembly consumables | Quote separately |
+
+Add **US$21.94 per lamp plus wire/insulation and shipping/tax** to the existing
+board-component estimate using that dated switch quote. The JLCPCB Extended-line
+setup-fee calculation below is unchanged: SW2 is bought separately and J5 is bare
+copper. The full system inventory is now **35 orderable identities** (34 prior
+board identities plus this external switch), with 31 fitted identities and four
+DNP/hand-fit board identities. The switch is fitted, not DNP.
+
+See [power-switch wiring, mounting and qualification](./power-switch.mdx).
+Recheck availability before ordering; do not substitute WR12AS or another terminal
+suffix. The PCB layout still needs J5 and the split power path before fabrication.
+
 ## Board P — USB-PD front end
 
 Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#component-list-lcsc-parts-and-rough-cost).

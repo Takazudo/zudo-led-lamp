@@ -8479,4 +8479,22 @@
 		)
 		(embedded_fonts no)
 	)
+
+  (symbol "WR11AS" (pin_names (offset 0)) (in_bom yes) (on_board no)
+    (property "Reference" "SW" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "WR11AS" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+    (symbol "WR11AS_0_1"
+      (circle (center -2.54 0) (radius 0.5) (stroke (width 0) (type default)) (fill (type none)))
+      (circle (center 2.54 0) (radius 0.5) (stroke (width 0) (type default)) (fill (type none)))
+      (polyline (pts (xy -2.04 0.2) (xy 2.54 2.54)) (stroke (width 0) (type default)) (fill (type none))))
+    (symbol "WR11AS_1_1"
+      (pin passive line (at -7.62 0 0) (length 5.08) (name "1a" (effects (font (size 1.27 1.27)))) (number "1a" (effects (font (size 1.27 1.27)))))
+      (pin passive line (at 7.62 0 180) (length 5.08) (name "1b" (effects (font (size 1.27 1.27)))) (number "1b" (effects (font (size 1.27 1.27)))))))
+  (symbol "Conn_1x02" (pin_names (offset 1.016)) (in_bom no) (on_board yes)
+    (property "Reference" "J" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "Conn_1x02" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+    (symbol "Conn_1x02_0_1" (rectangle (start -1.27 2.54) (end 1.27 -2.54) (stroke (width 0) (type default)) (fill (type background))))
+    (symbol "Conn_1x02_1_1"
+      (pin passive line (at -5.08 1.27 0) (length 3.81) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+      (pin passive line (at -5.08 -1.27 0) (length 3.81) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))))
 )

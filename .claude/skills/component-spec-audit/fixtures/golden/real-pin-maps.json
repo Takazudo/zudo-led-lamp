@@ -295,7 +295,7 @@
     {
       "record_id": "rec-bsmd1206-075-30v",
       "pin_map_id": "pinmap-bhfuse-075",
-      "canonical_sha256": "56a786edc8c78001a7db8d5fa4cb8ed7fa5c57ca9cfb02b24749ce2355c18226",
+      "canonical_sha256": "0f4fb48a2ae021d7ba5e983328f87598b0f8e0876f2acb7f1d60d20661288edd",
       "evidence_fact_ids": [
         "fact-bhfuse-project-nets"
       ],
@@ -309,9 +309,9 @@
         },
         {
           "symbol_pin": "2",
-          "name": "V15",
+          "name": "V15_FUSED",
           "footprint_pad": "2",
-          "function": "protected downstream rail"
+          "function": "fused switch feed"
         }
       ],
       "reviewer": "issue-25 foreground integration review"
@@ -1316,6 +1316,30 @@
         }
       ],
       "reviewer": "issue-25 foreground integration review"
+    },
+    {
+      "record_id": "rec-wr11as",
+      "pin_map_id": "pinmap-wr11as",
+      "canonical_sha256": "dcc454a984d5fc26b7a22346bdf9a6d01bf61d0746378c6c5acf5d08f5315f0b",
+      "evidence_fact_ids": [
+        "fact-wr11as-terminals"
+      ],
+      "trust_status": "TRUSTED",
+      "critical_pins": [
+        {
+          "symbol_pin": "1a",
+          "name": "COM",
+          "footprint_pad": "1a",
+          "function": "External solder lug; fused feed via Board L J5.1"
+        },
+        {
+          "symbol_pin": "1b",
+          "name": "NO",
+          "footprint_pad": "1b",
+          "function": "External solder lug; switched V15 return via Board L J5.2"
+        }
+      ],
+      "reviewer": "Independent planning review plus NKK WR catalog B127 checked 2026-09-05"
     }
   ]
 }

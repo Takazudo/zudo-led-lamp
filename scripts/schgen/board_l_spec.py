@@ -16,6 +16,8 @@ _C22U = ('CL21A226MAQNNNE', '22uF/25V', 'C45783', 'zudo-led-lamp:C0805')
 _R10K = ('0805W8F1002T5E', '10k', 'C17414', 'zudo-led-lamp:R0805')
 
 COMPONENTS = {
+    'SW2': ('WR11AS', 'WR11AS (panel rocker)', '', '', False, (444.5, 50.8)),
+    'J5': ('Conn_1x02', 'Power switch solder pads', '', 'zudo-led-lamp:SolderWire_1x02_P5.08mm', False, (444.5, 101.6)),
     # power input and LED driver (top row)
     'J2':   ('PM254V-11-06-H85', '2.54mm 1x6 female', 'C2832269', 'zudo-led-lamp:HDR-TH_6P-P2.54-V-F', False, (38.1, 50.8)),
     'F1':   ('BSMD1206-075-30V', 'PPTC 750mA/30V', 'C976305', 'zudo-led-lamp:F1206', False, (88.9, 50.8)),
@@ -78,9 +80,17 @@ LABEL_OVERRIDES = {
     'SW1': {'Value': (165.1 + 17.78, 101.6 + 2.54)},
 }
 
+# External assembly parts remain in the BOM but never transfer to the PCB.
+EXTERNAL_COMPONENTS = {
+    'SW2': {'mpn': 'WR11AS', 'manufacturer': 'NKK Switches',
+            'package': 'Panel-mount solder lug', 'supplier': 'DigiKey',
+            'order_code': '360-1507-ND', 'datasheet': 'https://www.nkkswitches.com/pdf/WR.pdf'},
+}
+
 NETS = {
     'VBUS_L':    ['J2.1', 'J2.2', 'F1.1'],
-    'V15':       ['F1.2', 'D10.1', 'C10.1', 'C11.1', 'U2.8', 'RS1.1', 'D11.2',
+    'V15_FUSED': ['F1.2', 'J5.1', 'SW2.1a'],
+    'V15':       ['SW2.1b', 'J5.2', 'D10.1', 'C10.1', 'C11.1', 'U2.8', 'RS1.1', 'D11.2',
                   'C12.1', 'C13.1', 'U4.3', 'C14.1'],
     'SET':       ['U2.1', 'RS1.2', 'L1.1'],
     'LED_P':     ['L1.2'] + [f'R{29 + n}.1' for n in range(1, 9)],

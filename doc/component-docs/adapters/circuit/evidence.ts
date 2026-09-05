@@ -56,6 +56,7 @@ export type InventoryLine = {
   lcsc: string;
   package: string;
   dnp: boolean;
+  mounting?: "pcb" | "external";
   owner_skill: string;
   identity_state: string;
   source_state: string;

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "interactions": [
+    {
+      "interaction_id": "int-wr11as-power-cut",
+      "record_ids": [
+        "rec-wr11as"
+      ],
+      "fact_ids": [
+        "fact-wr11as-rating",
+        "fact-wr11as-terminals",
+        "fact-wr11as-project-nets"
+      ],
+      "conditions": "Fused high-side switch cuts normal input to both converters; USB-PD board remains alive. Capacitive make/break, rail decay, minimum contact load and external back-power need bench validation.",
+      "verdict": "NEEDS BENCH"
+    }
+  ]
+}

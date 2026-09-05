@@ -21,6 +21,41 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         self.inventory_data = validator.load(validator.REFS / "inventory.json")
         self.lines = validator.validate_inventory(self.inventory_data)
 
+    def test_external_identity_is_not_a_blank_lcsc_bypass(self):
+        external = next(line for line in self.lines if line["mpn"] == "WR11AS")
+        self.assertEqual(external["lcsc"], "")
+        self.assertEqual(validator.resolve("NKK WR11AS", self.lines), ["line-wr11as"])
+        for change in ("missing-mounting", "fake-lcsc", "wrong-supplier"):
+            data = copy.deepcopy(self.inventory_data)
+            line = next(line for line in data["lines"] if line["mpn"] == "WR11AS")
+            if change == "missing-mounting": del line["mounting"]
+            elif change == "fake-lcsc": line["lcsc"] = "C496154"
+            else: line["order_code"] = "wrong-part"
+            with self.assertRaises(validator.ContractError):
+                validator.validate_inventory(data)
+        data = copy.deepcopy(self.inventory_data)
+        data["lines"][0]["lcsc"] = ""
+        with self.assertRaises(validator.ContractError):
+            validator.validate_inventory(data)
+
+    def test_external_terminal_map_cannot_claim_a_pcb_footprint(self):
+        aggregate = validator.validate_local_skills(self.schema, self.lines)
+        mapping = next(m for m in aggregate["pin_maps"] if m["record_id"] == "rec-wr11as")
+        mapping["footprint"] = "R0603"
+        with self.assertRaises(validator.ContractError):
+            validator.validate_pin_assets(aggregate, self.lines)
+
+    def test_power_switch_rejects_a_fused_rail_bypass(self):
+        import sys
+        sys.path.insert(0, str(validator.ROOT / "scripts/schgen"))
+        import verify_power_switch
+        verify_power_switch.check_topology(verify_power_switch.spec.NETS)
+        broken = copy.deepcopy(verify_power_switch.spec.NETS)
+        broken["V15_FUSED"].remove("F1.2")
+        broken["V15"].append("F1.2")
+        with self.assertRaises(AssertionError):
+            verify_power_switch.check_topology(broken)
+
     def test_full_offline_contract(self):
         self.assertEqual(validator.validate_all(), self.inventory_data["assertions"]["orderable_lines"])
 
@@ -32,7 +67,7 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         self.assertEqual(len(self.lines), assertions["orderable_lines"])
         self.assertEqual(sum(not line["dnp"] for line in self.lines), assertions["fitted_lines"])
         self.assertEqual(sum(line["dnp"] for line in self.lines), assertions["dnp_or_hand_fit_lines"])
-        self.assertEqual(len(self.inventory_data["exclusions"]), 4)
+        self.assertEqual(len(self.inventory_data["exclusions"]), 5)
 
     def test_all_routing_cases_are_direct(self):
         validator.validate_routing(self.lines)

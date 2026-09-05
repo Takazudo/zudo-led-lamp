@@ -16,9 +16,9 @@ The repository already holds validated component evidence as structured JSON und
 adds a **projection** of it into human documentation. It never re-states a fact in
 prose, never repairs a value, and never synthesises a component-wide verdict.
 
-Corpus as of this contract: **13 owner bundles, 34 records (24 standalone, 10
-subordinate), 89 sources, 384 facts, 115 coverage domains, 51 interactions, 34
-routes, 34 pin maps, 160 pins**, plus **6 cross-component rules** in
+Corpus as of this contract: **14 owner bundles, 35 records (25 standalone, 10
+subordinate), 91 sources, 393 facts, 118 coverage domains, 52 interactions, 35
+routes, 35 pin maps, 162 pins**, plus **7 cross-component rules** in
 `circuit-spec-integration`; 30 inventory lines fitted, 4 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
 fails the build.
@@ -66,7 +66,7 @@ adapters/circuit/           this repository's evidence provider
   paths.ts                  every path the adapter may touch
   validate.ts               python3 validate.py subprocess
   read.ts                   contained, symlink-refusing JSON reads
-  selection.ts              committed instance allowlist (34 records / 89 sources)
+  selection.ts              committed instance allowlist (35 records / 91 sources)
   matrix.ts                 committed per-field decisions
   integration.ts            cross-component rules: shapes, projection, closure
   evidence.ts               provider shapes, bundle reads, the joins (pure)
@@ -849,3 +849,20 @@ Whole-board rendering is deferred. The checked-in PCB layouts are placeholders,
 so a board viewer would turn provisional placement into a misleading design
 claim. Package previews are useful and bounded now; board rendering becomes valid
 only after the layouts themselves become authoritative.
+
+
+## External assembly components (2026-09-05)
+
+WR11AS adds one explicitly registered external component. Board specs declare
+`EXTERNAL_COMPONENTS` with exact manufacturer, MPN, package, supplier and order
+code. It has no LCSC or PCB footprint; the schematic includes it in the system
+BOM and excludes it from PCB placement. The inventory's `mounting: external`
+must agree with the generator metadata. Its pin map has `mounting: external`
+and an empty footprint; `footprint_pad` holds physical terminal IDs in this case.
+Ordinary PCB identities retain all existing LCSC and KiCad asset checks.
+
+The public record reference has a null footprint only for validated external
+records; its page links the audited PDF and explains the absent PCB previews.
+There remain **34 PCB records across 24 preview packages**, plus **one external
+record**. J5 is bare-copper PCB geometry, not a purchased component or public
+package preview. Historical verification reports above retain their original counts.

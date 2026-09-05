@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "coverage": [
+    {
+      "coverage_id": "cov-wr11as-identity",
+      "record_id": "rec-wr11as",
+      "domain": "identity ratings terminals and mounting",
+      "status": "COVERED",
+      "reason": "Exact ordering combination, circuit and dimensions in manufacturer WR catalog.",
+      "fact_ids": [
+        "fact-wr11as-manufacturer",
+        "fact-wr11as-rating",
+        "fact-wr11as-terminals",
+        "fact-wr11as-mounting",
+        "fact-wr11as-seal",
+        "fact-wr11as-ambient",
+        "fact-wr11as-contact-resistance"
+      ],
+      "blocking_fact_ids": []
+    },
+    {
+      "coverage_id": "cov-wr11as-open-0",
+      "record_id": "rec-wr11as",
+      "domain": "capacitive switching and contact wetting",
+      "status": "OPEN",
+      "reason": "The catalog gives a resistive rating; qualify capacitor charging, bounce/restart and low-current contact reliability on hardware before production.",
+      "fact_ids": [
+        "fact-wr11as-project-nets"
+      ],
+      "blocking_fact_ids": []
+    },
+    {
+      "coverage_id": "cov-wr11as-open-1",
+      "record_id": "rec-wr11as",
+      "domain": "assembled harness and OFF isolation",
+      "status": "OPEN",
+      "reason": "Verify physical lug orientation, insulated and strain-relieved harness, pad fit, voltage decay and no service-interface back-power on the assembled lamp.",
+      "fact_ids": [
+        "fact-wr11as-project-nets"
+      ],
+      "blocking_fact_ids": []
+    }
+  ]
+}
