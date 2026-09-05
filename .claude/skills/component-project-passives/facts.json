@@ -1255,14 +1255,14 @@
       "expression": "fact_c22775_power * fact_c22775_resistance"
     },
     {
-      "fact_id": "fact-c22775-encoder-topology",
+      "fact_id": "fact-c22775-brightness-topology",
       "record_id": "rec-c22775",
       "source_id": "src-c22775-generator",
       "class": "PROJECT_STATE",
-      "value": "R27/R28 are 100 Ohm series paths between encoder contacts and MCU-side debounce nodes",
+      "value": "R27 is the 100 Ohm series path from RV1 wiper BRIGHT_WIPER to U3.7 BRIGHT_ADC, with C22 100 nF and R22 100 kOhm to ground",
       "unit": "NONE",
-      "conditions": "current generated Board L netlist",
-      "locator": "src-c22775-generator: NETS mapping, rows ENC_A_SW/ENC_A and ENC_B_SW/ENC_B",
+      "conditions": "Absolute potentiometer ADC input; no quadrature encoder interface",
+      "locator": "src-c22775-generator: COMPONENTS table R27/R22/C22 and NETS rows BRIGHT_WIPER/BRIGHT_ADC",
       "provenance": "REFERENCE-DESIGN",
       "verdict": "NOT APPLICABLE",
       "depends_on": [],

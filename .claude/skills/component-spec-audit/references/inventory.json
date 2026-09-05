@@ -212,10 +212,6 @@
         {
           "board": "board-l",
           "refdes": "C22"
-        },
-        {
-          "board": "board-l",
-          "refdes": "C23"
         }
       ]
     },
@@ -264,6 +260,10 @@
         {
           "board": "board-l",
           "refdes": "R26"
+        },
+        {
+          "board": "board-l",
+          "refdes": "R22"
         }
       ]
     },
@@ -392,14 +392,6 @@
         {
           "board": "board-l",
           "refdes": "R20"
-        },
-        {
-          "board": "board-l",
-          "refdes": "R22"
-        },
-        {
-          "board": "board-l",
-          "refdes": "R23"
         },
         {
           "board": "board-l",
@@ -592,20 +584,20 @@
       ]
     },
     {
-      "line_id": "line-c2991196",
-      "mpn": "EC11L1525G01",
+      "line_id": "line-c470643",
+      "mpn": "RK10J11E0034",
       "manufacturer": "Alps Alpine",
-      "lcsc": "C2991196",
-      "package": "SW-TH_ALPS_EC11L1525G01",
+      "lcsc": "C470643",
+      "package": "POT-TH_RK10J11E0034",
       "dnp": false,
-      "owner_skill": "component-alps-ec11l1525g01",
-      "identity_state": "UNRESOLVED",
-      "source_state": "SOURCE UNAVAILABLE",
-      "function": "rotary encoder",
+      "owner_skill": "component-alps-rk10j11e0034",
+      "identity_state": "VERIFIED",
+      "source_state": "AVAILABLE",
+      "function": "stopped brightness potentiometer",
       "placements": [
         {
           "board": "board-l",
-          "refdes": "SW1"
+          "refdes": "RV1"
         }
       ]
     },
@@ -717,15 +709,11 @@
       "owner_skill": "component-project-passives",
       "identity_state": "UNRESOLVED",
       "source_state": "SOURCE UNAVAILABLE",
-      "function": "100 Ohm encoder resistor",
+      "function": "100 Ohm brightness ADC series resistor",
       "placements": [
         {
           "board": "board-l",
           "refdes": "R27"
-        },
-        {
-          "board": "board-l",
-          "refdes": "R28"
         }
       ]
     },
@@ -886,16 +874,16 @@
       ]
     },
     {
-      "line_id": "line-c496154",
-      "mpn": "1MS1T1B1M1QES-5",
-      "manufacturer": "Dailywell",
-      "lcsc": "C496154",
-      "package": "SW-TH_1MS1T1B1M1QES-5",
+      "line_id": "line-c5446803",
+      "mpn": "SS-12D01-G020",
+      "manufacturer": "G-Switch",
+      "lcsc": "C5446803",
+      "package": "SW-TH_SS-12D01-G020",
       "dnp": false,
-      "owner_skill": "component-dailywell-1ms1t1b1m1qes-5",
+      "owner_skill": "component-gswitch-ss-12d01-g020",
       "identity_state": "VERIFIED",
       "source_state": "AVAILABLE",
-      "function": "maintained lamp power toggle",
+      "function": "maintained lamp power slider",
       "placements": [
         {
           "board": "board-l",

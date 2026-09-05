@@ -265,7 +265,7 @@
           "UNI-ROYAL"
         ],
         "function": [
-          "100 Ohm encoder resistor"
+          "100 Ohm brightness ADC series resistor"
         ]
       },
       "positive": [

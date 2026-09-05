@@ -909,7 +909,7 @@ def validate_integration_artifacts(aggregate):
     fact_owners = {fact["fact_id"]: fact["record_id"] for fact in aggregate["facts"]}
     records = {record["record_id"] for record in aggregate["records"]}
     rules = load(integration / "references/rules.json")["rules"]
-    required_domains = {"board-mounted lamp power switching", "rail-envelope", "usb-pd-nvm-load-switch", "al8860-led-stage", "ap63203-logic-stage", "ntc-adc-firmware", "source-to-bench-chain"}
+    required_domains = {"potentiometer-brightness-adc", "board-mounted lamp power switching", "rail-envelope", "usb-pd-nvm-load-switch", "al8860-led-stage", "ap63203-logic-stage", "ntc-adc-firmware", "source-to-bench-chain"}
     require(len({rule["rule_id"] for rule in rules}) == len(rules), "integration rules: duplicate rule ID")
     require({rule["domain"] for rule in rules} == required_domains, "integration rules: exact required domains")
     for rule in rules:

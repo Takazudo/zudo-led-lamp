@@ -328,11 +328,11 @@
         "fact-c22775-tcr",
         "fact-c22775-voltage",
         "fact-c22775-rcwv-squared",
-        "fact-c22775-encoder-topology",
+        "fact-c22775-brightness-topology",
         "fact-c22775-pulse-caveat"
       ],
       "interaction_ids": [
-        "int-c22775-encoder"
+        "int-c22775-brightness"
       ],
       "open_domains": [
         "pulse-energy-at-installed-waveform"

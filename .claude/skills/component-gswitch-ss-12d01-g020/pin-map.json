@@ -2,10 +2,10 @@
   "schema_version": 1,
   "pin_maps": [
     {
-      "pin_map_id": "pinmap-c496154",
-      "record_id": "rec-c496154",
-      "symbol": "1MS1T1B1M1QES-5",
-      "footprint": "SW-TH_1MS1T1B1M1QES-5",
+      "pin_map_id": "pinmap-c5446803",
+      "record_id": "rec-c5446803",
+      "symbol": "SS-12D01-G020",
+      "footprint": "SW-TH_SS-12D01-G020",
       "pins": [
         {
           "symbol_pin": "1",
@@ -23,10 +23,10 @@
           "symbol_pin": "3",
           "name": "3",
           "footprint_pad": "3",
-          "function": "No PCB net; internally live from fused feed in OFF; keep isolated"
+          "function": "No PCB net; internally fused-feed live in OFF; keep isolated"
         }
       ],
-      "reviewed_by": "Exact 1MSP0694 terminal drawing and imported C496154 symbol/footprint checked 2026-09-06; mirror source trust remains open"
+      "reviewed_by": "2026-09-06 exact drawing and corrected imported assets; mechanical pins have no electrical net"
     }
   ]
 }
