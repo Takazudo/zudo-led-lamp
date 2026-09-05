@@ -76,6 +76,7 @@ for _n in range(1, 9):
 
 # EC11: keep the value text clear of the vertical A/C/B labels below the body
 LABEL_OVERRIDES = {
+    'SW2': {'Value': (462.28, 53.34)},
     'SW1': {'Value': (165.1 + 17.78, 101.6 + 2.54)},
 }
 

@@ -68,13 +68,10 @@ wiring mistakes; only a local `verify.sh` run (or opening the file in KiCad)
 does that.
 
 
-## External power rocker
+## JLCPCB power toggle
 
-Board L declares WR11AS in `EXTERNAL_COMPONENTS`. The schematic keeps SW2 in the
-system BOM but emits `on_board no`, so the PCB netlist excludes it. J5 is the
-on-board solder-pad pair. `verify.sh board-l` checks the actual PCB export, then
-uses an isolated temporary copy with external parts enabled for an assembly
-export. It compares that complete netlist and runs `verify_power_switch.py` for
-terminal mapping, PCB exclusions and the open/closed power-feed graph. The original
-schematic stays untouched. CI runs the pure-Python assertions; hardware back-power,
-inrush and contact endurance still need the documented bench checks.
+Board L fits Dailywell 1MS1T1B1M1QES-5 / C496154 as SW2, with a real slotted PCB
+footprint and 3D model. Common 2 receives V15_FUSED; pin 1 feeds V15; pin 3 is NC
+on the board but becomes fused-feed live in OFF. No external-component export copy
+is needed. `verify.sh board-l` checks the normal KiCad netlist and runs
+`verify_power_switch.py` to verify fitted identity, NC and the ON/OFF supply graph.

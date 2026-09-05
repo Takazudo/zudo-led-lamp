@@ -28,7 +28,7 @@ def check_topology(nets):
     if 'SW2.3' in inverse:
         assert set(nets[inverse['SW2.3']]) == {'SW2.3'}, 'OFF throw must be isolated on the PCB'
     assert 'SW2.3' in spec.NO_CONNECT
-    # State graph of the deliberate conductive feed elements: fuse and rocker.
+    # State graph of the deliberate conductive feed elements: fuse and toggle.
     for closed in (False, True):
         graph = {name: set() for name in nets}
         pairs = [('F1.1', 'F1.2')] + ([('SW2.2', 'SW2.1')] if closed else [])

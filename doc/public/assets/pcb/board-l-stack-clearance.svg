@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" role="img" aria-label="Underside assembly: power board in the centre, encoder to the left, switch wire pads to the right">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" role="img" aria-label="Underside assembly: power board in the centre, encoder to the left, board-mounted power toggle to the right">
 <rect width="1000" height="680" fill="#f5f7f4"/>
 <text x="50" y="42" font-family="Arial,sans-serif" font-size="27" fill="#17332b" text-anchor="start">Controls clear the pillar-mounted power board</text>
 <text x="50" y="69" font-family="Arial,sans-serif" font-size="16" fill="#53675e" text-anchor="start">Underside view • left/right are mirrored from KiCad front coordinates</text>
@@ -29,27 +29,31 @@
 <rect x="105.12" y="129.8" width="105.75999999999999" height="130.39999999999998" fill="#f2f3f2" stroke="#596761" stroke-width="2" />
 <circle cx="158.0" cy="195.0" r="24" fill="#596761"/>
 <text x="158.0" y="247.0" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="middle">SW1</text>
-<rect x="490.0" y="307" width="24" height="24" fill="#e7bd43" stroke="#80611c"/>
-<circle cx="502.0" cy="319" r="5.2" fill="#f5f7f4"/>
-<text x="502.0" y="349" font-family="Arial,sans-serif" font-size="13" fill="#17332b" text-anchor="middle">1</text>
-<circle cx="461.36" cy="319" r="12" fill="#e7bd43" stroke="#80611c"/>
-<circle cx="461.36" cy="319" r="5.2" fill="#f5f7f4"/>
-<text x="461.36" y="349" font-family="Arial,sans-serif" font-size="13" fill="#17332b" text-anchor="middle">2</text>
-<text x="481.68" y="285.4" font-family="Arial,sans-serif" font-size="16" fill="#17332b" text-anchor="middle">J5</text>
+<rect x="465.2" y="261.0" width="64.0" height="112.0" fill="#f2eee5" stroke="#886642" stroke-width="2" />
+<rect x="477.2" y="265.79999999999995" width="40" height="27.2" rx="13.6" fill="#e7bd43" stroke="#80611c"/>
+<rect x="481.2" y="269.79999999999995" width="32" height="19.2" rx="9.6" fill="#f5f7f4"/>
+<text x="529.2" y="283.4" font-family="Arial,sans-serif" font-size="13" fill="#17332b" text-anchor="middle">1</text>
+<rect x="477.2" y="303.4" width="40" height="27.2" rx="13.6" fill="#e7bd43" stroke="#80611c"/>
+<rect x="481.2" y="307.4" width="32" height="19.2" rx="9.6" fill="#f5f7f4"/>
+<text x="529.2" y="321.0" font-family="Arial,sans-serif" font-size="13" fill="#17332b" text-anchor="middle">2</text>
+<rect x="477.2" y="341.0" width="40" height="27.2" rx="13.6" fill="#e7bd43" stroke="#80611c"/>
+<rect x="481.2" y="345.0" width="32" height="19.2" rx="9.6" fill="#f5f7f4"/>
+<text x="529.2" y="358.6" font-family="Arial,sans-serif" font-size="13" fill="#17332b" text-anchor="middle">3</text>
+<text x="497.2" y="245.4" font-family="Arial,sans-serif" font-size="16" fill="#17332b" text-anchor="middle">SW2</text>
 <text x="625" y="130" font-family="Arial,sans-serif" font-size="20" fill="#17332b" text-anchor="start">Pillars determine placement</text>
 <text x="625" y="163" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">Board P translates +16.50 mm in X.</text>
 <text x="625" y="187" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">Both upper pillar pairs stay aligned.</text>
 <text x="625" y="211" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">Board P and the mounting holes are unchanged.</text>
-<text x="625" y="266" font-family="Arial,sans-serif" font-size="20" fill="#17332b" text-anchor="start">Six contacts now align</text>
-<text x="625" y="299" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">J2 rotated in place and rerouted.</text>
+<text x="625" y="266" font-family="Arial,sans-serif" font-size="20" fill="#17332b" text-anchor="start">Six contacts stay aligned</text>
+<text x="625" y="299" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">J2 retains its verified position and rotation.</text>
 <text x="625" y="323" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">1–2: supply  •  3: ATT  •  4: PDOK</text>
 <text x="625" y="347" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">5–6: ground; pin 1 mates with pin 1.</text>
 <text x="625" y="402" font-family="Arial,sans-serif" font-size="20" fill="#17332b" text-anchor="start">Rear controls outside the stack</text>
 <text x="625" y="435" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">Encoder footprint clearance: 1.39 mm.</text>
-<text x="625" y="459" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">J5 pad clearance: 1.42 mm.</text>
-<text x="625" y="483" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">WR11AS mounts in the bottom cover,</text>
-<text x="625" y="507" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">with two wires to J5. Final cutout position,</text>
-<text x="625" y="531" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">knob size and base depth need enclosure CAD.</text>
+<text x="625" y="459" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">SW2 courtyard clearance: 3.40 mm.</text>
+<text x="625" y="483" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">C496154 toggle is soldered into rear slots.</text>
+<text x="625" y="507" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">Support its bushing/nut in the enclosure.</text>
+<text x="625" y="531" font-family="Arial,sans-serif" font-size="15" fill="#17332b" text-anchor="start">Rear reach ≈28.7 mm; front lugs ≈1.9 mm.</text>
 <text x="90" y="615" font-family="Arial,sans-serif" font-size="16" fill="#17332b" text-anchor="start">Board L: 60 × 60 mm. This drawing checks XY placement; stack height is not shown.</text>
-<text x="90" y="642" font-family="Arial,sans-serif" font-size="14" fill="#53675e" text-anchor="start">The dashed third hole belongs to Board P only. Confirm the full assembly before fabrication.</text>
+<text x="90" y="642" font-family="Arial,sans-serif" font-size="14" fill="#53675e" text-anchor="start">The dashed third hole belongs to Board P only. Cutout, solder and operating clearance need a prototype.</text>
 </svg>

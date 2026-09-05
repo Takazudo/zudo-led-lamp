@@ -31,7 +31,7 @@
 		    )
 		    (property
 		      "Datasheet"
-		      "https://jlcpcb.com/api/file/downloadByFileSystemAccessId/8588897414619549696"
+		      "https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154"
 		      (id 3)
 		      (at 0 -15.24 0)
 		      (effects (font (size 1.27 1.27) ) hide)
@@ -5077,7 +5077,7 @@
 			)
 		)
 		(property "Value" "Power ON/OFF toggle"
-			(at 444.5 58.42 0)
+			(at 462.28 53.34 0)
 			(effects
 				(font (size 1.27 1.27))
 			)

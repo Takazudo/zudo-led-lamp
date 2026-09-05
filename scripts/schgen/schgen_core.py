@@ -192,7 +192,7 @@ def generate(spec):
         if external:
             for key, field in [('mpn', 'MPN'), ('manufacturer', 'Manufacturer'), ('supplier', 'Supplier'), ('order_code', 'Supplier Part')]:
                 props.append((field, external[key], X, Y, True))
-            props.append(('Assembly', 'External panel mount; hand wire via J5', X, Y, True))
+            props.append(('Assembly', 'External panel mount; see component wiring specification', X, Y, True))
         if lcsc:
             props.append(('LCSC', lcsc, X, Y + 7.62, True))
         for pname, pval, px, py, hide in props:
