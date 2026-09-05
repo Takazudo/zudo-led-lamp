@@ -2,8 +2,7 @@
 
 LED polarity per the library symbol drawing: pin 1 = cathode (K), pin 2 = anode (A).
 SS26: pin 1 = A, pin 2 = K. SMAJ20A: pin 1 = C, pin 2 = A. AL8860 EP = pin 9.
-EC11 symbol pins: A/B/C terminals, D/E push-button terminals (unused), 6/7 mounting lugs
-(the doc's MP1/MP2).
+RV1 single-unit pot: 1 low, 2 wiper, 3 high; MP1–MP4 isolated mounting terminals.
 """
 
 PROJECT_NAME = 'board-l'
@@ -16,7 +15,7 @@ _C22U = ('CL21A226MAQNNNE', '22uF/25V', 'C45783', 'zudo-led-lamp:C0805')
 _R10K = ('0805W8F1002T5E', '10k', 'C17414', 'zudo-led-lamp:R0805')
 
 COMPONENTS = {
-    'SW2': ('1MS1T1B1M1QES-5', 'Power ON/OFF toggle', 'C496154', 'zudo-led-lamp:SW-TH_1MS1T1B1M1QES-5', False, (444.5, 50.8)),
+    'SW2': ('SS-12D01-G020', 'Power ON/OFF slide', 'C5446803', 'zudo-led-lamp:SW-TH_SS-12D01-G020', False, (444.5, 50.8)),
     # power input and LED driver (top row)
     'J2':   ('PM254V-11-06-H85', '2.54mm 1x6 female', 'C2832269', 'zudo-led-lamp:HDR-TH_6P-P2.54-V-F', False, (38.1, 50.8)),
     'F1':   ('BSMD1206-075-30V', 'PPTC 750mA/30V', 'C976305', 'zudo-led-lamp:F1206', False, (88.9, 50.8)),
@@ -29,7 +28,7 @@ COMPONENTS = {
     'L2':   ('FNR4030S4R7MT', '4.7uH', 'C167874', 'zudo-led-lamp:IND-SMD_L4.0-W4.0_FNR40XXS', False, (381, 50.8)),
     # MCU, knob, interfaces (second row)
     'U3':   ('STM32G031F8P6', 'STM32G031F8P6', 'C529334', 'zudo-led-lamp:TSSOP-20_L6.5-W4.4-P0.65-LS6.4-BL', False, (76.2, 101.6)),
-    'SW1':  ('EC11L1525G01', 'EC11 15-detent', 'C2991196', 'zudo-led-lamp:SW-TH_ALPS_EC11L1525G01', False, (165.1, 101.6)),
+    'RV1': ('RK10J11E0034', '10k brightness pot', 'C470643', 'zudo-led-lamp:POT-TH_RK10J11E0034', False, (165.1, 101.6)),
     'J3':   ('PZ254V-11-05P', 'SWD 1x5 (hand-fit)', 'C492404', 'zudo-led-lamp:HDR-TH_5P-P2.54-V-M', True, (203.2, 101.6)),
     # dnp=False like Board P's J2/J3 and TP1: a bare-copper pad group has no part to
     # leave unpopulated. It is kept out of the BOM by its empty LCSC field instead.
@@ -53,14 +52,11 @@ COMPONENTS = {
     'R21':  ('0603WAF3302T5E', '33k', 'C4216', 'zudo-led-lamp:R0603', False, (73.66, 177.8)),
     'C21':  (*_C100N, False, (109.22, 177.8)),
     'C22':  (*_C100N, False, (144.78, 177.8)),
-    'C23':  (*_C100N, False, (180.34, 177.8)),
-    'R22':  (*_R10K, False, (215.9, 177.8)),
-    'R23':  (*_R10K, False, (251.46, 177.8)),
+    'R22': ('0603WAF1003T5E', '100k wiper pull-down', 'C25803', 'zudo-led-lamp:R0603', False, (215.9, 177.8)),
     'R24':  (*_R10K, False, (287.02, 177.8)),
     'R25':  (*_R10K, False, (322.58, 177.8)),
     'R26':  ('0603WAF1003T5E', '100k', 'C25803', 'zudo-led-lamp:R0603', False, (358.14, 177.8)),
     'R27':  ('0603WAF1000T5E', '100R', 'C22775', 'zudo-led-lamp:R0603', False, (393.7, 177.8)),
-    'R28':  ('0603WAF1000T5E', '100R', 'C22775', 'zudo-led-lamp:R0603', False, (429.26, 177.8)),
     'TP1':  ('TestPad', 'CTRL test pad', '', 'zudo-led-lamp:TestPad_D1.5mm', False, (393.7, 152.4)),
 }
 
@@ -74,10 +70,10 @@ for _n in range(1, 9):
     COMPONENTS[f'LED{3 * _n - 1}'] = (*_LED, False, (_x, 254))
     COMPONENTS[f'LED{3 * _n}'] = (*_LED, False, (_x, 279.4))
 
-# EC11: keep the value text clear of the vertical A/C/B labels below the body
+# Keep control values clear of their pin labels
 LABEL_OVERRIDES = {
     'SW2': {'Value': (462.28, 53.34)},
-    'SW1': {'Value': (165.1 + 17.78, 101.6 + 2.54)},
+    'RV1': {'Value': (165.1 + 17.78, 101.6 + 2.54)},
 }
 
 EXTERNAL_COMPONENTS = {}
@@ -95,11 +91,9 @@ NETS = {
     'SW_LOGIC':  ['U4.5', 'C15.1', 'L2.1'],
     'BST':       ['U4.6', 'C15.2'],
     'V3P3':      ['U4.1', 'L2.2', 'C16.1', 'C17.1', 'U3.4', 'C18.1', 'C19.1',
-                  'R22.1', 'R23.1', 'R24.1', 'R25.1', 'R26.1', 'J3.4'],
-    'ENC_A_SW':  ['SW1.A', 'R27.1'],
-    'ENC_A':     ['R27.2', 'R22.2', 'C22.1', 'U3.7'],
-    'ENC_B_SW':  ['SW1.B', 'R28.1'],
-    'ENC_B':     ['R28.2', 'R23.2', 'C23.1', 'U3.8'],
+                  'RV1.3', 'R24.1', 'R25.1', 'R26.1', 'J3.4'],
+    'BRIGHT_WIPER': ['RV1.2', 'R27.1'],
+    'BRIGHT_ADC': ['R27.2', 'R22.1', 'C22.1', 'U3.7'],
     'PDOK':      ['J2.4', 'R24.2', 'U3.12'],
     'ATT':       ['J2.3', 'R25.2', 'U3.14'],
     'NTC_SENSE': ['RT1.1', 'R26.2', 'C24.1', 'U3.11'],
@@ -111,7 +105,7 @@ NETS = {
     'GND':       ['J2.5', 'J2.6', 'D10.2', 'C10.2', 'C11.2', 'C12.2', 'C13.2',
                   'U2.2', 'U2.3', 'U2.9', 'C14.2', 'U4.4', 'C16.2', 'C17.2',
                   'U3.5', 'C18.2', 'C19.2', 'C20.2', 'R21.2', 'C21.2', 'C22.2',
-                  'C23.2', 'C24.2', 'RT1.2', 'SW1.C', 'SW1.6', 'SW1.7',
+                  'C24.2', 'RT1.2', 'RV1.1', 'R22.2',
                   'J3.5', 'J4.3'],
 }
 # LED strings: ballast -> top anode; internal nodes; bottom cathodes join LED_N above
@@ -126,5 +120,5 @@ NO_CONNECT = [
     'U2.7',                                  # AL8860 NC
     'U4.2',                                  # AP63203 EN — open for auto startup
     'U3.1', 'U3.2', 'U3.3', 'U3.15', 'U3.16', 'U3.17', 'U3.20',  # unused MCU pins
-    'SW1.D', 'SW1.E',                        # EC11 push-button terminals, unused
+    'U3.8', 'RV1.MP1', 'RV1.MP2', 'RV1.MP3', 'RV1.MP4',  # Unused PA1 and isolated pot mounting terminals
 ]

@@ -5,101 +5,226 @@
 	(uuid "ef98bbc0-7939-597a-8146-6f278c102a15")
 	(paper "A2")
 	(lib_symbols
-		(symbol "zudo-led-lamp:1MS1T1B1M1QES-5"
+		(symbol "zudo-led-lamp:SS-12D01-G020"
 		    (in_bom yes)
 		    (on_board yes)
 		    (property
 		      "Reference"
-		      "SW"
+		      "U"
 		      (id 0)
-		      (at 0 0.00 0)
+		      (at 0 -2.54 0)
 		      (effects (font (size 1.27 1.27) ) )
 		    )
 		    (property
 		      "Value"
-		      "1MS1T1B1M1QES-5"
+		      "SS-12D01-G020"
 		      (id 1)
-		      (at 0 -10.16 0)
+		      (at 0 -12.70 0)
 		      (effects (font (size 1.27 1.27) ) )
 		    )
 		    (property
 		      "Footprint"
-		      "zudo-led-lamp:SW-TH_1MS1T1B1M1QES-5"
+		      "zudo-led-lamp:SW-TH_SS-12D01-G020"
 		      (id 2)
-		      (at 0 -12.70 0)
-		      (effects (font (size 1.27 1.27) ) hide)
-		    )
-		    (property
-		      "Datasheet"
-		      "https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154"
-		      (id 3)
 		      (at 0 -15.24 0)
 		      (effects (font (size 1.27 1.27) ) hide)
 		    )
 		    (property
-		      "Manufacturer"
-		      "Dailywell(德利威)"
-		      (id 4)
+		      "Datasheet"
+		      "https://www.lcsc.com/datasheet/C5446803.pdf"
+		      (id 3)
 		      (at 0 -17.78 0)
 		      (effects (font (size 1.27 1.27) ) hide)
 		    )
 		    (property
-		      "MPN"
-		      "1MS1T1B1M1QES-5"
-		      (id 5)
+		      "Manufacturer"
+		      "G-Switch(品赞)"
+		      (id 4)
 		      (at 0 -20.32 0)
 		      (effects (font (size 1.27 1.27) ) hide)
 		    )
 		    (property
-		      "LCSC Part"
-		      "C496154"
-		      (id 6)
+		      "MPN"
+		      "SS-12D01-G020"
+		      (id 5)
 		      (at 0 -22.86 0)
 		      (effects (font (size 1.27 1.27) ) hide)
 		    )
 		    (property
-		      "ki_keywords"
-		      "Toggle Switches"
-		      (id 8)
+		      "LCSC Part"
+		      "C5446803"
+		      (id 6)
 		      (at 0 -25.40 0)
 		      (effects (font (size 1.27 1.27) ) hide)
 		    )
-		    (symbol "1MS1T1B1M1QES-5_0_1"
+		    (property
+		      "ki_keywords"
+		      "Slide Switches"
+		      (id 8)
+		      (at 0 -27.94 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "SS-12D01-G020_0_1"
 		      (rectangle
-		        (start -5.08 2.54)
-		        (end 5.08 -2.54)
-		        (stroke (width 0) (type default))
-		        (fill (type background))
-		      )
-		      (rectangle
-		        (start -2.54 6.35)
-		        (end 0.00 2.54)
+		        (start -7.62 3.81)
+		        (end 7.62 -3.81)
 		        (stroke (width 0) (type default))
 		        (fill (type background))
 		      )
 		      (circle
-		        (center -3.81 -1.27)
-		        (radius 0.38)
+		        (center 5.08 -2.54)
+		        (radius 0.51)
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (circle
+		        (center 0.00 -2.54)
+		        (radius 0.51)
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (circle
+		        (center -5.08 -2.54)
+		        (radius 0.51)
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -5.08 3.81) (xy -5.08 7.62) (xy -2.54 7.62) (xy -2.54 3.81)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 5.08 -2.03) (xy 4.83 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -5.08 -2.03) (xy -5.33 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -5.08 -2.03) (xy -4.83 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.00 -2.03) (xy -0.25 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.00 -2.03) (xy 0.25 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy -5.08 -2.03) (xy -5.08 -0.00) (xy 0.00 -0.00) (xy 0.00 -2.03)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 5.08 -2.03) (xy 5.33 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.00 -0.00) (xy 0.00 0.51)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 0.00 1.02) (xy 0.00 1.52) (xy 0.51 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 1.02 1.52) (xy 1.52 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 2.03 1.52) (xy 2.54 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 3.05 1.52) (xy 3.56 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 4.06 1.52) (xy 5.08 1.52)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 5.08 1.52) (xy 5.08 0.51)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 5.08 -1.52) (xy 5.08 -1.02)
+		        )
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (polyline
+		        (pts
+		          (xy 5.08 -0.51) (xy 5.08 -0.00)
+		        )
 		        (stroke (width 0) (type default))
 		        (fill (type none))
 		      )
 		      (pin passive line
-		        (at -2.54 -5.08 90)
-		        (length 2.54)
-		        (name "1" (effects (font (size 1.27 1.27))))
-		        (number "1" (effects (font (size 1.27 1.27))))
+		        (at 5.08 -7.62 90)
+		        (length 5.08)
+		        (name "3" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
 		      )
 		      (pin passive line
-		        (at 0.00 -5.08 90)
-		        (length 2.54)
+		        (at 0.00 -7.62 90)
+		        (length 5.08)
 		        (name "2" (effects (font (size 1.27 1.27))))
 		        (number "2" (effects (font (size 1.27 1.27))))
 		      )
 		      (pin passive line
-		        (at 2.54 -5.08 90)
-		        (length 2.54)
-		        (name "3" (effects (font (size 1.27 1.27))))
-		        (number "3" (effects (font (size 1.27 1.27))))
+		        (at -5.08 -7.62 90)
+		        (length 5.08)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
 		      )
 		    )
 		  )
@@ -2441,261 +2566,27 @@
 				)
 				(embedded_fonts no)
 			)
-		(symbol "zudo-led-lamp:EC11L1525G01"
-				(exclude_from_sim no)
-				(in_bom yes)
-				(on_board yes)
-				(in_pos_files yes)
-				(duplicate_pin_numbers_are_jumpers no)
-				(property "Reference" "SW"
-					(at 0 12.7 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "Value" "EC11L1525G01"
-					(at 0 -12.7 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "Footprint" "zudo-led-lamp:SW-TH_ALPS_EC11L1525G01"
-					(at 0 -15.24 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "Datasheet" "https://www.lcsc.com/datasheet/C2991196.pdf"
-					(at 0 -17.78 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "Description" ""
-					(at 0 0 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "Manufacturer" "ALPSALPINE(阿尔卑斯阿尔派)"
-					(at 0 -20.32 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "MPN" "EC11L1525G01"
-					(at 0 -22.86 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "LCSC Part" "C2991196"
-					(at 0 -25.4 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(property "ki_keywords" "Rotary Encoders"
-					(at 0 0 0)
-					(show_name no)
-					(do_not_autoplace no)
-					(hide yes)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(symbol "EC11L1525G01_0_1"
-					(rectangle
-						(start -5.08 5.08)
-						(end 5.08 -5.08)
-						(stroke
-							(width 0)
-							(type default)
-						)
-						(fill
-							(type background)
-						)
-					)
-					(circle
-						(center 0 0)
-						(radius 2.54)
-						(stroke
-							(width 0)
-							(type default)
-						)
-						(fill
-							(type none)
-						)
-					)
-					(pin passive line
-						(at -7.62 0 0)
-						(length 2.54)
-						(name "EH"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "6"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-					(pin passive line
-						(at 7.62 0 180)
-						(length 2.54)
-						(name "EH"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "7"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-					(pin passive line
-						(at -2.54 -7.62 90)
-						(length 2.54)
-						(name "A"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "A"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-					(pin passive line
-						(at 2.54 -7.62 90)
-						(length 2.54)
-						(name "B"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "B"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-					(pin passive line
-						(at 0 -7.62 90)
-						(length 2.54)
-						(name "C"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "C"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-					(pin passive line
-						(at -2.54 7.62 270)
-						(length 2.54)
-						(name "D"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "D"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-					(pin passive line
-						(at 2.54 7.62 270)
-						(length 2.54)
-						(name "E"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-						(number "E"
-							(effects
-								(font
-									(size 1.27 1.27)
-								)
-							)
-						)
-					)
-				)
-				(embedded_fonts no)
-			)
+		(symbol "zudo-led-lamp:RK10J11E0034"
+		(in_bom yes) (on_board yes)
+		(property "Reference" "RV" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "RK10J11E0034" (at 0 -10.16 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "zudo-led-lamp:POT-TH_RK10J11E0034" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "https://tech.alpsalpine.com/cms.media/product_catalog_rv_03_rk10j_en_780020d1ea.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Manufacturer" "Alps Alpine" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "LCSC Part" "C470643" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(symbol "RK10J11E0034_0_1"
+		(rectangle (start -1.27 5.08) (end 1.27 -5.08) (stroke (width 0) (type default)) (fill (type none)))
+		(polyline (pts (xy 1.27 0) (xy 2.54 1.27) (xy 2.54 -1.27) (xy 1.27 0)) (stroke (width 0) (type default)) (fill (type outline)))
+		)
+		(symbol "RK10J11E0034_1_1"
+		(pin passive line (at 0 7.62 270) (length 2.54) (name "HIGH" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+		(pin passive line (at 0 -7.62 90) (length 2.54) (name "LOW" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+		(pin passive line (at 7.62 0 180) (length 5.08) (name "WIPER" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+		(pin passive line (at -10.16 7.62 0) (length 2.54) (name "DUMMY" (effects (font (size 1.27 1.27)))) (number "MP1" (effects (font (size 1.27 1.27)))))
+		(pin passive line (at -10.16 2.54 0) (length 2.54) (name "DUMMY" (effects (font (size 1.27 1.27)))) (number "MP2" (effects (font (size 1.27 1.27)))))
+		(pin passive line (at -10.16 -2.54 0) (length 2.54) (name "SUPPORT" (effects (font (size 1.27 1.27)))) (number "MP3" (effects (font (size 1.27 1.27)))))
+		(pin passive line (at -10.16 -7.62 0) (length 2.54) (name "SUPPORT" (effects (font (size 1.27 1.27)))) (number "MP4" (effects (font (size 1.27 1.27)))))
+		))
 		(symbol "zudo-led-lamp:PZ254V-11-05P"
 				(exclude_from_sim no)
 				(in_bom yes)
@@ -5062,7 +4953,7 @@
 			)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:1MS1T1B1M1QES-5")
+		(lib_id "zudo-led-lamp:SS-12D01-G020")
 		(at 444.5 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5076,13 +4967,13 @@
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "Power ON/OFF toggle"
+		(property "Value" "Power ON/OFF slide"
 			(at 462.28 53.34 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:SW-TH_1MS1T1B1M1QES-5"
+		(property "Footprint" "zudo-led-lamp:SW-TH_SS-12D01-G020"
 			(at 444.5 50.8 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -5096,21 +4987,21 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C496154"
+		(property "LCSC" "C5446803"
 			(at 444.5 58.42 0)
 			(effects
 				(font (size 1.27 1.27))
 				(hide yes)
 			)
 		)
-		(pin "1"
-			(uuid "74e849c7-f01f-51a7-8311-3e07b94565dd")
+		(pin "3"
+			(uuid "447beff7-4b5f-51ee-8386-63be37a23b1f")
 		)
 		(pin "2"
 			(uuid "d613e30d-c281-54a3-9bd0-34a2395b1ed7")
 		)
-		(pin "3"
-			(uuid "148bdc7c-248f-5699-b45e-de6fa9ccbbf5")
+		(pin "1"
+			(uuid "1f7d00c0-c1af-5275-958c-63f94da07aae")
 		)
 		(instances
 			(project "board-l"
@@ -5791,27 +5682,27 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:EC11L1525G01")
+		(lib_id "zudo-led-lamp:RK10J11E0034")
 		(at 165.1 101.6 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "62b19e94-d789-5f5d-950f-f13d2355aa61")
-		(property "Reference" "SW1"
+		(uuid "fdc60cef-2ff2-5f9c-b9b6-bd341d20af47")
+		(property "Reference" "RV1"
 			(at 165.1 88.9 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "EC11 15-detent"
+		(property "Value" "10k brightness pot"
 			(at 182.88 104.14 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:SW-TH_ALPS_EC11L1525G01"
+		(property "Footprint" "zudo-led-lamp:POT-TH_RK10J11E0034"
 			(at 165.1 101.6 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -5825,38 +5716,38 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2991196"
+		(property "LCSC" "C470643"
 			(at 165.1 109.22 0)
 			(effects
 				(font (size 1.27 1.27))
 				(hide yes)
 			)
 		)
-		(pin "6"
-			(uuid "cca2b08e-dc68-51d5-a797-0c48f7f871df")
+		(pin "3"
+			(uuid "cdc57ba9-8519-59dd-b2ee-cf77d64116f4")
 		)
-		(pin "7"
-			(uuid "a8d611cf-9b2f-577a-b998-2aa320d7b0df")
+		(pin "1"
+			(uuid "cf24fc34-330e-51f8-9779-aeba1d467862")
 		)
-		(pin "A"
-			(uuid "714d5d6d-441b-5311-803d-5cef16c50e9e")
+		(pin "2"
+			(uuid "1c8d1555-305a-5e07-8077-9160ffbd9935")
 		)
-		(pin "B"
-			(uuid "ebb3cc65-7fc1-54df-a2b5-b020cc2ea971")
+		(pin "MP1"
+			(uuid "59fef6c9-2c12-580c-b1b7-9ba4e3b76f35")
 		)
-		(pin "C"
-			(uuid "6b7faa25-0520-5fda-8235-9aaaae187d64")
+		(pin "MP2"
+			(uuid "3ce2c0b7-6505-57e4-ac54-5110709390cb")
 		)
-		(pin "D"
-			(uuid "36d5254d-67ad-5d95-9d04-21de1e4adc52")
+		(pin "MP3"
+			(uuid "064be9ee-e477-5dbf-ba98-aaf5b5c9c8a6")
 		)
-		(pin "E"
-			(uuid "a5626ff4-2542-5cfd-973f-18a26511d34c")
+		(pin "MP4"
+			(uuid "5cff3175-1dc1-59c9-8e5c-f8ddf4a4012e")
 		)
 		(instances
 			(project "board-l"
 				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
-					(reference "SW1")
+					(reference "RV1")
 					(unit 1)
 				)
 			)
@@ -6951,64 +6842,7 @@
 		)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:CC0603KRX7R9BB104")
-		(at 180.34 177.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "cfb6fe15-f17c-57cd-b7a8-b597a84bdb98")
-		(property "Reference" "C23"
-			(at 180.34 172.72 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Value" "100nF/50V"
-			(at 180.34 182.88 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Footprint" "zudo-led-lamp:C0603"
-			(at 180.34 177.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 180.34 177.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 180.34 185.42 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "498b7b39-065e-501b-86b1-fe350ba60382")
-		)
-		(pin "2"
-			(uuid "da220498-ef1d-52e3-8127-bfc11652e02e")
-		)
-		(instances
-			(project "board-l"
-				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
-					(reference "C23")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "zudo-led-lamp:0805W8F1002T5E")
+		(lib_id "zudo-led-lamp:0603WAF1003T5E")
 		(at 215.9 177.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7022,13 +6856,13 @@
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "100k wiper pull-down"
 			(at 215.9 182.88 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-led-lamp:R0805"
+		(property "Footprint" "zudo-led-lamp:R0603"
 			(at 215.9 177.8 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7042,7 +6876,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C17414"
+		(property "LCSC" "C25803"
 			(at 215.9 185.42 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -7059,63 +6893,6 @@
 			(project "board-l"
 				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
 					(reference "R22")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "zudo-led-lamp:0805W8F1002T5E")
-		(at 251.46 177.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "4e4e18d0-f964-51c3-a60e-b8c00977b452")
-		(property "Reference" "R23"
-			(at 251.46 172.72 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Value" "10k"
-			(at 251.46 182.88 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Footprint" "zudo-led-lamp:R0805"
-			(at 251.46 177.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 251.46 177.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C17414"
-			(at 251.46 185.42 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "450e04b1-43db-57df-9a71-655b74e53e2a")
-		)
-		(pin "2"
-			(uuid "2bc590ab-2f06-577f-9b8a-1b9e058676cb")
-		)
-		(instances
-			(project "board-l"
-				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
-					(reference "R23")
 					(unit 1)
 				)
 			)
@@ -7344,63 +7121,6 @@
 			(project "board-l"
 				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
 					(reference "R27")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "zudo-led-lamp:0603WAF1000T5E")
-		(at 429.26 177.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "4a0dfa93-f85f-54a8-860e-a96ec84401be")
-		(property "Reference" "R28"
-			(at 429.26 172.72 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Value" "100R"
-			(at 429.26 182.88 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Footprint" "zudo-led-lamp:R0603"
-			(at 429.26 177.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 429.26 177.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C22775"
-			(at 429.26 185.42 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "cbce7a7e-acb4-5045-bdcd-3bdd2c649939")
-		)
-		(pin "2"
-			(uuid "baae9837-4ec7-51ae-8ac2-4efef4dbe212")
-		)
-		(instances
-			(project "board-l"
-				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
-					(reference "R28")
 					(unit 1)
 				)
 			)
@@ -9315,7 +9035,7 @@
 	)
 	(global_label "V15_FUSED"
 		(shape passive)
-		(at 444.5 55.88 270)
+		(at 444.5 58.42 270)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
@@ -9324,7 +9044,7 @@
 	)
 	(global_label "V15"
 		(shape passive)
-		(at 441.96 55.88 270)
+		(at 439.42 58.42 270)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
@@ -9801,21 +9521,12 @@
 	)
 	(global_label "V3P3"
 		(shape passive)
-		(at 210.82 177.8 180)
+		(at 165.1 93.98 90)
 		(effects
 			(font (size 1.27 1.27))
-			(justify right)
+			(justify left)
 		)
-		(uuid "74f6b92d-85a3-554f-9137-44bc2d8c8841")
-	)
-	(global_label "V3P3"
-		(shape passive)
-		(at 246.38 177.8 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "9b0e9652-8e43-5b93-8228-a5eaaad3f3fe")
+		(uuid "6e105c41-b09b-5378-8c5e-64f81b21a3ee")
 	)
 	(global_label "V3P3"
 		(shape passive)
@@ -9853,113 +9564,59 @@
 		)
 		(uuid "92b5e802-64e6-5405-870b-b7d916dea748")
 	)
-	(global_label "ENC_A_SW"
+	(global_label "BRIGHT_WIPER"
 		(shape passive)
-		(at 162.56 109.22 270)
+		(at 172.72 101.6 0)
 		(effects
 			(font (size 1.27 1.27))
-			(justify right)
+			(justify left)
 		)
-		(uuid "202df57e-40af-5d9d-bfd9-6c83d4ae67d0")
+		(uuid "b7762a64-db59-5cdd-ab9d-b512118a8b49")
 	)
-	(global_label "ENC_A_SW"
+	(global_label "BRIGHT_WIPER"
 		(shape passive)
 		(at 388.62 177.8 180)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "265f2835-8185-540a-9b6f-9145781b46dd")
+		(uuid "4ec232c8-da12-5578-b024-90274d47b69b")
 	)
-	(global_label "ENC_A"
+	(global_label "BRIGHT_ADC"
 		(shape passive)
 		(at 398.78 177.8 0)
 		(effects
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "e0df25df-3ea4-5851-b646-9c729e1f52fa")
+		(uuid "ea29ee52-8cd2-55b5-9c26-2293757debec")
 	)
-	(global_label "ENC_A"
+	(global_label "BRIGHT_ADC"
 		(shape passive)
-		(at 220.98 177.8 0)
+		(at 210.82 177.8 180)
 		(effects
 			(font (size 1.27 1.27))
-			(justify left)
+			(justify right)
 		)
-		(uuid "61a7040a-69af-5492-9665-f7cde8e85c02")
+		(uuid "929c25eb-6a44-547a-a674-4472139e994e")
 	)
-	(global_label "ENC_A"
+	(global_label "BRIGHT_ADC"
 		(shape passive)
 		(at 139.7 177.8 180)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "713d770f-3004-53a3-9f6c-36d1c6277085")
+		(uuid "59833f23-ded0-50f6-b8e9-b4b3224597a5")
 	)
-	(global_label "ENC_A"
+	(global_label "BRIGHT_ADC"
 		(shape passive)
 		(at 44.45 105.41 180)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "832ff25d-95e3-58c1-9274-b1eb98aa8b9e")
-	)
-	(global_label "ENC_B_SW"
-		(shape passive)
-		(at 167.64 109.22 270)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "f5687d5b-f293-573c-8d43-0cf915517f61")
-	)
-	(global_label "ENC_B_SW"
-		(shape passive)
-		(at 424.18 177.8 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "6bcd7b0c-f76c-5a70-bbf4-fcead90bda17")
-	)
-	(global_label "ENC_B"
-		(shape passive)
-		(at 434.34 177.8 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left)
-		)
-		(uuid "85f04218-e4f8-5e6b-9195-a8b03e59841b")
-	)
-	(global_label "ENC_B"
-		(shape passive)
-		(at 256.54 177.8 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left)
-		)
-		(uuid "194e7e0a-fc01-53b7-af4b-2d74f7f21066")
-	)
-	(global_label "ENC_B"
-		(shape passive)
-		(at 175.26 177.8 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "cebd765e-b1a6-50ae-a7b2-7c0d74de390b")
-	)
-	(global_label "ENC_B"
-		(shape passive)
-		(at 44.45 107.95 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "b73cb8f7-293e-5c6e-ae0c-2ce8fcff72f2")
+		(uuid "73805bb2-b14f-52c5-b0ac-37f15206f8e8")
 	)
 	(global_label "PDOK"
 		(shape passive)
@@ -10341,15 +9998,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 185.42 177.8 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left)
-		)
-		(uuid "c7ff93ae-48df-563f-8012-456f246d2305")
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 360.68 101.6 0)
 		(effects
 			(font (size 1.27 1.27))
@@ -10373,25 +10021,16 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "ab86aa9d-747f-59c0-9aa6-f02a170005db")
+		(uuid "f53110b5-8699-5c75-b2dd-6f8457855a8f")
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 157.48 101.6 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "ca730adc-3f48-5c82-bec5-b3be9dbcb9b6")
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 172.72 101.6 0)
+		(at 220.98 177.8 0)
 		(effects
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "ce6d6638-8626-5054-a2ca-73313f2be251")
+		(uuid "76ba21e1-bf0e-5fef-93d9-4cd060d9c1f4")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -10844,7 +10483,7 @@
 		(uuid "1bdeac1c-04ca-5b5a-9362-e757c1660bc6")
 	)
 	(no_connect
-		(at 447.04 55.88)
+		(at 449.58 58.42)
 		(uuid "e0c4f40b-6c67-5c43-893b-8ac8df1a521c")
 	)
 	(no_connect
@@ -10884,12 +10523,24 @@
 		(uuid "0bfa6035-0078-5c3d-9572-3e5ddd3324eb")
 	)
 	(no_connect
-		(at 162.56 93.98)
-		(uuid "76305330-dac1-54e5-b151-eb27d211a0c4")
+		(at 44.45 107.95)
+		(uuid "a1007f79-8619-5edd-b860-e39d838deb03")
 	)
 	(no_connect
-		(at 167.64 93.98)
-		(uuid "9dcfd02a-a8c4-5bed-a51c-c38cd7e5c8e9")
+		(at 154.94 93.98)
+		(uuid "57dba5ac-90ba-5dc3-8d7f-0735ed38b3f5")
+	)
+	(no_connect
+		(at 154.94 99.06)
+		(uuid "966b8dcc-1d6a-563e-a3dd-0d0c531bd4fb")
+	)
+	(no_connect
+		(at 154.94 104.14)
+		(uuid "16691f20-db2f-56d3-abd8-0bc1a992c9d4")
+	)
+	(no_connect
+		(at 154.94 109.22)
+		(uuid "c021d1a9-c4a7-56da-aaa5-3baef0a9bae1")
 	)
 	(sheet_instances
 		(path "/"

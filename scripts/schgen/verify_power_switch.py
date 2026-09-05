@@ -57,7 +57,7 @@ def check_schematic(path):
     assert field(sw, 'dnp') == 'no'
     props = {atom(p[1]): atom(p[2]) for p in find_all(sw, 'property')}
     assert props['Footprint'] == spec.COMPONENTS['SW2'][3]
-    assert props['LCSC'] == 'C496154'
+    assert props['LCSC'] == 'C5446803'
     assert not spec.EXTERNAL_COMPONENTS
     library = Library()
     name = spec.COMPONENTS['SW2'][0]
@@ -73,7 +73,7 @@ def check_schematic(path):
                 assert pos in nc and pos not in labels
             else:
                 assert labels[pos] == {'1': 'V15', '2': 'V15_FUSED'}[pin]
-    master = ROOT / 'footprints/kicad/SW-TH_1MS1T1B1M1QES-5.kicad_mod'
+    master = ROOT / 'footprints/kicad/SW-TH_SS-12D01-G020.kicad_mod'
     mirror = ROOT / 'footprints/kicad/zudo-led-lamp.pretty' / master.name
     assert master.read_bytes() == mirror.read_bytes()
     pads = find_all(load(str(master)), 'pad')
@@ -92,7 +92,7 @@ def main():
         for net in find_all(find_all(load(args.netlist), 'nets')[0], 'net'):
             nets[field(net, 'name')] = [field(n, 'ref') + '.' + field(n, 'pin') for n in find_all(net, 'node')]
         check_topology(nets)
-    print('PASS: C496154 fitted PCB identity, common/throw mapping, isolated OFF throw and ON/OFF feed topology; not a bench back-power test')
+    print('PASS: C5446803 fitted PCB identity, common/throw mapping, isolated OFF throw and ON/OFF feed topology; not a bench back-power test')
 
 
 if __name__ == '__main__':
