@@ -243,52 +243,52 @@
       "must_refuse": true
     },
     {
-      "case_id": "external-rocker-power-cut",
-      "observed_run_id": "observed-external-rocker-power-cut",
-      "prompt": "Evaluate NKK WR11AS external lamp power rocker, terminal 1a/1b and Board L J5 harness; prove both converters unpowered OFF with safe capacitor inrush/contact life.",
+      "case_id": "board-toggle-power-cut",
+      "observed_run_id": "observed-board-toggle-power-cut",
+      "prompt": "Evaluate Dailywell 1MS1T1B1M1QES-5 C496154 Board L power toggle, common 2 and the isolated live OFF throw; prove both converters unpowered OFF with safe capacitor inrush/contact life and assembled fit.",
       "expected_trigger_skill": "circuit-spec-integration",
       "expected_loaded_skills": [
         "component-spec-audit",
         "circuit-spec-integration",
-        "component-nkk-wr11as",
+        "component-dailywell-1ms1t1b1m1qes-5",
         "component-bhfuse-bsmd1206-075-30v",
         "component-al8860mp-13",
         "component-ap63203wu-7"
       ],
       "routing_queries": [
         {
-          "query": "NKK WR11AS",
+          "query": "Dailywell 1MS1T1B1M1QES-5",
           "expected_line_ids": [
-            "line-wr11as"
+            "line-c496154"
           ]
         }
       ],
       "direct_record_ids": [
-        "rec-wr11as",
+        "rec-c496154",
         "rec-bsmd1206-075-30v",
         "rec-al8860mp-13",
         "rec-ap63203wu-7"
       ],
       "subordinate_record_ids": [],
       "required_source_ids": [
-        "src-wr11as-datasheet",
-        "src-wr11as-generator",
+        "src-c496154-datasheet",
+        "src-c496154-generator",
         "src-bhfuse-generator",
         "src-ap6320x-ds41326"
       ],
       "rule_ids": [
-        "rule-wr11as-power-cut"
+        "rule-c496154-power-cut"
       ],
       "required_fact_ids": [
-        "fact-wr11as-rating",
-        "fact-wr11as-terminals",
-        "fact-wr11as-project-nets",
+        "fact-c496154-rating",
+        "fact-c496154-terminals",
+        "fact-c496154-project-nets",
         "fact-bhfuse-project-nets",
         "fact-ap63203-en-open"
       ],
       "required_calculation_ids": [],
       "expected_observed_conditions": [
-        "SW2 1a-1b closes fused feed to switched V15; J5.1 feed and J5.2 return are hand-wired. Both converters lose normal supply in OFF; Board P remains powered. Verify capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test."
+        "SW2 common 2 receives V15_FUSED and joins pin 1 to switched V15 in ON. In OFF, common 2 joins pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF; Board P remains powered. Verify modified plated-slot and enclosure fit, front lug clearance, capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test. Exact drawing is manufacturer-mirror evidence, not closed manufacturer-primary trust."
       ],
       "expected_verdicts": [
         "NEEDS BENCH"

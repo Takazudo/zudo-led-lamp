@@ -10,7 +10,7 @@
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
  * of quietly publishing a different set. They are the same corpus figures the
- * epic states (35 records, 91 sources), plus the seven cross-component rules —
+ * epic states (35 records, 92 sources), plus the seven cross-component rules —
  * those are not instance-selected, but their number is asserted for the same
  * reason, because a rule appearing or vanishing changes what the integration
  * page claims about the whole design.
@@ -33,7 +33,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
   checkedOn: "2026-08-23",
   expectedContent: "PDF",
   downloadedPdfSourceIds: [
-    "src-wr11as-datasheet", // PDF bytes/title checked 2026-09-05; prior verification dates retained below
+    "src-c496154-datasheet", // Exact PDF bytes/title rechecked 2026-09-06; prior dates retained below
     "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
     "src-rd-uniroyal-smd-sp-001", "src-umw-ao3401a", "src-high-diode-primary",
     "src-c13585-page", "src-c14663-yageo", "src-c15849-page",
@@ -56,7 +56,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
 
 export const CIRCUIT_SELECTION: InstanceSelection = {
   recordIds: [
-    "rec-wr11as", // external panel rocker, independently selected real model
+    "rec-c496154", // JLCPCB rear toggle with PCB footprint and model
     // component-type-c-31-m-17
     "rec-type-c-31-m-17", // standalone: TYPE-C-31-M-17
     // component-stusb4500qtr
@@ -107,7 +107,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   ],
 
   sourceIds: [
-    "src-wr11as-datasheet", "src-wr11as-generator",
+    "src-c496154-datasheet", "src-c496154-generator", "src-c496154-jlcpcb",
     // component-type-c-31-m-17
     "src-type-c-c283540", // rec-type-c-31-m-17
     "src-type-c-primary-page", // rec-type-c-31-m-17
@@ -214,7 +214,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
 
   // Every selected source is a public http(s) document URL, so all are linkable.
   linkableSourceIds: [
-    "src-wr11as-datasheet", "src-wr11as-generator",
+    "src-c496154-datasheet", "src-c496154-generator", "src-c496154-jlcpcb",
     "src-type-c-c283540",
     "src-type-c-primary-page",
     "src-type-c-primary-drawing",
@@ -315,7 +315,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   // SOURCE UNAVAILABLE. Normal generation is offline and trusts this committed
   // review decision; it never re-fetches these URLs.
   documentSelections: [
-    { recordId: "rec-wr11as", sourceId: "src-wr11as-datasheet", documentKind: "datasheet" },
+    { recordId: "rec-c496154", sourceId: "src-c496154-datasheet", documentKind: "datasheet" },
     { recordId: "rec-type-c-31-m-17", sourceId: "src-type-c-c283540", documentKind: "drawing" },
     { recordId: "rec-stusb4500qtr", sourceId: "src-stusb-ds12499", documentKind: "datasheet" },
     { recordId: "rec-pesd24vs1ub", sourceId: "src-pesd24vs1ub", documentKind: "datasheet" },
@@ -354,21 +354,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
 
   expect: {
     records: 35,
-    sources: 91,
+    sources: 92,
     integrationRules: 7,
   },
 };
-
-/** User-supplied NKK/CADENAS export, reviewed against WR.pdf B127 on 2026-09-06.
- * Separate selection prevents an external model from inventing a PCB footprint. */
-export const CIRCUIT_EXTERNAL_MODELS = [{
-  recordId: "rec-wr11as",
-  name: "WR11AS",
-  modelName: "WR11AS.wrl",
-  modelSha256: "95a0cd40119b0601e929caa29f2faa04c5eb23f687a1193444d40381da84a393",
-  originalName: "WR11AS.stl",
-  originalSha256: "2917e08e2385bf3d1d0bf3f46104c4ece401c84fe50b4056710842b9430e4abe",
-  offset: { x: 0, y: 0, z: 0 },
-  rotation: { x: -90, y: 0, z: 0 },
-  scale: { x: 2.54, y: 2.54, z: 2.54 },
-}] as const;

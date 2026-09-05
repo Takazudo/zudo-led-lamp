@@ -31,20 +31,12 @@ export function ComponentReferences({ descriptor: encoded }: ComponentReferences
           </dl>
         </article>
         <article className="zld-component-references__card">
-          {footprint === null ? <>
-            <h3 className="zld-component-references__card-heading">Panel mounting</h3>
-            <p>External panel-mounted component, hand-wired to the PCB. J5 is the wire connection; the rocker does not mount on those pads.</p>
-            <p>Use the datasheet for the panel cutout and terminal orientation.</p>
-            {descriptor.sourceCadUrl && <p><a href={descriptor.sourceCadUrl} download>Download original STL</a> (inch coordinates)</p>}
-          </> : <>
-            <h3 className="zld-component-references__card-heading">Footprint preview</h3>
-            <FootprintPreview assetUrl={footprint.assetUrl} footprintName={footprint.name} />
-          </>}
+          <h3 className="zld-component-references__card-heading">Footprint preview</h3>
+          <FootprintPreview assetUrl={footprint.assetUrl} footprintName={footprint.name} />
         </article>
         <article className="zld-component-references__card zld-component-references__model-card">
-          <h3 className="zld-component-references__card-heading">{footprint === null ? "Panel component model" : "Package model"}</h3>
+          <h3 className="zld-component-references__card-heading">Package model</h3>
           <PackageModelViewer descriptor={descriptor.modelDescriptor} />
-          {footprint === null && descriptor.sourceCadUrl && <p><a href={descriptor.sourceCadUrl.replace(/\.stl$/u, ".wrl")} download>Download KiCad WRL</a></p>}
         </article>
       </div>
     </section>

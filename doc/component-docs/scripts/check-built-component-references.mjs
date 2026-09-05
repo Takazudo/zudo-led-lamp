@@ -24,41 +24,19 @@ async function main() {
   assert.equal(recordDirectories.length, 35, "built site must contain exactly 35 component record routes");
 
   const manifest = JSON.parse(await readFile(join(FOOTPRINT_ROOT, "manifest.json"), "utf8"));
-  assert.equal(manifest.packages?.length, 24, "built footprint manifest must contain 24 packages");
+  assert.equal(manifest.packages?.length, 25, "built footprint manifest must contain 25 packages");
   const expectedFootprints = new Set(
     manifest.packages.map((entry) => {
       assert.match(entry.assetPath, /^\/assets\/component-previews\/footprints\/[A-Za-z0-9._+-]+\.svg$/u);
       return basename(entry.assetPath);
     }),
   );
-  assert.equal(expectedFootprints.size, 24, "built footprint manifest names must be unique");
+  assert.equal(expectedFootprints.size, 25, "built footprint manifest names must be unique");
 
   const referencedFootprints = new Set();
   const referencedModels = new Set();
   for (const slug of recordDirectories) {
     const html = await readFile(join(RECORDS_ROOT, slug, "index.html"), "utf8");
-    if (slug === "wr11as") {
-      assert.match(html, /External panel-mounted component/);
-      assert.match(html, /https:\/\/www.nkkswitches.com\/pdf\/WR.pdf/);
-      assert.match(html, /Datasheet PDF/);
-      assert.doesNotMatch(html, /alt="Footprint preview for/);
-      const sections = extractReferenceSections(html);
-      assert.equal(sections.length, 1);
-      const section = sections[0];
-      assert.match(section, /Panel component model/);
-      assert.match(section, /data-model-url=(?:"|')?\/assets\/component-previews\/models\/WR11AS.wrl/);
-      assert.match(section, /PackageModelViewerIsland/);
-      assert.match(section, /data-viewer-state=(?:"no-js"|no-js)/);
-      assert.match(section, /Download original STL/);
-      assert.match(section, /Download KiCad WRL/);
-      assert.match(section, /NKK\/CADENAS model/);
-      assert.equal((section.match(/data-component-preview-enlarge=/g) ?? []).length, 1);
-      assert.equal((section.match(/data-component-preview-dialog=/g) ?? []).length, 1);
-      await assertRegularDistFile("/assets/component-previews/models/WR11AS.stl");
-      await assertRegularDistFile("/assets/component-previews/models/WR11AS.wrl");
-      referencedModels.add("WR11AS.wrl");
-      continue;
-    }
     const sections = extractReferenceSections(html);
     assert.equal(sections.length, 1, `${slug} must render exactly one Component references section`);
     const section = sections[0];
@@ -133,17 +111,16 @@ async function main() {
   }
 
   assert.deepEqual([...referencedFootprints].sort(), [...expectedFootprints].sort(), "record pages must use exactly the manifest-selected SVGs");
-  assert.equal(referencedModels.size, 25, "record pages must reference 24 PCB WRLs and one external WRL");
+  assert.equal(referencedModels.size, 25, "record pages must deduplicate to exactly 25 selected WRLs");
 
   const actualPreviewFiles = await listFiles(PREVIEW_ROOT);
   const expectedPreviewFiles = new Set([
     "footprints/manifest.json",
-    "models/WR11AS.stl",
     ...[...expectedFootprints].map((name) => `footprints/${name}`),
     ...[...referencedModels].map((name) => `models/${name}`),
   ]);
   assert.deepEqual(actualPreviewFiles, [...expectedPreviewFiles].sort(), "built preview output contains missing, extra, or unselected assets");
-  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".svg").length, 24);
+  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".svg").length, 25);
   assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".wrl").length, 25);
   assert.equal(actualPreviewFiles.some((path) => [".step", ".stp"].includes(extname(path).toLowerCase())), false, "STEP must not be browser-published");
 
@@ -154,7 +131,7 @@ async function main() {
     "catalog index must not create or reference live preview UI",
   );
 
-  process.stdout.write("built component references passed: 35 records, 24 SVGs, 25 WRLs, 1 source STL, 0 STEP; catalog viewer-free\n");
+  process.stdout.write("built component references passed: 35 records, 25 SVGs, 25 WRLs, 0 STEP; catalog viewer-free\n");
 }
 
 async function assertRegularDistFile(publicPath) {

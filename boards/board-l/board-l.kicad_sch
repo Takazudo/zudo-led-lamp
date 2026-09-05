@@ -5,23 +5,104 @@
 	(uuid "ef98bbc0-7939-597a-8146-6f278c102a15")
 	(paper "A2")
 	(lib_symbols
-		(symbol "zudo-led-lamp:WR11AS" (pin_names (offset 0)) (in_bom yes) (on_board no)
-		    (property "Reference" "SW" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
-		    (property "Value" "WR11AS" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
-		    (symbol "WR11AS_0_1"
-		      (circle (center -2.54 0) (radius 0.5) (stroke (width 0) (type default)) (fill (type none)))
-		      (circle (center 2.54 0) (radius 0.5) (stroke (width 0) (type default)) (fill (type none)))
-		      (polyline (pts (xy -2.04 0.2) (xy 2.54 2.54)) (stroke (width 0) (type default)) (fill (type none))))
-		    (symbol "WR11AS_1_1"
-		      (pin passive line (at -7.62 0 0) (length 5.08) (name "1a" (effects (font (size 1.27 1.27)))) (number "1a" (effects (font (size 1.27 1.27)))))
-		      (pin passive line (at 7.62 0 180) (length 5.08) (name "1b" (effects (font (size 1.27 1.27)))) (number "1b" (effects (font (size 1.27 1.27)))))))
-		(symbol "zudo-led-lamp:Conn_1x02" (pin_names (offset 1.016)) (in_bom no) (on_board yes)
-		    (property "Reference" "J" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
-		    (property "Value" "Conn_1x02" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
-		    (symbol "Conn_1x02_0_1" (rectangle (start -1.27 2.54) (end 1.27 -2.54) (stroke (width 0) (type default)) (fill (type background))))
-		    (symbol "Conn_1x02_1_1"
-		      (pin passive line (at -5.08 1.27 0) (length 3.81) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-		      (pin passive line (at -5.08 -1.27 0) (length 3.81) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))))
+		(symbol "zudo-led-lamp:1MS1T1B1M1QES-5"
+		    (in_bom yes)
+		    (on_board yes)
+		    (property
+		      "Reference"
+		      "SW"
+		      (id 0)
+		      (at 0 0.00 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Value"
+		      "1MS1T1B1M1QES-5"
+		      (id 1)
+		      (at 0 -10.16 0)
+		      (effects (font (size 1.27 1.27) ) )
+		    )
+		    (property
+		      "Footprint"
+		      "zudo-led-lamp:SW-TH_1MS1T1B1M1QES-5"
+		      (id 2)
+		      (at 0 -12.70 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Datasheet"
+		      "https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154"
+		      (id 3)
+		      (at 0 -15.24 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "Manufacturer"
+		      "Dailywell(德利威)"
+		      (id 4)
+		      (at 0 -17.78 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "MPN"
+		      "1MS1T1B1M1QES-5"
+		      (id 5)
+		      (at 0 -20.32 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "LCSC Part"
+		      "C496154"
+		      (id 6)
+		      (at 0 -22.86 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (property
+		      "ki_keywords"
+		      "Toggle Switches"
+		      (id 8)
+		      (at 0 -25.40 0)
+		      (effects (font (size 1.27 1.27) ) hide)
+		    )
+		    (symbol "1MS1T1B1M1QES-5_0_1"
+		      (rectangle
+		        (start -5.08 2.54)
+		        (end 5.08 -2.54)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (rectangle
+		        (start -2.54 6.35)
+		        (end 0.00 2.54)
+		        (stroke (width 0) (type default))
+		        (fill (type background))
+		      )
+		      (circle
+		        (center -3.81 -1.27)
+		        (radius 0.38)
+		        (stroke (width 0) (type default))
+		        (fill (type none))
+		      )
+		      (pin passive line
+		        (at -2.54 -5.08 90)
+		        (length 2.54)
+		        (name "1" (effects (font (size 1.27 1.27))))
+		        (number "1" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 0.00 -5.08 90)
+		        (length 2.54)
+		        (name "2" (effects (font (size 1.27 1.27))))
+		        (number "2" (effects (font (size 1.27 1.27))))
+		      )
+		      (pin passive line
+		        (at 2.54 -5.08 90)
+		        (length 2.54)
+		        (name "3" (effects (font (size 1.27 1.27))))
+		        (number "3" (effects (font (size 1.27 1.27))))
+		      )
+		    )
+		  )
 		(symbol "zudo-led-lamp:PM254V-11-06-H85"
 				(exclude_from_sim no)
 				(in_bom yes)
@@ -4981,135 +5062,60 @@
 			)
 	)
 	(symbol
-		(lib_id "zudo-led-lamp:WR11AS")
+		(lib_id "zudo-led-lamp:1MS1T1B1M1QES-5")
 		(at 444.5 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board no)
+		(on_board yes)
 		(dnp no)
 		(uuid "f6acad05-21de-5dab-bc72-7219399961cd")
 		(property "Reference" "SW2"
-			(at 444.5 45.72 0)
+			(at 457.2 48.26 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "WR11AS (panel rocker)"
-			(at 444.5 55.88 0)
+		(property "Value" "Power ON/OFF toggle"
+			(at 462.28 53.34 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "zudo-led-lamp:SW-TH_1MS1T1B1M1QES-5"
 			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.nkkswitches.com/pdf/WR.pdf"
-			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "MPN" "WR11AS"
-			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "NKK Switches"
-			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Supplier" "DigiKey"
-			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Supplier Part" "360-1507-ND"
-			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(property "Assembly" "External panel mount; hand wire via J5"
-			(at 444.5 50.8 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-		(pin "1a"
-			(uuid "edcee4fb-71a0-5418-b5ed-d842f16b8a30")
-		)
-		(pin "1b"
-			(uuid "fc39f0c6-81c3-5ac1-a637-2713d1920d7e")
-		)
-		(instances
-			(project "board-l"
-				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
-					(reference "SW2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "zudo-led-lamp:Conn_1x02")
-		(at 444.5 101.6 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "52de4489-70a5-548d-add3-dcc04b85f14c")
-		(property "Reference" "J5"
-			(at 444.5 95.25 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Value" "Power switch solder pads"
-			(at 444.5 107.95 0)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Footprint" "zudo-led-lamp:SolderWire_1x02_P5.08mm"
-			(at 444.5 101.6 0)
 			(effects
 				(font (size 1.27 1.27))
 				(hide yes)
 			)
 		)
 		(property "Datasheet" ""
-			(at 444.5 101.6 0)
+			(at 444.5 50.8 0)
+			(effects
+				(font (size 1.27 1.27))
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C496154"
+			(at 444.5 58.42 0)
 			(effects
 				(font (size 1.27 1.27))
 				(hide yes)
 			)
 		)
 		(pin "1"
-			(uuid "f717ca17-4eb4-5bf1-8390-47760181ae50")
+			(uuid "74e849c7-f01f-51a7-8311-3e07b94565dd")
 		)
 		(pin "2"
-			(uuid "3304c4d4-d3f9-5f13-93e4-04c3c6efdd8f")
+			(uuid "d613e30d-c281-54a3-9bd0-34a2395b1ed7")
+		)
+		(pin "3"
+			(uuid "148bdc7c-248f-5699-b45e-de6fa9ccbbf5")
 		)
 		(instances
 			(project "board-l"
 				(path "/ef98bbc0-7939-597a-8146-6f278c102a15"
-					(reference "J5")
+					(reference "SW2")
 					(unit 1)
 				)
 			)
@@ -9309,39 +9315,21 @@
 	)
 	(global_label "V15_FUSED"
 		(shape passive)
-		(at 439.42 100.33 180)
+		(at 444.5 55.88 270)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "a10a70af-d4bd-5fab-952f-b8d1ecd29e8d")
-	)
-	(global_label "V15_FUSED"
-		(shape passive)
-		(at 436.88 50.8 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "bc6b13ea-b798-551b-88a9-d5ecdd8c5f91")
+		(uuid "bbee4e75-4d77-5fb0-9397-7a3f9d4f04f9")
 	)
 	(global_label "V15"
 		(shape passive)
-		(at 452.12 50.8 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left)
-		)
-		(uuid "31f18486-4b6a-5b38-8d1d-60723d323620")
-	)
-	(global_label "V15"
-		(shape passive)
-		(at 439.42 102.87 180)
+		(at 441.96 55.88 270)
 		(effects
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "d6fccefd-f61e-52ac-a4c0-1902dc5d0547")
+		(uuid "dd5aa286-32f9-57d6-b62c-eac6034b82b4")
 	)
 	(global_label "V15"
 		(shape passive)
@@ -10854,6 +10842,10 @@
 			(justify left)
 		)
 		(uuid "1bdeac1c-04ca-5b5a-9362-e757c1660bc6")
+	)
+	(no_connect
+		(at 447.04 55.88)
+		(uuid "e0c4f40b-6c67-5c43-893b-8ac8df1a521c")
 	)
 	(no_connect
 		(at 187.96 50.8)

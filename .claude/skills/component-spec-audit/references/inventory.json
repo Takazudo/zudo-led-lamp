@@ -30,11 +30,6 @@
       "board": "board-l",
       "refdes": "TP1",
       "reason": "bare-copper test pad; no orderable/LCSC line"
-    },
-    {
-      "board": "board-l",
-      "refdes": "J5",
-      "reason": "bare-copper hand-wire solder pads; no orderable component"
     }
   ],
   "lines": [
@@ -891,25 +886,22 @@
       ]
     },
     {
-      "line_id": "line-wr11as",
-      "mpn": "WR11AS",
-      "manufacturer": "NKK Switches",
-      "lcsc": "",
-      "package": "Panel-mount solder lug",
+      "line_id": "line-c496154",
+      "mpn": "1MS1T1B1M1QES-5",
+      "manufacturer": "Dailywell",
+      "lcsc": "C496154",
+      "package": "SW-TH_1MS1T1B1M1QES-5",
       "dnp": false,
-      "owner_skill": "component-nkk-wr11as",
+      "owner_skill": "component-dailywell-1ms1t1b1m1qes-5",
       "identity_state": "VERIFIED",
       "source_state": "AVAILABLE",
-      "function": "maintained lamp power rocker",
+      "function": "maintained lamp power toggle",
       "placements": [
         {
           "board": "board-l",
           "refdes": "SW2"
         }
-      ],
-      "mounting": "external",
-      "supplier": "DigiKey",
-      "order_code": "360-1507-ND"
+      ]
     }
   ]
 }

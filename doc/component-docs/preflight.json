@@ -30,6 +30,7 @@
       "c4749199",
       "c492404",
       "c492405",
+      "c496154",
       "c529334",
       "cl21a226maqnnne",
       "fnr4030s4r7mt",
@@ -41,14 +42,13 @@
       "ro-ss26",
       "stusb4500qtr",
       "type-c-31-m-17",
-      "umw-ao3401a",
-      "wr11as"
+      "umw-ao3401a"
     ]
   },
   "sources": {
-    "available": 91,
-    "selected": 91,
-    "linkable": 91,
+    "available": 92,
+    "selected": 92,
+    "linkable": 92,
     "ids": [
       "src-al8860-ds39014",
       "src-al8860-generator",
@@ -102,6 +102,9 @@
       "src-c492405-drawing",
       "src-c492405-lcsc",
       "src-c492405-page",
+      "src-c496154-datasheet",
+      "src-c496154-generator",
+      "src-c496154-jlcpcb",
       "src-c529334-ds",
       "src-c529334-es",
       "src-c529334-generator",
@@ -138,9 +141,7 @@
       "src-type-c-primary-drawing",
       "src-type-c-primary-page",
       "src-umw-ao3401a",
-      "src-umw-ao3401a-board-p-generator",
-      "src-wr11as-datasheet",
-      "src-wr11as-generator"
+      "src-umw-ao3401a-board-p-generator"
     ]
   },
   "fields": [
@@ -273,187 +274,187 @@
     {
       "key": "source.sourceId",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.documentTitle",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.documentNumber",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.revision",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.documentDate",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.retrievalDate",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.authorityClass",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.availability",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.locator",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.printedPageLabel",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.physicalPdfPageIndex",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 91
+      "withheld": 92
     },
     {
       "key": "source.authoritativeUrl",
       "decision": "PUBLISH",
-      "emitted": 91,
+      "emitted": 92,
       "withheld": 0
     },
     {
       "key": "source.alternateAuthoritativeUrl",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 91
+      "withheld": 92
     },
     {
       "key": "source.sha256",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 91
+      "withheld": 92
     },
     {
       "key": "source.evidenceExtract",
       "decision": "DENY",
       "emitted": 0,
-      "withheld": 91
+      "withheld": 92
     },
     {
       "key": "fact.factId",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.class",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.value",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.unit",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.conditions",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.locator",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.provenance",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.verdict",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.dependsOn",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "fact.expression",
       "decision": "PUBLISH",
-      "emitted": 393,
+      "emitted": 395,
       "withheld": 0
     },
     {
       "key": "coverage.coverageId",
       "decision": "PUBLISH",
-      "emitted": 118,
+      "emitted": 119,
       "withheld": 0
     },
     {
       "key": "coverage.domain",
       "decision": "PUBLISH",
-      "emitted": 118,
+      "emitted": 119,
       "withheld": 0
     },
     {
       "key": "coverage.status",
       "decision": "PUBLISH",
-      "emitted": 118,
+      "emitted": 119,
       "withheld": 0
     },
     {
       "key": "coverage.reason",
       "decision": "PUBLISH",
-      "emitted": 118,
+      "emitted": 119,
       "withheld": 0
     },
     {
       "key": "coverage.factIds",
       "decision": "PUBLISH",
-      "emitted": 118,
+      "emitted": 119,
       "withheld": 0
     },
     {
       "key": "coverage.blockingFactIds",
       "decision": "PUBLISH",
-      "emitted": 118,
+      "emitted": 119,
       "withheld": 0
     },
     {
@@ -663,67 +664,49 @@
     {
       "key": "reference.footprint.packageId",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.footprint.name",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.footprint.path",
       "decision": "PUBLISH",
-      "emitted": 58,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.model.path",
       "decision": "PUBLISH",
-      "emitted": 59,
-      "withheld": 0
-    },
-    {
-      "key": "reference.model.name",
-      "decision": "PUBLISH",
-      "emitted": 1,
-      "withheld": 0
-    },
-    {
-      "key": "reference.model.originalName",
-      "decision": "PUBLISH",
-      "emitted": 1,
-      "withheld": 0
-    },
-    {
-      "key": "asset.sourceCad",
-      "decision": "PUBLISH",
-      "emitted": 1,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.model.offset",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.model.rotation",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.model.scale",
       "decision": "PUBLISH",
-      "emitted": 59,
+      "emitted": 60,
       "withheld": 0
     },
     {
       "key": "reference.package.recordIds",
       "decision": "PUBLISH",
-      "emitted": 24,
+      "emitted": 25,
       "withheld": 0
     },
     {
@@ -741,7 +724,7 @@
     {
       "key": "asset.footprintPreview",
       "decision": "PUBLISH",
-      "emitted": 34,
+      "emitted": 35,
       "withheld": 0
     },
     {
@@ -1071,6 +1054,24 @@
       "reason": "ABSOLUTE_HTTP_URL"
     },
     {
+      "sourceId": "src-c496154-datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c496154-generator",
+      "url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/96586a26ad0336d2d1ee4a61c8c6252d34fae4c5/scripts/schgen/board_l_spec.py",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
+      "sourceId": "src-c496154-jlcpcb",
+      "url": "https://jlcpcb.com/partdetail/C496154",
+      "decision": "ALLOW",
+      "reason": "ABSOLUTE_HTTP_URL"
+    },
+    {
       "sourceId": "src-c529334-ds",
       "url": "https://www.st.com/resource/en/datasheet/stm32g031f8.pdf",
       "decision": "ALLOW",
@@ -1291,28 +1292,16 @@
       "url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_p_spec.py",
       "decision": "ALLOW",
       "reason": "ABSOLUTE_HTTP_URL"
-    },
-    {
-      "sourceId": "src-wr11as-datasheet",
-      "url": "https://www.nkkswitches.com/pdf/WR.pdf",
-      "decision": "ALLOW",
-      "reason": "ABSOLUTE_HTTP_URL"
-    },
-    {
-      "sourceId": "src-wr11as-generator",
-      "url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/a29a046fc2bc7291704b297cf23a9be5bc000115/scripts/schgen/board_l_spec.py",
-      "decision": "ALLOW",
-      "reason": "ABSOLUTE_HTTP_URL"
     }
   ],
   "counts": {
     "generatedPages": 39,
-    "publishedCoverageDomains": 118,
-    "publishedFacts": 393,
+    "publishedCoverageDomains": 119,
+    "publishedFacts": 395,
     "publishedIntegrationRules": 7,
     "publishedInteractions": 52,
     "publishedPinMaps": 35,
     "publishedRecords": 35,
-    "publishedSources": 91
+    "publishedSources": 92
   }
 }

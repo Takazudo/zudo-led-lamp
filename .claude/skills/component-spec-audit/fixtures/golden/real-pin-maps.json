@@ -1318,28 +1318,34 @@
       "reviewer": "issue-25 foreground integration review"
     },
     {
-      "record_id": "rec-wr11as",
-      "pin_map_id": "pinmap-wr11as",
-      "canonical_sha256": "dcc454a984d5fc26b7a22346bdf9a6d01bf61d0746378c6c5acf5d08f5315f0b",
+      "record_id": "rec-c496154",
+      "pin_map_id": "pinmap-c496154",
+      "canonical_sha256": "375c97c67847b15db7aa3dfc0c9e9ebf793d719aec15391fc7575b5a181d506d",
       "evidence_fact_ids": [
-        "fact-wr11as-terminals"
+        "fact-c496154-terminals"
       ],
-      "trust_status": "TRUSTED",
+      "trust_status": "UNSOURCED",
       "critical_pins": [
         {
-          "symbol_pin": "1a",
-          "name": "COM",
-          "footprint_pad": "1a",
-          "function": "External solder lug; fused feed via Board L J5.1"
+          "symbol_pin": "1",
+          "name": "1",
+          "footprint_pad": "1",
+          "function": "Switched V15 to both converters; joins common 2 in ON"
         },
         {
-          "symbol_pin": "1b",
-          "name": "NO",
-          "footprint_pad": "1b",
-          "function": "External solder lug; switched V15 return via Board L J5.2"
+          "symbol_pin": "2",
+          "name": "2",
+          "footprint_pad": "2",
+          "function": "Common; V15_FUSED from F1.2"
+        },
+        {
+          "symbol_pin": "3",
+          "name": "3",
+          "footprint_pad": "3",
+          "function": "No PCB net; internally live from fused feed in OFF; keep isolated"
         }
       ],
-      "reviewer": "Independent planning review plus NKK WR catalog B127 checked 2026-09-05"
+      "reviewer": "Exact 1MSP0694 drawing and imported C496154 assets checked 2026-09-06; manufacturer mirror remains open"
     }
   ]
 }

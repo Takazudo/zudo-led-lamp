@@ -18,9 +18,20 @@
     "textPolicy": "suppress-all-fp-text-in-temporary-library",
     "postprocessor": "repository-svg-normalizer-v1"
   },
-  "canonicalInputSha256": "2890c3ed7154ef4202c68e01b956c61442b05f9937550f580375ad44b9c36405",
-  "generatedOutputSha256": "71521e4a303cfca8484f3c6bd6192eaf3b3cb4c45fe2e7fd41e771a54fdbe651",
+  "canonicalInputSha256": "3cecd837b77f9bfa58834abc430e032cab11db557150153df988c49404641c6c",
+  "generatedOutputSha256": "bb026baf3cb73cd1d6a83e481fc4d2fbf05acabf48d43cd254b79378fa34590a",
   "packages": [
+    {
+      "packageId": "SW-TH_1MS1T1B1M1QES-5",
+      "footprintName": "SW-TH_1MS1T1B1M1QES-5",
+      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/SW-TH_1MS1T1B1M1QES-5.kicad_mod",
+      "recordIds": [
+        "rec-c496154"
+      ],
+      "assetPath": "/assets/component-previews/footprints/SW-TH_1MS1T1B1M1QES-5.svg",
+      "canonicalInputSha256": "b83f14fd132efc936082ce354d2b3cedf584671fd0b578747ed9e57ffb592fc6",
+      "generatedOutputSha256": "1d98879dcb651184048f9d14fbc0c7b518b5f85f0c43acd3f545221046010c90"
+    },
     {
       "packageId": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
       "footprintName": "USB-C-SMD_10P-P1.00-L6.8-W8.9",

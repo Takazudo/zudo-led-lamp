@@ -30,24 +30,23 @@ fee arithmetic at the bottom of this page is only as good as the tier data on th
 you order.
 :::
 
-## External hand-assembly addition (2026-09-05)
+## JLCPCB power switch replacement (2026-09-06)
 
-| Ref | Qty | Exact part | Supplier / order code | Assembly | Dated availability / cost |
+| Ref | Qty | Exact part | JLCPCB | Assembly | Dated availability / cost |
 |---|---|---|---|---|---|
-| SW2 | 1 | **NKK WR11AS** | [DigiKey 360-1507-ND](https://www.digikey.com/en/products/detail/nkk-switches/WR11AS/379592) | Fitted panel rocker, hand-wired; no LCSC/CPL | 8 immediate + 94 factory; US$21.94 at quantity 1 |
-| J5 | 1 pad pair | Bare solder points | No purchased part | PCB feature only | No BOM line or assembly fee |
-| Harness | 2 wires | 22 AWG stranded copper, ≥60 V / 105 °C insulation | Cut each to ≤150 mm; insulated lugs and strain relief | Hand assembly consumables | Quote separately |
+| SW2 | 1 | **Dailywell 1MS1T1B1M1QES-5** | [C496154](https://jlcpcb.com/partdetail/C496154) | Extended; rear PCB plated slots; Wave Soldering | 1,080 in stock; 995 available to order; US$1.1485 at quantity 1 |
 
-Add **US$21.94 per lamp plus wire/insulation and shipping/tax** to the existing
-board-component estimate using that dated switch quote. The JLCPCB Extended-line
-setup-fee calculation below is unchanged: SW2 is bought separately and J5 is bare
-copper. The full system inventory is now **35 orderable identities** (34 prior
-board identities plus this external switch), with 31 fitted identities and four
-DNP/hand-fit board identities. The switch is fitted, not DNP.
+SW2 replaces the separately sourced WR11AS and its J5 harness interface. It is
+fitted and included in the Board L BOM/CPL. The inventory remains **35 orderable
+identities**, now all with LCSC identifiers; 31 are fitted and four are DNP/hand-fit.
+The older cost snapshot below predates this switch: add one C496154 per lamp and
+one additional Extended line to the current JLCPCB quote. No separate WR11AS or
+switch harness purchase is required. Enclosure mounting hardware remains mechanical assembly.
 
-See [power-switch wiring, mounting and qualification](./power-switch.mdx).
-Recheck availability before ordering; do not substitute WR12AS or another terminal
-suffix. The PCB layout still needs J5 and the split power path before fabrication.
+The exact manufacturer calls these solder lugs; JLCPCB offers this SKU for
+wave-solder assembly. The project uses a reviewed slotted footprint and requires
+bushing/nut support. See [switch mounting and qualification](./power-switch.mdx).
+Stock is not reserved, and modified slot fit must be checked on the first assembly.
 
 ## Board P — USB-PD front end
 

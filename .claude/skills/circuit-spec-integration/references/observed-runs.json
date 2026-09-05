@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "provenance_note": "Observed Claude Code policy rendering/refusal after explicit /circuit-spec-integration invocation with a frozen evidence packet. Deterministic forward fixtures separately prove routing and evidence discovery; these runs do not claim independent model discovery of IDs. The WR11AS run is a Codex collaboration subagent with no tool use and a context-free frozen packet; it observes policy rendering only.",
+  "provenance_note": "Observed explicit circuit-spec-integration policy rendering/refusal against frozen evidence packets. Deterministic forward fixtures separately prove routing and evidence discovery; these runs do not claim independent model discovery of IDs. The C496154 run records the actual parent Codex policy response after loading the packet and named evidence. Its response phase used no tools and created no persistent session; it is not an independent subagent observation.",
   "runs": [
     {
       "run_id": "observed-usb-pd-programmed-state",
@@ -177,52 +177,52 @@
       }
     },
     {
-      "run_id": "observed-external-rocker-power-cut",
-      "case_id": "external-rocker-power-cut",
-      "runner": "Codex collaboration subagent; context-free frozen packet; no tool calls",
+      "run_id": "observed-board-toggle-power-cut",
+      "case_id": "board-toggle-power-cut",
+      "runner": "Parent Codex explicit-skill policy rendering after loading frozen packet and named owner evidence; not an independent model-discovery run",
       "model": "inherited session model",
-      "run_date": "2026-09-05",
+      "run_date": "2026-09-06",
       "invocation": {
         "skill": "/circuit-spec-integration",
         "tools": "disabled",
         "session_persistence": false,
         "evidence_packet": "frozen"
       },
-      "prompt": "Evaluate NKK WR11AS external lamp power rocker, terminal 1a/1b and Board L J5 harness; prove both converters unpowered OFF with safe capacitor inrush/contact life.",
-      "prompt_sha256": "a4cf78bf5a1130c5099eb6cda0f19001a0cbb40752ffc4aac453e8d4ac3147ed",
-      "response_sha256": "81eeb9be35adc6c6925845072736d6de8eceae80c28fe25eaab0c92146a9b6e6",
+      "prompt": "Evaluate Dailywell 1MS1T1B1M1QES-5 C496154 Board L power toggle, common 2 and the isolated live OFF throw; prove both converters unpowered OFF with safe capacitor inrush/contact life and assembled fit.",
+      "prompt_sha256": "357153e0a22f9e0bec695a1210231333ba25451754fd32bf3acbd8d41a65fb31",
+      "response_sha256": "070866ec6dd9a5890dfa8a73d273c64dd2574f6df8049f9f23b3aed50a3eed7c",
       "response": {
         "trigger_skill": "circuit-spec-integration",
         "loaded_skills": [
           "component-spec-audit",
           "circuit-spec-integration",
-          "component-nkk-wr11as",
+          "component-dailywell-1ms1t1b1m1qes-5",
           "component-bhfuse-bsmd1206-075-30v",
           "component-al8860mp-13",
           "component-ap63203wu-7"
         ],
         "source_ids": [
-          "src-wr11as-datasheet",
-          "src-wr11as-generator",
+          "src-c496154-datasheet",
+          "src-c496154-generator",
           "src-bhfuse-generator",
           "src-ap6320x-ds41326"
         ],
         "fact_ids": [
-          "fact-wr11as-rating",
-          "fact-wr11as-terminals",
-          "fact-wr11as-project-nets",
+          "fact-c496154-rating",
+          "fact-c496154-terminals",
+          "fact-c496154-project-nets",
           "fact-bhfuse-project-nets",
           "fact-ap63203-en-open"
         ],
         "conditions": [
-          "SW2 1a-1b closes fused feed to switched V15; J5.1 feed and J5.2 return are hand-wired. Both converters lose normal supply in OFF; Board P remains powered. Verify capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test."
+          "SW2 common 2 receives V15_FUSED and joins pin 1 to switched V15 in ON. In OFF, common 2 joins pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF; Board P remains powered. Verify modified plated-slot and enclosure fit, front lug clearance, capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test. Exact drawing is manufacturer-mirror evidence, not closed manufacturer-primary trust."
         ],
         "calculation_ids": [],
         "verdicts": [
           "NEEDS BENCH"
         ],
         "refused": true,
-        "refusal": "The frozen packet requires bench verification before claiming proven OFF behavior, safe capacitor inrush, or adequate contact life."
+        "refusal": "The design graph opens the normal V15 supply in OFF, but common 2 energizes isolated pad 3 and Board P remains powered. Stored charge and ATT/PDOK/SWD/UART back-power are untested. The 5 A at 28 VDC rating from an exact manufacturer mirror does not establish capacitive endurance or manufacturer-primary trust. Modified-slot and front-lug/enclosure fit are calculated or rendered design expectations, not physically validated assembly. Therefore proof of unpowered converters, safe inrush/contact life and assembled fit is refused pending bench validation."
       }
     }
   ]

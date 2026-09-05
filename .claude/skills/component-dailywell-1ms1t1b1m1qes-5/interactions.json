@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "interactions": [
+    {
+      "interaction_id": "int-c496154-power-cut",
+      "record_ids": [
+        "rec-c496154"
+      ],
+      "fact_ids": [
+        "fact-c496154-rating",
+        "fact-c496154-terminals",
+        "fact-c496154-project-nets"
+      ],
+      "conditions": "Fused high-side switch cuts normal input to both converters; USB-PD board remains alive. Pin 3 is internally fused-feed live in OFF despite having no PCB net. Capacitive make/break, rail decay, minimum contact load, modified slot/enclosure fit and service-interface back-power need prototype validation; drawing is manufacturer-mirror evidence.",
+      "verdict": "NEEDS BENCH"
+    }
+  ]
+}

@@ -21,7 +21,6 @@ export const MODEL_PUBLIC_ROOT = join(
 export type ModelAssetPlanEntry = {
   readonly name: string;
   readonly source: string;
-  readonly kind?: "download";
 };
 
 export type ModelAssetResult = {
@@ -35,8 +34,8 @@ export type ModelAssetResult = {
 export async function buildModelAssetPlan(): Promise<readonly ModelAssetPlanEntry[]> {
   const index = await readEvidenceIndex();
   const packages = index.references?.packages;
-  if (packages === undefined || packages.length !== 24) {
-    fail("ADAPTER_CONTRACT", "model publication requires exactly 24 selected packages", {
+  if (packages === undefined || packages.length !== 25) {
+    fail("ADAPTER_CONTRACT", "model publication requires exactly 25 selected packages", {
       actual: packages?.length ?? 0,
     });
   }
@@ -55,13 +54,6 @@ export async function buildModelAssetPlan(): Promise<readonly ModelAssetPlanEntr
       source: containedRepositoryFile(descriptor.modelPath),
     });
   }
-  const external = index.references?.externalModelsByRecordId;
-  if (external?.size !== 1) fail("ADAPTER_CONTRACT", "model publication requires one selected external model");
-  for (const descriptor of external.values()) {
-    entries.push({ name: basename(descriptor.modelPath), source: containedRepositoryFile(descriptor.modelPath) });
-    entries.push({ name: descriptor.originalName, source: containedRepositoryFile(descriptor.originalPath), kind: "download" });
-  }
-  if (new Set(entries.map((entry) => entry.name)).size !== entries.length) fail("ADAPTER_CONTRACT", "model asset names must be unique");
   return entries.sort((a, b) => byCodeUnit(a.name, b.name));
 }
 
@@ -86,8 +78,8 @@ export async function syncModelAssets(
 
   for (const entry of plan) {
     assertSafePreviewAssetName(entry.name, "model-publication");
-    if (extname(entry.name).toLowerCase() !== (entry.kind === "download" ? ".stl" : ".wrl")) {
-      fail("PUBLICATION_POLICY", "model previews must be WRL; explicitly selected CAD downloads must be STL", { name: entry.name });
+    if (extname(entry.name).toLowerCase() !== ".wrl") {
+      fail("PUBLICATION_POLICY", "only WRL files may be published as model previews", { name: entry.name });
     }
     const target = containedPublicTarget(outputRoot, entry.name);
     const sourceBytes = await readFile(entry.source);
