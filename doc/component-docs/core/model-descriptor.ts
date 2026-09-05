@@ -3,7 +3,6 @@ export const MODEL_ASSET_BASE = "/assets/component-previews/models/";
 export type ModelVector = { readonly x: number; readonly y: number; readonly z: number };
 
 export type ModelViewerDescriptor = {
-  readonly kind?: "external";
   readonly version: 1;
   readonly packageId: string;
   readonly packageLabel: string;
@@ -39,7 +38,7 @@ export function assertModelDescriptor(value: unknown): asserts value is ModelVie
   if (typeof value !== "object" || value === null) throw new Error("Model descriptor must be an object");
   const descriptor = value as Record<string, unknown>;
   const keys = Object.keys(descriptor).sort().join(",");
-  if (keys !== "modelUrl,offset,packageId,packageLabel,rotation,scale,version" && !(keys === "kind,modelUrl,offset,packageId,packageLabel,rotation,scale,version" && descriptor.kind === "external")) {
+  if (keys !== "modelUrl,offset,packageId,packageLabel,rotation,scale,version") {
     throw new Error("Model descriptor has unexpected fields");
   }
   if (

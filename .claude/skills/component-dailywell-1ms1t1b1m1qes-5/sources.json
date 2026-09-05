@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "src-c496154-datasheet",
+      "record_id": "rec-c496154",
+      "document_title": "1MS1T1B1M1QES-5 Miniature Toggle Switches",
+      "document_number": "1MSP0694",
+      "revision": "B; temperature amendment 2017-10-18",
+      "document_date": "2006-01-17",
+      "authoritative_url": "https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154",
+      "alternate_authoritative_url": "https://jlcpcb.com/partdetail/C496154",
+      "retrieval_date": "2026-09-06",
+      "authority_class": "MANUFACTURER_MIRROR",
+      "sha256": "74dfeb6b3051a03f56ed026f5dcded1f2f90d432d8db171fe68f25534c2b510c",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "1 of 1",
+      "locator": "Drawing 1MSP0694: SWITCH FUNCTION table; RATINGS Q row; dimensioned views; SOLDER LUG and PANEL MOUNTING figures; SPECIFICATIONS",
+      "evidence_extract": "Exact manufacturer-authored -5 drawing retrieved through JLCPCB and the stable PDF URL on the exact LCSC listing; both downloads have identical SHA256. Mirror authority does not close manufacturer-primary trust. Maintained SPDT ON-NONE-ON: common 2 joins 3 in position 1 or 1 in position 3. Q silver contacts: 5 A at 120 VAC or 28 VDC, 2 A at 250 VAC; no resistive-load qualifier stated. Body 12.70 x 6.86 mm, lug pitch 4.70 mm, lug width 2.03 mm and thickness 0.76 mm, projection 3.96 mm; drawing general two-decimal tolerance +/-0.25 mm. Solder lugs and threaded panel mounting, not the manufacturer PC-pin variant. Bushing 1/4-40 UNS-2A; opening diameter 6.35 mm. Mechanical life 40,000 operations. Ambient -40 to +85 C. Initial contact resistance 10 milliohms maximum at 2-4 VDC, 100 mA. No lamp capacitive-inrush or contact-wetting qualification."
+    },
+    {
+      "source_id": "src-c496154-generator",
+      "record_id": "rec-c496154",
+      "document_title": "Board L JLCPCB power switch design",
+      "document_number": "Board L JLCPCB power switch design",
+      "revision": "96586a26ad0336d2d1ee4a61c8c6252d34fae4c5",
+      "document_date": "2026-09-06",
+      "authoritative_url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/96586a26ad0336d2d1ee4a61c8c6252d34fae4c5/scripts/schgen/board_l_spec.py",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-09-06",
+      "authority_class": "PROJECT_GENERATOR",
+      "sha256": "f76db6ce0ffd49db05abe0e9cfc5ca6c57f26b0b0bd04d016e65a25d6ba3b345",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "source file",
+      "locator": "COMPONENTS table SW2; NETS rows V15_FUSED/V15; NO_CONNECT SW2.3",
+      "evidence_extract": "SW2 is fitted Dailywell 1MS1T1B1M1QES-5, LCSC C496154, with zudo-led-lamp:SW-TH_1MS1T1B1M1QES-5 footprint. Pin 2=V15_FUSED=F1.2, pin 1=V15 feeds both converters and D10; pin 3 explicitly unconnected on the board but internally tied to fused feed in the OFF throw. GND remains continuous. No external switch or J5 harness. Normal design input about 15 V, 0.41 A is a design estimate, not a bench measurement."
+    },
+    {
+      "source_id": "src-c496154-jlcpcb",
+      "record_id": "rec-c496154",
+      "document_title": "JLCPCB C496154 exact component and assembly listing",
+      "document_number": "C496154",
+      "revision": "Live listing observed 2026-09-06 JST",
+      "document_date": "2026-09-06",
+      "authoritative_url": "https://jlcpcb.com/partdetail/C496154",
+      "alternate_authoritative_url": "",
+      "retrieval_date": "2026-09-06",
+      "authority_class": "DISTRIBUTOR_IDENTITY",
+      "sha256": "aee6dc0193285b2ecca915eed29aac564a9dbfd5bbc8b6b9fdd9282ef9cfddc4",
+      "availability": "AVAILABLE",
+      "physical_pdf_page_index": 0,
+      "printed_page_label": "web listing",
+      "locator": "Component identity table; Stock and Available Order Qty rows; PCB Assembly Tips section and Assembly Type row",
+      "evidence_extract": "Dailywell 1MS1T1B1M1QES-5 is JLCPCB C496154, Extended. Live page observed 2026-09-06 JST: In Stock 1080, Available Order Qty 995; Assembly Type Wave Soldering, PCBA Type Economic and Standard, explicit PCB assembly support and Add to My Part Lib for Assembly. Stock is not reserved and changes. Supplier PC Pin wording is not manufacturer terminal classification: exact drawing says solder lug/panel mounting. Listing does not certify the project-adapted slots, insertion, enclosure fit or physical assembly.",
+      "identity_extract_sha256": "cd5d809fde0a1242aaef69138dcbddbeea566cab699d7bffa294ba205a030336",
+      "refresh_policy": "VOLATILE-HTML",
+      "refresh_note": "Live HTML and inventory are not deterministic; the canonical identity extract is hash locked separately."
+    }
+  ]
+}

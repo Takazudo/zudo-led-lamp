@@ -146,10 +146,16 @@ contact mapping, orientation, or incoming continuity.
   [catalog](/docs/components/catalog/).
 
 
-## WR11AS power-cut boundary
+## C496154 power-cut boundary
 
-The external Board L rocker is **NKK WR11AS**, rated **15 A at 30 V DC for
-resistive load** (WR catalog B124). It carries the nominal ~0.41 A lamp input,
-after F1, and cuts both converters. This rating does not certify capacitor
-inrush, low-current contact wetting or the unresolved upstream transient envelope.
-See [exact wiring and hardware qualification](/docs/architecture/power-switch/).
+Board L's rear toggle is **Dailywell 1MS1T1B1M1QES-5 / C496154**. The exact
+manufacturer drawing retrieved through LCSC lists **5 A at 28 VDC** for Q silver
+contacts, without a load-type qualifier. It carries the nominal ~0.41 A input
+after F1. Common 2 connects pin 1 to both converters in ON; OFF connects to pin 3,
+which is isolated on the PCB but then electrically live.
+
+JLCPCB lists this exact part for wave-solder assembly. The project-adapted plated
+slots and enclosure bushing support still require physical fit verification.
+The rating does not certify capacitor inrush, contact wetting or the unresolved
+upstream transient envelope. See [the component evidence](/docs/components/records/c496154/)
+and [hardware qualification](/docs/architecture/power-switch/).

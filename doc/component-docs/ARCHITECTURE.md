@@ -17,8 +17,8 @@ adds a **projection** of it into human documentation. It never re-states a fact 
 prose, never repairs a value, and never synthesises a component-wide verdict.
 
 Corpus as of this contract: **14 owner bundles, 35 records (25 standalone, 10
-subordinate), 91 sources, 393 facts, 118 coverage domains, 52 interactions, 35
-routes, 35 pin maps, 162 pins**, plus **7 cross-component rules** in
+subordinate), 92 sources, 395 facts, 119 coverage domains, 52 interactions, 35
+routes, 35 pin maps, 163 pins**, plus **7 cross-component rules** in
 `circuit-spec-integration`; 30 inventory lines fitted, 4 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
 fails the build.
@@ -66,7 +66,7 @@ adapters/circuit/           this repository's evidence provider
   paths.ts                  every path the adapter may touch
   validate.ts               python3 validate.py subprocess
   read.ts                   contained, symlink-refusing JSON reads
-  selection.ts              committed instance allowlist (35 records / 91 sources)
+  selection.ts              committed instance allowlist (35 records / 92 sources)
   matrix.ts                 committed per-field decisions
   integration.ts            cross-component rules: shapes, projection, closure
   evidence.ts               provider shapes, bundle reads, the joins (pure)
@@ -153,9 +153,9 @@ both. CI pins `node-version: 22`.
 
 ### Footprint preview assets
 
-The 24 package-level SVG previews under
+The 25 package-level SVG previews under
 `public/assets/component-previews/footprints/` are generated assets, shared by
-all 34 record aliases. Their `manifest.json` locks each canonical footprint
+all 35 record aliases. Their `manifest.json` locks each canonical footprint
 hash, output hash, record mapping, renderer, and export options. Catalog data
 therefore carries a stable asset path rather than duplicating SVG bytes per
 record.
@@ -253,7 +253,7 @@ Rules the shape enforces:
 **`PublicRecordIdentity.ownerSkill`** was added in #59: the owner bundle's name
 (`component-al8860mp-13`) is what lets a record page link back to its raw agent
 resource at `/docs/claude-skills/<name>/`, and it is not derivable — 13 owners
-cover 34 records and `component-project-passives` owns eleven of them.
+cover 35 records and `component-project-passives` owns eleven of them.
 `FIELD_KEYS` gained `record.ownerSkill` and the matrix publishes it; those bundle
 routes are already on the live site, so it publishes a route rather than a new
 fact.
@@ -270,7 +270,7 @@ fatal `ADAPTER_CONTRACT` — there is no fourth shape to guess at.
 ### Identity, ordering, errors
 
 - **Record slug** = record ID minus the `rec-` prefix (`rec-al8860mp-13` →
-  `al8860mp-13`). Verified unique across all 34 records. Derived from the ID and
+  `al8860mp-13`). Verified unique across all 35 records. Derived from the ID and
   never from the MPN, because MPNs contain commas and slashes (`PESD24VS1UB,115`).
   A slug that does not match `^[a-z][a-z0-9]*(-[a-z0-9]+)*$`, or that hits the
   reserved list (`index`, `404`, `assets`, `api`, `search`, `sitemap`, `robots`,
@@ -836,7 +836,7 @@ canonical `zudo-led-lamp.pretty` library. Before projection, the adapter require
   content rejected;
 - 512 KiB per footprint, 2 MiB per WRL, and 8 MiB for the selected aggregate.
 
-The 34 record mappings collapse to a reviewed 24-package manifest while retaining
+The 35 record mappings collapse to a reviewed 25-package manifest while retaining
 record-level lookup. Public paths identify only those manifest-selected footprint
 and WRL files. Same-basename STEP is validation evidence and is not published:
 browser preview loaders use WRL, while exposing both formats would double the
@@ -851,24 +851,17 @@ claim. Package previews are useful and bounded now; board rendering becomes vali
 only after the layouts themselves become authoritative.
 
 
-## External assembly components (2026-09-05)
+## All selected components have JLCPCB identities (2026-09-06)
 
-WR11AS adds one explicitly registered external component. Board specs declare
-`EXTERNAL_COMPONENTS` with exact manufacturer, MPN, package, supplier and order
-code. It has no LCSC or PCB footprint; the schematic includes it in the system
-BOM and excludes it from PCB placement. The inventory's `mounting: external`
-must agree with the generator metadata. Its pin map has `mounting: external`
-and an empty footprint; `footprint_pad` holds physical terminal IDs in this case.
-Ordinary PCB identities retain all existing LCSC and KiCad asset checks.
+Dailywell 1MS1T1B1M1QES-5 / C496154 replaces the external WR11AS selection.
+The active corpus has **35 PCB records across 25 preview packages**, with an
+explicit PDF, footprint and WRL for each record. SW2 is fitted, has an LCSC code,
+and appears in the PCB/BOM/CPL. The old J5 pad pair and WR11AS source/preview assets
+are removed. The prior WR11AS-only external CAD publication path was retired;
+the replacement uses the existing PCB package pipeline and safety checks.
 
-The public record reference has a null footprint only for validated external
-records; its page links the audited PDF. A separately hash-locked
-`CIRCUIT_EXTERNAL_MODELS` selection now supplies the real WR11AS panel model,
-retained original STL download, and converted WRL. This leaves all PCB package
-requirements intact: 24 PCB WRLs plus one external WRL and one explicit STL
-download. The UI shows panel mounting instead of a fabricated footprint preview.
-Model descriptors distinguish external components from shared footprint geometry;
-closed schemas and local path restrictions apply to both.
-There remain **34 PCB records across 24 preview packages**, plus **one external
-record**. J5 is bare-copper PCB geometry, not a purchased component or public
-package preview. Historical verification reports above retain their original counts.
+The exact manufacturer drawing is retained as manufacturer-mirror evidence,
+separate from the JLCPCB assembly/stock observation. The switch's solder lugs fit
+project-adapted plated slots with a documented tolerance calculation. PCB models
+and source drawings do not close physical fit, inrush, OFF decay or back-power gates.
+Historical verification reports above retain their original counts.

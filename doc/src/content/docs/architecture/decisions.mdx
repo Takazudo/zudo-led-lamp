@@ -393,14 +393,16 @@ call either protected input chain PASS. The current no-PD gate is tracked in
 [issue #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).
 
 
-## Maintained lamp power rocker (2026-09-05)
+## JLCPCB-assembled maintained toggle replaces the rocker (2026-09-06)
 
-Choose **NKK WR11AS**, the user's preferred appliance-style rocker, because the
-exact solder-lug SKU was stocked during planning. Keep the EC11 for brightness.
-SW2 cuts the fused positive feed to both Board L converters through J5; it leaves
-Board P powered. A firmware/CTRL-only switch would retain logic standby power,
-so the mechanical supply cut was selected. See [the locked wiring and evidence](./power-switch.mdx).
+Choose **Dailywell 1MS1T1B1M1QES-5 / C496154**, the earlier toggle fallback,
+with live JLCPCB stock and wave-solder assembly support verified during planning.
+The WR11AS choice on 2026-09-05 used external distributor stock and missed the
+JLCPCB sourcing requirement; that decision is superseded.
 
-Dailywell 1MS1T1B1M1QES-5 and NKK MN11SS1W01 were toggle fallbacks if the rocker
-was unavailable. They are not authorized drop-in substitutions. Panel mounting
-means separate hand assembly, with no LCSC identity or PCB footprint for SW2.
+SW2 mounts on the rear PCB, clear of Board P and the pillars, and cuts the fused
+positive feed to both converters. Common 2 feeds pin 1 in ON; pin 3 is unwired
+but live in OFF. Board P remains powered. The EC11 retains brightness control.
+Use the exact solder-lug SKU in the reviewed plated-slot footprint and support its
+threaded bushing in the enclosure. The old J5 pads and external harness are removed.
+See [selection, mounting and qualification](./power-switch.mdx).

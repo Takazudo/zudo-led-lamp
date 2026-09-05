@@ -29,11 +29,11 @@
  * The site publishes component knowledge through channels this feature does not
  * own. The narrative docs are hand-authored and name parts in prose;
  * `claudeResources` mirrors every `SKILL.md` verbatim, and a routing prompt is
- * close to the skill's own frontmatter description by construction. Five values
+ * close to the skill's own frontmatter description by construction. Six values
  * in this corpus are therefore on the site legitimately, in pages this
  * generator never wrote.
  *
- * Scanning the whole site with the full canary set reports those five on every
+ * Scanning the whole site with the full canary set reports those six on every
  * clean build. So:
  *
  *   OWNED  artifacts this feature writes — the generated MDX, the preflight
@@ -95,8 +95,9 @@ const MINIMUM_SITE_FILES = 150;
 
 /**
  * How many canaries the SITE tier is allowed to drop because another content
- * source already publishes them. Five today, each verified by hand:
+ * source already publishes them. Six today, each verified by hand:
  *
+ *   Dailywell 1MS1T1B1M1QES-5      owner mirror + switch architecture/BOM
  *   SMAJ20A C571370                 only the claude-skills mirror
  *   AO3401A C347476                 only the claude-skills mirror
  *   XFCN PZ254V male                records + architecture/BOM + ratings matrix
@@ -104,7 +105,7 @@ const MINIMUM_SITE_FILES = 150;
  *   UMW (Youtai Semiconductor) …    mirror + architecture/decisions + ratings-matrix
  *
  * The subtraction corpus includes `claude-skills/*`, the generated mirror of
- * each `SKILL.md` — and two of the five rest on that mirror ALONE. `SKILL.md`
+ * each `SKILL.md` — and two of the six rest on that mirror ALONE. `SKILL.md`
  * bodies are hand-editable, and the raw file is outside the canary harvest, so
  * a sentence added to one could retire a canary sitewide, invisibly from both
  * directions.
@@ -117,7 +118,7 @@ const MINIMUM_SITE_FILES = 150;
  * for a noisy one, firing on component-audit skills whose bodies name parts
  * constantly, and a canary that cries wolf gets suppressed.
  */
-const EXPECTED_WITHHELD = 5;
+const EXPECTED_WITHHELD = 6;
 
 function assertWithheldCount(withheld: number): void {
   if (withheld === EXPECTED_WITHHELD) return;

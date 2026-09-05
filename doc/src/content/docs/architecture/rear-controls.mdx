@@ -5,26 +5,25 @@ sidebar_position: 36
 ---
 
 Board L now supports the intended interaction: turn the lamp over to reach the
-power rocker and brightness knob. The 24 LEDs remain on the front, facing upward
+power toggle and brightness knob. The 24 LEDs remain on the front, facing upward
 into the starburst light chamber. SW1, the existing **EC11L1525G01 encoder**, is
 mounted on the back, beside the pillar-mounted power board. It is not an analog potentiometer; its A/B/C connections and
 unused D/E push contacts retain the schematic assignments.
 
-![KiCad render of Board L from underneath, showing the rear encoder and J5 solder points](/assets/pcb/board-l-rear-controls.png)
+![KiCad render of Board L from underneath, showing the rear encoder and C496154 switch](/assets/pcb/board-l-rear-controls.png)
 
-This is a render of the actual PCB file. The WR11AS rocker and its harness are
-external assembly items, so they do not appear in this board-only render.
+This is a render of the actual PCB file. Both rear controls now have their real
+models: SW1 is the encoder, and SW2 is the JLCPCB C496154 maintained toggle.
 
-## The rocker connects through J5
+## SW2 replaces the external harness
 
-The board now routes `F1.2 → J5.1` on `V15_FUSED`, and `J5.2 → V15` to the existing
-converter input distribution. The previous copper connection from F1 directly to
-V15 is removed. Fit the external rocker between J5 pads 1 and 2 using the
-[locked wiring and harness specification](./power-switch.mdx#where-the-switch-connects).
-The square pad is **1 FEED**, and the round pad is **2 RETURN**; rear silkscreen
-labels identify them. Both wires carry positive supply, not ground.
+The board routes `F1.2 → SW2.2` on `V15_FUSED`, and `SW2.1 → V15` to the existing
+converter input distribution. ON joins common 2 to pin 1. OFF joins 2 to the
+otherwise isolated pin 3: that pad is unwired, but electrically live in OFF.
+J5 and the external switch wiring are removed. SW2 is fitted in the BOM/CPL as
+[Dailywell 1MS1T1B1M1QES-5 / C496154](./power-switch.mdx).
 
-The switch feed and return remain routed through J5. The front LEDs retain their
+The front LEDs retain their
 positions. R31 moves from (43.25, 13.25) to (40.50, 13.25) mm to clear the rear
 encoder's through-hole support lug; its two LED_P branches and LED_S2_A path are
 rerouted. SW1's A/B/C connections retain their schematic identities.
@@ -46,22 +45,29 @@ A drawing viewed from underneath reverses left and right.
 | Feature | X | Y | Side / purpose |
 |---|---:|---:|---|
 | SW1 shaft / footprint origin | 51.50 | 12.50 | Back; encoder body and shaft extend below Board L |
-| J5 pad 1 | 8.50 | 28.00 | Back wire entry; fused feed to WR11AS lug 1a |
-| J5 pad 2 | 13.58 | 28.00 | Back wire entry; switched return from lug 1b |
-| SW2 panel opening | Not fixed | Not fixed | External bottom panel; 34.2 × 17.2 mm, +0.3 / −0 mm |
+| SW2 body / footprint origin | 9.10 | 27.75 | Back; toggle body and actuator extend below Board L |
+| SW2 pad 1 | 9.10 | 23.05 | Switched V15 to both converters |
+| SW2 pad 2 | 9.10 | 27.75 | Common; V15_FUSED from F1 |
+| SW2 pad 3 | 9.10 | 32.45 | Isolated PCB pad; fused-feed live in OFF |
 
-The starburst-panel references establish hidden controls below a horizontal LED
-board, but contain no dimensioned underside or enclosure CAD. The rocker opening
-and the base depth therefore remain mechanical prototype decisions. Its specified
-panel thickness is 1–4 mm; the encoder's panel and shaft fit must be checked against
-the actual purchased part because the retained encoder mechanical evidence remains
+The switch bushing is centred at SW2's origin. The drawing gives an 8.89 mm body,
+8.89 mm threaded bushing and 10.41 mm actuator projection. Position the enclosure
+support plane through the threaded bushing and reserve thread engagement for the
+nuts. Its 6.35 mm opening has keyway details; the optional locking-ring arrangement
+uses a 2.38 mm locating hole 6.10 mm off centre. Use the exact drawing for the profile.
+Panel thickness, nut stack and control recess depth remain prototype decisions.
+
+The actual model reaches about 28.67 mm below its mounting plane. On the front,
+lugs extend about 1.90 mm past a 1.6 mm PCB, plus solder. Keep the light chamber
+clear of that volume, particularly the powered common and OFF-throw lugs. The
+[slot-fit calculation](./power-switch.mdx#plated-slots-and-panel-support-accommodate-the-exact-part)
+is a design check; it does not establish assembled fit or solder quality.
+
+Provide finger access and feet or a rim that keep both controls off the table.
+Secure the toggle's threaded bushing so actuation does not load its PCB joints.
+The encoder's panel and shaft fit also needs checking against the purchased part;
+its retained mechanical evidence remains
 [mirror-only and unresolved](/docs/components/records/c2991196/).
-
-Provide a recessed bottom control area with finger access. The base rim or feet
-must support the lamp with clearance below the installed knob and the rocker in
-both positions. Include clearance for solder lugs, insulated wires, strain relief,
-encoder hardware and removal of the bottom cover. A PCB render alone does not
-establish those clearances.
 
 ### The pillars and connector fix Board P's position
 
@@ -78,23 +84,21 @@ through-hole in Board L.
 This diagram is viewed from underneath, so X is mirrored relative to the coordinate
 table. The Board P outline is also marked on Board L's `Dwgs.User` layer.
 SW1's footprint clears the power-board outline by approximately **1.39 mm**;
-J5's pads clear it by **1.42 mm**. The verification script reserves a 1 mm
+SW2's reviewed courtyard clears it by **3.40 mm**. The verification script reserves a 1 mm
 horizontal placement margin. This is a PCB envelope check, not clearance for a
 chosen knob diameter or enclosure wall.
 
 With the corrected J2 orientation, all six numbered contact centres match
 JOUT1 after the same pillar-derived translation. Confirm seating, pillar height,
 connector body clearance and six-net continuity in the physical assembly before
-powering it. Place the external rocker and harness outside the power board's
-occupied volume; its final panel coordinates and the enclosure depth remain
-mechanical prototype decisions.
+powering it. SW2 stays outside the power board's occupied projection; enclosure depth, bushing support and front lug clearance remain mechanical prototype checks.
 
 ## Verification covers copper, not the assembled lamp
 
 KiCad 10 loads, saves and renders the edited board. DRC is run with the existing
 project rules, zone refill and schematic parity checking. The control checker
-also verifies schematic footprint identities and pad-net assignments, rear SW1/J5,
-front LEDs, all six pillar-aligned mating contacts, clearance around Board P, and J5's exclusion from orderable BOM and placement files.
+also verifies schematic footprint identities and pad-net assignments, rear SW1/SW2,
+front LEDs, all six pillar-aligned mating contacts, clearance around Board P, and SW2's C496154 identity and inclusion in orderable BOM and placement files, plus isolation of pin 3.
 
 ```sh
 kicad-cli pcb drc --format json --schematic-parity --refill-zones \

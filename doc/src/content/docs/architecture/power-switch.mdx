@@ -1,149 +1,127 @@
 ---
-title: Lamp power switch — NKK WR11AS
-description: The selected maintained panel rocker, exact hand-wire connections, OFF behavior and bring-up checks.
+title: Lamp power switch — Dailywell C496154
+description: The JLCPCB-assembled rear toggle, exact terminal connections, OFF behavior and prototype checks.
 sidebar_position: 35
 ---
 
-The selected switch is **NKK WR11AS**, a black, non-illuminated, maintained
-ON/OFF rocker with epoxy-sealed **solder lugs**. It mounts in the enclosure and
-connects to Board L through two wires. The encoder continues to set brightness.
+The selected switch is **Dailywell 1MS1T1B1M1QES-5 / C496154**, a maintained
+SPDT toggle assembled directly on the back of Board L. One throw provides ON;
+the other is left unwired for OFF. The existing encoder controls brightness.
 
-## Selection and availability
+## JLCPCB supplies the selected switch
 
-The user preferred the appliance-style rocker if stocked. On **2026-09-05**,
-[DigiKey's exact WR11AS listing](https://www.digikey.com/en/products/detail/nkk-switches/WR11AS/379592)
-showed **8 immediately available, plus 94 factory stock**, at **US$21.94 for one**.
-Factory stock is separate from immediately shippable distributor stock. A
-[Mouser listing](https://www.mouser.co.uk/en/ProductDetail/NKK-Switches/WR11AS?qs=sGAEpiMZZMtFyPk3yBMYYPFvUbFOir2HXZ6HEEWKoew%3D)
-also listed 23. These are dated observations, not reserved inventory; verify stock,
-shipping to Japan and delivered price before ordering. No parts have been purchased.
+On **2026-09-06 JST**, the [exact JLCPCB listing](https://jlcpcb.com/partdetail/C496154)
+showed **1,080 in stock**, **995 available to order**, **Extended**,
+**Wave Soldering**, and **Economic and Standard PCBA**. The quantity-one price
+was US$1.1485 before assembly, shipping and tax. These are dated observations,
+not reserved inventory; recheck the exact C496154 line when placing the PCBA order.
+No order has been placed.
 
-The fallback discussed during planning was Dailywell **1MS1T1B1M1QES-5 / C496154**
-(571 listed at LCSC, about US$0.98 each), followed by NKK **MN11SS1W01**. These toggles
-are alternatives for a future reviewed revision, not interchangeable BOM substitutes.
-The stock condition was satisfied, so **WR11AS is the locked selection**.
+This replaces the earlier NKK WR11AS selection, which did not meet the JLCPCB
+sourcing requirement. SW2 now has an LCSC identifier, PCB footprint, BOM/CPL
+entry and actual KiCad 3D model. The old J5 wire-pad pair and switch harness are removed.
 
-The [manufacturer WR catalog](https://www.nkkswitches.com/pdf/WR.pdf), pages
-B124, B126 and B127, supports the rating and exact terminal/mounting details below.
-The [component record](/docs/components/records/wr11as/) retains the evidence and
-open qualification domains.
+The [exact Dailywell drawing](https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154)
+was retrieved from LCSC and matched the JLCPCB copy byte-for-byte. Its title is
+1MS1T1B1M1QES-5, drawing 1MSP0694, revision B with a 2017 temperature amendment.
+The [component record](/docs/components/records/c496154/) includes the drawing,
+footprint, interactive model and retained evidence. Manufacturer-authored content
+retrieved through a distributor remains mirror evidence under the audit contract.
 
-## Where the switch connects
+## The switch disconnects the normal positive feed
 
 ```mermaid
 flowchart LR;
   BP["Board P: USB-PD remains powered"] --> J2["Board L J2 pins 1 and 2"];
   J2 --> F1["F1 PPTC"];
-  F1 --> FEED["V15_FUSED: J5.1"];
-  FEED --> SW2["External SW2 WR11AS: 1a to 1b when ON"];
-  SW2 --> RET["V15: J5.2 return"];
+  F1 --> COM["V15_FUSED: SW2 pin 2 common"];
+  COM --> SW2["ON joins 2–1; OFF joins 2–3"];
+  SW2 --> RET["Pin 1: switched V15"];
   RET --> LED["AL8860 LED driver"];
   RET --> LOGIC["AP63203 logic supply and MCU"];
   RET --> LOCAL["D10 TVS and local input capacitors"];
 ```
 
-| Endpoint | Connect to | Meaning |
+| Terminal | PCB connection | Behavior |
 |---|---|---|
-| Board L J5 pad **1** | SW2 solder lug **1a** | `V15_FUSED`, positive supply after F1 |
-| SW2 solder lug **1b** | Board L J5 pad **2** | `V15`, switched positive return feeding both converters |
-| SW2 terminal **1** | **Does not exist** | The WR12 drawing includes a terminal that WR11 omits |
+| **2, common** | `V15_FUSED`, directly from F1.2 | Powered whenever the normal input is present |
+| **1** | `V15`, feeding both converters and D10 | Connected to common in lamp ON |
+| **3** | Explicit schematic NC; isolated PCB pad | Connected to common in lamp OFF, so **electrically live in OFF** |
 
-ON connects **1a–1b**; OFF opens them. Read the manufacturer's **terminal-side
-view**, identify the actual lug markings, and verify continuity before wiring.
-Do not infer ON direction from a photograph. WR11AS has no actuator marking:
-mark **I / O** on the enclosure after checking the installed orientation.
+The manufacturer specifies maintained **ON–NONE–ON**, with no centre position.
+Its position 1 connects 2–3; position 3 connects 2–1. “OFF” means the lamp load is
+disconnected, not that every switch terminal is de-energized. Never connect pin 3
+to ground. Confirm continuity and mark I/O on the enclosure using the installed
+orientation, not a product photograph or the model's illustrated lever position.
 
-`GND`, `ATT` and `PDOK` remain connected as before. Both positive contacts of J2
-join **before F1**, so neither can bypass the switch. D10 and the converter input
-capacitors remain local to switched `V15`. No LED switching node runs through
-this cable.
+Both J2 positive contacts join before F1, so neither bypasses SW2. `GND`, `ATT`
+and `PDOK` remain connected. D10 and the input capacitors stay local to switched
+`V15`; no LED switching node passes through the control.
 
-## Mechanical and hand-assembly details
+## Plated slots and panel support accommodate the exact part
 
-- Panel cutout: **34.2 × 17.2 mm, each +0.3 / −0 mm**, panel thickness **1–4 mm**.
-  Check the B127 drawing and actual enclosure material/fit before cutting.
-- Use the **S solder-lug** variant. The F quick-connect and L factory wire-lead
-  versions are different orderable parts.
-- Project harness choice: two **22 AWG stranded copper wires**, insulation rated
-  at least **60 V and 105 °C**, each **150 mm or shorter**. Route them together,
-  away from LED heat and switching nodes. This is a prototype construction choice,
-  not a manufacturer-approved harness specification or a 15 A system rating.
-- J5's custom bare PCB solder points have **5.08 mm pitch**, **1.3 mm holes** and
-  **3 mm pads**. Verify the actual stripped wire fits the finished plated hole.
-  Provide enclosure strain relief; solder joints must not carry cable pull loads.
-- Insulate each switch lug separately with heat shrink, secure the harness, and
-  keep exposed conductors clear of the chassis and PCB. Follow the manufacturer's
-  soldering Profile A guidance referenced by the WR catalog.
-- The catalog specifies **IP67 at the front panel and IP60 behind the panel** for
-  this solder-lug variant. This does not make the lamp waterproof.
+Dailywell calls this variant **solder lug / panel mounting**, despite the supplier's
+generic “PC Pin” attribute. The exact supplier footprint uses plated slots for those
+lugs, and JLCPCB lists wave-solder assembly. The project enlarges the imported
+slots to **4.0 × 2.4 mm**, with **5.0 × 3.4 mm copper pads**, at **4.7 mm pitch**.
+The 8 × 14 mm courtyard includes body margin.
 
-SW2 is included in the **system BOM**, marked **off-board**, and has no PCB
-footprint, CPL placement or fabricated 3D preview. J5 is an **on-board bare-copper
-feature**, excluded from the orderable BOM/CPL. Buy the switch separately as
-**DigiKey 360-1507-ND / NKK WR11AS**, then hand-wire it.
+The slot calculation includes the drawing's dimensional/angular tolerances,
+rounded slot ends, JLCPCB's published +0.13/−0.08 mm slot-size tolerance and a
+stated registration allowance. It leaves approximately **0.030 mm worst-case
+corner clearance** and **0.385 mm annulus** under those assumptions. The full
+calculation and source hashes are retained in `footprints/vendor/C496154/README.md`.
+This is a project-adapted footprint, not a manufacturer land pattern or proof
+that JLCPCB has approved this particular board's insertion and soldering details.
 
-:::note[PCB interface is now routed]
-`board-l.kicad_pcb` includes J5 on the rear side: pad 1 connects to F1.2
-(`V15_FUSED`), and pad 2 returns to `V15`. The old direct F1-to-V15 copper
-connection has been removed. SW2 remains an external panel component.
-See [rear controls and enclosure handoff](./rear-controls.mdx) for placement,
-verification and the remaining mechanical prototype checks.
-:::
+Secure the **1/4-40 UNS-2A threaded bushing** with the enclosure and nuts, so
+actuation does not load the solder joints. The drawing shows a 6.35 mm panel
+opening with keyway details; the optional locking-ring arrangement adds a
+2.38 mm locating hole 6.10 mm from centre. Body and bushing lengths are each
+8.89 mm; the lever projects a further 10.41 mm. Reserve a support plane through
+the bushing and sufficient thread engagement for the hardware. Final panel
+thickness and nut stack remain enclosure prototype choices.
 
-## What OFF and ON mean
+SW2 sits at **(9.10, 27.75) mm on B.Cu**. See the
+[rear-controls handoff](./rear-controls.mdx) for stack clearance and the actual
+PCB render. Its lugs project approximately **1.9 mm past the front of a 1.6 mm
+PCB**, plus solder; check that space against LEDs and the light chamber.
 
-OFF disconnects Board L's **normal positive input supply**, turning off the LED
-and logic converters after stored charge decays. **Board P and USB-PD remain
-powered** while the USB cable is connected. OFF is not complete USB isolation.
-Unplug USB and disconnect debug/programming equipment before servicing.
+## OFF and ON still need hardware qualification
 
-After V3P3 has decayed below the reset threshold, ON restarts the converters and
-MCU. A rapid OFF/ON may retain enough charge to avoid reset; no active discharge
-circuit was added. Confirm that behavior during bring-up. ON does not bypass the existing
-PD-status, startup or thermal gates. Brightness restoration is **not implemented
-by this hardware change**; firmware must initialize brightness deliberately. This
-repository's control examples are not evidence of flashed or tested firmware.
+OFF disconnects Board L's normal positive supply. LEDs and logic turn off after
+stored charge decays. **Board P and USB-PD remain powered** while USB is connected.
+Disconnect USB and service cables before handling the assembly.
 
-An externally powered SWD/UART device may feed an otherwise unpowered circuit.
-Do not claim OFF isolation with service cables attached; keep them disconnected
-for the normal-use OFF test, then evaluate each service configuration separately.
-The attached Board P status outputs also need an off-state back-power check.
+ON restarts the converters and MCU after sufficient rail decay. Rapid OFF/ON can
+retain charge and avoid reset; no active discharge circuit was added. Startup,
+PD-status and thermal gates remain unchanged. Brightness restoration is not
+implemented by this hardware revision; firmware must initialize it deliberately.
 
-## Rating and qualification boundary
+The exact drawing lists **5 A at 28 VDC** for Q silver contacts, compared with the
+lamp's nominal **0.41 A at 15 V** design estimate. It does not identify a load-type
+qualifier or prove capacitive-inrush endurance or low-current contact reliability.
+F1 and board limits still govern the system.
 
-The switch is rated **15 A at 30 V DC for resistive load**. The lamp's nominal
-budget is **approximately 0.41 A at 15 V**, not 15 A. F1, wiring and board limits
-continue to govern the lamp. A DC resistive nameplate does not prove capacitor
-inrush endurance or low-current contact reliability.
-
-C10, C11, C12 and C14 total 40 µF nominal; C13 adds 0.1 µF. Their nominal input
-energy is `0.5 × 40.1 µF × (15 V)² = 4.51 mJ`. MLCC bias/tolerance, source
-impedance, harness inductance, both converter loads and switch bounce change the
-actual waveform. This estimate is **not a peak-current bound or lifetime test**.
-The retained WR catalog does not establish a minimum applicable contact load or
-capacitive-load life. Qualify repeated switching at full and minimum brightness,
-and after idle/storage, before a production build.
-
-The existing upstream surge/TVS envelope remains open. A 30 V switch rating is
-not proof of survival at an upstream TVS's conditioned clamp voltage.
+C10/C11/C12/C14 total 40 µF nominal; C13 adds 0.1 µF. Their nominal stored energy
+at 15 V is `0.5 × 40.1 µF × (15 V)² = 4.51 mJ`. This is not a peak-current or
+lifetime bound. Capacitance bias, source impedance and contact bounce affect the
+actual waveform. The existing upstream surge/TVS qualification remains open.
 
 ## Bring-up checks
 
-1. With every supply disconnected, check J5.1→1a and 1b→J5.2, installed I/O
-   orientation, wire insulation/strain relief, and no PCB bypass. Verify the
-   rocker is open in OFF and closed in ON.
-2. Bring up Board P alone first. With SW2 OFF, connect the lamp using a
-   current-limited setup appropriate to the existing bring-up sequence. Measure
-   V15 and V3P3 decay/off-state voltage; confirm no LED glow or MCU partial power.
-3. Scope J5 feed/return, input current, V3P3 and CTRL during ON, OFF, rapid
-   toggles and USB reconnects with the rocker in either position. Check bounce,
-   inrush, overshoot, brownout cycling and visible startup flashes.
-4. Verify safe startup and thermal protection still function; test full/minimum
-   brightness and repeated cold/hot switching. Check contact drop and harness
-   temperature. Record measurements rather than assuming nameplate margin is proof.
-5. Separately assess ATT/PDOK and each SWD/UART service connection for back-power.
-   Do not connect an external programmer supply to the switched-off lamp unless
-   that service configuration has been reviewed.
+1. Unpowered, verify terminal numbering, 2–1 ON and 2–3 OFF, no copper bypass,
+   and isolation of pin 3 from every PCB net. Check slots, solder fill, bushing
+   support, front lug clearance and installed I/O labels.
+2. Bring up Board P first. With SW2 OFF and service cables disconnected, use the
+   existing current-limited bring-up procedure. Measure V15/V3P3 decay and residual
+   voltage; check for LED glow or partial MCU power.
+3. Scope input current, V15, V3P3 and CTRL during ON, OFF, rapid toggles and USB
+   reconnection. Check inrush, bounce, overshoot, brownout cycling and startup flashes.
+4. Test full/minimum brightness, repeated switching, idle/storage recovery, contact
+   drop and temperature. Verify startup and thermal protection still function.
+5. Separately assess ATT/PDOK and SWD/UART back-power. An externally powered
+   service interface can energize the load even when its normal supply is open.
 
-These are **unperformed hardware gates**. Software checks prove generated nets,
-terminal mapping and PCB/BOM exclusions; they cannot prove assembled behavior.
+These are unperformed hardware checks. ERC, netlist checks, DRC and 3D rendering
+verify design data; they do not prove assembled operation or enclosure fit.

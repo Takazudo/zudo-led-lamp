@@ -32,7 +32,7 @@ export function PackageModelViewerIsland({ descriptor: encoded }: PackageModelVi
         onClose={() => setDialogOpen(false)}
         returnFocusRef={triggerRef}
         labelId="zld-model-preview-dialog-title"
-        title={`Interactive 3D view of ${descriptor.packageLabel}`}
+        title={`Interactive 3D view of shared footprint package ${descriptor.packageLabel}`}
         variant="model"
       >
         {isDialogOpen && <ModelViewerSurface encoded={encoded} instance="dialog" />}
@@ -102,14 +102,14 @@ function ModelViewerSurface({
       aria-labelledby={captionId}
     >
       <figcaption id={captionId} className="zld-model-viewer__caption">
-        <strong>{descriptor.kind === "external" ? "Panel component:" : "Shared footprint package:"}</strong> {descriptor.packageLabel}
+        <strong>Shared footprint package:</strong> {descriptor.packageLabel}
       </figcaption>
       <div className="zld-model-viewer__viewport-frame">
         <div
           className="zld-model-viewer__viewport"
           data-model-viewer-viewport=""
           tabIndex={0}
-          aria-label={`Interactive 3D view of ${descriptor.packageLabel}`}
+          aria-label={`Interactive 3D view of shared footprint package ${descriptor.packageLabel}`}
         />
         {onEnlarge !== undefined && (
           <button
@@ -131,9 +131,7 @@ function ModelViewerSurface({
         Interactive inspection requires JavaScript and WebGL. The package identity remains available in this page.
       </p>
       <p className="zld-model-viewer__notice">
-        {descriptor.kind === "external"
-          ? "NKK/CADENAS model converted from the supplied STL. The preview is scaled to millimetres; neutral grey is used because STL has no materials. This representation does not establish enclosure fit."
-          : "This geometry represents a shared footprint package and may not exactly match the manufacturer part."}
+        This geometry represents a shared footprint package and may not exactly match the manufacturer part.
       </p>
     </figure>
   );

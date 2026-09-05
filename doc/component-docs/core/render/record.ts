@@ -159,25 +159,12 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
 
 function componentReferencesSection(record: PublicRecord): RootContent[] {
   const footprint = record.reference.footprint;
-  const external = record.reference.externalModel;
-  if (footprint === null && external !== undefined) {
-    const document = record.reference.document;
-    const modelName = String(external.modelPath).split("/").at(-1);
-    if (modelName === undefined) throw new Error("External model path has no basename");
-    return [component("ComponentReferences", { descriptor: encodeComponentReferencesDescriptor(createComponentReferencesDescriptor({
-      document: { label: document.label, title: document.documentTitle, authority: document.authorityClass, availability: document.availability, url: document.url },
-      footprintName: null,
-      sourceCadUrl: `${MODEL_ASSET_BASE}${external.originalName}`,
-      model: { version: 1, kind: "external", packageId: external.name, packageLabel: external.name,
-        modelUrl: `${MODEL_ASSET_BASE}${modelName}`, offset: external.offset, rotation: external.rotation, scale: external.scale },
-    })) })];
-  }
   if (footprint === null) {
     const document = record.reference.document;
     return [
       heading(2, literal("Component references")),
       paragraph([link(document.url, document.label), text(literal(" — ")), text(document.documentTitle)]),
-      paragraph([text(literal("External panel-mounted component, hand-wired to the PCB. No PCB footprint applies. No component model has been selected. Consult the manufacturer drawing for panel cutout and terminal orientation."))]),
+      paragraph([text(literal("External panel-mounted component, hand-wired to the PCB. No PCB footprint or package model applies. Consult the manufacturer drawing for panel cutout and terminal orientation."))]),
     ];
   }
   const modelName = String(footprint.modelPath).split("/").at(-1);

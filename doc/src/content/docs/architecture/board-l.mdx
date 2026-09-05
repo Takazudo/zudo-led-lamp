@@ -8,9 +8,8 @@ Board L is everything that is not USB-PD negotiation: the constant-current LED d
 the LED array itself, the 3.3 V logic rail, the control MCU, and the knob. It consumes
 the switched 15 V rail from [Board P](./board-p.mdx) and nothing else.
 
-The enclosure-mounted [WR11AS power rocker](./power-switch.mdx) disconnects both
-converters after F1; J5 provides its two hand-wire solder points. The PCB now places
-SW1 and J5 on the rear, leaving the LEDs facing the light chamber. See the
+The rear PCB [C496154 power toggle](./power-switch.mdx) disconnects both
+converters after F1. SW1 and SW2 are on the rear, leaving the LEDs facing the light chamber. See the
 [rear-controls layout and enclosure handoff](./rear-controls.mdx).
 
 ## Block diagram
@@ -40,7 +39,7 @@ flowchart LR;
   J4["J4 UART pads"];
 
   J2 --> F1;
-  F1 --> SW2["External WR11AS via J5\nmaintained ON-OFF"];
+  F1 --> SW2["PCB toggle C496154\nmaintained ON-OFF"];
   SW2 --> V15;
   V15 --> RS1;
   V15 --> U2;
@@ -562,8 +561,8 @@ Diodes DS41326 Rev 3.
 | Net | Connected pins (Ref.Pin) | Note |
 |---|---|---|
 | `VBUS_L` | `J2.1 J2.2 F1.1` | Both paired power contacts converge on the PPTC |
-| `V15_FUSED` | `F1.2 J5.1 SW2.1a` | Fused positive feed to the external rocker |
-| `V15` | `SW2.1b J5.2 D10.cathode C10.1 C11.1 U2.VIN(8) RS1.1 D11.cathode C12.1 C13.1 U4.VIN(3) C14.1` | The board's 15 V rail. D10 = second SMAJ20A local to Board L, clamping cable-inductance transients the harness can develop |
+| `V15_FUSED` | `F1.2 SW2.2` | Fused positive feed to the toggle common |
+| `V15` | `SW2.1 D10.cathode C10.1 C11.1 U2.VIN(8) RS1.1 D11.cathode C12.1 C13.1 U4.VIN(3) C14.1` | The board's 15 V rail. D10 = second SMAJ20A local to Board L, protecting the local converter input; actual transient qualification remains open |
 
 ### LED driver (U2, AL8860MP-13, MSOP-8EP)
 

@@ -82,11 +82,11 @@ describe("reviewed document shortcuts", () => {
 });
 
 describe("KiCad preview manifest", () => {
-  it("maps every record to one descriptor and collapses it to exactly 24 packages", () => {
-    assert.equal(model.records.filter((record) => record.reference.footprint?.modelPath.endsWith(".wrl")).length, 34);
-    assert.equal(model.packagePreviews.length, 24);
-    assert.equal(new Set(model.packagePreviews.map((entry) => entry.packageId)).size, 24);
-    assert.equal(model.packagePreviews.flatMap((entry) => entry.recordIds).length, 34);
+  it("maps every record to one descriptor and collapses it to exactly 25 packages", () => {
+    assert.equal(model.records.filter((record) => record.reference.footprint?.modelPath.endsWith(".wrl")).length, 35);
+    assert.equal(model.packagePreviews.length, 25);
+    assert.equal(new Set(model.packagePreviews.map((entry) => entry.packageId)).size, 25);
+    assert.equal(model.packagePreviews.flatMap((entry) => entry.recordIds).length, 35);
   });
 
   it("preserves non-zero Z rotations from the footprint", () => {

@@ -244,17 +244,7 @@ export type PublicFootprintReference = {
   readonly scale: PublicTransform3d;
 };
 
-export type PublicExternalModelReference = {
-  readonly name: SafeText;
-  readonly modelPath: SafeText;
-  readonly originalName: SafeText;
-  readonly offset: PublicTransform3d;
-  readonly rotation: PublicTransform3d;
-  readonly scale: PublicTransform3d;
-};
-
 export type PublicRecordReference = {
-  readonly externalModel?: PublicExternalModelReference;
   readonly document: PublicDocumentReference;
   readonly footprint: PublicFootprintReference | null;
 };

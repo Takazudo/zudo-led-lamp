@@ -34,8 +34,8 @@ describe("the real circuit adapter", () => {
     // committed selection needs review — exactly what should fail a build.
     assert.equal(result.report.records.available, 35);
     assert.equal(result.report.records.selected, 35);
-    assert.equal(result.report.sources.available, 91);
-    assert.equal(result.report.sources.selected, 91);
+    assert.equal(result.report.sources.available, 92);
+    assert.equal(result.report.sources.selected, 92);
     assert.equal(result.report.viewModelVersion, VIEW_MODEL_VERSION);
     assert.equal(result.report.provider.id, "circuit-component-spec");
 

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "record_id": "rec-c496154",
+      "line_id": "line-c496154",
+      "kind": "standalone",
+      "parent_record_id": null,
+      "mpn": "1MS1T1B1M1QES-5",
+      "manufacturer": "Dailywell",
+      "lcsc": "C496154",
+      "package": "SW-TH_1MS1T1B1M1QES-5",
+      "source_ids": [
+        "src-c496154-datasheet",
+        "src-c496154-generator",
+        "src-c496154-jlcpcb"
+      ],
+      "fact_ids": [
+        "fact-c496154-manufacturer",
+        "fact-c496154-identity",
+        "fact-c496154-rating",
+        "fact-c496154-terminals",
+        "fact-c496154-mounting",
+        "fact-c496154-mechanical-life",
+        "fact-c496154-ambient",
+        "fact-c496154-contact-resistance",
+        "fact-c496154-project-nets",
+        "fact-c496154-assembly",
+        "fact-c496154-orderability"
+      ],
+      "interaction_ids": [
+        "int-c496154-power-cut"
+      ],
+      "open_domains": [
+        "manufacturer-primary source trust",
+        "capacitive switching and contact wetting",
+        "assembled switch and OFF isolation"
+      ]
+    }
+  ]
+}
