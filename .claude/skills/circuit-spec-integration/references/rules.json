@@ -454,24 +454,52 @@
       ]
     },
     {
-      "rule_id": "rule-c496154-power-cut",
+      "rule_id": "rule-c5446803-power-cut",
       "domain": "board-mounted lamp power switching",
       "record_ids": [
-        "rec-c496154",
+        "rec-c5446803",
         "rec-bsmd1206-075-30v",
         "rec-al8860mp-13",
         "rec-ap63203wu-7"
       ],
       "fact_ids": [
-        "fact-c496154-rating",
-        "fact-c496154-terminals",
-        "fact-c496154-project-nets",
+        "fact-c5446803-rating",
+        "fact-c5446803-terminals",
+        "fact-c5446803-project-nets",
         "fact-bhfuse-project-nets",
         "fact-ap63203-en-open"
       ],
-      "conditions": "SW2 common 2 receives V15_FUSED and joins pin 1 to switched V15 in ON. In OFF, common 2 joins pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF; Board P remains powered. Verify modified plated-slot and enclosure fit, front lug clearance, capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test. Exact drawing is manufacturer-mirror evidence, not closed manufacturer-primary trust.",
+      "conditions": "SW2 center common 2 receives V15_FUSED and joins outer pin 1 to switched V15 in ON. In OFF it joins isolated outer pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF while Board P remains powered. G020 has a 2 mm actuator and 5.5 mm body-plus-actuator dimension; the corrected model retains shoulder stand-off for approximately 6 mm PCB reach, requiring physical confirmation. Verify inrush, bounce, restart, contact life, rail decay and service-interface back-power. Exact switch drawing remains manufacturer-mirror evidence.",
       "verdict": "NEEDS BENCH",
-      "refusal": "Do not certify physical OFF isolation, switch endurance, modified footprint insertion or the complete rail envelope from mirrored ratings and generated connectivity alone."
+      "refusal": "Do not certify physical OFF isolation, installed height, switch endurance or rail safety from a mirrored current rating and generated design alone."
+    },
+    {
+      "rule_id": "rule-c470643-brightness-adc",
+      "domain": "potentiometer-brightness-adc",
+      "record_ids": [
+        "rec-c470643",
+        "rec-c529334",
+        "rec-c22775",
+        "rec-c25803",
+        "rec-c14663"
+      ],
+      "fact_ids": [
+        "fact-c470643-resistance",
+        "fact-c470643-tolerance",
+        "fact-c470643-terminals",
+        "fact-c470643-stops",
+        "fact-c470643-project-nets",
+        "fact-c470643-adc-design",
+        "fact-c470643-firmware-target",
+        "fact-c529334-adc",
+        "fact-c529334-topology",
+        "fact-c22775-brightness-topology",
+        "fact-c25803-resistance",
+        "fact-c14663-capacitance"
+      ],
+      "conditions": "RV1 RK10J11E0034 is the single-unit 10 kOhm +/-30% stopped potentiometer: end 1=GND, end 3=V3P3, wiper 2 through R27 100 Ohm to U3.7 PA0 BRIGHT_ADC; all four mechanical pads and U3.8 are no-connects. R22 100 kOhm and C22 100 nF connect BRIGHT_ADC to GND. Worst divider source resistance is 3.25 kOhm plus 100 Ohm before bias loading; open-wiper nominal RC decay is 10 ms, not a certified fault detector. Use the documented 160.5-cycle ADC target, reference/errata review, endpoint and inversion calibration, averaging and startup ramp with thermal/PD gates. The 270-degree physical stops replace quadrature behavior. The catalog lists Insertion (t: 2 mm); this is not treated as a mandatory PCB thickness. Seating and contact life on the actual 1.6 mm PCB need prototype proof, and firmware is not flashed.",
+      "verdict": "NEEDS BENCH",
+      "refusal": "Do not claim calibrated absolute brightness, safe startup, open-wiper fault detection or installed mechanical fit from schematic calculations and unflashed firmware examples."
     }
   ]
 }

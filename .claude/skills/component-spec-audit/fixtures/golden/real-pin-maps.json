@@ -142,58 +142,58 @@
       "reviewer": "issue-25 foreground integration review"
     },
     {
-      "record_id": "rec-c2991196",
-      "pin_map_id": "pinmap-c2991196",
-      "canonical_sha256": "26315a0430442a3d3977b6935661e45003be1d82a64307269a61f531fe844e86",
+      "record_id": "rec-c470643",
+      "pin_map_id": "pinmap-c470643",
+      "canonical_sha256": "ba012baf730f244ffe3b5027a2b04f519246343b1ec20a22fbcb2532b8cde525",
       "evidence_fact_ids": [
-        "fact-c2991196-topology"
+        "fact-c470643-terminals"
       ],
-      "trust_status": "UNSOURCED",
+      "trust_status": "TRUSTED",
       "critical_pins": [
         {
-          "symbol_pin": "6",
-          "name": "support-6",
-          "footprint_pad": "6",
-          "function": "grounded support lug"
+          "symbol_pin": "1",
+          "name": "LOW",
+          "footprint_pad": "1",
+          "function": "Resistive end terminal; GND"
         },
         {
-          "symbol_pin": "7",
-          "name": "support-7",
-          "footprint_pad": "7",
-          "function": "grounded support lug"
+          "symbol_pin": "2",
+          "name": "WIPER",
+          "footprint_pad": "2",
+          "function": "Wiper; BRIGHT_WIPER through R27 to BRIGHT_ADC"
         },
         {
-          "symbol_pin": "A",
-          "name": "phase-A",
-          "footprint_pad": "A",
-          "function": "quadrature phase A"
+          "symbol_pin": "3",
+          "name": "HIGH",
+          "footprint_pad": "3",
+          "function": "Resistive end terminal; V3P3"
         },
         {
-          "symbol_pin": "B",
-          "name": "phase-B",
-          "footprint_pad": "B",
-          "function": "quadrature phase B"
+          "symbol_pin": "MP1",
+          "name": "DUMMY",
+          "footprint_pad": "MP1",
+          "function": "Mechanical dummy/support; no electrical connection"
         },
         {
-          "symbol_pin": "C",
-          "name": "common",
-          "footprint_pad": "C",
-          "function": "encoder common"
+          "symbol_pin": "MP2",
+          "name": "DUMMY",
+          "footprint_pad": "MP2",
+          "function": "Mechanical dummy/support; no electrical connection"
         },
         {
-          "symbol_pin": "D",
-          "name": "switch-D",
-          "footprint_pad": "D",
-          "function": "momentary switch terminal"
+          "symbol_pin": "MP3",
+          "name": "SUPPORT",
+          "footprint_pad": "MP3",
+          "function": "Mechanical dummy/support; no electrical connection"
         },
         {
-          "symbol_pin": "E",
-          "name": "switch-E",
-          "footprint_pad": "E",
-          "function": "momentary switch terminal"
+          "symbol_pin": "MP4",
+          "name": "SUPPORT",
+          "footprint_pad": "MP4",
+          "function": "Mechanical dummy/support; no electrical connection"
         }
       ],
-      "reviewer": "issue-25 foreground integration review"
+      "reviewer": "2026-09-06 exact drawing and corrected imported assets; mechanical pins have no electrical net"
     },
     {
       "record_id": "rec-ap63203wu-7",
@@ -753,7 +753,7 @@
       "pin_map_id": "pinmap-c22775",
       "canonical_sha256": "35ce675fc1074718cd6f892f07bceb62de9456c7457cb8f50a1689d46d4ab42e",
       "evidence_fact_ids": [
-        "fact-c22775-encoder-topology"
+        "fact-c22775-brightness-topology"
       ],
       "trust_status": "UNSOURCED",
       "critical_pins": [
@@ -775,7 +775,7 @@
     {
       "record_id": "rec-c529334",
       "pin_map_id": "pinmap-c529334",
-      "canonical_sha256": "52157e10f42d26a85537b0dfa4728e285a94c5ade7b29b8b6f9414c4cb5cf03c",
+      "canonical_sha256": "281190bf57d1e4b15a2e83439967565a04fb159a8969869296634bbe5ac5a92f",
       "evidence_fact_ids": [
         "fact-c529334-pin-bonds",
         "fact-c529334-topology"
@@ -787,6 +787,54 @@
           "name": "PB7/PB8",
           "footprint_pad": "1",
           "function": "shared GPIO bond"
+        },
+        {
+          "symbol_pin": "2",
+          "name": "PB9/PC14-OSC32_IN",
+          "footprint_pad": "2",
+          "function": "shared GPIO/oscillator bond"
+        },
+        {
+          "symbol_pin": "3",
+          "name": "PC15-OSC32_OUT",
+          "footprint_pad": "3",
+          "function": "GPIO/oscillator"
+        },
+        {
+          "symbol_pin": "4",
+          "name": "VDD/VDDA",
+          "footprint_pad": "4",
+          "function": "digital and analog supply"
+        },
+        {
+          "symbol_pin": "5",
+          "name": "VSS/VSSA",
+          "footprint_pad": "5",
+          "function": "digital and analog ground"
+        },
+        {
+          "symbol_pin": "6",
+          "name": "PF2-NRST",
+          "footprint_pad": "6",
+          "function": "reset"
+        },
+        {
+          "symbol_pin": "7",
+          "name": "PA0",
+          "footprint_pad": "7",
+          "function": "BRIGHT_ADC ADC_IN0"
+        },
+        {
+          "symbol_pin": "8",
+          "name": "PA1",
+          "footprint_pad": "8",
+          "function": "unused GPIO; explicit no-connect"
+        },
+        {
+          "symbol_pin": "9",
+          "name": "PA2",
+          "footprint_pad": "9",
+          "function": "UART_TX candidate"
         },
         {
           "symbol_pin": "10",
@@ -849,61 +897,13 @@
           "function": "SWCLK and boot-capable shared bond"
         },
         {
-          "symbol_pin": "2",
-          "name": "PB9/PC14-OSC32_IN",
-          "footprint_pad": "2",
-          "function": "shared GPIO/oscillator bond"
-        },
-        {
           "symbol_pin": "20",
           "name": "PB3/PB4/PB5/PB6",
           "footprint_pad": "20",
           "function": "shared GPIO bond"
-        },
-        {
-          "symbol_pin": "3",
-          "name": "PC15-OSC32_OUT",
-          "footprint_pad": "3",
-          "function": "GPIO/oscillator"
-        },
-        {
-          "symbol_pin": "4",
-          "name": "VDD/VDDA",
-          "footprint_pad": "4",
-          "function": "digital and analog supply"
-        },
-        {
-          "symbol_pin": "5",
-          "name": "VSS/VSSA",
-          "footprint_pad": "5",
-          "function": "digital and analog ground"
-        },
-        {
-          "symbol_pin": "6",
-          "name": "PF2-NRST",
-          "footprint_pad": "6",
-          "function": "reset"
-        },
-        {
-          "symbol_pin": "7",
-          "name": "PA0",
-          "footprint_pad": "7",
-          "function": "ENC_A"
-        },
-        {
-          "symbol_pin": "8",
-          "name": "PA1",
-          "footprint_pad": "8",
-          "function": "ENC_B"
-        },
-        {
-          "symbol_pin": "9",
-          "name": "PA2",
-          "footprint_pad": "9",
-          "function": "UART_TX candidate"
         }
       ],
-      "reviewer": "issue-25 foreground integration review"
+      "reviewer": "2026-09-06 Board L absolute-brightness PA0 mapping review; primary STM32 byte-lock trust remains open"
     },
     {
       "record_id": "rec-c4749199",
@@ -1318,11 +1318,11 @@
       "reviewer": "issue-25 foreground integration review"
     },
     {
-      "record_id": "rec-c496154",
-      "pin_map_id": "pinmap-c496154",
-      "canonical_sha256": "375c97c67847b15db7aa3dfc0c9e9ebf793d719aec15391fc7575b5a181d506d",
+      "record_id": "rec-c5446803",
+      "pin_map_id": "pinmap-c5446803",
+      "canonical_sha256": "6ca80ab491ccb894149f967a8476b2b1eeeed5978ff469c53e58c79144ad4708",
       "evidence_fact_ids": [
-        "fact-c496154-terminals"
+        "fact-c5446803-terminals"
       ],
       "trust_status": "UNSOURCED",
       "critical_pins": [
@@ -1342,10 +1342,10 @@
           "symbol_pin": "3",
           "name": "3",
           "footprint_pad": "3",
-          "function": "No PCB net; internally live from fused feed in OFF; keep isolated"
+          "function": "No PCB net; internally fused-feed live in OFF; keep isolated"
         }
       ],
-      "reviewer": "Exact 1MSP0694 drawing and imported C496154 assets checked 2026-09-06; manufacturer mirror remains open"
+      "reviewer": "2026-09-06 exact drawing and corrected imported assets; mechanical pins have no electrical net"
     }
   ]
 }

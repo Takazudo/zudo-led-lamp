@@ -39,7 +39,7 @@ def check_board(path):
             if pin.split('.')[0] not in spec.EXTERNAL_COMPONENTS:
                 assert nets.get(pin) == name, f'{pin}: {nets.get(pin)} != {name}'
     assert {p for p, net in nets.items() if net == 'V15_FUSED'} == {'F1.2', 'SW2.2'}
-    assert field(footprints['SW1'], 'layer') == 'B.Cu'
+    assert field(footprints['RV1'], 'layer') == 'B.Cu'
     assert field(footprints['SW2'], 'layer') == 'B.Cu'
     assert all(field(footprints[f'LED{i}'], 'layer') == 'F.Cu' for i in range(1, 25))
     attrs = {atom(a) for a in find_all(footprints['SW2'], 'attr')[0][1:]}
@@ -48,7 +48,13 @@ def check_board(path):
     assert not any(any(atom(p[1]) == 'Reference' and atom(p[2]) == 'J5'
                        for p in find_all(f, 'property')) for f in find_all(board, 'footprint'))
     properties = {atom(p[1]): atom(p[2]) for p in find_all(footprints['SW2'], 'property')}
-    assert properties['LCSC'] == properties['LCSC Part'] == 'C496154'
+    assert properties['LCSC'] == properties['LCSC Part'] == 'C5446803'
+    for pad in find_all(footprints['SW2'], 'pad'):
+        assert xy(find_all(pad,'size')[0]) == (2.25,2.25)
+        assert abs(float(atom(find_all(pad,'drill')[0][1]))-1.6)<.001
+    for ref,value,lcsc in [('RV1','RK10J11E0034','C470643'),('R22','100k','C25803'),('R27','100R','C22775')]:
+        properties={atom(p[1]):atom(p[2]) for p in find_all(footprints[ref],'property')}
+        assert properties['LCSC']==lcsc, f'{ref} wrong assembly part'
     assert 'SW2.3' in spec.NO_CONNECT
     assert nets['SW2.3'] == 'unconnected-(SW2-Pad3)'
     assert [pin for pin, net in nets.items() if net == nets['SW2.3']] == ['SW2.3']
@@ -57,31 +63,34 @@ def check_board(path):
         for item in find_all(board, kind):
             net = find_all(item, 'net')
             assert not net or atom(net[0][-1]) != nets['SW2.3'], 'OFF throw must stay isolated'
-    switch = footprints['SW2']
-    for pad in find_all(switch, 'pad'):
-        assert xy(find_all(pad, 'size')[0]) == (3.4, 5.0)
-        drill = find_all(pad, 'drill')[0]
-        assert atom(drill[1]) == 'oval' and tuple(float(atom(v)) for v in drill[2:]) == (2.4, 4.0)
-        assert float(atom(find_all(pad, 'at')[0][3])) % 180 == 90
-    models = find_all(switch, 'model')
-    assert len(models) == 1
-    model_name = 'SW-TH_1MS1T1B1M1QES-5_L12.7-W6.9-H28.7-P4.7'
-    assert atom(models[0][1]) == '${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/' + model_name + '.wrl'
-    for kind, expected in [('offset', (0, 0, 0)), ('rotate', (0, 0, 0)), ('scale', (1, 1, 1))]:
-        assert tuple(float(atom(v)) for v in find_all(find_all(models[0], kind)[0], 'xyz')[0][1:]) == expected
-    model_path = ROOT / 'footprints/kicad/zudo-led-lamp.3dshapes' / (model_name + '.wrl')
-    assert model_path.with_suffix('.step').is_file()
-    points = []
-    for block in re.findall(r'point\s*\[([^]]+)\]', model_path.read_text()):
-        values = list(map(float, re.findall(r'[-+]?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?', block)))
-        points.extend(zip(values[::3], values[1::3], values[2::3]))
-    bounds = [(min(p[i] for p in points)*2.54, max(p[i] for p in points)*2.54) for i in range(3)]
-    assert all(math.dist(actual, expected) < .001 for actual, expected in
-               zip(bounds, [(-3.299968, 3.299968), (-6.35, 6.35), (-3.50012, 28.67406)])), 'Recheck changed switch model and assembly height'
-    thickness = float(field(find_all(board, 'general')[0], 'thickness'))
-    assert abs(thickness-1.6) < .001
-    assert abs(-bounds[2][0]-thickness-1.90012) < .001, 'Recheck front lug protrusion'
-    assert nets['SW1.D'].startswith('unconnected-') and nets['SW1.E'].startswith('unconnected-')
+    for ref, name, expected in [
+        ('SW2', 'SW-TH_SS-12D01-G020', [(-4.4,4.4),(-1.95,1.95),(-4.3,6.0)]),
+        ('RV1', 'POT-TH_RK10J11E0034_family', [(-7,7),(-5.124958,9.525),(-2.100072,1.970024)]),
+    ]:
+        models = find_all(footprints[ref], 'model')
+        assert len(models) == 1
+        assert atom(models[0][1]) == '${KIPRJMOD}/../../footprints/kicad/zudo-led-lamp.3dshapes/' + name + '.wrl'
+        for kind, transform_value in [('offset',(0,0,0)),('rotate',(0,0,0)),('scale',(1,1,1))]:
+            assert tuple(float(atom(v)) for v in find_all(find_all(models[0],kind)[0],'xyz')[0][1:]) == transform_value
+        model_path = ROOT / 'footprints/kicad/zudo-led-lamp.3dshapes' / (name+'.wrl')
+        assert model_path.with_suffix('.step').is_file()
+        points=[]
+        for block in re.findall(r'point\s*\[([^]]+)\]',model_path.read_text()):
+            values=list(map(float,re.findall(r'[-+]?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?',block)))
+            points.extend(zip(values[::3],values[1::3],values[2::3]))
+        bounds=[(min(p[i] for p in points)*2.54,max(p[i] for p in points)*2.54) for i in range(3)]
+        assert all(math.dist(a,e)<.001 for a,e in zip(bounds,expected)), f'Recheck {ref} model bounds'
+    assert abs(float(field(find_all(board,'general')[0],'thickness'))-1.6)<.001
+    assert set(nets[p] for p in ['RV1.1','RV1.2','RV1.3']) == {'GND','BRIGHT_WIPER','V3P3'}
+    for number in ['MP1','MP2','MP3','MP4']:
+        assert nets['RV1.'+number].startswith('unconnected-')
+    assert nets['U3.8'].startswith('unconnected-')
+    assert set(nets[p] for p in ['R27.2','R22.1','C22.1','U3.7']) == {'BRIGHT_ADC'}
+    # The shared supplier footprint had a dual-gang pin map. Check actual single-gang rows.
+    for number, point in [('1',(-4,-5)),('2',(0,-5)),('3',(4,-5)),
+                          ('MP1',(-2,-5)),('MP2',(2,-5)),('MP3',(5,5)),('MP4',(-5,5))]:
+        pad=next(p for p in find_all(footprints['RV1'],'pad') if atom(p[1])==number)
+        assert math.dist(xy(find_all(pad,'at')[0]),point)<.001, f'Wrong single-gang pad {number}'
     return len(footprints)
 
 
@@ -132,18 +141,20 @@ def check_stack(board_path, power_path):
         px, py = pad_position(power['JOUT1'], number)
         assert math.dist(pad_position(lamp['J2'], number), (px + 16.5, py)) < .001, \
             f'Pin {number} does not mate at the pillar-aligned position'
-    for ref, expected in [('SW1', (51.5, 12.5)), ('SW2', (9.1, 27.75))]:
-        assert math.dist(xy(find_all(lamp[ref], 'at')[0]), expected) < .001, \
-            f'{ref} moved: recheck the complete footprint against Board P and pillars'
-    # These conservative half-extents enclose the exact placed footprint graphics and pads.
-    for ref, half in [('SW1', (6.61, 8.15)), ('SW2', (4, 7))]:
-        x, y = xy(find_all(lamp[ref], 'at')[0]); bounds = (x-half[0], y-half[1], x+half[0], y+half[1])
-        at = find_all(lamp[ref], 'at')[0]
-        angle = float(atom(at[3])) if len(at) > 3 else 0
-        assert abs(angle) < .001, f'Recheck the {ref} envelope after rotation'
-        left, top, right, bottom = bounds
-        assert left >= .5 and top >= .5 and right <= 59.5 and bottom <= 59.5
-        assert right <= 15.5 or left >= 44.5 or top >= 41, f'{ref} intrudes into Board P plus 1 mm margin'
+    for ref, expected in [('RV1',(51.9,9.5)),('SW2',(9.1,27.75))]:
+        assert math.dist(xy(find_all(lamp[ref],'at')[0]),expected)<.001
+    # Transform the entire placed courtyard, including the off-origin 14.2 mm wheel.
+    for ref in ['RV1','SW2']:
+        fp=lamp[ref]
+        points=[]
+        for kind in ['fp_rect','fp_line']:
+            for graphic in find_all(fp,kind):
+                if field(graphic,'layer') == 'B.CrtYd':
+                    points.extend(transform(fp,xy(find_all(graphic,end)[0])) for end in ['start','end'])
+        assert points, f'{ref} courtyard missing'
+        left,top,right,bottom=min(x for x,y in points),min(y for x,y in points),max(x for x,y in points),max(y for x,y in points)
+        assert left>=.5 and top>=.5 and right<=59.5 and bottom<=59.5
+        assert right<=15.5 or left>=44.5 or top>=41, f'{ref} intrudes into Board P plus 1mm margin'
 
 
 def check_drc(path, baseline=None):

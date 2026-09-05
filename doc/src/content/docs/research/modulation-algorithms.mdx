@@ -4,6 +4,16 @@ description: PWM frequency and gamma-correction notes plus pseudocode sketches f
 sidebar_position: 80
 ---
 
+:::note[Current control revision — 2026-09-06]
+The current design uses **RV1 ALPS RK10J11E0034 / C470643**, a stopped 10 kΩ
+potentiometer with 270°±10° travel, and **SW2 G-Switch SS-12D01-G020 / C5446803**.
+Encoder comparisons and example firmware below are historical research, not the
+current netlist or executable firmware. See [Board L's current ADC mapping](/docs/architecture/board-l/#knob-mapping).
+The absolute ADC position replaces edge counting and the old fixed startup target;
+start dark and ramp only after valid position, PD-status and thermal checks.
+:::
+
+
 ## Two frequencies, not one
 
 It helps to separate two very different rates in this design:

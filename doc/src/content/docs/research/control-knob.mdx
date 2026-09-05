@@ -4,6 +4,16 @@ description: Panel potentiometer vs rotary encoder for the lamp's modulation-par
 sidebar_position: 70
 ---
 
+:::note[Current control revision — 2026-09-06]
+The current design uses **RV1 ALPS RK10J11E0034 / C470643**, a stopped 10 kΩ
+potentiometer with 270°±10° travel, and **SW2 G-Switch SS-12D01-G020 / C5446803**.
+Encoder comparisons and example firmware below are historical research, not the
+current netlist or executable firmware. See [Board L's current ADC mapping](/docs/architecture/board-l/#knob-mapping).
+The absolute ADC position replaces edge counting and the old fixed startup target;
+start dark and ramp only after valid position, PD-status and thermal checks.
+:::
+
+
 ## Context
 
 The lamp needs a physical **knob** the user turns to control the fire/wave modulation (see [modulation-algorithms](/docs/research/modulation-algorithms/) for what it might control). Two classic approaches: a panel-mount **potentiometer** read by the MCU's ADC, or a **rotary encoder** read as a quadrature digital signal. The source issue requires the circuit to stay **JLCPCB-only** — this page checks real stock, not just "what's the standard part for this."
@@ -70,3 +80,14 @@ None of these are Basic/Preferred tier (all Extended, ~¥470 one-time fee per un
 - Does the chosen encoder need an integrated push-button (for a mode-select gesture, e.g. short-press to cycle between speed/depth/brightness assignment)? None of the three shortlisted EC11 SKUs above were confirmed to include one from the DB description alone — verify against the actual datasheet before BOM lock.
 - Pull-up strategy for the A/B lines: external resistors vs MCU-internal pull-ups (all three MCU candidates in [mcu-candidates](/docs/research/mcu-candidates/) have internal weak pull-ups, likely sufficient given the encoder's low switching speed).
 - Debounce approach: firmware-timer debounce vs a small RC filter on A/B — either works at knob-turning speeds; architecture pass picks based on GPIO budget and firmware complexity preference.
+
+
+## Current selection: stopped ALPS wheel
+
+The user selected **RK10J11E0034 / C470643**. JLCPCB showed 6,939 stocked and
+6,677 available to order on 2026-09-06 JST. The [primary ALPS catalog](https://tech.alpsalpine.com/cms.media/product_catalog_rv_03_rk10j_en_780020d1ea.pdf)
+identifies the single-unit 10 kΩ ±30% 1B taper and drawing 1. The exact product
+page confirms 270°±10° travel and physical stops. Five lower mounting positions
+include three electrical pins and two dummy supports; two upper supports also
+remain. Pin 2 is the wiper. Read absolute ADC position and validate installed
+clockwise direction instead of carrying over encoder counting or boot defaults.

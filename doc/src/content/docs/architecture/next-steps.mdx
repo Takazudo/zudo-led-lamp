@@ -10,10 +10,10 @@ tools, and which gates must pass before the next step is allowed.
 
 ## Fit and validate the rear controls
 
-Board L now includes the routed JLCPCB **C496154 SW2 toggle** and rear SW1 encoder.
+Board L now includes the routed JLCPCB **C5446803 SW2 slide switch** and rear RV1 stopped potentiometer.
 The [rear-controls handoff](./rear-controls.mdx) gives PCB coordinates, the actual
-3D render, and enclosure constraints. SW2 is included in the BOM/CPL; support its
-threaded bushing in the enclosure and check the plated slots and front lug projection.
+3D render, and enclosure constraints. SW2 is included in the BOM/CPL; check both
+control bodies in the enclosure and check terminal fit and front lead projection.
 Follow the [bring-up sequence](./power-switch.mdx), including inrush, bounce,
 rail decay, contact reliability and service back-power. These checks remain
 unperformed until hardware exists.
@@ -33,7 +33,7 @@ settled, so Board L's capture is not simultaneously debugging the library.
    hierarchical sheet and instantiate it eight times rather than copy-pasting; the
    [net table](./board-l.mdx#net-connectivity-table-led-array-8-strings-x-3-series) names the nets in exactly
    that repeating pattern.
-4. **Board L control** — U3, SW1, RT1, the CTRL RC filter, the pad groups.
+4. **Board L control** — U3, RV1, RT1, the CTRL RC filter, the pad groups.
 
 Run ERC after each stage, not once at the end.
 
@@ -48,7 +48,7 @@ Run ERC after each stage, not once at the end.
 | U2 exposed pad | Tie to the ground pour for heat, but the datasheet is explicit that it must **not** be the electrical ground return path — pins 2 and 3 are |
 | LED thermal pours | The [thermal budget](/docs/research/thermal-budget/) is clear that the ~1 W/site figure assumes a generous via-stitched pour per pad; a token pad does not hit it. At 0.19 W/site there is margin, but do not spend it all on cramped copper |
 | RT1 placement | Physically **inside** the LED array, not near the board edge — it is measuring the array's temperature, and the derate thresholds assume that |
-| SW1 and the board edge | The EC11's bushing has to reach a panel. The enclosure is out of scope, so leave the mounting reference generous and revisit it when the enclosure exists |
+| RV1 and the board edge | Reserve the full Ø14±0.2 mm wheel envelope and finger access; its centre is offset from the footprint origin. Verify the low-profile housing and 1.6 mm PCB fit |
 
 ## Footprint pipeline
 
@@ -58,7 +58,7 @@ drawing them — but it is also where the
 
 1. **`easyeda2kicad`** to import symbols and footprints for the LCSC parts, especially
    the ones with no KiCad-official equivalent (U1 STUSB4500, U2 AL8860, J1 receptacle,
-   SW1 encoder).
+   RV1 potentiometer and SW2 slide switch).
 2. **`kicad-jlcpcb-tools`** for the BOM/CPL export rather than KiCad's built-in export —
    it carries a community-maintained rotation database.
 3. **Add explicit rotation overrides in its Corrections Manager** for every
@@ -238,22 +238,18 @@ harder to attribute once an animation is running.
 
 ### Gate 5 — Firmware
 
-Flash over SWD (ST-Link or CMSIS-DAP; OpenOCD or PlatformIO on macOS). Bring up in this
-order: encoder counting → PWM/CTRL mapping → gamma → modulation → thermal derate. Verify
-that the boot behaviour is dark-then-ramp, and that a mid-operation reset drops the lamp
-to dark rather than to full brightness.
+No executable control firmware is in this repository. Implement PA0/ADC_IN0
+absolute-position acquisition first, with suitable sample time for up to 3.35 kΩ
+source resistance, endpoint calibration, averaging and underside-direction inversion
+if required. Then bring up PWM/CTRL mapping, gamma, modulation and thermal derating.
+Initialize PWM off; only after valid ADC, PD-status and thermal checks, ramp toward
+the knob's current position. Verify power-on, watchdog/reset and rapid OFF/ON behavior.
 
-:::caution[Encoder debounce and contact verification is a real bring-up gate, not just "bring it up first"]
-Encoder counting comes first in the bring-up order because it needs bench verification,
-not just code: the retained EC11 mechanical spec conditions are the datasheet's own test
-point (5 V, 5 kΩ pull-ups), not this design's real operating point (3.3 V, 10 kΩ
-pull-ups via R22/R23). No rotary-contact wetting-current minimum is retained for this
-part, so a lower test current has not been shown safe by datasheet evidence alone —
-confirm clean, bounce-free counting on the bench at the real operating point. Also check
-that C22/C23's discharge through the contact (≈33 mA peak through the 100 Ω series
-resistors R27/R28 on each closure) is not accelerating contact wear beyond what the
-bench verification shows acceptable.
-:::
+Open the wiper connection and measure the R22/C22 nominal 10 ms discharge toward
+dark. This does not prove detection of all contact or wiring faults; a short to
+V3P3 can look like a valid high setting. Validate the fault policy and ADC settling
+on hardware, with the actual wheel and operating temperature.
+
 
 ## Open questions for the bench
 
@@ -266,7 +262,7 @@ bench verification shows acceptable.
 | Actual driver efficiency | The budget assumes 92%; component losses suggest ~95%; the research assumed 88% | Gate 4 — input power versus `LED_P` output power |
 | Is 440 kHz switching audible? | Analog dimming should prevent it, but the inductor still switches | Gate 4 — listen in a quiet room, at several brightness levels |
 | Is ~700 lm the right brightness through a diffuser? | The diffuser does not exist yet | Only answerable once the enclosure phase starts |
-| Does the chosen EC11 SKU have a push-button? | Would open up mode-cycling in a future firmware revision | Inspect the received part |
+| Does the wheel turn brighter clockwise from underneath? | Endpoint polarity must match the user-facing direction | Measure endpoints and apply firmware inversion if needed |
 
 ## One pre-layout decision this design has not made
 

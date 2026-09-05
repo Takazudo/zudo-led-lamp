@@ -1,6 +1,6 @@
 ---
 name: component-project-passives
-description: Resolve the exact Samsung, Yageo, and UNI-ROYAL passive lines used by this project. Use whenever one of the listed MPNs/LCSC IDs, its capacitor or resistor limits, its Board P/Board L placement, bias/derating, reset, CCDB, CTRL, NTC, encoder, or discharge network is relevant.
+description: Resolve the exact Samsung, Yageo, and UNI-ROYAL passive lines used by this project. Use whenever one of the listed MPNs/LCSC IDs, its capacitor or resistor limits, its Board P/Board L placement, bias/derating, reset, CCDB, CTRL, NTC, brightness ADC, or discharge network is relevant.
 ---
 
 # Exact project passives
@@ -21,7 +21,7 @@ Treat `0603WAF0000T5E` as a jumper, not a normal resistance: use its less-than-5
 
 ## Audit boundaries
 
-The current generator connects C35 between Q1 gate and VBUS_IN, R12 as the VBEN-to-Q1-gate divider leg, R13 to DISCH, R14 to VBUS_VS_DISCH, fitted R19/R20 as CCDB bridges, and DNP R17/R18 as external-Rd options. It places R21 as the reset pull-down, Board L R20/R21/C21 on CTRL, Board L R26/RT1/C24 on NTC_SENSE, and R27/R28 in encoder paths. These are fact-ID-linked observations only. Verify active-device requirements and reset polarity with their owning skills; do not infer them from passive values.
+The current generator connects C35 between Q1 gate and VBUS_IN, R12 as the VBEN-to-Q1-gate divider leg, R13 to DISCH, R14 to VBUS_VS_DISCH, fitted R19/R20 as CCDB bridges, and DNP R17/R18 as external-Rd options. It places R21 as the reset pull-down, Board L R20/R21/C21 on CTRL, Board L R26/RT1/C24 on NTC_SENSE, and R27 with R22/C22 in the absolute-brightness ADC path. These are fact-ID-linked observations only. Verify active-device requirements and reset polarity with their owning skills; do not infer them from passive values.
 
 ## Human component reference
 

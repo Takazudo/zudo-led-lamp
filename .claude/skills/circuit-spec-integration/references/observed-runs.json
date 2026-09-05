@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "provenance_note": "Observed explicit circuit-spec-integration policy rendering/refusal against frozen evidence packets. Deterministic forward fixtures separately prove routing and evidence discovery; these runs do not claim independent model discovery of IDs. The C496154 run records the actual parent Codex policy response after loading the packet and named evidence. Its response phase used no tools and created no persistent session; it is not an independent subagent observation.",
+  "provenance_note": "Observed explicit circuit-spec-integration policy rendering/refusal against frozen evidence packets. Deterministic forward fixtures separately prove routing and evidence discovery; these runs do not claim independent model discovery of IDs. The low-slider and stopped-potentiometer runs record actual parent Codex responses after reviewing the named packets. Response rendering used no tools and created no persistent session; these are not independent subagent observations. The parent subsequently clarified that the ALPS Insertion (t: 2 mm) notation must not be treated as a mandatory PCB substrate thickness; the stopped-potentiometer response incorporates that clarification.",
   "runs": [
     {
       "run_id": "observed-usb-pd-programmed-state",
@@ -177,9 +177,9 @@
       }
     },
     {
-      "run_id": "observed-board-toggle-power-cut",
-      "case_id": "board-toggle-power-cut",
-      "runner": "Parent Codex explicit-skill policy rendering after loading frozen packet and named owner evidence; not an independent model-discovery run",
+      "run_id": "observed-low-slider-power-cut",
+      "case_id": "low-slider-power-cut",
+      "runner": "Parent Codex explicit-skill policy rendering from the frozen named evidence packet; not independent discovery",
       "model": "inherited session model",
       "run_date": "2026-09-06",
       "invocation": {
@@ -188,41 +188,100 @@
         "session_persistence": false,
         "evidence_packet": "frozen"
       },
-      "prompt": "Evaluate Dailywell 1MS1T1B1M1QES-5 C496154 Board L power toggle, common 2 and the isolated live OFF throw; prove both converters unpowered OFF with safe capacitor inrush/contact life and assembled fit.",
-      "prompt_sha256": "357153e0a22f9e0bec695a1210231333ba25451754fd32bf3acbd8d41a65fb31",
-      "response_sha256": "070866ec6dd9a5890dfa8a73d273c64dd2574f6df8049f9f23b3aed50a3eed7c",
+      "prompt": "Evaluate G-Switch SS-12D01-G020 C5446803 low-profile Board L switch and isolated live OFF throw; prove OFF isolation, mounted height and capacitive switching endurance.",
+      "prompt_sha256": "2ae40dd76903dbf9f558e382aea74fd2fc3bcc1686dc4f8d6b38eaa614e439d9",
+      "response_sha256": "704cab8338e66eb4c7b39657fe4198cde0216aeb4bde7a0113e5fe603272a2f0",
       "response": {
         "trigger_skill": "circuit-spec-integration",
         "loaded_skills": [
           "component-spec-audit",
           "circuit-spec-integration",
-          "component-dailywell-1ms1t1b1m1qes-5",
+          "component-gswitch-ss-12d01-g020",
           "component-bhfuse-bsmd1206-075-30v",
           "component-al8860mp-13",
           "component-ap63203wu-7"
         ],
         "source_ids": [
-          "src-c496154-datasheet",
-          "src-c496154-generator",
+          "src-c5446803-datasheet",
+          "src-c5446803-generator",
           "src-bhfuse-generator",
           "src-ap6320x-ds41326"
         ],
         "fact_ids": [
-          "fact-c496154-rating",
-          "fact-c496154-terminals",
-          "fact-c496154-project-nets",
+          "fact-c5446803-rating",
+          "fact-c5446803-terminals",
+          "fact-c5446803-project-nets",
           "fact-bhfuse-project-nets",
           "fact-ap63203-en-open"
         ],
         "conditions": [
-          "SW2 common 2 receives V15_FUSED and joins pin 1 to switched V15 in ON. In OFF, common 2 joins pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF; Board P remains powered. Verify modified plated-slot and enclosure fit, front lug clearance, capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test. Exact drawing is manufacturer-mirror evidence, not closed manufacturer-primary trust."
+          "SW2 center common 2 receives V15_FUSED and joins outer pin 1 to switched V15 in ON. In OFF it joins isolated outer pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF while Board P remains powered. G020 has a 2 mm actuator and 5.5 mm body-plus-actuator dimension; the corrected model retains shoulder stand-off for approximately 6 mm PCB reach, requiring physical confirmation. Verify inrush, bounce, restart, contact life, rail decay and service-interface back-power. Exact switch drawing remains manufacturer-mirror evidence."
         ],
         "calculation_ids": [],
         "verdicts": [
           "NEEDS BENCH"
         ],
         "refused": true,
-        "refusal": "The design graph opens the normal V15 supply in OFF, but common 2 energizes isolated pad 3 and Board P remains powered. Stored charge and ATT/PDOK/SWD/UART back-power are untested. The 5 A at 28 VDC rating from an exact manufacturer mirror does not establish capacitive endurance or manufacturer-primary trust. Modified-slot and front-lug/enclosure fit are calculated or rendered design expectations, not physically validated assembly. Therefore proof of unpowered converters, safe inrush/contact life and assembled fit is refused pending bench validation."
+        "refusal": "The design supports normal feed interruption through common 2 to pin 1 in ON, with pin 3 isolated on the PCB but live in OFF. It does not prove capacitive-switch endurance or absence of alternate back-power. The mirrored drawing provides 3.5 mm body plus 2 mm actuator, while the model retains about 0.5 mm shoulder stand-off; approximately 6 mm mounted reach needs physical verification. Production and bench certification are refused from this evidence alone."
+      }
+    },
+    {
+      "run_id": "observed-stopped-potentiometer-adc",
+      "case_id": "stopped-potentiometer-adc",
+      "runner": "Parent Codex explicit-skill policy rendering from the frozen named evidence packet; not independent discovery",
+      "model": "inherited session model",
+      "run_date": "2026-09-06",
+      "invocation": {
+        "skill": "/circuit-spec-integration",
+        "tools": "disabled",
+        "session_persistence": false,
+        "evidence_packet": "frozen"
+      },
+      "prompt": "Evaluate ALPS RK10J11E0034 C470643 stopped brightness potentiometer with R27/R22/C22 and STM32 PA0 ADC; prove calibrated brightness, open-wiper behavior, safe startup and fit in the 1.6 mm board.",
+      "prompt_sha256": "17ac0807e72e9f8f7a6c97dc93bc201851baee7a07a564c4d4430a86448d7f06",
+      "response_sha256": "2eb845744fe8e4d9b3f302f049709e7fa83f6de4fcd9a994e2152f96d1b1bf16",
+      "response": {
+        "trigger_skill": "circuit-spec-integration",
+        "loaded_skills": [
+          "component-spec-audit",
+          "circuit-spec-integration",
+          "component-alps-rk10j11e0034",
+          "component-stm32g031f8p6",
+          "component-project-passives"
+        ],
+        "source_ids": [
+          "src-c470643-spec",
+          "src-c470643-page",
+          "src-c470643-generator",
+          "src-c529334-ds",
+          "src-c529334-generator",
+          "src-c22775-generator",
+          "src-c25803-uniroyal",
+          "src-c14663-yageo"
+        ],
+        "fact_ids": [
+          "fact-c470643-resistance",
+          "fact-c470643-tolerance",
+          "fact-c470643-terminals",
+          "fact-c470643-stops",
+          "fact-c470643-project-nets",
+          "fact-c470643-adc-design",
+          "fact-c470643-firmware-target",
+          "fact-c529334-adc",
+          "fact-c529334-topology",
+          "fact-c22775-brightness-topology",
+          "fact-c25803-resistance",
+          "fact-c14663-capacitance"
+        ],
+        "conditions": [
+          "RV1 RK10J11E0034 is the single-unit 10 kOhm +/-30% stopped potentiometer: end 1=GND, end 3=V3P3, wiper 2 through R27 100 Ohm to U3.7 PA0 BRIGHT_ADC; all four mechanical pads and U3.8 are no-connects. R22 100 kOhm and C22 100 nF connect BRIGHT_ADC to GND. Worst divider source resistance is 3.25 kOhm plus 100 Ohm before bias loading; open-wiper nominal RC decay is 10 ms, not a certified fault detector. Use the documented 160.5-cycle ADC target, reference/errata review, endpoint and inversion calibration, averaging and startup ramp with thermal/PD gates. The 270-degree physical stops replace quadrature behavior. The catalog lists Insertion (t: 2 mm); this is not treated as a mandatory PCB thickness. Seating and contact life on the actual 1.6 mm PCB need prototype proof, and firmware is not flashed."
+        ],
+        "calculation_ids": [],
+        "verdicts": [
+          "NEEDS BENCH"
+        ],
+        "refused": true,
+        "refusal": "The single-gang wiper 2, endpoints 1 and 3, and four mechanical no-connects match the primary drawing. The nominal design calculations give 13000/4 + 100 = 3350 Ohm before bias and 100000 x 100 nF = 10 ms open-wiper decay; loading means the transfer is not perfectly linear. The static circuit does not prove calibrated brightness, safe flashed startup, detection of all wiper faults or seating in the actual 1.6 mm PCB; the catalog Insertion (t: 2 mm) notation does not prove that a 2 mm substrate is mandatory. Endpoint and inversion calibration, long ADC sampling, reference and errata review, and bench startup, gate and fit verification are required before certification."
       }
     }
   ]

@@ -22,13 +22,13 @@ class ComponentSpecValidatorTests(unittest.TestCase):
         self.lines = validator.validate_inventory(self.inventory_data)
 
     def test_power_switch_identity_is_jlcpcb_and_not_external(self):
-        switch = next(line for line in self.lines if line["lcsc"] == "C496154")
-        self.assertEqual(switch["mpn"], "1MS1T1B1M1QES-5")
+        switch = next(line for line in self.lines if line["lcsc"] == "C5446803")
+        self.assertEqual(switch["mpn"], "SS-12D01-G020")
         self.assertNotEqual(switch.get("mounting"), "external")
-        self.assertEqual(validator.resolve("Dailywell 1MS1T1B1M1QES-5", self.lines), ["line-c496154"])
+        self.assertEqual(validator.resolve("G-Switch SS-12D01-G020", self.lines), ["line-c5446803"])
         for change in ("blank-lcsc", "wrong-mpn"):
             data = copy.deepcopy(self.inventory_data)
-            line = next(line for line in data["lines"] if line["lcsc"] == "C496154")
+            line = next(line for line in data["lines"] if line["lcsc"] == "C5446803")
             if change == "blank-lcsc": line["lcsc"] = ""
             else: line["mpn"] = "WR11AS"
             with self.assertRaises(validator.ContractError):
@@ -36,7 +36,7 @@ class ComponentSpecValidatorTests(unittest.TestCase):
 
     def test_power_switch_pin_map_cannot_claim_wrong_pcb_footprint(self):
         aggregate = validator.validate_local_skills(self.schema, self.lines)
-        mapping = next(m for m in aggregate["pin_maps"] if m["record_id"] == "rec-c496154")
+        mapping = next(m for m in aggregate["pin_maps"] if m["record_id"] == "rec-c5446803")
         mapping["footprint"] = "R0603"
         with self.assertRaises(validator.ContractError):
             validator.validate_pin_assets(aggregate, self.lines)

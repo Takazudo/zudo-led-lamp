@@ -1,127 +1,71 @@
 ---
-title: Lamp power switch — Dailywell C496154
-description: The JLCPCB-assembled rear toggle, exact terminal connections, OFF behavior and prototype checks.
+title: Lamp power switch — G-Switch C5446803
+description: The short rear slide switch, exact terminal connections, OFF behavior and prototype checks.
 sidebar_position: 35
 ---
 
-The selected switch is **Dailywell 1MS1T1B1M1QES-5 / C496154**, a maintained
-SPDT toggle assembled directly on the back of Board L. One throw provides ON;
-the other is left unwired for OFF. The existing encoder controls brightness.
+The selected switch is **G-Switch SS-12D01-G020 / C5446803**, a maintained SPDT
+slide switch on the rear of Board L. It replaces the tall Dailywell toggle. RV1,
+the stopped ALPS potentiometer, sets brightness independently.
 
-## JLCPCB supplies the selected switch
+## Selected part and availability
 
-On **2026-09-06 JST**, the [exact JLCPCB listing](https://jlcpcb.com/partdetail/C496154)
-showed **1,080 in stock**, **995 available to order**, **Extended**,
-**Wave Soldering**, and **Economic and Standard PCBA**. The quantity-one price
-was US$1.1485 before assembly, shipping and tax. These are dated observations,
-not reserved inventory; recheck the exact C496154 line when placing the PCBA order.
-No order has been placed.
+On **2026-09-06 JST**, the [JLCPCB C5446803 listing](https://jlcpcb.com/partdetail/C5446803)
+showed **3,709 in stock and 3,698 available to order**. These are dated observations,
+not reserved inventory or approval of this particular board's assembly. No order
+has been placed. The [exact G020 drawing](https://datasheet.lcsc.com/datasheet/pdf/af2c04499242010f9bc8773a044bd472.pdf?productCode=C5446803)
+is manufacturer-authored evidence retrieved through a distributor mirror.
 
-This replaces the earlier NKK WR11AS selection, which did not meet the JLCPCB
-sourcing requirement. SW2 now has an LCSC identifier, PCB footprint, BOM/CPL
-entry and actual KiCad 3D model. The old J5 wire-pad pair and switch harness are removed.
+The switch is rated **1 A at 24 V DC**. The lamp's nominal design estimate is
+approximately 0.41 A at 15 V; the contact rating alone does not qualify capacitor
+inrush, contact bounce, switching lifetime or the upstream surge envelope.
 
-The [exact Dailywell drawing](https://datasheet.lcsc.com/datasheet/pdf/6c3cd0923a3d432d426a54ab841f4e91.pdf?productCode=C496154)
-was retrieved from LCSC and matched the JLCPCB copy byte-for-byte. Its title is
-1MS1T1B1M1QES-5, drawing 1MSP0694, revision B with a 2017 temperature amendment.
-The [component record](/docs/components/records/c496154/) includes the drawing,
-footprint, interactive model and retained evidence. Manufacturer-authored content
-retrieved through a distributor remains mirror evidence under the audit contract.
-
-## The switch disconnects the normal positive feed
-
-```mermaid
-flowchart LR;
-  BP["Board P: USB-PD remains powered"] --> J2["Board L J2 pins 1 and 2"];
-  J2 --> F1["F1 PPTC"];
-  F1 --> COM["V15_FUSED: SW2 pin 2 common"];
-  COM --> SW2["ON joins 2–1; OFF joins 2–3"];
-  SW2 --> RET["Pin 1: switched V15"];
-  RET --> LED["AL8860 LED driver"];
-  RET --> LOGIC["AP63203 logic supply and MCU"];
-  RET --> LOCAL["D10 TVS and local input capacitors"];
-```
+## Exact ON/OFF connections
 
 | Terminal | PCB connection | Behavior |
 |---|---|---|
-| **2, common** | `V15_FUSED`, directly from F1.2 | Powered whenever the normal input is present |
-| **1** | `V15`, feeding both converters and D10 | Connected to common in lamp ON |
-| **3** | Explicit schematic NC; isolated PCB pad | Connected to common in lamp OFF, so **electrically live in OFF** |
+| 2, common | V15_FUSED from F1.2 | Fused positive input |
+| 1 | V15 to both converters and D10 | ON closes 2–1 |
+| 3 | Explicit NC, isolated PCB pad | OFF closes 2–3; this terminal is live in OFF |
 
-The manufacturer specifies maintained **ON–NONE–ON**, with no centre position.
-Its position 1 connects 2–3; position 3 connects 2–1. “OFF” means the lamp load is
-disconnected, not that every switch terminal is de-energized. Never connect pin 3
-to ground. Confirm continuity and mark I/O on the enclosure using the installed
-orientation, not a product photograph or the model's illustrated lever position.
+Both positive J2 contacts join before F1. Ground, ATT and PDOK remain connected.
+D10 and input capacitors remain local to switched V15; no LED switching node is
+routed through the switch. Never connect throw 3 to ground. Verify continuity
+and mark installed ON/OFF direction before powering the assembled board.
 
-Both J2 positive contacts join before F1, so neither bypasses SW2. `GND`, `ATT`
-and `PDOK` remain connected. D10 and the input capacitors stay local to switched
-`V15`; no LED switching node passes through the control.
+OFF removes Board L's normal positive supply. LEDs and logic turn off after
+stored charge decays; **Board P and USB-PD remain powered**. Debug/UART equipment
+can back-power the load, so OFF is not service isolation. Disconnect USB and
+service cables before handling the assembly.
 
-## Plated slots and panel support accommodate the exact part
+ON restarts the MCU only after sufficient rail decay; rapid OFF/ON may avoid
+reset. Firmware must initialize PWM off, validate the RV1 absolute ADC position
+and PD/thermal state, then ramp toward that position. No executable lamp-control
+firmware is supplied by this hardware revision.
 
-Dailywell calls this variant **solder lug / panel mounting**, despite the supplier's
-generic “PC Pin” attribute. The exact supplier footprint uses plated slots for those
-lugs, and JLCPCB lists wave-solder assembly. The project enlarges the imported
-slots to **4.0 × 2.4 mm**, with **5.0 × 3.4 mm copper pads**, at **4.7 mm pitch**.
-The 8 × 14 mm courtyard includes body margin.
+## Short actuator and model provenance
 
-The slot calculation includes the drawing's dimensional/angular tolerances,
-rounded slot ends, JLCPCB's published +0.13/−0.08 mm slot-size tolerance and a
-stated registration allowance. It leaves approximately **0.030 mm worst-case
-corner clearance** and **0.385 mm annulus** under those assumptions. The full
-calculation and source hashes are retained in `footprints/vendor/C496154/README.md`.
-This is a project-adapted footprint, not a manufacturer land pattern or proof
-that JLCPCB has approved this particular board's insertion and soldering details.
+The G020 version has a **3.5 mm case and 2 mm actuator**. The corrected family CAD
+retains a **0.5 mm shoulder**, giving approximately **6 mm mounted reach**. It is
+a documented project adaptation of family CAD to G020, not a newly acquired exact
+manufacturer model. Do not reuse the taller family actuator as the enclosure envelope.
 
-Secure the **1/4-40 UNS-2A threaded bushing** with the enclosure and nuts, so
-actuation does not load the solder joints. The drawing shows a 6.35 mm panel
-opening with keyway details; the optional locking-ring arrangement adds a
-2.38 mm locating hole 6.10 mm from centre. Body and bushing lengths are each
-8.89 mm; the lever projects a further 10.41 mm. Reserve a support plane through
-the bushing and sufficient thread engagement for the hardware. Final panel
-thickness and nut stack remain enclosure prototype choices.
+SW2 is on B.Cu at **(9.10, 27.75) mm**, rotated **90°**. Verify housing clearance,
+actuator access/travel, soldering, retention and underside enclosure clearance on
+the prototype. See the [rear-controls handoff](./rear-controls.mdx).
 
-SW2 sits at **(9.10, 27.75) mm on B.Cu**. See the
-[rear-controls handoff](./rear-controls.mdx) for stack clearance and the actual
-PCB render. Its lugs project approximately **1.9 mm past the front of a 1.6 mm
-PCB**, plus solder; check that space against LEDs and the light chamber.
+## Qualification checks
 
-## OFF and ON still need hardware qualification
+1. Unpowered, verify 2–1 ON and 2–3 OFF, the isolated throw-3 pad, and no copper
+   bypass. Check insertion, support and installed switch direction.
+2. With service cables disconnected, bring up Board P first and measure V15/V3P3
+   decay and residual voltage with SW2 OFF. Check for LED glow or partial MCU power.
+3. Scope input current, V15, V3P3 and CTRL during switching, rapid toggles and USB
+   reconnection. Check bounce, inrush, overshoot, brownout cycling and startup flashes.
+4. Test minimum/full brightness, repeated switching, contact drop and temperature;
+   verify startup and thermal protection. Assess ATT/PDOK and SWD/UART back-power separately.
 
-OFF disconnects Board L's normal positive supply. LEDs and logic turn off after
-stored charge decays. **Board P and USB-PD remain powered** while USB is connected.
-Disconnect USB and service cables before handling the assembly.
-
-ON restarts the converters and MCU after sufficient rail decay. Rapid OFF/ON can
-retain charge and avoid reset; no active discharge circuit was added. Startup,
-PD-status and thermal gates remain unchanged. Brightness restoration is not
-implemented by this hardware revision; firmware must initialize it deliberately.
-
-The exact drawing lists **5 A at 28 VDC** for Q silver contacts, compared with the
-lamp's nominal **0.41 A at 15 V** design estimate. It does not identify a load-type
-qualifier or prove capacitive-inrush endurance or low-current contact reliability.
-F1 and board limits still govern the system.
-
-C10/C11/C12/C14 total 40 µF nominal; C13 adds 0.1 µF. Their nominal stored energy
-at 15 V is `0.5 × 40.1 µF × (15 V)² = 4.51 mJ`. This is not a peak-current or
-lifetime bound. Capacitance bias, source impedance and contact bounce affect the
-actual waveform. The existing upstream surge/TVS qualification remains open.
-
-## Bring-up checks
-
-1. Unpowered, verify terminal numbering, 2–1 ON and 2–3 OFF, no copper bypass,
-   and isolation of pin 3 from every PCB net. Check slots, solder fill, bushing
-   support, front lug clearance and installed I/O labels.
-2. Bring up Board P first. With SW2 OFF and service cables disconnected, use the
-   existing current-limited bring-up procedure. Measure V15/V3P3 decay and residual
-   voltage; check for LED glow or partial MCU power.
-3. Scope input current, V15, V3P3 and CTRL during ON, OFF, rapid toggles and USB
-   reconnection. Check inrush, bounce, overshoot, brownout cycling and startup flashes.
-4. Test full/minimum brightness, repeated switching, idle/storage recovery, contact
-   drop and temperature. Verify startup and thermal protection still function.
-5. Separately assess ATT/PDOK and SWD/UART back-power. An externally powered
-   service interface can energize the load even when its normal supply is open.
-
-These are unperformed hardware checks. ERC, netlist checks, DRC and 3D rendering
-verify design data; they do not prove assembled operation or enclosure fit.
+C10/C11/C12/C14 plus C13 total 40.1 µF nominal, storing approximately **4.51 mJ
+at 15 V**. This is an energy estimate, not a peak-current or lifetime bound.
+Hardware checks remain unperformed; ERC, DRC, netlist checks and rendering verify
+design data rather than assembled operation.

@@ -1,6 +1,6 @@
 ---
 title: Board L — Driver, Control, LED Array
-description: The locked Board L design — 24 warm-white 2835 LEDs in 8 parallel 3-series strings at 500mA, an AL8860 constant-current buck, an AP63203 3.3V rail, an STM32G031 MCU and an EC11 knob, with a complete pin-level net table and worked component math.
+description: The locked Board L design — 24 warm-white 2835 LEDs in 8 parallel 3-series strings at 500mA, an AL8860 constant-current buck, an AP63203 3.3V rail, an STM32G031 MCU and a stopped ALPS potentiometer, with a complete pin-level net table and worked component math.
 sidebar_position: 30
 ---
 
@@ -8,8 +8,8 @@ Board L is everything that is not USB-PD negotiation: the constant-current LED d
 the LED array itself, the 3.3 V logic rail, the control MCU, and the knob. It consumes
 the switched 15 V rail from [Board P](./board-p.mdx) and nothing else.
 
-The rear PCB [C496154 power toggle](./power-switch.mdx) disconnects both
-converters after F1. SW1 and SW2 are on the rear, leaving the LEDs facing the light chamber. See the
+The rear PCB [C5446803 slide switch](./power-switch.mdx) disconnects both
+converters after F1. RV1 and SW2 are on the rear, leaving the LEDs facing the light chamber. See the
 [rear-controls layout and enclosure handoff](./rear-controls.mdx).
 
 ## Block diagram
@@ -31,7 +31,7 @@ flowchart LR;
   U4["U4 AP63203WU-7\n3.3V sync buck"];
   V33["V3P3 rail\nC16 C17 22uF"];
   U3["U3 STM32G031F8P6"];
-  SW1["SW1 EC11 encoder"];
+  RV1["RV1 ALPS 10k potentiometer"];
   RT1["RT1 NTC 10k\nin the LED array"];
   RCF["R20 10k / R21 33k / C21 100n\nRC low-pass, 0 to 2.53V DC"];
   CTRL["U2 CTRL pin 4\nanalog dimming"];
@@ -39,7 +39,7 @@ flowchart LR;
   J4["J4 UART pads"];
 
   J2 --> F1;
-  F1 --> SW2["PCB toggle C496154\nmaintained ON-OFF"];
+  F1 --> SW2["PCB slide switch C5446803\nmaintained ON-OFF"];
   SW2 --> V15;
   V15 --> RS1;
   V15 --> U2;
@@ -54,7 +54,7 @@ flowchart LR;
   V15 --> U4;
   U4 --> V33;
   V33 --> U3;
-  SW1 -->|"A/B quadrature\nPA0 / PA1, TIM2"| U3;
+  RV1 -->|"Wiper via RC filter\nPA0 ADC_IN0"| U3;
   RT1 -->|"PA4 ADC_IN4"| U3;
   J2 -->|"ATT / PDOK"| U3;
   U3 -->|"PA6 TIM3_CH1\n20kHz PWM"| RCF;
@@ -278,8 +278,8 @@ open for automatic startup".
 `STM32G031F8P6` ([C529334](https://jlcpcb.com/partdetail/C529334)), TSSOP-20, 64 KB
 flash / 8 KB SRAM, Cortex-M0+, 12-bit ADC.
 
-`EC11L1525G01` ([C2991196](https://jlcpcb.com/partdetail/C2991196)), quadrature
-encoder (detent/pulse count unresolved — see caveat below), panel-mount bushing.
+`RK10J11E0034` ([C470643](https://jlcpcb.com/partdetail/C470643)), stopped single-unit
+10 kΩ potentiometer, read by PA0 / ADC_IN0.
 
 ### Analog dimming, not PWM dimming
 
@@ -378,39 +378,31 @@ properly means retaining the DS39014 soft-start row as a fact on the AL8860 reco
 
 ### Knob mapping
 
-The encoder drives **TIM2 in hardware quadrature-encoder mode** (PA0 = TIM2_CH1,
-PA1 = TIM2_CH2), so edge counting costs no CPU time and the invalid-transition rejection
-in [control-safety](/docs/research/control-safety/#fault-handling-sketch-knob-fault-fallback) is handled in
-silicon. Firmware reads the counter each animation frame and clamps it.
+RV1 is **ALPS RK10J11E0034 / C470643**, a single-unit 10 kΩ ±30% potentiometer
+with **270° ±10° travel and physical stops**. Pin 1 is GND, pin 3 is V3P3,
+and pin 2 is the wiper. The four dummy/support terminals remain unconnected.
+The exact manufacturer drawing identifies electrical terminals at the two outer
+positions and the centre of the five-terminal row; the two intervening terminals
+are dummy supports, not a second resistor element.
 
-| | Value |
-|---|---|
-| Counts per detent | 4 (TIM2 x4 quadrature mode) |
-| Firmware scale | 2 brightness steps per count → 8 per detent |
-| Full sweep | 32 detents, **~2.1 turns** from off to full |
-| Clamp | saturated to [0, 255], no wrap |
-| Boot | 0 (dark), then ramp to 40% over 1 s |
+`RV1.2 → BRIGHT_WIPER → R27 (100 Ω) → BRIGHT_ADC → U3.7 (PA0 / ADC_IN0)`.
+R22 is now a 100 kΩ pull-down from BRIGHT_ADC to GND; C22 is 100 nF to GND.
+R23, R28 and C23 are removed, and PA1/U3.8 is unconnected. With the pot's
+maximum 13 kΩ track resistance, the conservative source resistance is
+13 kΩ / 4 + 100 Ω = **3.35 kΩ** before the parallel pull-down is considered.
+Use the documented **160.5-cycle ADC acquisition target**, and validate settling
+after channel changes against the selected ADC clock, reference and device errata.
+An open wiper discharges C22 through R22 with nominal **10 ms** time constant;
+this biases an open wiper toward dark but does not detect every wiring or contact fault.
 
-The counts-per-detent figure assumes one full quadrature cycle per detent, which is the
-usual EC11 arrangement — the parts DB reports "30/15" for this SKU, consistent with 30
-pulses and 15 detents per revolution. Confirm it on the received part; the firmware scale
-factor is a one-line change if it turns out to be 8 counts per detent instead. The scale
-exists because unscaled counting would need **4.3 turns** to sweep 0–255, which is far too
-much travel for a lamp knob.
+Firmware reads an absolute position rather than counting encoder edges. Calibrate
+ADC endpoints, allow inversion after checking clockwise direction from underneath,
+average samples, clamp the result and apply the existing brightness/modulation mapping.
+The pull-down loads the track, so raw ADC codes are not an ideal unloaded angle scale.
+Keep PWM off during reset and initialization; after valid ADC, PD-status and thermal
+checks, ramp toward the measured knob position. There is no fixed 40% boot target.
+These are implementation requirements: this repository has no executable control firmware.
 
-:::caution[Pulses-per-revolution is unresolved]
-This page states 30 pulses / 15 detents per revolution. The retained manufacturer-authored specification
-(KK-2010-9648) states the **reverse** — 15 pulses / 30 detents — and the generator's SW1 label says only
-"15-detent". A 2026-08-02 retrieval attempt could not reach Alps Alpine's primary source: the
-`EC11L1525G01` product page returns HTTP 403 on every path while the sibling `EC11E15244G1` page loads
-normally, and no `EC11L` row appears in any current encoder sub-category listing. Mirror-only evidence cannot
-settle a number the firmware UI scale depends on, so no figure on this page has been changed. Tracked in
-[#32](https://github.com/Takazudo/zudo-led-lamp/issues/32).
-:::
-
-An encoder has no absolute position, so the boot ramp exists to tell the user the lamp is
-alive. It happens strictly *after* firmware has taken control of CTRL, so it does not
-weaken the default-off guarantee.
 
 ### Modulation algorithm
 
@@ -419,6 +411,10 @@ layered as that page suggests) — a slow "breathing" layer and a faster "flicke
 summed around the knob's base brightness. Approach 3 (recorded-flame LUT) is rejected
 because no such dataset exists for this project; approach 2's bounded random walk is
 folded in as the slow layer's character rather than kept as a separate mode.
+
+This is an algorithm sketch, not executable firmware. The ADC/calibration and startup
+helpers below require implementation; initialization must ramp from zero to the
+validated absolute position before enabling normal animation.
 
 ```c
 /* ---- fixed constants (tune against the real diffuser, not on the bench) ---- */
@@ -440,7 +436,11 @@ static uint8_t gamma_lut[256];    /* lut[i] = round(255 * pow(i/255, GAMMA)) */
 void animation_frame(void)
 {
     /* 1. knob -> base brightness, perceptual 0..255 */
-    uint8_t base = knob_count_clamped();          /* TIM2 CNT, saturated 0..255 */
+    uint8_t base = brightness_adc_calibrated();   /* averaged/inverted PA0, 0..255 */
+    if (!startup_pd_thermal_checks_valid() || base == 0) {
+        pwm_set_duty_q16(0);                     /* stop stays dark despite noise */
+        return;
+    }
 
     /* 2. two layers of low-pass-filtered noise */
     int16_t slow_raw = (int16_t)random_uniform(-128, 127);
@@ -561,7 +561,7 @@ Diodes DS41326 Rev 3.
 | Net | Connected pins (Ref.Pin) | Note |
 |---|---|---|
 | `VBUS_L` | `J2.1 J2.2 F1.1` | Both paired power contacts converge on the PPTC |
-| `V15_FUSED` | `F1.2 SW2.2` | Fused positive feed to the toggle common |
+| `V15_FUSED` | `F1.2 SW2.2` | Fused positive feed to the slide-switch common |
 | `V15` | `SW2.1 D10.cathode C10.1 C11.1 U2.VIN(8) RS1.1 D11.cathode C12.1 C13.1 U4.VIN(3) C14.1` | The board's 15 V rail. D10 = second SMAJ20A local to Board L, protecting the local converter input; actual transient qualification remains open |
 
 ### LED driver (U2, AL8860MP-13, MSOP-8EP)
@@ -602,7 +602,7 @@ Strings are numbered 1–8; LEDs `LED1`–`LED24` in order, so string *n* holds
 | `V15` | `U4.VIN(3) C14.1` | C14 = 10 µF input cap |
 | `SW_LOGIC` | `U4.SW(5) C15.1 L2.1` | Switching node, L2 = 4.7 µH |
 | `BST` | `U4.BST(6) C15.2` | C15 = 100 nF bootstrap, SW to BST |
-| `V3P3` | `U4.FB(1) L2.2 C16.1 C17.1 U3.VDD(4) C18.1 C19.1 R22.1 R23.1 R24.1 R25.1 R26.1 J3.4` | Fixed-output part — FB ties directly to the output, no divider (DS41326 §9) |
+| `V3P3` | `U4.FB(1) L2.2 C16.1 C17.1 U3.VDD(4) C18.1 C19.1 RV1.3 R24.1 R25.1 R26.1 J3.4` | Fixed-output part — FB ties directly to the output, no divider (DS41326 §9) |
 | `GND` | `U4.GND(4) C14.2 C16.2 C17.2` | C16/C17 = 2 x 22 µF per DS41326 Table 2 |
 | No-connect | `U4.EN(2)` | Left open for automatic startup — internal current source and 1.18 V threshold per DS41326 Figure 3 |
 
@@ -616,8 +616,8 @@ Strings are numbered 1–8; LEDs `LED1`–`LED24` in order, so string *n* holds
 | 4 | VDD / VDDA | `V3P3` | Supply and ADC reference. `C18` 100 nF + `C19` 1 µF adjacent |
 | 5 | VSS / VSSA | `GND` | |
 | 6 | PF2-NRST | `NRST` | `C20` 100 nF to GND, and `J3.3` for the programmer |
-| 7 | PA0 | `ENC_A` | TIM2_CH1 — encoder phase A |
-| 8 | PA1 | `ENC_B` | TIM2_CH2 — encoder phase B |
+| 7 | PA0 | `BRIGHT_ADC` | ADC_IN0 — absolute brightness |
+| 8 | PA1 | NC | Unused |
 | 9 | PA2 | `UART_TX` | USART2_TX → `J4.1` debug pad |
 | 10 | PA3 | `UART_RX` | USART2_RX → `J4.2` debug pad |
 | 11 | PA4 | `NTC_SENSE` | ADC_IN4 — thermistor divider |
@@ -644,10 +644,9 @@ pin with PA15, so PA15 must never be configured as an output in firmware.
 |---|---|---|
 | `PWM_DIM` | `U3.PA6(13) R20.1` | 20 kHz PWM out |
 | `CTRL` | `R20.2 R21.1 C21.1 U2.CTRL(4) TP1.1` | Filtered DC, 0 to 2.53 V |
-| `ENC_A_SW` | `SW1.A R27.1` | Switch-side node of phase A |
-| `ENC_A` | `R27.2 R22.2 C22.1 U3.PA0(7)` | R27 100 Ω limits C22's discharge through the contact; R22 10 kΩ pull-up to `V3P3`, C22 100 nF debounce (τ = 1 ms) |
-| `ENC_B_SW` | `SW1.B R28.1` | Switch-side node of phase B |
-| `ENC_B` | `R28.2 R23.2 C23.1 U3.PA1(8)` | R28/R23/C23, mirror of phase A |
+| `BRIGHT_WIPER` | `RV1.2 R27.1` | Potentiometer wiper |
+| `BRIGHT_ADC` | `R27.2 R22.1 C22.1 U3.PA0(7)` | 100 Ω series, 100 kΩ pull-down, 100 nF shunt |
+
 | `PDOK` | `J2.4 R24.2 U3.PA5(12)` | R24 10 kΩ pull-up — Board P drives this open-drain |
 | `ATT` | `J2.3 R25.2 U3.PA7(14)` | R25 10 kΩ pull-up |
 | `NTC_SENSE` | `RT1.1 R26.2 C24.1 U3.PA4(11)` | R26 100 kΩ divider top to `V3P3` |
@@ -661,12 +660,9 @@ pin with PA15, so PA15 must never be configured as an output in firmware.
 
 | Net | Connected pins (Ref.Pin) |
 |---|---|
-| `GND` | `J2.5 J2.6 D10.anode C10.2 C11.2 C12.2 C13.2 U2.GND(2) U2.GND(3) U2.EP C14.2 U4.GND(4) C16.2 C17.2 U3.VSS(5) C18.2 C19.2 C20.2 R21.2 C21.2 C22.2 C23.2 C24.2 RT1.2 SW1.C SW1.MP1 SW1.MP2 J3.5 J4.3` |
+| `GND` | `J2.5 J2.6 D10.anode C10.2 C11.2 C12.2 C13.2 U2.GND(2) U2.GND(3) U2.EP C14.2 U4.GND(4) C16.2 C17.2 U3.VSS(5) C18.2 C19.2 C20.2 R21.2 C21.2 C22.2 C24.2 RT1.2 RV1.1 R22.2 J3.5 J4.3` |
 
-`SW1.MP1` / `SW1.MP2` are the encoder's mounting lugs. If the fitted EC11 SKU turns out
-to carry a push-button (the parts DB lists 7 solder joints, which is consistent with a
-switch variant — the [knob research](/docs/research/control-knob/) flagged this as
-unverified), its two switch terminals are left unconnected; the design does not use them.
+RV1 has four dummy/support terminals, all electrically unconnected.
 
 ### Connectors and pad groups
 
@@ -675,11 +671,12 @@ unverified), its two switch terminals are left unconnected; the design does not 
 | `J2` | PM254V-11-06-H85 female, C2832269 | 6 | Direct mate for Board P's PZ254V-11-06P male `JOUT1`; mirrors its pin map exactly — see [Board P](./board-p.mdx#jout1-pin-assignment-locked) |
 | `J3` | 1x5, 2.54 mm | SWDIO, SWCLK, NRST, 3V3, GND | **Footprint only.** Hand-fit a pin strip for bring-up; not in the assembly BOM |
 | `J4` | 1x3, 2.54 mm | TX, RX, GND | Footprint only |
-| `SW1` | EC11L1525G01 | A, C, B + lugs | Panel-mount encoder |
+| `RV1` | RK10J11E0034 / C470643 | 1 endpoint, 2 wiper, 3 endpoint; four isolated supports | Rear stopped potentiometer |
 
 ## What the design review changed (2026-08-01)
 
-An independent electrical review confirmed the captured netlist matches this page
+This historical review predates the RV1 replacement; its encoder-specific changes are superseded.
+An independent electrical review confirmed the then-captured netlist matched this page
 pin-for-pin (including all 24 LED polarities and all four IC pinouts against their
 datasheets) and made these changes, reflected above:
 
@@ -822,7 +819,7 @@ bench thermal reading.
 - [Thermal budget](/docs/research/thermal-budget/) — the 1 W/site FR-4 guideline
 - [Logic rail](/docs/research/control-logic-rail/) — the LDO-vs-buck dissipation math
 - [MCU candidates](/docs/research/mcu-candidates/) — CH32V003 / STM32 / PY32 and their toolchains
-- [Knob candidates](/docs/research/control-knob/) — why an encoder, not a potentiometer
+- [Knob candidates](/docs/research/control-knob/) — current stopped-pot selection and historical encoder research
 - [Modulation algorithms](/docs/research/modulation-algorithms/) — gamma, flicker thresholds, the three approaches
 - [Safe default-OFF](/docs/research/control-safety/) — the hardware-not-firmware principle
 - Diodes Incorporated DS39014 Rev 5 (AL8860) and DS41326 Rev 3 (AP63200/1/3/5)

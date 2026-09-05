@@ -30,23 +30,23 @@ fee arithmetic at the bottom of this page is only as good as the tier data on th
 you order.
 :::
 
-## JLCPCB power switch replacement (2026-09-06)
+## Low-profile control replacement (2026-09-06)
 
-| Ref | Qty | Exact part | JLCPCB | Assembly | Dated availability / cost |
-|---|---|---|---|---|---|
-| SW2 | 1 | **Dailywell 1MS1T1B1M1QES-5** | [C496154](https://jlcpcb.com/partdetail/C496154) | Extended; rear PCB plated slots; Wave Soldering | 1,080 in stock; 995 available to order; US$1.1485 at quantity 1 |
+| Ref | Qty | Selected part | Dated JLCPCB stock / order quantity |
+|---|---:|---|---|
+| RV1 | 1 | ALPS RK10J11E0034 / [C470643](https://jlcpcb.com/partdetail/C470643) | 6,939 / 6,677 |
+| SW2 | 1 | G-Switch SS-12D01-G020 / [C5446803](https://jlcpcb.com/partdetail/C5446803) | 3,709 / 3,698 |
 
-SW2 replaces the separately sourced WR11AS and its J5 harness interface. It is
-fitted and included in the Board L BOM/CPL. The inventory remains **35 orderable
-identities**, now all with LCSC identifiers; 31 are fitted and four are DNP/hand-fit.
-The older cost snapshot below predates this switch: add one C496154 per lamp and
-one additional Extended line to the current JLCPCB quote. No separate WR11AS or
-switch harness purchase is required. Enclosure mounting hardware remains mechanical assembly.
+Both controls replace the prior EC11 encoder and Dailywell toggle. Stock is a dated
+observation, not a reservation. ALPS specifies manual soldering and insertion
+(t:2 mm); supplier listing availability does not approve this board's assembly.
+Verify seating/retention and soldering on the 1.6 mm PCB with the assembler.
 
-The exact manufacturer calls these solder lugs; JLCPCB offers this SKU for
-wave-solder assembly. The project uses a reviewed slotted footprint and requires
-bushing/nut support. See [switch mounting and qualification](./power-switch.mdx).
-Stock is not reserved, and modified slot fit must be checked on the first assembly.
+R22 changes to 100 kΩ C25803; R27 remains 100 Ω C22775 and C22 remains 100 nF
+C14663. R23, R28 and C23 are removed. Four RV1 dummy/support terminals remain
+unconnected. Refresh the BOM/CPL and quote from the revised design rather than
+reusing the old stock and Extended-fee snapshot below. See [rear controls](./rear-controls.mdx).
+
 
 ## Board P — USB-PD front end
 
@@ -90,18 +90,19 @@ Adopted unchanged from the [power-section audit](/docs/power/board-p-front-end/#
 | L2 | 1 | FNR4030S4R7MT 4.7 µH | [C167874](https://jlcpcb.com/partdetail/C167874) | SMD 4x4 mm | Extended | 252,195 | Logic buck inductor, shielded, 78 mΩ |
 | RS1 | 1 | RLP25FEER200 200 mΩ ±1% 2 W | [C459674](https://jlcpcb.com/partdetail/C459674) | 2512 | Extended | **20,654** | High-side sense → 500 mA |
 | R30–R37 | 8 | 33 Ω ±1% 1 W | [C2934070](https://jlcpcb.com/partdetail/C2934070) | 2512 | Extended | 85,468 | Per-string ballast — upsized from a 250 mW 1206 by the design review (the 1206 exceeded its rating at the worst-case 90 mA string) |
-| R20, R22–R25 | 5 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | CTRL filter series, encoder/PDOK/ATT pull-ups |
-| R26 | 1 | 100 kΩ ±1% | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | **Basic** | 7,990,119 | NTC divider top — moved off the 10 kΩ line by the design review; the outgoing 10 kΩ divider exceeded the NTC's 0.1 mA maximum operating current by 68%. Shares Board P's R11 reel |
-| R27, R28 | 2 | 100 Ω ±1% | [C22775](https://jlcpcb.com/partdetail/C22775) | 0603 | **Basic** | 7,325,193 | Encoder phase series — limits C22/C23 discharge through the EC11 contacts. Added by the design review |
+| R20, R24, R25 | 3 | 10 kΩ ±1% | [C17414](https://jlcpcb.com/partdetail/C17414) | 0805 | **Basic** | 10,726,008 | CTRL filter series, PDOK/ATT pull-ups |
+| R22, R26 | 2 | 100 kΩ ±1% | [C25803](https://jlcpcb.com/partdetail/C25803) | 0603 | **Basic** | 7,990,119 | Brightness ADC pull-down and NTC divider top — R26 moved off the 10 kΩ line by the design review; the outgoing 10 kΩ divider exceeded the NTC's 0.1 mA maximum operating current by 68%. Shares Board P's R11 reel |
+| R27 | 1 | 100 Ω ±1% | [C22775](https://jlcpcb.com/partdetail/C22775) | 0603 | **Basic** | 7,325,193 | Brightness wiper series resistor |
 | R21 | 1 | 33 kΩ ±1% | [C4216](https://jlcpcb.com/partdetail/C4216) | 0603 | **Basic** | 696,981 | CTRL pull-down + divider (default-OFF) |
 | C10, C11, C12, C14 | 4 | CL31A106KBHNNNE 10 µF 50 V | [C13585](https://jlcpcb.com/partdetail/C13585) | 1206 | **Basic** | 1,877,266 | Input bulk + both buck input caps |
-| C13, C15, C18, C20–C24 | 8 | CC0603KRX7R9BB104 100 nF 50 V | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | **Basic** | 12,618,106 | HF decouple, BST, NRST, CTRL filter, encoder debounce, NTC filter |
+| C13, C15, C18, C20–C22, C24 | 7 | CC0603KRX7R9BB104 100 nF 50 V | [C14663](https://jlcpcb.com/partdetail/C14663) | 0603 | **Basic** | 12,618,106 | HF decouple, BST, NRST, CTRL filter, brightness ADC filter, NTC filter |
 | C16, C17 | 2 | CL21A226MAQNNNE 22 µF 25 V | [C45783](https://jlcpcb.com/partdetail/C45783) | 0805 | **Basic** | 1,734,789 | 3.3 V output caps per DS41326 Table 2 |
 | C19 | 1 | CL10A105KB8NNNC 1 µF 50 V | [C15849](https://jlcpcb.com/partdetail/C15849) | 0603 | **Basic** | 5,979,916 | MCU VDD bulk |
 | RT1 | 1 | NCP18XH103F03RB 10 kΩ B=3380 K | [C13564](https://jlcpcb.com/partdetail/C13564) | 0603 | Extended | 398,625 | NTC, placed inside the LED array |
 | F1 | 1 | BSMD1206-075-30V | [C976305](https://jlcpcb.com/partdetail/C976305) | 1206 | Extended | 73,979 | PPTC, 750 mA hold / 1.5 A trip / 30 V |
 | J2 | 1 | PM254V-11-06-H85 female | [C2832269](https://jlcpcb.com/partdetail/XFCN-PM254V_11_06H85/C2832269) | THT 1x6, 2.54 mm | Extended | 42,315 (live 2026-08-20) | Direct mate for Board P JOUT1; mirrors its pin map |
-| SW1 | 1 | EC11L1525G01 | [C2991196](https://jlcpcb.com/partdetail/C2991196) | THT, panel bushing | Extended | **4,566** | Rotary encoder; detent/pulse count unresolved, see #32 |
+| RV1 | 1 | RK10J11E0034 | [C470643](https://jlcpcb.com/partdetail/C470643) | Insertion, low-profile wheel | Verify quote | **6,939** | Single-unit 10 kΩ ±30%; 270°±10° stops |
+| SW2 | 1 | SS-12D01-G020 | [C5446803](https://jlcpcb.com/partdetail/C5446803) | THT short slide switch | Verify quote | **3,709** | Maintained SPDT, 1 A at 24 V DC |
 | LED1–LED24 | 24 | HL-AM-2835H421W-S1-08-HR3 (2800–3100 K) | [C210315](https://jlcpcb.com/partdetail/C210315) | SMD2835-2P | Extended | 399,813 | 3000 K, CRI 80, 29 lm typ @ 60 mA |
 
 **Footprint only — not in the assembly BOM:**
@@ -120,7 +121,7 @@ they are the specialty parts — but each needs a re-check before ordering.
 |---|---|---|
 | D5 / D10 SMAJ20A ([C571370](https://jlcpcb.com/partdetail/C571370)) | **3,770**, and **two boards need it** | Lowest-stock line in the whole design. Do not make a same-name or different-standoff substitution: exact vendor identity, conditioned clamp table, pad orientation, and both rail waveforms must be re-audited in the [ratings analysis](/docs/power/ratings-matrix/) and against the canonical record ([`rec-high-diode-smaj20a`](/docs/components/records/high-diode-smaj20a/)) |
 | U2 AL8860MP-13 ([C500782](https://jlcpcb.com/partdetail/C500782)) — canonical record [`rec-al8860mp-13`](/docs/components/records/al8860mp-13/) | **4,000** | Fine for a prototype run. `AL8860WT-7` (TSOT-25) is pin-compatible in function but showed 0 stock and is limited to 1 A — it would still cover this design's 500 mA if the MSOP part disappears |
-| SW1 EC11L1525G01 ([C2991196](https://jlcpcb.com/partdetail/C2991196)) — canonical record [`rec-c2991196`](/docs/components/records/c2991196/) | **4,566** | The [knob research](/docs/research/control-knob/) found two other EC11 SKUs in the 4,600–5,500 range ([C370970](https://jlcpcb.com/partdetail/C370970), [C470748](https://jlcpcb.com/partdetail/C470748)); any of them substitutes, at a higher unit price. Verify the pinout of whichever is fitted — EC11 terminal order is not universal across SKUs |
+| RV1 RK10J11E0034 / C470643 | **6,939** | Current stopped-pot choice; do not substitute an encoder without circuit/firmware revision |
 | RS1 RLP25FEER200 ([C459674](https://jlcpcb.com/partdetail/C459674)) | **20,654** | Any 200 mΩ ±1% 2512 sense resistor rated 1 W or better substitutes directly; the value, not the manufacturer, is what sets 500 mA — see [`fact-rlp25-resistance`](/docs/components/records/rlp25feer200/#fact-rlp25-resistance) |
 
 ## Extended-part fee economics

@@ -1,3 +1,5 @@
+> Historical audit artifact: the EC11 encoder findings below describe the former design. The current Board L uses ALPS RK10J11E0034 C470643 absolute brightness control; consult its owner evidence and the current inventory.
+
 # Circuit recheck — Wave-3 locked decisions
 
 Date: 2026-08-02. Issue: [#47](https://github.com/Takazudo/zudo-led-lamp/issues/47) under epic

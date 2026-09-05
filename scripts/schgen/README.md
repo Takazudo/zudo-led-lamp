@@ -68,10 +68,15 @@ wiring mistakes; only a local `verify.sh` run (or opening the file in KiCad)
 does that.
 
 
-## JLCPCB power toggle
+## Low-profile rear controls
 
-Board L fits Dailywell 1MS1T1B1M1QES-5 / C496154 as SW2, with a real slotted PCB
+Board L fits G-Switch SS-12D01-G020 / C5446803 as SW2, with a reviewed through-hole PCB
 footprint and 3D model. Common 2 receives V15_FUSED; pin 1 feeds V15; pin 3 is NC
 on the board but becomes fused-feed live in OFF. No external-component export copy
 is needed. `verify.sh board-l` checks the normal KiCad netlist and runs
 `verify_power_switch.py` to verify fitted identity, NC and the ON/OFF supply graph.
+
+RV1 is ALPS RK10J11E0034 / C470643 with physical stops. The wiper goes through
+R27 to PA0 ADC_IN0, with R22 pull-down and C22 filtering. Four mechanical pads and
+PA1 are NC. `scripts/pcb/verify-controls.py` checks the schematic/PCB net mapping,
+corrected single-unit footprint pads, model bounds and two-board clearance.

@@ -199,24 +199,15 @@ that removes a future respin is cheap at this price.
 
 ## Knob
 
-| | |
-|---|---|
-| **Chosen** | `EC11L1525G01` ([C2991196](https://jlcpcb.com/partdetail/C2991196)) — rotary encoder (detent count unresolved, see [#32](https://github.com/Takazudo/zudo-led-lamp/issues/32)) |
-| **Rejected** | WH148-family panel potentiometer |
-| **Rejected** | 3296W / 3362P trimmer behind a panel cutout |
+**Current choice (2026-09-06): ALPS RK10J11E0034 / C470643**, single-unit 10 kΩ
+±30%, 270°±10° travel with physical stops. It replaces the tall EC11 encoder and
+provides absolute brightness position. The earlier encoder decision used the stock
+information then available; it is superseded by this stocked low-profile wheel.
 
-Straightforward — the [knob research](/docs/research/control-knob/) found **zero stock
-across every WH148 SKU**, and the well-stocked alternatives are screwdriver trimmers, not
-knobs. The project's JLCPCB-only sourcing constraint is accepted, so the encoder is the
-only real option.
+Use PA0 ADC_IN0, R27 100 Ω, R22 100 kΩ pull-down and C22 100 nF. Calibrate and
+average ADC input, verify installed direction, and ramp from dark to the position
+after valid PD/thermal checks. Do not restore the old fixed 40% startup target.
 
-C2991196 over the other two EC11 SKUs simply on price ($1.27 versus $2.26 and $2.76) —
-none is Basic tier and all sit in the same 4,500–5,500 stock band, so there is nothing
-else to separate them.
-
-Consequence accepted: **no absolute position.** The knob's physical angle means nothing
-after a power cycle. Mitigated by booting dark and ramping to 40%, per
-[control-safety's](/docs/research/control-safety/) "pick a sane default on boot".
 
 ## Control scheme
 
@@ -236,11 +227,9 @@ Three reasons, in order of weight:
 2. **Brightness is the parameter with a safety meaning.** Turning it down is also turning
    down heat, and turning it fully down is off. Speed and depth have no such property,
    and neither does a mode-cycled knob whose current mode is invisible.
-3. **The mode gesture is not reliably available.** The
-   [knob research](/docs/research/control-knob/) flagged that none of the shortlisted
-   EC11 SKUs was confirmed to have an integrated push-button. Building the primary UI on
-   an unverified mechanical feature would be a poor bet. The parts DB reports 7 solder
-   joints for C2991196, which *hints* at a switch variant, but a hint is not a datasheet.
+3. **The selected potentiometer has no mode button.** The stopped absolute wheel
+   controls brightness directly; no gesture is needed.
+
 
 Speed and depth become firmware constants. They want tuning against the real diffuser
 anyway — which does not exist yet, because the enclosure is out of scope — so freezing
@@ -393,16 +382,26 @@ call either protected input chain PASS. The current no-PD gate is tracked in
 [issue #34](https://github.com/Takazudo/zudo-led-lamp/issues/34).
 
 
-## JLCPCB-assembled maintained toggle replaces the rocker (2026-09-06)
+## Historical toggle decision — superseded by the short slide switch
 
-Choose **Dailywell 1MS1T1B1M1QES-5 / C496154**, the earlier toggle fallback,
+The previous revision chose **Dailywell 1MS1T1B1M1QES-5 / C496154**, the earlier toggle fallback,
 with live JLCPCB stock and wave-solder assembly support verified during planning.
 The WR11AS choice on 2026-09-05 used external distributor stock and missed the
 JLCPCB sourcing requirement; that decision is superseded.
 
 SW2 mounts on the rear PCB, clear of Board P and the pillars, and cuts the fused
 positive feed to both converters. Common 2 feeds pin 1 in ON; pin 3 is unwired
-but live in OFF. Board P remains powered. The EC11 retains brightness control.
+but live in OFF. Board P remains powered. The EC11 retained brightness control in that revision.
 Use the exact solder-lug SKU in the reviewed plated-slot footprint and support its
 threaded bushing in the enclosure. The old J5 pads and external harness are removed.
 See [selection, mounting and qualification](./power-switch.mdx).
+
+
+## Low-profile controls replace the tall controls (2026-09-06)
+
+The current power control is **G-Switch SS-12D01-G020 / C5446803**, maintained
+SPDT rated 1 A at 24 V DC. Common 2 receives V15_FUSED; throw 1 feeds V15;
+throw 3 stays isolated on the PCB and becomes live in OFF. The corrected family
+model retains the 3.5 mm case, 2 mm actuator and 0.5 mm shoulder, about 6 mm
+mounted height. RV1 replaces SW1 with the stopped ALPS wheel. Board P, pillars
+and J2 alignment remain fixed; enclosure and soldering fit still need prototypes.

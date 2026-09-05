@@ -4,6 +4,16 @@ description: How to guarantee the LED stays off from power-up until the MCU acti
 sidebar_position: 90
 ---
 
+:::note[Current control revision — 2026-09-06]
+The current design uses **RV1 ALPS RK10J11E0034 / C470643**, a stopped 10 kΩ
+potentiometer with 270°±10° travel, and **SW2 G-Switch SS-12D01-G020 / C5446803**.
+Encoder comparisons and example firmware below are historical research, not the
+current netlist or executable firmware. See [Board L's current ADC mapping](/docs/architecture/board-l/#knob-mapping).
+The absolute ADC position replaces edge counting and the old fixed startup target;
+start dark and ramp only after valid position, PD-status and thermal checks.
+:::
+
+
 ## Safe default-OFF
 
 The requirement: **the LED must stay off from the moment power is applied until the MCU firmware has booted and actively asserts the dim signal** — not "off by default in firmware," but off by hardware default, before firmware has run at all.
@@ -110,3 +120,12 @@ This composes cleanly with any of the three modulation approaches from [modulati
 - What temperature sensing does the thermal design actually provide (NTC on a spare ADC channel, a digital over-temp comparator output, or something on the driver IC itself) — this page assumes an ADC-readable temperature value but the actual signal type depends on the `thermal-*` research.
 - What counts as `DEFAULT_SAFE_BRIGHTNESS` for a knob-fault fallback — a fixed firmware constant is simplest, but should it be tunable, and should a persistent knob fault (not just transient jitter) also trigger any user-visible indication (if a status LED exists on the logic rail)?
 - Should the pull-down/pull-up resistor value be tuned against the MCU's internal weak pull-up/down strength (all three MCU candidates have configurable internal pulls) to potentially avoid an external resistor entirely for the dim-pin default-off guarantee, or is an external resistor preferred for reliability independent of firmware GPIO configuration timing?
+
+
+## Current potentiometer fault boundary
+
+R22 (100 kΩ) pulls BRIGHT_ADC down and C22 (100 nF) filters it; an open wiper
+decays toward dark with nominal 10 ms RC. R27 is 100 Ω in series. This does not
+identify every fault: a stuck wiper or short to V3P3 can resemble a valid setting.
+Validate ADC acquisition/calibration, clamp readings, retain independent PD and
+thermal gates, and keep PWM off until startup checks pass.

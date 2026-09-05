@@ -17,7 +17,7 @@ adds a **projection** of it into human documentation. It never re-states a fact 
 prose, never repairs a value, and never synthesises a component-wide verdict.
 
 Corpus as of this contract: **14 owner bundles, 35 records (25 standalone, 10
-subordinate), 92 sources, 395 facts, 119 coverage domains, 52 interactions, 35
+subordinate), 91 sources, 391 facts, 116 coverage domains, 49 interactions, 35
 routes, 35 pin maps, 163 pins**, plus **7 cross-component rules** in
 `circuit-spec-integration`; 30 inventory lines fitted, 4 DNP/hand-fit.
 These figures are asserted in code (`adapters/circuit/selection.ts`) and a mismatch
@@ -66,7 +66,7 @@ adapters/circuit/           this repository's evidence provider
   paths.ts                  every path the adapter may touch
   validate.ts               python3 validate.py subprocess
   read.ts                   contained, symlink-refusing JSON reads
-  selection.ts              committed instance allowlist (35 records / 92 sources)
+  selection.ts              committed instance allowlist (35 records / 91 sources)
   matrix.ts                 committed per-field decisions
   integration.ts            cross-component rules: shapes, projection, closure
   evidence.ts               provider shapes, bundle reads, the joins (pure)

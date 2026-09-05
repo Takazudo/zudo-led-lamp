@@ -4,6 +4,16 @@ description: Buck-converter and LDO options for deriving the MCU's 3.3V logic ra
 sidebar_position: 50
 ---
 
+:::note[Current control revision — 2026-09-06]
+The current design uses **RV1 ALPS RK10J11E0034 / C470643**, a stopped 10 kΩ
+potentiometer with 270°±10° travel, and **SW2 G-Switch SS-12D01-G020 / C5446803**.
+Encoder comparisons and example firmware below are historical research, not the
+current netlist or executable firmware. See [Board L's current ADC mapping](/docs/architecture/board-l/#knob-mapping).
+The absolute ADC position replaces edge counting and the old fixed startup target;
+start dark and ramp only after valid position, PD-status and thermal checks.
+:::
+
+
 ## Context
 
 The PD board (Board-P) delivers a switched 15V rail. The control MCU, its ADC-connected knob, and any status LED need a clean low-current 3.3V logic rail derived from that 15V. This page compares a **switching buck converter** against a **linear regulator (LDO)** for that conversion and gives JLCPCB-verified candidates for both routes.

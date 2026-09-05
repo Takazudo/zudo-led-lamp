@@ -243,52 +243,116 @@
       "must_refuse": true
     },
     {
-      "case_id": "board-toggle-power-cut",
-      "observed_run_id": "observed-board-toggle-power-cut",
-      "prompt": "Evaluate Dailywell 1MS1T1B1M1QES-5 C496154 Board L power toggle, common 2 and the isolated live OFF throw; prove both converters unpowered OFF with safe capacitor inrush/contact life and assembled fit.",
+      "case_id": "low-slider-power-cut",
+      "observed_run_id": "observed-low-slider-power-cut",
+      "prompt": "Evaluate G-Switch SS-12D01-G020 C5446803 low-profile Board L switch and isolated live OFF throw; prove OFF isolation, mounted height and capacitive switching endurance.",
       "expected_trigger_skill": "circuit-spec-integration",
       "expected_loaded_skills": [
         "component-spec-audit",
         "circuit-spec-integration",
-        "component-dailywell-1ms1t1b1m1qes-5",
+        "component-gswitch-ss-12d01-g020",
         "component-bhfuse-bsmd1206-075-30v",
         "component-al8860mp-13",
         "component-ap63203wu-7"
       ],
       "routing_queries": [
         {
-          "query": "Dailywell 1MS1T1B1M1QES-5",
+          "query": "G-Switch SS-12D01-G020",
           "expected_line_ids": [
-            "line-c496154"
+            "line-c5446803"
           ]
         }
       ],
       "direct_record_ids": [
-        "rec-c496154",
+        "rec-c5446803",
         "rec-bsmd1206-075-30v",
         "rec-al8860mp-13",
         "rec-ap63203wu-7"
       ],
       "subordinate_record_ids": [],
       "required_source_ids": [
-        "src-c496154-datasheet",
-        "src-c496154-generator",
+        "src-c5446803-datasheet",
+        "src-c5446803-generator",
         "src-bhfuse-generator",
         "src-ap6320x-ds41326"
       ],
       "rule_ids": [
-        "rule-c496154-power-cut"
+        "rule-c5446803-power-cut"
       ],
       "required_fact_ids": [
-        "fact-c496154-rating",
-        "fact-c496154-terminals",
-        "fact-c496154-project-nets",
+        "fact-c5446803-rating",
+        "fact-c5446803-terminals",
+        "fact-c5446803-project-nets",
         "fact-bhfuse-project-nets",
         "fact-ap63203-en-open"
       ],
       "required_calculation_ids": [],
       "expected_observed_conditions": [
-        "SW2 common 2 receives V15_FUSED and joins pin 1 to switched V15 in ON. In OFF, common 2 joins pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF; Board P remains powered. Verify modified plated-slot and enclosure fit, front lug clearance, capacitor inrush, bounce, shutdown decay, restart and low-current contact reliability, with SWD/UART disconnected for the OFF test. Exact drawing is manufacturer-mirror evidence, not closed manufacturer-primary trust."
+        "SW2 center common 2 receives V15_FUSED and joins outer pin 1 to switched V15 in ON. In OFF it joins isolated outer pin 3, which has no PCB net but is fused-feed live. Both converters lose normal supply in OFF while Board P remains powered. G020 has a 2 mm actuator and 5.5 mm body-plus-actuator dimension; the corrected model retains shoulder stand-off for approximately 6 mm PCB reach, requiring physical confirmation. Verify inrush, bounce, restart, contact life, rail decay and service-interface back-power. Exact switch drawing remains manufacturer-mirror evidence."
+      ],
+      "expected_verdicts": [
+        "NEEDS BENCH"
+      ],
+      "must_refuse": true
+    },
+    {
+      "case_id": "stopped-potentiometer-adc",
+      "observed_run_id": "observed-stopped-potentiometer-adc",
+      "prompt": "Evaluate ALPS RK10J11E0034 C470643 stopped brightness potentiometer with R27/R22/C22 and STM32 PA0 ADC; prove calibrated brightness, open-wiper behavior, safe startup and fit in the 1.6 mm board.",
+      "expected_trigger_skill": "circuit-spec-integration",
+      "expected_loaded_skills": [
+        "component-spec-audit",
+        "circuit-spec-integration",
+        "component-alps-rk10j11e0034",
+        "component-stm32g031f8p6",
+        "component-project-passives"
+      ],
+      "routing_queries": [
+        {
+          "query": "RK10J11E0034",
+          "expected_line_ids": [
+            "line-c470643"
+          ]
+        }
+      ],
+      "direct_record_ids": [
+        "rec-c470643",
+        "rec-c529334",
+        "rec-c22775",
+        "rec-c25803",
+        "rec-c14663"
+      ],
+      "subordinate_record_ids": [],
+      "required_source_ids": [
+        "src-c470643-spec",
+        "src-c470643-page",
+        "src-c470643-generator",
+        "src-c529334-ds",
+        "src-c529334-generator",
+        "src-c22775-generator",
+        "src-c25803-uniroyal",
+        "src-c14663-yageo"
+      ],
+      "rule_ids": [
+        "rule-c470643-brightness-adc"
+      ],
+      "required_fact_ids": [
+        "fact-c470643-resistance",
+        "fact-c470643-tolerance",
+        "fact-c470643-terminals",
+        "fact-c470643-stops",
+        "fact-c470643-project-nets",
+        "fact-c470643-adc-design",
+        "fact-c470643-firmware-target",
+        "fact-c529334-adc",
+        "fact-c529334-topology",
+        "fact-c22775-brightness-topology",
+        "fact-c25803-resistance",
+        "fact-c14663-capacitance"
+      ],
+      "required_calculation_ids": [],
+      "expected_observed_conditions": [
+        "RV1 RK10J11E0034 is the single-unit 10 kOhm +/-30% stopped potentiometer: end 1=GND, end 3=V3P3, wiper 2 through R27 100 Ohm to U3.7 PA0 BRIGHT_ADC; all four mechanical pads and U3.8 are no-connects. R22 100 kOhm and C22 100 nF connect BRIGHT_ADC to GND. Worst divider source resistance is 3.25 kOhm plus 100 Ohm before bias loading; open-wiper nominal RC decay is 10 ms, not a certified fault detector. Use the documented 160.5-cycle ADC target, reference/errata review, endpoint and inversion calibration, averaging and startup ramp with thermal/PD gates. The 270-degree physical stops replace quadrature behavior. The catalog lists Insertion (t: 2 mm); this is not treated as a mandatory PCB thickness. Seating and contact life on the actual 1.6 mm PCB need prototype proof, and firmware is not flashed."
       ],
       "expected_verdicts": [
         "NEEDS BENCH"
