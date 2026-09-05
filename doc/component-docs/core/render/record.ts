@@ -142,7 +142,7 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
         [
           identity.function,
           identity.manufacturer,
-          identity.lcsc,
+          ...(identity.lcsc ? [identity.lcsc] : []),
           placementSummary(identity.placements),
           identity.recordId,
         ],

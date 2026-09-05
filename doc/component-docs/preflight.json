@@ -772,7 +772,7 @@
     },
     {
       "sourceId": "src-bhfuse-generator",
-      "url": "https://github.com/Takazudo/zudo-led-lamp/blob/feat/wr11as-lamp-switch/scripts/schgen/board_l_spec.py",
+      "url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/a29a046fc2bc7291704b297cf23a9be5bc000115/scripts/schgen/board_l_spec.py",
       "decision": "ALLOW",
       "reason": "ABSOLUTE_HTTP_URL"
     },
@@ -1282,7 +1282,7 @@
     },
     {
       "sourceId": "src-wr11as-generator",
-      "url": "https://github.com/Takazudo/zudo-led-lamp/blob/feat/wr11as-lamp-switch/scripts/schgen/board_l_spec.py",
+      "url": "https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/a29a046fc2bc7291704b297cf23a9be5bc000115/scripts/schgen/board_l_spec.py",
       "decision": "ALLOW",
       "reason": "ABSOLUTE_HTTP_URL"
     }

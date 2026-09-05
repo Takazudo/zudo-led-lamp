@@ -154,3 +154,21 @@ make the workflow progress; stop and obtain the missing design or review decisio
    route renders; this issue does not change CI smoke ownership. `verify.sh` reporting
    `SKIPPED` without `kicad-cli` also is not a substitute for opening the regenerated
    schematic in Eeschema, running ERC, and performing visual pin/orientation review.
+
+
+## External panel components
+
+A purchased, hand-wired panel component is not a PCB part. Declare it explicitly
+in the board spec's `EXTERNAL_COMPONENTS` before `NETS`, with exact MPN,
+manufacturer, package, supplier, order code and datasheet URL. Keep its LCSC and
+PCB footprint fields empty, but set inventory `mounting: external` with matching
+supplier/order code. The generator emits `in_bom yes` and `on_board no`.
+
+Use an exact manufacturer terminal symbol and evidence owner. Its pin map sets
+`mounting: external`, an empty `footprint`, and physical terminal numbers in
+`footprint_pad`. Record this meaning explicitly; do not fabricate PCB pads or
+STEP/WRL previews. Public selection still requires the record, sources and audited
+PDF; the generated page explains that PCB previews do not apply. Add separate
+bare-copper wire pads to both footprint library locations, with an inventory
+exclusion only for those real board features. Verify system assembly connectivity
+and PCB exclusion separately. All PCB-component asset requirements remain intact.

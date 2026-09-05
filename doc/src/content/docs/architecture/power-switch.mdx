@@ -97,7 +97,9 @@ and logic converters after stored charge decays. **Board P and USB-PD remain
 powered** while the USB cable is connected. OFF is not complete USB isolation.
 Unplug USB and disconnect debug/programming equipment before servicing.
 
-ON restarts the converters and resets the MCU. It does not bypass the existing
+After V3P3 has decayed below the reset threshold, ON restarts the converters and
+MCU. A rapid OFF/ON may retain enough charge to avoid reset; no active discharge
+circuit was added. Confirm that behavior during bring-up. ON does not bypass the existing
 PD-status, startup or thermal gates. Brightness restoration is **not implemented
 by this hardware change**; firmware must initialize brightness deliberately. This
 repository's control examples are not evidence of flashed or tested firmware.
