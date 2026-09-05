@@ -5,6 +5,9 @@
  * remain deterministic and offline.
  */
 
+import { createHash } from "node:crypto";
+import { CIRCUIT_EXTERNAL_MODELS } from "./selection.ts";
+
 import { lstat, readFile, realpath } from "node:fs/promises";
 import { basename, extname, isAbsolute, join, relative } from "node:path";
 
@@ -38,7 +41,18 @@ export type CircuitPackageReference = {
   readonly recordIds: readonly string[];
 };
 
+export type CircuitExternalModelReference = {
+  readonly name: string;
+  readonly modelPath: string;
+  readonly originalPath: string;
+  readonly originalName: string;
+  readonly offset: Transform3d;
+  readonly rotation: Transform3d;
+  readonly scale: Transform3d;
+};
+
 export type CircuitReferenceContract = {
+  readonly externalModelsByRecordId?: ReadonlyMap<string, CircuitExternalModelReference>;
   readonly documentsByRecordId: ReadonlyMap<string, CircuitDocumentReference>;
   readonly packages: readonly CircuitPackageReference[];
   readonly packageByRecordId: ReadonlyMap<string, CircuitPackageReference>;
@@ -96,7 +110,29 @@ export async function readCircuitReferenceContract(
       actual: packages.length,
     });
   }
-  return { documentsByRecordId, packages, packageByRecordId };
+  const externalModelsByRecordId = new Map<string, CircuitExternalModelReference>();
+  for (const selected of CIRCUIT_EXTERNAL_MODELS) {
+    if (!selection.recordIds.includes(selected.recordId)) continue;
+    if (index.recordById.get(selected.recordId)?.line.mounting !== "external") {
+      fail("ADAPTER_CONTRACT", "standalone model must belong to an external component", { recordId: selected.recordId });
+    }
+    const modelFile = await containedFile(MODEL_ROOT, selected.modelName, selected.recordId);
+    const sourceFile = await containedFile(join(REPO_ROOT, "footprints/external", selected.name), selected.originalName, selected.recordId);
+    for (const [path, hash] of [[modelFile, selected.modelSha256], [sourceFile, selected.originalSha256]]) {
+      const bytes = await readFile(path!);
+      assertReferenceSize("model", bytes.length, selected.recordId);
+      if (createHash("sha256").update(bytes).digest("hex") !== hash) fail("ADAPTER_CONTRACT", "external CAD asset hash differs from reviewed selection", { recordId: selected.recordId });
+    }
+    validateVrml(await readFile(modelFile, "utf8"), selected.recordId, selected.modelName);
+    aggregateModelBytes += await fileSize(modelFile, "model", selected.recordId);
+    assertReferenceSize("aggregate", aggregateModelBytes, selected.recordId);
+    externalModelsByRecordId.set(selected.recordId, {
+      name: selected.name, modelPath: relative(REPO_ROOT, modelFile),
+      originalPath: relative(REPO_ROOT, sourceFile), originalName: selected.originalName,
+      offset: selected.offset, rotation: selected.rotation, scale: selected.scale,
+    });
+  }
+  return { documentsByRecordId, packages, packageByRecordId, externalModelsByRecordId };
 }
 
 function selectDocuments(

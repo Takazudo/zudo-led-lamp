@@ -160,9 +160,12 @@ supplier/order code. The generator emits `in_bom yes` and `on_board no`.
 
 Use an exact manufacturer terminal symbol and evidence owner. Its pin map sets
 `mounting: external`, an empty `footprint`, and physical terminal numbers in
-`footprint_pad`. Record this meaning explicitly; do not fabricate PCB pads or
-STEP/WRL previews. Public selection still requires the record, sources and audited
-PDF; the generated page explains that PCB previews do not apply. Add separate
+`footprint_pad`. Record this meaning explicitly; do not fabricate PCB pads or model geometry. A supplied manufacturer CAD model
+may be published independently through `CIRCUIT_EXTERNAL_MODELS`, without a PCB
+footprint. Preserve its original file, source attribution and hash, document
+unit/orientation conversion, and validate the derived WRL. An STL source does not
+require an invented STEP solid. Public selection still requires the record, sources and audited
+PDF; the generated page distinguishes the standalone component model from PCB placement. Add separate
 bare-copper wire pads to both footprint library locations, with an inventory
 exclusion only for those real board features. Verify system assembly connectivity
 and PCB exclusion separately. All PCB-component asset requirements remain intact.

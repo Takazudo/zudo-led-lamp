@@ -41,7 +41,22 @@ async function main() {
       assert.match(html, /External panel-mounted component/);
       assert.match(html, /https:\/\/www.nkkswitches.com\/pdf\/WR.pdf/);
       assert.match(html, /Datasheet PDF/);
-      assert.doesNotMatch(html, /data-model-url=|alt="Footprint preview for/);
+      assert.doesNotMatch(html, /alt="Footprint preview for/);
+      const sections = extractReferenceSections(html);
+      assert.equal(sections.length, 1);
+      const section = sections[0];
+      assert.match(section, /Panel component model/);
+      assert.match(section, /data-model-url=(?:"|')?\/assets\/component-previews\/models\/WR11AS.wrl/);
+      assert.match(section, /PackageModelViewerIsland/);
+      assert.match(section, /data-viewer-state=(?:"no-js"|no-js)/);
+      assert.match(section, /Download original STL/);
+      assert.match(section, /Download KiCad WRL/);
+      assert.match(section, /NKK\/CADENAS model/);
+      assert.equal((section.match(/data-component-preview-enlarge=/g) ?? []).length, 1);
+      assert.equal((section.match(/data-component-preview-dialog=/g) ?? []).length, 1);
+      await assertRegularDistFile("/assets/component-previews/models/WR11AS.stl");
+      await assertRegularDistFile("/assets/component-previews/models/WR11AS.wrl");
+      referencedModels.add("WR11AS.wrl");
       continue;
     }
     const sections = extractReferenceSections(html);
@@ -118,17 +133,18 @@ async function main() {
   }
 
   assert.deepEqual([...referencedFootprints].sort(), [...expectedFootprints].sort(), "record pages must use exactly the manifest-selected SVGs");
-  assert.equal(referencedModels.size, 24, "record pages must deduplicate to exactly 24 selected WRLs");
+  assert.equal(referencedModels.size, 25, "record pages must reference 24 PCB WRLs and one external WRL");
 
   const actualPreviewFiles = await listFiles(PREVIEW_ROOT);
   const expectedPreviewFiles = new Set([
     "footprints/manifest.json",
+    "models/WR11AS.stl",
     ...[...expectedFootprints].map((name) => `footprints/${name}`),
     ...[...referencedModels].map((name) => `models/${name}`),
   ]);
   assert.deepEqual(actualPreviewFiles, [...expectedPreviewFiles].sort(), "built preview output contains missing, extra, or unselected assets");
   assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".svg").length, 24);
-  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".wrl").length, 24);
+  assert.equal(actualPreviewFiles.filter((path) => extname(path).toLowerCase() === ".wrl").length, 25);
   assert.equal(actualPreviewFiles.some((path) => [".step", ".stp"].includes(extname(path).toLowerCase())), false, "STEP must not be browser-published");
 
   const catalog = await readFile(CATALOG, "utf8");
@@ -138,7 +154,7 @@ async function main() {
     "catalog index must not create or reference live preview UI",
   );
 
-  process.stdout.write("built component references passed: 35 records, 24 SVGs, 24 WRLs, 0 STEP; catalog viewer-free\n");
+  process.stdout.write("built component references passed: 35 records, 24 SVGs, 25 WRLs, 1 source STL, 0 STEP; catalog viewer-free\n");
 }
 
 async function assertRegularDistFile(publicPath) {

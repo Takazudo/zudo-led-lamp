@@ -214,6 +214,7 @@ function projectRecordReference(
   const recordId = entry.record.record_id;
   const document = references.documentsByRecordId.get(recordId);
   const footprint = references.packageByRecordId.get(recordId);
+  const external = references.externalModelsByRecordId?.get(recordId);
   if (document === undefined || (footprint === undefined && entry.line.mounting !== "external")) {
     fail("ADAPTER_CONTRACT", "record has no complete reference descriptor", { recordId });
   }
@@ -229,6 +230,10 @@ function projectRecordReference(
   if (footprint !== undefined) {
     policy.publishRequired("asset.footprintPreview", true);
     policy.publishRequired("asset.modelPreview", true);
+  }
+  if (external !== undefined) {
+    policy.publishRequired("asset.modelPreview", true);
+    policy.publishRequired("asset.sourceCad", true);
   }
   const labels = {
     datasheet: "Datasheet PDF",
@@ -246,6 +251,14 @@ function projectRecordReference(
       documentKind: policy.publishRequired("reference.document.documentKind", document.documentKind),
     },
     footprint: footprint === undefined ? null : projectFootprint(footprint, policy),
+    ...(external === undefined ? {} : { externalModel: {
+      name: policy.publishRequired("reference.model.name", safeText(external.name, { field: `${recordId}.externalModel.name` })),
+      modelPath: policy.publishRequired("reference.model.path", safeText(external.modelPath, { field: `${recordId}.externalModel.modelPath` })),
+      originalName: policy.publishRequired("reference.model.originalName", safeText(external.originalName, { field: `${recordId}.externalModel.originalName` })),
+      offset: policy.publishRequired("reference.model.offset", external.offset),
+      rotation: policy.publishRequired("reference.model.rotation", external.rotation),
+      scale: policy.publishRequired("reference.model.scale", external.scale),
+    } }),
   };
 }
 

@@ -118,7 +118,7 @@
       "record_id": "rec-wr11as",
       "source_id": "src-wr11as-generator",
       "class": "PROJECT_STATE",
-      "value": "External panel mount; hand wire through J5; no PCB footprint or model",
+      "value": "External panel mount; hand wire through J5; no PCB footprint or placed PCB model",
       "unit": "NONE",
       "conditions": "Fitted external component in system BOM; absent PCB/CPL",
       "locator": "src-wr11as-generator: COMPONENTS table SW2/J5; EXTERNAL_COMPONENTS table SW2; NETS rows V15_FUSED/V15",
