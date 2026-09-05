@@ -18,19 +18,19 @@
     "textPolicy": "suppress-all-fp-text-in-temporary-library",
     "postprocessor": "repository-svg-normalizer-v1"
   },
-  "canonicalInputSha256": "3cecd837b77f9bfa58834abc430e032cab11db557150153df988c49404641c6c",
-  "generatedOutputSha256": "bb026baf3cb73cd1d6a83e481fc4d2fbf05acabf48d43cd254b79378fa34590a",
+  "canonicalInputSha256": "5d2061d4b27077dfca5ecd02a7a2579a3607fe3d9c581a5ca46fb207811e0824",
+  "generatedOutputSha256": "8039b0ea3ee4c356e152b998bef95f9824fcc1a641d4bc6718694bec50ef1177",
   "packages": [
     {
-      "packageId": "SW-TH_1MS1T1B1M1QES-5",
-      "footprintName": "SW-TH_1MS1T1B1M1QES-5",
-      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/SW-TH_1MS1T1B1M1QES-5.kicad_mod",
+      "packageId": "SW-TH_SS-12D01-G020",
+      "footprintName": "SW-TH_SS-12D01-G020",
+      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/SW-TH_SS-12D01-G020.kicad_mod",
       "recordIds": [
-        "rec-c496154"
+        "rec-c5446803"
       ],
-      "assetPath": "/assets/component-previews/footprints/SW-TH_1MS1T1B1M1QES-5.svg",
-      "canonicalInputSha256": "b83f14fd132efc936082ce354d2b3cedf584671fd0b578747ed9e57ffb592fc6",
-      "generatedOutputSha256": "1d98879dcb651184048f9d14fbc0c7b518b5f85f0c43acd3f545221046010c90"
+      "assetPath": "/assets/component-previews/footprints/SW-TH_SS-12D01-G020.svg",
+      "canonicalInputSha256": "7fd669c1bfa38a29000bfecfc29bd47d3b70dc118d82c4bf826f090bf15f3aea",
+      "generatedOutputSha256": "412c13cc55f692f1440cb729c716b652e2be4bc7abec26360aa7f01c29828ad2"
     },
     {
       "packageId": "USB-C-SMD_10P-P1.00-L6.8-W8.9",
@@ -285,15 +285,15 @@
       "generatedOutputSha256": "e16182ea4db6495fa2278ce48da6ba0f143ca9dd2b1df695825fe6841b843bb8"
     },
     {
-      "packageId": "SW-TH_ALPS_EC11L1525G01",
-      "footprintName": "SW-TH_ALPS_EC11L1525G01",
-      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/SW-TH_ALPS_EC11L1525G01.kicad_mod",
+      "packageId": "POT-TH_RK10J11E0034",
+      "footprintName": "POT-TH_RK10J11E0034",
+      "footprintPath": "footprints/kicad/zudo-led-lamp.pretty/POT-TH_RK10J11E0034.kicad_mod",
       "recordIds": [
-        "rec-c2991196"
+        "rec-c470643"
       ],
-      "assetPath": "/assets/component-previews/footprints/SW-TH_ALPS_EC11L1525G01.svg",
-      "canonicalInputSha256": "a38021fdf5538b3f2dd9045b2c4dd2a78414f9044edca582bd3da28998bb7755",
-      "generatedOutputSha256": "19f3bd93035e1c6490b0ce632a817a4661b155ad1f548704d026b3dbf3bb7393"
+      "assetPath": "/assets/component-previews/footprints/POT-TH_RK10J11E0034.svg",
+      "canonicalInputSha256": "f0c424d68428c6a24ed85825da34a02e8ab864b8c0f3727f348cdd5eaa26558b",
+      "generatedOutputSha256": "1f763c6bf8a58ec0b9cd12745aa9fb08a3e1365b397aeca7130404cabbe2de93"
     },
     {
       "packageId": "LED-SMD_L3.3-W2.8-RD",

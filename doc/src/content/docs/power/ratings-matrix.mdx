@@ -146,16 +146,20 @@ contact mapping, orientation, or incoming continuity.
   [catalog](/docs/components/catalog/).
 
 
-## C496154 power-cut boundary
+## Low-profile controls boundary
 
-Board L's rear toggle is **Dailywell 1MS1T1B1M1QES-5 / C496154**. The exact
-manufacturer drawing retrieved through LCSC lists **5 A at 28 VDC** for Q silver
-contacts, without a load-type qualifier. It carries the nominal ~0.41 A input
-after F1. Common 2 connects pin 1 to both converters in ON; OFF connects to pin 3,
-which is isolated on the PCB but then electrically live.
+SW2 is **G-Switch SS-12D01-G020 / C5446803**, rated **1 A at 24 V DC** in the
+exact manufacturer-authored drawing retrieved through a distributor mirror. The
+nominal lamp load is about 0.41 A at 15 V. This does not qualify inrush, contact
+bounce, lifetime or the existing unresolved TVS/transient envelope. Common 2
+feeds throw 1 in ON; throw 3 stays isolated on the PCB but becomes live in OFF.
+Board P remains powered. See [switch checks](/docs/architecture/power-switch/).
 
-JLCPCB lists this exact part for wave-solder assembly. The project-adapted plated
-slots and enclosure bushing support still require physical fit verification.
-The rating does not certify capacitor inrush, contact wetting or the unresolved
-upstream transient envelope. See [the component evidence](/docs/components/records/c496154/)
-and [hardware qualification](/docs/architecture/power-switch/).
+RV1 is **ALPS RK10J11E0034 / C470643**, a 10 kΩ ±30% single-unit pot, operated
+as a V3P3-to-GND divider. The [manufacturer catalog](https://tech.alpsalpine.com/cms.media/product_catalog_rv_03_rk10j_en_780020d1ea.pdf)
+lists 20 V DC applicability, −10 to +60 °C ambient, and manual-solder insertion
+mounting. Keep local control temperature inside that range. The model's low height
+does not prove seating or retention on the 1.6 mm PCB. Worst-case unloaded wiper
+source resistance plus R27 is 3.35 kΩ; qualify ADC acquisition and calibration.
+The 100 kΩ/100 nF pull-down filter gives nominal 10 ms open-wiper decay, not
+complete fault detection. Existing PD, safe-start and thermal gates remain required.

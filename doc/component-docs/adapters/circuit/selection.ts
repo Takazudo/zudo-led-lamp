@@ -10,7 +10,7 @@
  * The `expect` counts are the other half of that guarantee, in the opposite
  * direction: if the provider corpus shrinks or grows, generation fails instead
  * of quietly publishing a different set. They are the same corpus figures the
- * epic states (35 records, 92 sources), plus the seven cross-component rules —
+ * epic states (35 records, 91 sources), plus the eight cross-component rules —
  * those are not instance-selected, but their number is asserted for the same
  * reason, because a rule appearing or vanishing changes what the integration
  * page claims about the whole design.
@@ -33,7 +33,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
   checkedOn: "2026-08-23",
   expectedContent: "PDF",
   downloadedPdfSourceIds: [
-    "src-c496154-datasheet", // Exact PDF bytes/title rechecked 2026-09-06; prior dates retained below
+    "src-c5446803-datasheet", // Exact PDF bytes/title rechecked 2026-09-06; prior dates retained below
     "src-type-c-c283540", "src-stusb-ds12499", "src-pesd24vs1ub",
     "src-rd-uniroyal-smd-sp-001", "src-umw-ao3401a", "src-high-diode-primary",
     "src-c13585-page", "src-c14663-yageo", "src-c15849-page",
@@ -44,7 +44,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
     "src-bhfuse-1206", "src-al8860-ds39014", "src-rlp25-spec",
     "src-fxl-series-mirror", "src-ro-ss26-mirror", "src-ap6320x-ds41326",
     "src-fnr-series-mirror", "src-samsung-cl21-product", "src-c492404-drawing",
-    "src-c2991196-spec", "src-c13564-current", "src-c210315-spec",
+    "src-c470643-spec", "src-c13564-current", "src-c210315-spec",
     "src-c2934070-spec", "src-c4749199-drawing",
   ],
   // The official ST URL was independently parsed as the STM32G031x4/x6/x8
@@ -56,7 +56,7 @@ export const CIRCUIT_DOCUMENT_VERIFICATION = {
 
 export const CIRCUIT_SELECTION: InstanceSelection = {
   recordIds: [
-    "rec-c496154", // JLCPCB rear toggle with PCB footprint and model
+    "rec-c5446803", // JLCPCB low-profile rear slider with PCB footprint and model
     // component-type-c-31-m-17
     "rec-type-c-31-m-17", // standalone: TYPE-C-31-M-17
     // component-stusb4500qtr
@@ -97,8 +97,8 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "rec-c529334", // standalone: STM32G031F8P6
     "rec-c492404", // subordinate: PZ254V-11-05P
     "rec-c4749199", // subordinate: DS254P-2X10-L0
-    // component-alps-ec11l1525g01
-    "rec-c2991196", // standalone: EC11L1525G01
+    // component-alps-rk10j11e0034
+    "rec-c470643", // standalone: RK10J11E0034
     // component-murata-ncp18xh103f03rb
     "rec-c13564", // standalone: NCP18XH103F03RB
     // component-honglitronic-hl-am-2835h421w-s1-08-hr3
@@ -107,7 +107,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   ],
 
   sourceIds: [
-    "src-c496154-datasheet", "src-c496154-generator", "src-c496154-jlcpcb",
+    "src-c5446803-datasheet", "src-c5446803-generator", "src-c5446803-jlcpcb",
     // component-type-c-31-m-17
     "src-type-c-c283540", // rec-type-c-31-m-17
     "src-type-c-primary-page", // rec-type-c-31-m-17
@@ -194,12 +194,11 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c4749199-drawing", // rec-c4749199
     "src-c4749199-um1075", // rec-c4749199  (SOURCE UNAVAILABLE)
     "src-c4749199-generator", // rec-c4749199
-    // component-alps-ec11l1525g01
-    "src-c2991196-spec", // rec-c2991196
-    "src-c2991196-page", // rec-c2991196  (SOURCE UNAVAILABLE)
-    "src-c2991196-generator", // rec-c2991196
-    "src-c2991196-primary-retry", // rec-c2991196  (SOURCE UNAVAILABLE)
-    "src-c2991196-encoder-rc", // rec-c2991196
+    // component-alps-rk10j11e0034
+    "src-c470643-spec", // rec-c470643
+    "src-c470643-page", // rec-c470643 primary manufacturer page
+    "src-c470643-generator", // rec-c470643
+    "src-c470643-jlcpcb", // rec-c470643
     // component-murata-ncp18xh103f03rb
     "src-c13564-current", // rec-c13564
     "src-c13564-catalog", // rec-c13564
@@ -214,7 +213,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
 
   // Every selected source is a public http(s) document URL, so all are linkable.
   linkableSourceIds: [
-    "src-c496154-datasheet", "src-c496154-generator", "src-c496154-jlcpcb",
+    "src-c5446803-datasheet", "src-c5446803-generator", "src-c5446803-jlcpcb",
     "src-type-c-c283540",
     "src-type-c-primary-page",
     "src-type-c-primary-drawing",
@@ -291,11 +290,10 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     "src-c4749199-drawing",
     "src-c4749199-um1075",
     "src-c4749199-generator",
-    "src-c2991196-spec",
-    "src-c2991196-page",
-    "src-c2991196-generator",
-    "src-c2991196-primary-retry",
-    "src-c2991196-encoder-rc",
+    "src-c470643-spec",
+    "src-c470643-page",
+    "src-c470643-generator",
+    "src-c470643-jlcpcb",
     "src-c13564-current",
     "src-c13564-catalog",
     "src-c13564-generator",
@@ -315,7 +313,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
   // SOURCE UNAVAILABLE. Normal generation is offline and trusts this committed
   // review decision; it never re-fetches these URLs.
   documentSelections: [
-    { recordId: "rec-c496154", sourceId: "src-c496154-datasheet", documentKind: "datasheet" },
+    { recordId: "rec-c5446803", sourceId: "src-c5446803-datasheet", documentKind: "datasheet" },
     { recordId: "rec-type-c-31-m-17", sourceId: "src-type-c-c283540", documentKind: "drawing" },
     { recordId: "rec-stusb4500qtr", sourceId: "src-stusb-ds12499", documentKind: "datasheet" },
     { recordId: "rec-pesd24vs1ub", sourceId: "src-pesd24vs1ub", documentKind: "datasheet" },
@@ -346,7 +344,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
     { recordId: "rec-c529334", sourceId: "src-c529334-ds", documentKind: "datasheet" },
     { recordId: "rec-c492404", sourceId: "src-c492404-drawing", documentKind: "drawing" },
     { recordId: "rec-c4749199", sourceId: "src-c4749199-drawing", documentKind: "drawing" },
-    { recordId: "rec-c2991196", sourceId: "src-c2991196-spec", documentKind: "specification" },
+    { recordId: "rec-c470643", sourceId: "src-c470643-spec", documentKind: "specification" },
     { recordId: "rec-c13564", sourceId: "src-c13564-current", documentKind: "specification" },
     { recordId: "rec-c210315", sourceId: "src-c210315-spec", documentKind: "specification" },
     { recordId: "rec-c2934070", sourceId: "src-c2934070-spec", documentKind: "specification" },
@@ -354,7 +352,7 @@ export const CIRCUIT_SELECTION: InstanceSelection = {
 
   expect: {
     records: 35,
-    sources: 92,
-    integrationRules: 7,
+    sources: 91,
+    integrationRules: 8,
   },
 };

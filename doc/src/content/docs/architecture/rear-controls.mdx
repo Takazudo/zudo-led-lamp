@@ -1,121 +1,75 @@
 ---
 title: Rear Controls — PCB and Enclosure Handoff
-description: Routed Board L switch interface and underside brightness encoder, with placement coordinates and the remaining enclosure prototype checks.
+description: The stopped ALPS wheel and short slide switch, their rear placement and remaining mechanical checks.
 sidebar_position: 36
 ---
 
-Board L now supports the intended interaction: turn the lamp over to reach the
-power toggle and brightness knob. The 24 LEDs remain on the front, facing upward
-into the starburst light chamber. SW1, the existing **EC11L1525G01 encoder**, is
-mounted on the back, beside the pillar-mounted power board. It is not an analog potentiometer; its A/B/C connections and
-unused D/E push contacts retain the schematic assignments.
+The 24 LEDs face the light chamber. On the opposite face, **RV1 ALPS
+RK10J11E0034 / C470643** provides absolute brightness with physical stops, and
+**SW2 G-Switch SS-12D01-G020 / C5446803** provides maintained power ON/OFF.
+The tall encoder and toggle are superseded.
 
-![KiCad render of Board L from underneath, showing the rear encoder and C496154 switch](/assets/pcb/board-l-rear-controls.png)
+![Actual Board L rear-control render](/assets/pcb/board-l-rear-controls.png)
 
-This is a render of the actual PCB file. Both rear controls now have their real
-models: SW1 is the encoder, and SW2 is the JLCPCB C496154 maintained toggle.
+## Placement and height
 
-## SW2 replaces the external harness
+Coordinates use KiCad's front-view axes on the 60 × 60 mm Board L outline.
+An underside view mirrors X; do not mirror these coordinates again in mechanical CAD.
 
-The board routes `F1.2 → SW2.2` on `V15_FUSED`, and `SW2.1 → V15` to the existing
-converter input distribution. ON joins common 2 to pin 1. OFF joins 2 to the
-otherwise isolated pin 3: that pad is unwired, but electrically live in OFF.
-J5 and the external switch wiring are removed. SW2 is fitted in the BOM/CPL as
-[Dailywell 1MS1T1B1M1QES-5 / C496154](./power-switch.mdx).
-
-The front LEDs retain their
-positions. R31 moves from (43.25, 13.25) to (40.50, 13.25) mm to clear the rear
-encoder's through-hole support lug; its two LED_P branches and LED_S2_A path are
-rerouted. SW1's A/B/C connections retain their schematic identities.
-
-Board L J2 is rotated 180 degrees from its former placement, then rerouted,
-so numbered contacts align with Board P in the pillar-defined assembly. Its
-centre remains (29.40, 37.70) mm. Pin 1 now lies at X 23.05 mm, and pin 6 at
-X 35.75 mm, all at Y 37.70 mm. This corrects the previous reversed physical
-pin order; the schematic signal assignments do not change. J2.5 uses a solid
-connection to the rear ground plane instead of a starved thermal relief.
-
-## Use these coordinates for the enclosure prototype
-
-All coordinates below are **millimetres in KiCad's front-view coordinate system**,
-measured from the upper-left corner of the 60 × 60 mm Board L outline. Do not
-mirror these coordinates again when importing the board into mechanical CAD.
-A drawing viewed from underneath reverses left and right.
-
-| Feature | X | Y | Side / purpose |
+| Feature | X (mm) | Y (mm) | Placement |
 |---|---:|---:|---|
-| SW1 shaft / footprint origin | 51.50 | 12.50 | Back; encoder body and shaft extend below Board L |
-| SW2 body / footprint origin | 9.10 | 27.75 | Back; toggle body and actuator extend below Board L |
-| SW2 pad 1 | 9.10 | 23.05 | Switched V15 to both converters |
-| SW2 pad 2 | 9.10 | 27.75 | Common; V15_FUSED from F1 |
-| SW2 pad 3 | 9.10 | 32.45 | Isolated PCB pad; fused-feed live in OFF |
+| RV1 footprint origin | 51.90 | 9.50 | B.Cu, 0° |
+| RV1 wheel centre | 51.90 | 12.00 | Offset from footprint origin |
+| SW2 footprint origin | 9.10 | 27.75 | B.Cu, 90° |
+| J2 centre | 29.40 | 37.70 | Existing six-contact mating alignment |
 
-The switch bushing is centred at SW2's origin. The drawing gives an 8.89 mm body,
-8.89 mm threaded bushing and 10.41 mm actuator projection. Position the enclosure
-support plane through the threaded bushing and reserve thread engagement for the
-nuts. Its 6.35 mm opening has keyway details; the optional locking-ring arrangement
-uses a 2.38 mm locating hole 6.10 mm off centre. Use the exact drawing for the profile.
-Panel thickness, nut stack and control recess depth remain prototype decisions.
+RV1's knob is **Ø14 ±0.2 mm**, with approximately **1.97 mm model reach** above
+its mounting plane. Use the entire wheel envelope, not just the footprint origin,
+for enclosure access and Board P clearance. The manufacturer lists insertion
+`(t:2 mm)`; the project PCB is 1.6 mm. Catalog wording alone does not qualify
+retention, seating or soldering on this thickness. Check the actual part and
+opposite-face lead protrusion before fabrication release; do not silently change
+all board thicknesses to match an ambiguous catalog label.
 
-The actual model reaches about 28.67 mm below its mounting plane. On the front,
-lugs extend about 1.90 mm past a 1.6 mm PCB, plus solder. Keep the light chamber
-clear of that volume, particularly the powered common and OFF-throw lugs. The
-[slot-fit calculation](./power-switch.mdx#plated-slots-and-panel-support-accommodate-the-exact-part)
-is a design check; it does not establish assembled fit or solder quality.
+The imported ALPS model has a dual-unit family name but its external geometry is
+checked against the selected single-unit drawing. The single-unit electrical
+mapping is separate: five lower positions include endpoints 1/3, central wiper 2,
+and two dummy terminals. Two additional upper supports complete seven physical
+mounting features. All four dummy/support terminals remain electrically isolated.
 
-Provide finger access and feet or a rim that keep both controls off the table.
-Secure the toggle's threaded bushing so actuation does not load its PCB joints.
-The encoder's panel and shaft fit also needs checking against the purchased part;
-its retained mechanical evidence remains
-[mirror-only and unresolved](/docs/components/records/c2991196/).
+SW2's corrected G020 family model uses a 3.5 mm case, 2 mm actuator and retained
+0.5 mm shoulder: approximately **6 mm mounted height**. Reserve actuator travel,
+finger access and clearance from the table. Family CAD is an enclosure aid, not
+proof of exact manufactured dimensions or assembly fit.
 
-### The pillars and connector fix Board P's position
+## Board P and the pillars remain fixed
 
-The two upper Board P pillar holes, (4, 4) and (23, 4) mm, align with Board L's
-(20.5, 4) and (39.5, 4) mm holes. This fixes the in-plane assembly transform:
-**`xL = xP + 16.50`, `yL = yP`**, with no in-plane rotation. Board P's
-27 × 40 mm outline therefore occupies **X 16.50–43.50, Y 0–40 mm** inside
-Board L's outline. The existing pillar positions and Board P PCB are preserved.
-Board P's third hole projects to (29.30, 32.60) mm; it is not a third shared
-through-hole in Board L.
+The Board P outline occupies **X 16.50–43.50, Y 0–40 mm** in Board L coordinates.
+The shared upper pillars fix the transform `xL = xP + 16.50`, `yL = yP`.
+Board P's holes (4,4) and (23,4) align with Board L's (20.5,4) and (39.5,4).
+The third Board P hole projects to (29.3,32.6) and is not a shared through-hole.
+Board P, pillars and J2 orientation/alignment are unchanged by this control revision.
 
-![Rear assembly projection showing Board P between the controls, the shared pillars and the aligned six-pin connector](/assets/pcb/board-l-stack-clearance.svg)
+![Rear projection of the two-board stack and controls](/assets/pcb/board-l-stack-clearance.svg)
 
-This diagram is viewed from underneath, so X is mirrored relative to the coordinate
-table. The Board P outline is also marked on Board L's `Dwgs.User` layer.
-SW1's footprint clears the power-board outline by approximately **1.39 mm**;
-SW2's reviewed courtyard clears it by **3.40 mm**. The verification script reserves a 1 mm
-horizontal placement margin. This is a PCB envelope check, not clearance for a
-chosen knob diameter or enclosure wall.
+J2 pin 1 remains at X23.05 and pin 6 at X35.75, all at Y37.70 mm. Confirm all six
+mating contacts, pillar height and connector seating on the assembly. Check both
+rear body clearance and front lead/solder clearance against LEDs and the chamber.
 
-With the corrected J2 orientation, all six numbered contact centres match
-JOUT1 after the same pillar-derived translation. Confirm seating, pillar height,
-connector body clearance and six-net continuity in the physical assembly before
-powering it. SW2 stays outside the power board's occupied projection; enclosure depth, bushing support and front lug clearance remain mechanical prototype checks.
+## Electrical and firmware handoff
 
-## Verification covers copper, not the assembled lamp
+RV1.1 is GND, RV1.3 is V3P3 and RV1.2 is BRIGHT_WIPER. R27 (100 Ω) feeds
+BRIGHT_ADC at PA0/ADC_IN0; R22 (100 kΩ) and C22 (100 nF) shunt that node to GND.
+R23/R28/C23 are removed and PA1 is unconnected. See [Board L](./board-l.mdx#knob-mapping)
+for calibration, averaging, direction and startup requirements.
 
-KiCad 10 loads, saves and renders the edited board. DRC is run with the existing
-project rules, zone refill and schematic parity checking. The control checker
-also verifies schematic footprint identities and pad-net assignments, rear SW1/SW2,
-front LEDs, all six pillar-aligned mating contacts, clearance around Board P, and SW2's C496154 identity and inclusion in orderable BOM and placement files, plus isolation of pin 3.
+SW2 common 2 receives V15_FUSED, throw 1 feeds V15, and throw 3 is isolated on
+the PCB but **live in OFF**. Board P remains powered. The
+[power-switch procedure](./power-switch.mdx) retains the back-power, switching
+transient and rail-decay checks.
 
-```sh
-kicad-cli pcb drc --format json --schematic-parity --refill-zones \
-  -o /tmp/board-l-controls-drc.json boards/board-l/board-l.kicad_pcb
-python3 scripts/pcb/verify-controls.py \
-  --drc-report /tmp/board-l-controls-drc.json
-```
-
-The original board had 58 silkscreen warnings, no unrouted connections and two
-schematic parity issues from the missing switch interface. The updated board has
-no electrical errors, no unrouted connections and no schematic parity issues.
-It retains the exact same 58 pre-existing silkscreen warning signatures, with no
-new warnings. Review those existing warnings before a fabrication release.
-
-Prototype checks remain: mechanical fit with both boards and the purchased controls,
-clockwise brightness increase when viewed from the user-facing underside, stable
-contact/debounce behaviour, OFF rail decay and back-power, switching inrush and
-thermal behaviour inside the enclosure. Retain the existing
-[power-switch bring-up procedure](./power-switch.mdx); DRC does not close its
-`NEEDS BENCH` gates.
+Run KiCad DRC with zone refill and schematic parity, plus the control-placement
+checker, after the final routed board is saved. Record that revision's actual
+results; this handoff does not assert new DRC counts. Prototype gates remain
+mechanical fit, absolute ADC endpoint/direction checks, acquisition settling,
+smooth dimming, safe startup, thermal behavior and assembled OFF operation.
