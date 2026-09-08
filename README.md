@@ -10,4 +10,5 @@ Docs: https://zudo-led-lamp.takazudomodular.com/
 - `boards/board-p/` — KiCad project: USB-PD front end board
 - `boards/board-l/` — KiCad project: driver + control + LED array board
 - `boards/swd-adapter/` — KiCad project: ST-LINK/V2 20-pin to Board L 1x5 SWD adapter
+- `enclosure/` — parametric starburst enclosure generator and [print/assembly guide](enclosure/README.md)
 - `symbols/`, `footprints/` — shared KiCad symbol/footprint/3D libraries for all projects (see `footprints/CLAUDE.md`)

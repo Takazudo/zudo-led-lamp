@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev": "pnpm generate:components && run-p dev:zfb dev:history dev:components",
-    "build": "pnpm generate:models && pnpm generate:components && zfb build",
+    "build": "pnpm generate:enclosure-viewer && pnpm generate:models && pnpm generate:components && zfb build",
+    "generate:enclosure-viewer": "node enclosure-viewer/build.mjs",
     "preview": "zfb preview",
     "check": "zfb check",
     "dev:zfb": "zfb dev",
@@ -65,6 +66,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/three": "0.185.3",
+    "esbuild": "0.28.2",
     "npm-run-all2": "^7.0.2",
     "pagefind": "^1.4.0",
     "tailwindcss": "^4.2.0",
