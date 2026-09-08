@@ -2,11 +2,14 @@ import { build } from "esbuild";
 import { copyFile, mkdir, readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
+import "./check-geometry.mjs";
 
 const source = fileURLToPath(new URL("./", import.meta.url));
 const output = fileURLToPath(new URL("../public/assets/enclosure/", import.meta.url));
 await mkdir(output, { recursive: true });
 const root = new URL("../../", import.meta.url);
+execFileSync("python3", [fileURLToPath(new URL("enclosure/verify_exports.py", root))], { stdio: "inherit" });
 const manifest = JSON.parse(await readFile(`${output}manifest.json`, "utf8"));
 if (!manifest.pcb_models_checked) throw new Error("Enclosure PCB clearance checks missing. Run uv run enclosure/generate.py");
 const sha = (bytes) => createHash("sha256").update(bytes).digest("hex");

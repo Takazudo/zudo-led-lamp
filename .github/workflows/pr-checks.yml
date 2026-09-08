@@ -35,6 +35,9 @@ on:
       - "base/**"
     paths:
       - "doc/**"
+      # The enclosure preview verifies these CAD inputs against its manifest.
+      - "enclosure/**"
+      - "boards/**/*.kicad_pcb"
       # The site publishes repo-root Claude resources — doc/zfb.config.ts sets
       # claudeResources.claudeDir "../.claude" and scanRoot "..", so these
       # inputs change the built site despite living outside doc/.
