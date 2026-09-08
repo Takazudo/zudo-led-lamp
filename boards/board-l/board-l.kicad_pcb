@@ -17982,7 +17982,7 @@
 			(type solid)
 		)
 		(fill no)
-		(layer "Edge.Cuts")
+		(layer "Dwgs.User")
 		(uuid "595457e3-9d41-4370-b63b-daeff2353698")
 	)
 	(gr_rect
