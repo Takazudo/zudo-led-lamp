@@ -408,14 +408,27 @@ function assertCredentialFree(targets: readonly ScanTarget[]): void {
  * was false, while >=5.17.0 injects the route only when it is true, so the file
  * is absent entirely. Absence is the stronger signal of the two — the check
  * that carries the policy is the `<url>` test below.
+ *
+ * Accepting absence removes the one thing the old missing-file failure caught
+ * for free: a RENAMED artifact. So the `<url>` test runs over every
+ * `sitemap*.xml` in `dist/` rather than the single hard-coded path — a sharded
+ * `sitemap-index.xml` / `sitemap-0.xml` pair would otherwise publish every
+ * route while this gate reported nothing.
  */
+const SITEMAP_ARTIFACT = /(?:^|\/)sitemap[^/]*\.xml$/u;
+
 function assertSitemapUnchanged(targets: readonly ScanTarget[]): void {
-  const sitemap = targets.find((target) => target.label === "dist/sitemap.xml");
-  if (sitemap?.text === undefined || sitemap.text === null) return;
-  if (/<url>/u.test(sitemap.text)) {
+  const populated = targets.filter(
+    (target) =>
+      SITEMAP_ARTIFACT.test(target.label) &&
+      typeof target.text === "string" &&
+      /<url>/u.test(target.text),
+  );
+  if (populated.length > 0) {
     throw new ComponentDocsError(
       "PUBLICATION_POLICY",
-      "sitemap.xml has entries; enabling it is a separate publication decision",
+      "sitemap has entries; enabling it is a separate publication decision",
+      { offenders: populated.map((target) => target.label) },
     );
   }
 }
