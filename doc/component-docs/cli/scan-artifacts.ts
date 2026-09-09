@@ -399,19 +399,36 @@ function assertCredentialFree(targets: readonly ScanTarget[]): void {
 
 /**
  * The sitemap is not enabled, and enabling it is a separate tested decision —
- * it would publish every generated route to crawlers in one file. An empty
- * `urlset` is the contracted state; a populated one means the config changed
- * without that decision being taken.
+ * it would publish every generated route to crawlers in one file. A populated
+ * `urlset` means the config changed without that decision being taken.
+ *
+ * Two artifact shapes both mean "not enabled", because upstream changed how it
+ * represents the off state: @takazudo/zudo-doc <5.17.0 always injected the
+ * `/sitemap.xml` route and rendered an empty `urlset` when `settings.sitemap`
+ * was false, while >=5.17.0 injects the route only when it is true, so the file
+ * is absent entirely. Absence is the stronger signal of the two — the check
+ * that carries the policy is the `<url>` test below.
+ *
+ * Accepting absence removes the one thing the old missing-file failure caught
+ * for free: a RENAMED artifact. So the `<url>` test runs over every
+ * `sitemap*.xml` in `dist/` rather than the single hard-coded path — a sharded
+ * `sitemap-index.xml` / `sitemap-0.xml` pair would otherwise publish every
+ * route while this gate reported nothing.
  */
+const SITEMAP_ARTIFACT = /(?:^|\/)sitemap[^/]*\.xml$/u;
+
 function assertSitemapUnchanged(targets: readonly ScanTarget[]): void {
-  const sitemap = targets.find((target) => target.label === "dist/sitemap.xml");
-  if (sitemap?.text === undefined || sitemap.text === null) {
-    throw new ComponentDocsError("PUBLICATION_POLICY", "dist/sitemap.xml is missing");
-  }
-  if (/<url>/u.test(sitemap.text)) {
+  const populated = targets.filter(
+    (target) =>
+      SITEMAP_ARTIFACT.test(target.label) &&
+      typeof target.text === "string" &&
+      /<url>/u.test(target.text),
+  );
+  if (populated.length > 0) {
     throw new ComponentDocsError(
       "PUBLICATION_POLICY",
-      "sitemap.xml has entries; enabling it is a separate publication decision",
+      "sitemap has entries; enabling it is a separate publication decision",
+      { offenders: populated.map((target) => target.label) },
     );
   }
 }
