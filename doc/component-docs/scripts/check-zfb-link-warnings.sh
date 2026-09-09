@@ -43,6 +43,11 @@ set -euo pipefail
 # an unrecognised line has to turn CI red rather than silently switch this gate
 # off.
 #
+# Known unrecognised shape, deliberately NOT suppressed: @takazudo/zfb >=2.14.0
+# prints ``zfb warn: plain CSS import `<path>` was dropped: ...``. If that
+# appears, a stylesheet really was dropped from the build — fix the import,
+# don't add it here.
+#
 # Usage: bash check-zfb-link-warnings.sh <build-log>
 #   Locally:  pnpm build 2>&1 | tee /tmp/doc-build.log
 #             bash component-docs/scripts/check-zfb-link-warnings.sh /tmp/doc-build.log
