@@ -399,15 +399,19 @@ function assertCredentialFree(targets: readonly ScanTarget[]): void {
 
 /**
  * The sitemap is not enabled, and enabling it is a separate tested decision —
- * it would publish every generated route to crawlers in one file. An empty
- * `urlset` is the contracted state; a populated one means the config changed
- * without that decision being taken.
+ * it would publish every generated route to crawlers in one file. A populated
+ * `urlset` means the config changed without that decision being taken.
+ *
+ * Two artifact shapes both mean "not enabled", because upstream changed how it
+ * represents the off state: @takazudo/zudo-doc <5.17.0 always injected the
+ * `/sitemap.xml` route and rendered an empty `urlset` when `settings.sitemap`
+ * was false, while >=5.17.0 injects the route only when it is true, so the file
+ * is absent entirely. Absence is the stronger signal of the two — the check
+ * that carries the policy is the `<url>` test below.
  */
 function assertSitemapUnchanged(targets: readonly ScanTarget[]): void {
   const sitemap = targets.find((target) => target.label === "dist/sitemap.xml");
-  if (sitemap?.text === undefined || sitemap.text === null) {
-    throw new ComponentDocsError("PUBLICATION_POLICY", "dist/sitemap.xml is missing");
-  }
+  if (sitemap?.text === undefined || sitemap.text === null) return;
   if (/<url>/u.test(sitemap.text)) {
     throw new ComponentDocsError(
       "PUBLICATION_POLICY",
