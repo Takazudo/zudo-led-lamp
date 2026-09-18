@@ -17956,6 +17956,17 @@
 		(start 16.5 0)
 		(end 43.5 40)
 		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "Dwgs.User")
+		(uuid "595457e3-9d41-4370-b63b-daeff2353698")
+	)
+	(gr_rect
+		(start 16.5 0)
+		(end 43.5 40)
+		(stroke
 			(width 0.15)
 			(type default)
 		)
@@ -17973,17 +17984,6 @@
 		(fill no)
 		(layer "Edge.Cuts")
 		(uuid "939f1959-348d-481c-8cdd-78c9101291b0")
-	)
-	(gr_rect
-		(start 16.5 0)
-		(end 43.5 40)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(fill no)
-		(layer "Dwgs.User")
-		(uuid "595457e3-9d41-4370-b63b-daeff2353698")
 	)
 	(gr_rect
 		(start 0 0)
@@ -18171,6 +18171,19 @@
 		(fill no)
 		(layer "User.2")
 		(uuid "19e38489-8ad8-4095-bc9b-ad7bc3b2e0f5")
+	)
+	(gr_text "rev1"
+		(at 58.4 38 90)
+		(layer "B.SilkS")
+		(uuid "bb13774f-db95-48cf-a701-4d4324df3e92")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.3)
+				(bold yes)
+			)
+			(justify left bottom mirror)
+		)
 	)
 	(gr_text "BOARD P REAR ENVELOPE"
 		(at 30 2 0)
