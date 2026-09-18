@@ -59,7 +59,7 @@
   "pcb_models_checked": true,
   "board_sources": {
     "board-l": {
-      "sha256": "31bec3eb0d7e5f8f19d6aaedbbe2c28ed09815c8cfeef09fcdd67d098859e07c",
+      "sha256": "1d9dc7a70d10216b25cd40eb5f9dafa60eacdffa0a1fddda04e9ff6c0eab765b",
       "holes": [
         [
           4.0,
@@ -637,7 +637,7 @@
       }
     },
     "board-p": {
-      "sha256": "a9f318fc97e9c2738982c27dff82cb931c8dfd7432059e0aaa670020bf8df290",
+      "sha256": "930a50dd5b37017dcaf65f4344eeee8af6a3fe9e663f32c4fd118af2e904fffa",
       "holes": [
         [
           4.0,
