@@ -3,7 +3,6 @@ import { zudoDoc } from "@takazudo/zudo-doc/config";
 
 export default defineConfig(
   zudoDoc({
-    themePack: "sumi",
     siteName: "zudo-led-lamp",
     githubUrl: "https://github.com/Takazudo/zudo-led-lamp",
     // siteUrl host MUST match the wrangler.toml custom-domain route.
@@ -12,7 +11,9 @@ export default defineConfig(
     cjkFriendly: true,
     sidebarResizer: true,
     sidebarToggle: true,
+    tocToggle: true,
     imageEnlarge: true,
+    assetViewer: true,
     dynamicPageTransition: true,
     docHistory: true,
     // Generated component pages carry their own provenance (source, revision,
@@ -131,10 +132,6 @@ export default defineConfig(
       {
         type: "component",
         component: "search",
-      },
-      {
-        type: "component",
-        component: "language-switcher",
       },
     ],
     // Cloudflare Workers adapter — required for the deploy (dist/_worker.js).

@@ -117,6 +117,10 @@ jobs:
         working-directory: doc
         run: pnpm build
 
+      - name: Local image and media references resolve
+        working-directory: doc
+        run: pnpm check:images
+
       - name: Built component references are complete and minimal
         working-directory: doc
         run: pnpm check:built-component-references
