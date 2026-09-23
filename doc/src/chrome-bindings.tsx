@@ -4,7 +4,7 @@
 /**
  * Host chrome bindings for zudo-doc.
  *
- * The doc route stub (`pages/docs/[[...slug]].tsx`, package-owned and NOT to be
+ * The doc route stub (`pages/docs/[[...slug]].tsx`, scaffold-derived and NOT to be
  * edited) already imports `virtual:zudo-doc-chrome-bindings` and spreads it
  * into `createChrome`. Pointing `chromeBindingsModule` at this file is
  * therefore the supported way to register MDX components without touching any

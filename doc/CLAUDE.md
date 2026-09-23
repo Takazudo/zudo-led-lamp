@@ -13,19 +13,21 @@ Documentation site built with [zudo-doc](https://github.com/zudolab/zudo-doc) �
 
 ## Commands
 
-- `pnpm dev` — runs the zfb dev server (port 4321) and the doc-history API server (port 4322) concurrently via `run-p` (`pnpm dev:zfb` / `pnpm dev:history` individually)
+- `pnpm dev` — runs the zfb dev server (port 4321) and the doc-history API server (port 4322) concurrently via zudo-doc’s `run-parallel` (`pnpm dev:zfb` / `pnpm dev:history` individually)
 - `pnpm dev:network` — same, but zfb binds `--host 0.0.0.0` for LAN access (`pnpm dev:zfb:network` individually); the doc-history server stays loopback-only and LAN clients reach it through zfb's `/doc-history/*` dev proxy
 - **Trusted networks only:** this also serves your git doc-history — including UNPUBLISHED local commits — to anyone on the LAN via the `/doc-history/*` proxy
-- `run-p` swallows trailing args, so other zfb flags don't forward through `pnpm dev` — pass them directly instead: `pnpm run dev:zfb -- <flags>`
+- Pass zfb-specific flags directly to `pnpm run dev:zfb -- <flags>`. The combined dev command starts the doc-history server and component watcher too.
 - `pnpm build` — regenerates public model previews and component docs, then static HTML export to `dist/`
 - `pnpm check` — TypeScript type checking (covers `component-docs/` too)
+- `pnpm check:images` — validate local image/media references after building
+- `pnpm check:links` — scaffold link diagnostics; strict flags are available via `--help`
 - `pnpm preview` — serve the built `dist/`
 - `pnpm generate:components` — project `.claude/skills/**` evidence into `src/content/docs/components/`
 - `pnpm check:components` — fail if that generated output or `component-docs/preflight.json` is stale
 - `pnpm test:components` — the generator's own test suite
 - `pnpm generate:footprint-previews` / `pnpm check:footprint-previews` — regenerate with the pinned KiCad container / verify committed SVG previews without Docker
 - `pnpm generate:models` / `pnpm check:models` — copy the reviewed selected WRL files into public preview assets / verify their bytes
-- `pnpm b4push` — `check` + `test:components` + footprint/model checks + `build` + `check:components` + both artifact scans; it is the local validation gate, not a deploy command
+- `pnpm b4push` — `check` + `test:components` + footprint/model checks + `build` + image/media validation + `check:components` + both artifact scans; it is the local validation gate, not a deploy command
 
 ## Key Directories
 
@@ -33,7 +35,7 @@ Documentation site built with [zudo-doc](https://github.com/zudolab/zudo-doc) �
 zfb.config.ts             # THE one config file — zudoDoc({ ...only fields you chose })
 pages/
 ├── index.tsx             # 1-line re-export of the package home route
-└── docs/[[...slug]].tsx  # self-contained doc-route stub (required for `pnpm dev`)
+└── docs/[[...slug]].tsx  # host-owned doc-route stub with static preview-island imports
 component-docs/           # component-knowledge projection (see its ARCHITECTURE.md)
 ├── core/                 # provider-neutral: view model, publication policy, safe MDX
 ├── adapters/circuit/     # this repo's evidence provider (.claude/skills + validate.py)
@@ -94,11 +96,23 @@ Do NOT use h1 (`#`) in doc content — the page title from frontmatter is render
 
 Admonitions (above), tabbed content (`<Tabs>` / `<TabItem>`, `<CodeGroup>`), and block math (`<MathBlock>`) work the same way — no import. Full reference: https://zudo-doc.takazudomodular.com/docs/components/
 
-## Enabled Features
+## Scaffold defaults and project extensions
 
-- **search** — zudo-doc's own index: the build emits `search-index.json` and an inline client that scores by case-insensitive substring over `title` (+3), `description` (+2) and `body` (+1), with `body` truncated to 300 characters. Not Pagefind — `pagefind` is an unused devDependency, referenced by no script and by nothing in `zfb.config.ts`, and `dist/` contains no `pagefind/` directory.
-- **claudeResources** — Auto-generated docs for Claude Code resources
-- **sidebarResizer** — Draggable sidebar width
-- **sidebarToggle** — Show/hide desktop sidebar
-- **docHistory** — Document edit history
-- **llmsTxt** — Generates llms.txt for LLM consumption
+The site follows create-zudo-doc 5.26.5 defaults, including the stock theme pack.
+See `SCAFFOLD.md` for the feature inventory, retained extensions, and sync procedure.
+
+- **search** — package-owned full-text search and generated `search-index.json`
+- **sidebarFilter**, **sidebarResizer**, **sidebarToggle** — built-in filtering and desktop sidebar controls
+- **tocToggle** — show/hide the desktop table of contents
+- **docHistory** — document edit history; generated component pages remain excluded
+- **llmsTxt** — generates llms.txt for LLM consumption
+- **imageEnlarge** — image enlargement
+- **assetViewer** — viewer routes under `/files/` for public assets; index and search/LLM indexing retain the upstream off defaults
+- **dynamicPageTransition** — client-side page navigation
+- **footerCopyright** — the project's existing attribution
+
+Intentional extensions include CJK handling, repo-root Claude resources, the body-foot
+history strip, project navigation, Cloudflare adapter, and domain-specific generators,
+evidence renderers and preview islands. Optional upstream features stay off unless
+listed as an intentional extension. This is a single-locale site, so the header has
+no language switcher.
