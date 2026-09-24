@@ -219,11 +219,13 @@ describe("the stylesheet declares what the components emit", () => {
     assert.match(stylesheet, /\.zld-evidence-table table\s*\{[^}]*min-width:/u);
   });
 
-  it("gives component references an auto-fit grid and contained preview media", () => {
+  it("aligns document metadata and pairs contained preview media by content width", () => {
     assert.match(
       stylesheet,
-      /\.zld-component-references__grid\s*\{[^}]*grid-template-columns:\s*repeat\(auto-fit, minmax\(min\(18rem, 100%\), 1fr\)\)/u,
+      /\.zld-component-references__document\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) minmax\(12rem, 0\.8fr\)/u,
     );
+    assert.match(stylesheet, /\.zld-component-references__previews\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/u);
+    assert.match(stylesheet, /@container \(max-width: 38rem\)/u);
     assert.match(
       stylesheet,
       /\.zld-component-references__footprint-frame > a\s*\{[^}]*aspect-ratio:\s*16 \/ 9/u,

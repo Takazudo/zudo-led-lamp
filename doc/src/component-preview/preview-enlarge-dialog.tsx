@@ -12,7 +12,6 @@ import { useModalDialog } from "@takazudo/zudo-doc/use-modal-dialog";
 export type PreviewEnlargeDialogProps = {
   readonly children: ComponentChildren;
   readonly isOpen: boolean;
-  readonly labelId: string;
   readonly onClose: () => void;
   readonly returnFocusRef: RefObject<HTMLElement>;
   readonly title: string;
@@ -23,7 +22,6 @@ export type PreviewEnlargeDialogProps = {
 export function PreviewEnlargeDialog({
   children,
   isOpen,
-  labelId,
   onClose,
   returnFocusRef,
   title,
@@ -48,7 +46,7 @@ export function PreviewEnlargeDialog({
       ref={dialogRef}
       className={`zld-preview-dialog zld-preview-dialog--${variant} z-modal`}
       style={ENLARGE_DIALOG_STYLE}
-      aria-labelledby={labelId}
+      aria-label={title}
       data-component-preview-dialog={variant}
       onClick={handleDialogClick}
       onKeyDown={(event) => {
@@ -89,7 +87,6 @@ export function PreviewEnlargeDialog({
           <path d="M5 5l14 14M19 5L5 19" />
         </svg>
       </button>
-      <h2 id={labelId} className="zld-preview-dialog__title">{title}</h2>
       <div className="zld-preview-dialog__content">
         {children}
       </div>

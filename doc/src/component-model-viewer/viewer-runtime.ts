@@ -56,6 +56,13 @@ export function createOnDemandInvalidator(render: () => void): {
   };
 }
 
+/** Distance that contains a bounding sphere in both camera dimensions. */
+export function modelFitDistance(radius: number, verticalFovDegrees: number, aspect: number): number {
+  const vertical = MathUtils.degToRad(verticalFovDegrees / 2);
+  const horizontal = Math.atan(Math.tan(vertical) * Math.max(aspect, 0.001));
+  return Math.max(radius, 0.001) / Math.sin(Math.min(vertical, horizontal)) * 1.25;
+}
+
 export async function mountModelViewer(
   root: HTMLElement,
   descriptor: ModelViewerDescriptor,
@@ -107,12 +114,22 @@ export async function mountModelViewer(
     controls.screenSpacePanning = true;
     controls.listenToKeyEvents(viewport);
 
+    let fitBounds: Sphere | undefined;
     const render = () => {
       if (disposed || renderer === undefined) return;
       const width = Math.max(1, viewport.clientWidth);
       const height = Math.max(1, viewport.clientHeight);
       renderer.setSize(width, height, false);
+      const previousAspect = camera.aspect;
       camera.aspect = width / height;
+      if (fitBounds !== undefined && Math.abs(previousAspect - camera.aspect) > 0.0001) {
+        const required = modelFitDistance(fitBounds.radius, camera.fov, camera.aspect);
+        const current = camera.position.distanceTo(controls!.target);
+        if (current < required) {
+          camera.position.sub(controls!.target).setLength(required).add(controls!.target);
+          controls!.update();
+        }
+      }
       camera.updateProjectionMatrix();
       renderer.setClearColor(new Color(0x000000), 0);
       renderer.render(scene, camera);
@@ -132,7 +149,8 @@ export async function mountModelViewer(
     model = new VRMLLoader().parse(source, descriptor.modelUrl);
     applyModelTransform(model, descriptor.offset, descriptor.rotation, descriptor.scale);
     scene.add(model);
-    frameCamera(camera, controls, model);
+    camera.aspect = Math.max(1, viewport.clientWidth) / Math.max(1, viewport.clientHeight);
+    fitBounds = frameCamera(camera, controls, model);
 
     if (typeof ResizeObserver === "function") {
       resizeObserver = new ResizeObserver(invalidator.invalidate);
@@ -181,21 +199,22 @@ export async function mountModelViewer(
   }
 }
 
-function frameCamera(camera: PerspectiveCamera, controls: OrbitControls, object: Object3D): void {
+function frameCamera(camera: PerspectiveCamera, controls: OrbitControls, object: Object3D): Sphere {
   const bounds = new Box3().setFromObject(object);
   if (bounds.isEmpty()) throw new Error("Model has no displayable bounds");
   const sphere = bounds.getBoundingSphere(new Sphere());
   const radius = Math.max(sphere.radius, 0.001);
-  const distance = radius / Math.sin(MathUtils.degToRad(camera.fov / 2));
+  const distance = modelFitDistance(radius, camera.fov, camera.aspect);
   const direction = new Vector3(1, 0.8, 1).normalize();
   controls.target.copy(sphere.center);
-  camera.position.copy(sphere.center).addScaledVector(direction, distance * 1.25);
+  camera.position.copy(sphere.center).addScaledVector(direction, distance);
   camera.near = Math.max(radius / 1000, 0.0001);
   camera.far = Math.max(radius * 1000, 100);
   camera.updateProjectionMatrix();
   controls.minDistance = radius * 0.15;
   controls.maxDistance = radius * 20;
   controls.update();
+  return sphere;
 }
 
 function disposeObject(root: Object3D): void {
