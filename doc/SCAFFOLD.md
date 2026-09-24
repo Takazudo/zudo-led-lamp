@@ -1,7 +1,7 @@
 # Documentation scaffold maintenance
 
-Baseline: `create-zudo-doc@5.26.5`, released with `@takazudo/zudo-doc@5.26.5`.
-The release source is `a88026b51227f65ff6c7c181c69215a23198cd95` in
+Baseline: `create-zudo-doc@5.27.0`, released with `@takazudo/zudo-doc@5.27.0`.
+The release source is `50cbd5c6c9e5a795d72a74a855e105e4939d4eab` in
 `zudolab/zudo-doc`. `ZUDO_DEPS_PINS.md` tracks copied files.
 
 ## Default feature inventory
@@ -21,7 +21,8 @@ The release source is `a88026b51227f65ff6c7c181c69215a23198cd95` in
 | Footer copyright | Existing project attribution |
 
 The theme pack is the package's `default` (no explicit override). Light/dark
-mode follows the package default and system preference. This single-locale site
+mode uses the package Appearance menu (Light, Dark, System), with System following
+the device preference. This single-locale site
 uses GitHub, theme, and search header controls. Asset listing and asset indexing
 in search/LLM exports remain off, matching upstream defaults. Files are already
 published under `public/assets`; the viewer adds a presentation route.
@@ -47,9 +48,9 @@ published under `public/assets`; the viewer adds a presentation route.
 Scaffold scripts use zudo-doc's `run-parallel` to run development services. The
 project also starts the component watcher and generates component docs first.
 `check:images` is the package image/media validator. `check:links` is the copied
-scaffold link checker; existing CI checks remain the authoritative strict checks
-for hand-authored routes and generated component references. Diagnostic findings
-from a newly adopted checker must be assessed against the pre-upgrade content.
+scaffold link checker. `check:anchors` applies its strict anchor check after the
+build in both local validation and CI. Existing checks additionally cover
+hand-authored route warnings and generated component references.
 
 Optional locales, design-token panel, theme switcher, versioning, sitemap, tag
 features, Codex publication, and desktop wrappers are not enabled by this refresh.
@@ -69,13 +70,22 @@ The reusable circuit documentation foundation is a separate future task.
 5. Commit regenerated Claude-resource pages together with instruction changes.
    Update the provenance pin only after verification succeeds.
 
-## Known upstream diagnostic
+## Escaped-underscore anchors verified fixed
 
-The scaffold link checker exposes a pre-existing TOC slug mismatch for escaped
-underscores: a generated heading such as `ABSOLUTE\_MAXIMUM` gets an extra dash
-in its TOC href. This is tracked in
+zudo-doc 5.27.0 fixes the TOC mismatch reported in
 [zudo-doc issue 4380](https://github.com/zudolab/zudo-doc/issues/4380).
-The migration introduced no new instances. Keep the checker advisory until that
-upstream defect is fixed; the existing strict view-model and built-reference
-checks remain enabled. Four unrelated authored links found by the checker were
-corrected to the actual rendered heading ID.
+The refreshed checker shares the package heading extractor, including h5/h6 IDs.
+The upgrade reduced the built site's 272 invalid anchors to zero. The four
+authored links corrected in the previous refresh remain intact.
+
+`check:anchors` now prevents this class of defect from passing local validation
+or deployment CI. No local package patch or anchor allowlist was needed.
+
+## Mobile Appearance Escape remains upstream
+
+In 5.27.0, pressing Escape in the mobile drawer's Appearance menu closes both
+menu and drawer, preventing focus restoration to the Appearance trigger.
+[zudo-doc issue 4393](https://github.com/zudolab/zudo-doc/issues/4393) tracks the
+nested Escape handling defect. Theme selection and System persistence work;
+this does not affect the repaired TOC anchors. Keep the package implementation
+until the upstream fix is released.
