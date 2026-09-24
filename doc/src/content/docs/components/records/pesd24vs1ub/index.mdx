@@ -17,22 +17,44 @@ This is a subordinate record. It is a component in its own right, with its own o
 
 ## Identity
 
-- **Record ID:** `rec-pesd24vs1ub`
-- **Record kind:** subordinate
-- **Manufacturer part number:** `PESD24VS1UB,115`
-- **Manufacturer:** Nexperia
-- **Function:** CC-line ESD protection
-- **LCSC ID:** `C85382`
-- **Package:** `SOD-523_L1.2-W0.8-LS1.6-RD`
-- **Inventory line:** `line-c85382`
-- **Also known as:** `PESD24VS1UB`, `USB-C CC ESD`
-- **Owner skill:** `component-stusb4500qtr`
-- **Fit:** DNP or hand-fit
-- **Identity state:** UNRESOLVED
-- **Source state:** SOURCE UNAVAILABLE
-- **Coverage:** 1 open of 2 published
+| Field                    | Recorded value                |
+| ------------------------ | ----------------------------- |
+| Record ID                | `rec-pesd24vs1ub`             |
+| Record kind              | subordinate                   |
+| Manufacturer part number | `PESD24VS1UB,115`             |
+| Manufacturer             | Nexperia                      |
+| Function                 | CC-line ESD protection        |
+| LCSC ID                  | `C85382`                      |
+| Package                  | `SOD-523_L1.2-W0.8-LS1.6-RD`  |
+| Inventory line           | `line-c85382`                 |
+| Also known as            | `PESD24VS1UB`, `USB-C CC ESD` |
+| Owner skill              | `component-stusb4500qtr`      |
+
+**Fit:** DNP or hand-fit
+
+**Identity state:** UNRESOLVED
+
+**Source state:** SOURCE UNAVAILABLE
+
+**Coverage:** 1 open of 2 published
+
+## Documents and package
+
+<EvidenceAnchor id="component-references-heading" />
 
 <ComponentReferences descriptor="7b2276657273696f6e223a312c22646f63756d656e74223a7b226c6162656c223a2244617461736865657420504446222c227469746c65223a225045534432345653315542204553442070726f74656374696f6e2064696f646520696e20534f44353233207061636b616765222c22617574686f72697479223a224d414e5546414354555245525f5052494d415259222c22617661696c6162696c697479223a22415641494c41424c45222c2275726c223a2268747470733a2f2f6173736574732e6e657870657269612e636f6d2f646f63756d656e74732f646174612d73686565742f50455344323456533155422e706466227d2c22666f6f747072696e74223a7b226e616d65223a22534f442d3532335f4c312e322d57302e382d4c53312e362d5244222c22617373657455726c223a222f6173736574732f636f6d706f6e656e742d70726576696577732f666f6f747072696e74732f534f442d3532335f4c312e322d57302e382d4c53312e362d52442e737667227d2c226d6f64656c44657363726970746f72223a223762323237363635373237333639366636653232336133313263323237303631363336623631363736353439363432323361323235333466343432643335333233333566346333313265333232643537333032653338326434633533333132653336326435323434323232633232373036313633366236313637363534633631363236353663323233613232353334663434326433353332333335663463333132653332326435373330326533383264346335333331326533363264353234343232326332323664366636343635366335353732366332323361323232663631373337333635373437333266363336663664373036663665363536653734326437303732363537363639363537373733326636643666363436353663373332663533346634343264333533323333356634633331326533323264353733303265333832643438333032653337326434633533333132653336326537373732366332323263323236663636363637333635373432323361376232323738323233613330326332323739323233613330326332323761323233613330376432633232373236663734363137343639366636653232336137623232373832323361333032633232373932323361333032633232376132323361333133383330376432633232373336333631366336353232336137623232373832323361333132633232373932323361333132633232376132323361333137643764227d" />
+
+**Selected document:** [Datasheet PDF](https://assets.nexperia.com/documents/data-sheet/PESD24VS1UB.pdf) — PESD24VS1UB ESD protection diode in SOD523 package
+
+**Selected source ID:** `src-pesd24vs1ub`
+
+**Authority:** MANUFACTURER\_PRIMARY
+
+**Availability:** AVAILABLE
+
+**Package footprint:** `SOD-523_L1.2-W0.8-LS1.6-RD`
+
+This geometry represents a shared footprint package and may not exactly match the manufacturer part.
 
 ## Placements
 
@@ -51,8 +73,7 @@ Coverage is stated one domain at a time and is never rolled up. A domain marked 
 
 <EvidenceAnchor id="cov-pesd-spec" />
 
-- **Coverage ID:** `cov-pesd-spec`
-- **Status:** COVERED
+**Coverage ID:** `cov-pesd-spec` · **Status:** COVERED
 
 **Reason:** Nexperia datasheet tables and package figure
 
@@ -71,8 +92,7 @@ Coverage is stated one domain at a time and is never rolled up. A domain marked 
 
 <EvidenceAnchor id="cov-pesd-bench" />
 
-- **Coverage ID:** `cov-pesd-bench`
-- **Status:** OPEN
+**Coverage ID:** `cov-pesd-bench` · **Status:** OPEN
 
 **Reason:** The generator marks D6/D7 DNP and no fitted-board measurement exists
 
@@ -88,63 +108,137 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-<EvidenceTable label="facts">
-  | Fact                                                                 | Value | Unit | Conditions                               | Verdict                         | Provenance   | Evidence                                                        |
-  | -------------------------------------------------------------------- | ----- | ---- | ---------------------------------------- | ------------------------------- | ------------ | --------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-pesd-leakage" />`fact-pesd-leakage`         | 50    | `nA` | maximum at VRWM=24 V, Tamb=25 degC       | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row IRM](#src-pesd24vs1ub) |
-  | <EvidenceAnchor id="fact-pesd-capacitance" />`fact-pesd-capacitance` | 50    | `pF` | maximum at f=1 MHz, VR=0 V, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row Cd](#src-pesd24vs1ub)  |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-leakage" />
+
+  **Fact:** `fact-pesd-leakage`
+
+  **Value:** 50 · **Unit:** `nA`
+
+  **Conditions:** maximum at VRWM=24 V, Tamb=25 degC
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 9, Table 6 row IRM](#src-pesd24vs1ub)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-capacitance" />
+
+  **Fact:** `fact-pesd-capacitance`
+
+  **Value:** 50 · **Unit:** `pF`
+
+  **Conditions:** maximum at f=1 MHz, VR=0 V, Tamb=25 degC
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 9, Table 6 row Cd](#src-pesd24vs1ub)
+</EvidenceFact>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-<EvidenceTable label="facts">
-  | Fact                                                 | Value | Unit | Conditions                                                         | Verdict                         | Provenance   | Evidence                                                                        |
-  | ---------------------------------------------------- | ----- | ---- | ------------------------------------------------------------------ | ------------------------------- | ------------ | ------------------------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-pesd-esd" />`fact-pesd-esd` | 23    | `kV` | maximum IEC 61000-4-2 contact discharge; ten non-repetitive pulses | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 8, Table 5 ESD maximum-ratings row](#src-pesd24vs1ub) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-esd" />
+
+  **Fact:** `fact-pesd-esd`
+
+  **Value:** 23 · **Unit:** `kV`
+
+  **Conditions:** maximum IEC 61000-4-2 contact discharge; ten non-repetitive pulses
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 8, Table 5 ESD maximum-ratings row](#src-pesd24vs1ub)
+</EvidenceFact>
 
 ### PROTECTION\_STANDOFF
 
 The voltage a protection device is expected to sit at without conducting.
 
-<EvidenceTable label="facts">
-  | Fact                                                           | Value | Unit | Conditions                           | Verdict                         | Provenance   | Evidence                                                         |
-  | -------------------------------------------------------------- | ----- | ---- | ------------------------------------ | ------------------------------- | ------------ | ---------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-pesd-standoff" />`fact-pesd-standoff` | 24    | `V`  | Tamb=25 degC reverse working voltage | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VRWM](#src-pesd24vs1ub) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-standoff" />
+
+  **Fact:** `fact-pesd-standoff`
+
+  **Value:** 24 · **Unit:** `V`
+
+  **Conditions:** Tamb=25 degC reverse working voltage
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 9, Table 6 row VRWM](#src-pesd24vs1ub)
+</EvidenceFact>
 
 ### PROTECTION\_BREAKDOWN
 
 The voltage at which a protection device begins to conduct.
 
-<EvidenceTable label="facts">
-  | Fact                                                             | Value      | Unit | Conditions            | Verdict                         | Provenance   | Evidence                                                        |
-  | ---------------------------------------------------------------- | ---------- | ---- | --------------------- | ------------------------------- | ------------ | --------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-pesd-breakdown" />`fact-pesd-breakdown` | 26.5..27.5 | `V`  | IR=5 mA, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VBR](#src-pesd24vs1ub) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-breakdown" />
+
+  **Fact:** `fact-pesd-breakdown`
+
+  **Value:** 26.5..27.5 · **Unit:** `V`
+
+  **Conditions:** IR=5 mA, Tamb=25 degC
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 9, Table 6 row VBR](#src-pesd24vs1ub)
+</EvidenceFact>
 
 ### PROTECTION\_CLAMP
 
 The voltage a protection device clamps to while conducting its rated surge current.
 
-<EvidenceTable label="facts">
-  | Fact                                                     | Value                        | Unit | Conditions                                 | Verdict                         | Provenance   | Evidence                                                        |
-  | -------------------------------------------------------- | ---------------------------- | ---- | ------------------------------------------ | ------------------------------- | ------------ | --------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-pesd-clamp" />`fact-pesd-clamp` | 36 max at 1 A; 70 max at 3 A | `V`  | non-repetitive 8/20 us pulse, Tamb=25 degC | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 9, Table 6 row VCL](#src-pesd24vs1ub) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-clamp" />
+
+  **Fact:** `fact-pesd-clamp`
+
+  **Value:** 36 max at 1 A; 70 max at 3 A · **Unit:** `V`
+
+  **Conditions:** non-repetitive 8/20 us pulse, Tamb=25 degC
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 9, Table 6 row VCL](#src-pesd24vs1ub)
+</EvidenceFact>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-<EvidenceTable label="facts">
-  | Fact                                                                   | Value                                      | Unit   | Conditions                                                | Verdict                         | Provenance   | Evidence                                                                                                     |
-  | ---------------------------------------------------------------------- | ------------------------------------------ | ------ | --------------------------------------------------------- | ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
-  | <EvidenceAnchor id="fact-pesd-manufacturer" />`fact-pesd-manufacturer` | Nexperia                                   | `NONE` | exact PESD24VS1UB orderable including ,115 packing suffix | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: document title block and ordering information table row PESD24VS1UB,115](#src-pesd24vs1ub) |
-  | <EvidenceAnchor id="fact-pesd-pinout" />`fact-pesd-pinout`             | pin 1 cathode, pin 2 anode; unidirectional | `NONE` | SOD523 package top-view marking/orientation               | PASS - primary-source confirmed | PRIMARY-SPEC | [src-pesd24vs1ub: Section 4, Table pinning; Section 11 Figure 10](#src-pesd24vs1ub)                          |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-manufacturer" />
+
+  **Fact:** `fact-pesd-manufacturer`
+
+  **Value:** Nexperia · **Unit:** `NONE`
+
+  **Conditions:** exact PESD24VS1UB orderable including ,115 packing suffix
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: document title block and ordering information table row PESD24VS1UB,115](#src-pesd24vs1ub)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-pesd-pinout" />
+
+  **Fact:** `fact-pesd-pinout`
+
+  **Value:** pin 1 cathode, pin 2 anode; unidirectional · **Unit:** `NONE`
+
+  **Conditions:** SOD523 package top-view marking/orientation
+
+  **Verdict:** PASS - primary-source confirmed · **Provenance:** PRIMARY-SPEC
+
+  **Evidence:** [src-pesd24vs1ub: Section 4, Table pinning; Section 11 Figure 10](#src-pesd24vs1ub)
+</EvidenceFact>
 
 ## Pin maps
 
@@ -200,16 +294,21 @@ Every document cited above, with its identification, when it was retrieved, and 
 
 <EvidenceAnchor id="src-pesd24vs1ub" />
 
-- **Source ID:** `src-pesd24vs1ub`
-- **Document number:** PESD24VS1UB
-- **Revision:** Rev 4
-- **Document date:** 2018-11-29
-- **Retrieved:** 2026-08-02
-- **Authority:** MANUFACTURER\_PRIMARY
-- **Locator:** Section 9, Table 6 characteristic rows; Section 11, Figure 10 package outline
-- **Printed page:** 4
-- **Availability:** AVAILABLE
-- **Document URL:** [https://assets.nexperia.com/documents/data-sheet/PESD24VS1UB.pdf](https://assets.nexperia.com/documents/data-sheet/PESD24VS1UB.pdf)
+**Source ID:** `src-pesd24vs1ub` · **Authority:** MANUFACTURER\_PRIMARY
+
+| Field           | Recorded value |
+| --------------- | -------------- |
+| Document number | PESD24VS1UB    |
+| Revision        | Rev 4          |
+| Document date   | 2018-11-29     |
+| Retrieved       | 2026-08-02     |
+| Printed page    | 4              |
+
+**Locator:** Section 9, Table 6 characteristic rows; Section 11, Figure 10 package outline
+
+**Availability:** AVAILABLE
+
+**Document URL:** [https://assets.nexperia.com/documents/data-sheet/PESD24VS1UB.pdf](https://assets.nexperia.com/documents/data-sheet/PESD24VS1UB.pdf)
 
 ## Legend
 

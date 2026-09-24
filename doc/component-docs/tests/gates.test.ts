@@ -20,6 +20,9 @@ import { before, describe, it } from "node:test";
 import { FIELD_KEYS, PublicationPolicy, type FieldKey } from "../core/publication.ts";
 import { buildRecordIndex } from "../core/render/shared.ts";
 import { renderRecord } from "../core/render/record.ts";
+import { renderCatalog } from "../core/render/catalog.ts";
+import { renderRecordsIndex } from "../core/render/record.ts";
+import { renderIntegration } from "../core/render/integration.ts";
 import { harvestCanaries, normalizeForScan } from "../core/scan.ts";
 import { projectIndex, readEvidenceIndex } from "../adapters/circuit/index.ts";
 import { DENIED_PROVIDER_KEYS, readCanaries } from "../adapters/circuit/canaries.ts";
@@ -59,6 +62,60 @@ function coverageSection(slug: string, anchor: string): string {
   const next = page.slice(start).search(/\n#{2,3} /u);
   return next === -1 ? page.slice(start) : page.slice(start, start + next);
 }
+
+describe("the complete corpus uses the presentation contract", () => {
+  it("keeps every record's facts, source anchors and selected document visible in Markdown", () => {
+    assert.equal(pages.size, 35);
+    for (const record of model.records) {
+      const page = pages.get(record.identity.slug);
+      assert.ok(page);
+      assert.ok(page.includes("## Documents and package"));
+      assert.ok(page.includes('<EvidenceAnchor id="component-references-heading" />'));
+      assert.equal([...page.matchAll(/<EvidenceFact>/gu)].length, record.facts.length);
+      assert.equal([...page.matchAll(/<\/EvidenceFact>/gu)].length, record.facts.length);
+      for (const fact of record.facts) {
+        assert.ok(page.includes(`<EvidenceAnchor id="${fact.anchor}" />`), fact.factId);
+        assert.ok(page.includes(`**Fact:** \`${fact.factId}\``), fact.factId);
+        for (const claim of [fact.conditions, fact.verdict, fact.provenance, fact.locator, fact.unit]) {
+          assert.ok(normalizeForScan(page).includes(normalizeForScan(claim)), `${fact.factId} omits ${claim}`);
+        }
+      }
+      for (const source of record.sources) {
+        assert.ok(page.includes(`<EvidenceAnchor id="${source.anchor}" />`), source.sourceId);
+        assert.ok(page.includes(`**Source ID:** \`${source.sourceId}\``), source.sourceId);
+        for (const claim of [source.documentTitle, source.documentNumber, source.revision, source.documentDate, source.retrievalDate, source.authorityClass, source.locator, source.printedPageLabel, source.availability]) {
+          if (claim === "") continue;
+          assert.ok(normalizeForScan(page).includes(normalizeForScan(claim)), `${source.sourceId} omits ${claim}`);
+        }
+      }
+      for (const domain of record.coverage) {
+        assert.ok(page.includes(`<EvidenceAnchor id="${domain.anchor}" />`), domain.coverageId);
+        assert.ok(page.includes(`**Coverage ID:** \`${domain.coverageId}\``), domain.coverageId);
+        assert.ok(normalizeForScan(page).includes(normalizeForScan(domain.reason)), domain.coverageId);
+      }
+      assert.ok(page.includes(`**Selected source ID:** \`${record.reference.document.sourceId}\``));
+      assert.ok(normalizeForScan(page).includes(normalizeForScan(record.reference.document.url)));
+      assert.ok(page.includes("## Placements") && page.includes("## Sources"));
+    }
+  });
+
+  it("keeps all catalog entries, records index links and integration rule anchors", () => {
+    const catalog = renderCatalog(model).contents;
+    const records = renderRecordsIndex(model.records).contents;
+    const integration = renderIntegration(model, buildRecordIndex(model)).contents;
+    assert.equal([...catalog.matchAll(/^### /gmu)].length, 35);
+    assert.ok(catalog.includes('<EvidenceTable label="parts-index">'));
+    for (const record of model.records) {
+      assert.ok(catalog.includes(`<EvidenceAnchor id="${record.identity.anchor}" />`));
+      assert.ok(catalog.includes(`\`${record.identity.recordId}\``));
+      assert.ok(records.includes(`\`${record.identity.recordId}\``));
+    }
+    for (const rule of model.integration) {
+      assert.ok(integration.includes(`<EvidenceAnchor id="${rule.anchor}" />`));
+      assert.ok(normalizeForScan(integration).includes(normalizeForScan(rule.refusal)));
+    }
+  });
+});
 
 describe("open coverage never reads as safety", () => {
   it("still finds the corpus split the epic states", () => {
@@ -145,9 +202,8 @@ describe("open coverage never reads as safety", () => {
         assert.equal(forbidden.test(page), false, `${slug} synthesises a verdict: ${forbidden}`);
       }
 
-      // The identity block carries no status bullet of its own: every `Status:`
-      // on the page belongs to a named coverage domain.
-      const statusBullets = [...page.matchAll(/^- \*\*Status:\*\*/gmu)].length;
+      // Every `Status:` paragraph belongs to a named coverage domain.
+      const statusBullets = [...page.matchAll(/\*\*Coverage ID:\*\* `[^`]+` · \*\*Status:\*\*/gu)].length;
       const domains = model.records.find((record) => record.identity.slug === slug)?.coverage
         .length;
       assert.equal(statusBullets, domains, `${slug} has a status that is not a domain's`);

@@ -120,14 +120,14 @@ describe("dense tables carry a scroll container", () => {
     }
   });
 
-  it("keeps every column — the container scrolls, the table does not shrink", () => {
-    // The seven fact columns are seven separate claims. A "responsive" table
-    // that drops Conditions or Provenance on a narrow screen would publish a
-    // value without the terms it holds under, which is a different fact.
-    assert.match(
-      driverPage,
-      /\| Fact\s*\| Value\s*\| Unit\s*\| Conditions\s*\| Verdict\s*\| Provenance\s*\| Evidence\s*\|/u,
-    );
+  it("keeps each fact's claims together in one visible primitive", () => {
+    const facts = [...driverPage.matchAll(/<EvidenceFact>([\s\S]*?)<\/EvidenceFact>/gu)];
+    assert.ok(facts.length > 0);
+    for (const [, body] of facts) {
+      for (const label of ["Fact", "Value", "Unit", "Conditions", "Verdict", "Provenance", "Evidence"]) {
+        assert.ok(body?.includes(`**${label}:**`), `fact omits ${label}`);
+      }
+    }
   });
 
   it("labels each container with a slug the guard would accept", () => {
@@ -143,7 +143,7 @@ describe("dense tables carry a scroll container", () => {
   it("never lets a label carry evidence text", () => {
     // Attribute values are the one place evidence may never reach. Every label
     // the renderers emit is authored in this repository.
-    const authored = new Set(["parts-index", "facts", "calculation-dependencies", "pin-assignments"]);
+    const authored = new Set(["parts-index", "pin-assignments"]);
     for (const page of [catalogPage, ...recordPages]) {
       for (const match of page.matchAll(/<Evidence(?:Table|Details) label="([^"]*)"/gu)) {
         assert.ok(authored.has(match[1] ?? ""), `unexpected label ${match[1]}`);
@@ -219,11 +219,13 @@ describe("the stylesheet declares what the components emit", () => {
     assert.match(stylesheet, /\.zld-evidence-table table\s*\{[^}]*min-width:/u);
   });
 
-  it("gives component references an auto-fit grid and contained preview media", () => {
+  it("aligns document metadata and pairs contained preview media by content width", () => {
     assert.match(
       stylesheet,
-      /\.zld-component-references__grid\s*\{[^}]*grid-template-columns:\s*repeat\(auto-fit, minmax\(min\(18rem, 100%\), 1fr\)\)/u,
+      /\.zld-component-references__document\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) minmax\(12rem, 0\.8fr\)/u,
     );
+    assert.match(stylesheet, /\.zld-component-references__previews\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/u);
+    assert.match(stylesheet, /@container \(max-width: 38rem\)/u);
     assert.match(
       stylesheet,
       /\.zld-component-references__footprint-frame > a\s*\{[^}]*aspect-ratio:\s*16 \/ 9/u,

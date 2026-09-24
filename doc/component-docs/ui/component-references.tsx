@@ -16,25 +16,23 @@ export function ComponentReferences({ descriptor: encoded }: ComponentReferences
   const descriptor = decodeComponentReferencesDescriptor(encoded);
   const { document, footprint } = descriptor;
   return (
-    <section className="zld-component-references" aria-labelledby="component-references-heading">
-      <h2 id="component-references-heading" className="zld-component-references__heading">Component references</h2>
-      <div className="zld-component-references__grid">
-        <article className="zld-component-references__card">
-          <h3 className="zld-component-references__card-heading">Selected document</h3>
+    <section className="zld-component-references" aria-label="Selected document and package previews">
+      <div className="zld-component-references__document">
+        <div>
           <p className="zld-component-references__document-label">{document.label}</p>
-          <p className="zld-component-references__document-title">
-            <a href={document.url}>{document.title}</a>
-          </p>
-          <dl className="zld-component-references__metadata">
-            <div><dt>Authority</dt><dd>{document.authority}</dd></div>
-            <div><dt>Availability</dt><dd>{document.availability}</dd></div>
-          </dl>
-        </article>
-        <article className="zld-component-references__card">
+          <p className="zld-component-references__document-title"><a href={document.url}>{document.title}</a></p>
+        </div>
+        <dl className="zld-component-references__metadata">
+          <div><dt>Authority</dt><dd>{document.authority}</dd></div>
+          <div><dt>Availability</dt><dd>{document.availability}</dd></div>
+        </dl>
+      </div>
+      <div className="zld-component-references__previews">
+        <article className="zld-component-references__preview">
           <h3 className="zld-component-references__card-heading">Footprint preview</h3>
           <FootprintPreview assetUrl={footprint.assetUrl} footprintName={footprint.name} />
         </article>
-        <article className="zld-component-references__card zld-component-references__model-card">
+        <article className="zld-component-references__preview zld-component-references__model-card">
           <h3 className="zld-component-references__card-heading">Package model</h3>
           <PackageModelViewer descriptor={descriptor.modelDescriptor} />
         </article>

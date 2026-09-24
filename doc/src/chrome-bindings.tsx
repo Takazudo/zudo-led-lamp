@@ -19,6 +19,7 @@
 import { defineChromeBindings } from "@takazudo/zudo-doc/chrome-bindings";
 import { EvidenceAnchor } from "../component-docs/ui/evidence-anchor";
 import { EvidenceDetails } from "../component-docs/ui/evidence-details";
+import { EvidenceFact } from "../component-docs/ui/evidence-fact";
 import { EvidenceTable } from "../component-docs/ui/evidence-table";
 import { ComponentReferences } from "../component-docs/ui/component-references";
 import { PackageModelViewer } from "../component-docs/ui/package-model-viewer";
@@ -32,6 +33,7 @@ export const chromeBindings = defineChromeBindings({
     // literal text and silently swallows the content it wraps.
     EvidenceAnchor,
     EvidenceDetails,
+    EvidenceFact,
     EvidenceTable,
     ComponentReferences,
     PackageModelViewer,
