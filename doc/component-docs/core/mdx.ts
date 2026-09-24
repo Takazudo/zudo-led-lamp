@@ -41,6 +41,7 @@ import type { SafeUrl } from "./url.ts";
 export const ALLOWED_COMPONENT_ATTRIBUTES = {
   EvidenceAnchor: ["id"],
   EvidenceDetails: ["label"],
+  EvidenceFact: [],
   EvidenceTable: ["label"],
   ComponentReferences: ["descriptor"],
   PackageModelViewer: ["descriptor"],

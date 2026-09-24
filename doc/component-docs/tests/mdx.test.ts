@@ -6,6 +6,7 @@ import {
   assertMdxSafe,
   bulletList,
   component,
+  containerComponent,
   evidenceAnchor,
   heading,
   link,
@@ -123,6 +124,29 @@ describe("assertMdxSafe rejects text the serializer did not produce", () => {
 
   it("accepts a whitelisted component", () => {
     assert.doesNotThrow(() => assertMdxSafe('<EvidenceAnchor id="fact-x" />\n', "test.mdx"));
+  });
+
+  it("accepts a fact container with ordinary Markdown and no attributes", () => {
+    const body = serializeBody([
+      containerComponent("EvidenceFact", {}, [
+        paragraph([text(safeText("VIN < 40 V and {vref}", { field: "condition" }))]),
+      ]),
+    ]);
+    assertMdxSafe(body, "test.mdx");
+    assert.match(body, /^<EvidenceFact>$/mu);
+    assert.match(body, /^<\/EvidenceFact>$/mu);
+    assert.match(body, /VIN \\< 40 V and \\\{vref\}/u);
+  });
+
+  it("rejects authored attributes on a fact container", () => {
+    assert.throws(
+      () => assertMdxSafe('<EvidenceFact class="hidden">claim</EvidenceFact>\n', "test.mdx"),
+      (error: unknown) => error instanceof ComponentDocsError && error.code === "UNSAFE_MDX",
+    );
+    assert.throws(
+      () => containerComponent("EvidenceFact", { hidden: "true" }, []),
+      (error: unknown) => error instanceof ComponentDocsError && error.code === "UNSAFE_MDX",
+    );
   });
 });
 

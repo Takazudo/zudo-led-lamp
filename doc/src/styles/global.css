@@ -36,6 +36,19 @@
   scroll-margin-top: 6rem;
 }
 
+/* One fact remains a normal Markdown block. The inset separates adjacent
+   claims without compressing the class heading or gloss above the first fact. */
+.zld-evidence-fact {
+  display: flow-root;
+  min-width: 0;
+  padding-inline-start: var(--spacing-hsp-sm);
+  border-inline-start: 2px solid var(--color-muted);
+}
+
+.zld-evidence-fact > :where(* + *) {
+  margin-block-start: var(--spacing-vsp-2xs);
+}
+
 /* Pin-assignment tables are reference data a reader looks up rather than reads,
    so they ship inside a native <details>. It opens with no JavaScript, and the
    rows sit in the generated HTML and in llms-full.txt whether it is open or
