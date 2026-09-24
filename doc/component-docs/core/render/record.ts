@@ -42,7 +42,6 @@ import {
   containerComponent,
   evidenceAnchor,
   heading,
-  inlineEvidenceAnchor,
   link,
   paragraph,
   routeCodeLink,
@@ -55,6 +54,7 @@ import {
   type TableRow,
 } from "../mdx.ts";
 import { MODEL_ASSET_BASE } from "../model-descriptor.ts";
+import { anchor } from "../ids.ts";
 import { createComponentReferencesDescriptor, encodeComponentReferencesDescriptor } from "../reference-descriptor.ts";
 import { buildPage, type GeneratedPage } from "../page.ts";
 import { joinSafe, literal, safeText, type SafeText } from "../text.ts";
@@ -115,7 +115,7 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
     ...componentReferencesSection(record),
     ...placementSection(record),
     ...coverageSection(record, index),
-    ...factsSection(record, index),
+    ...factsSection(record),
     ...calculationSection(record, index),
     ...pinMapSection(record),
     ...interactionSection(record, index),
@@ -159,17 +159,24 @@ export function renderRecord(record: PublicRecord, index: RecordIndex): Generate
 
 function componentReferencesSection(record: PublicRecord): RootContent[] {
   const footprint = record.reference.footprint;
+  const document = record.reference.document;
+  const headingBlocks: RootContent[] = [
+    heading(2, literal("Documents and package")),
+    evidenceAnchor(anchor("component-references-heading")),
+  ];
   if (footprint === null) {
-    const document = record.reference.document;
     return [
-      heading(2, literal("Component references")),
-      paragraph([link(document.url, document.label), text(literal(" — ")), text(document.documentTitle)]),
+      ...headingBlocks,
+      evidenceAnchor(anchor("component-references")),
+      paragraph([link(document.url, document.label), space(), text(literal("—")), space(), text(document.documentTitle)]),
+      paragraph(field("Selected source ID", [code(document.sourceId)])),
+      paragraph(field("Authority", [text(document.authorityClass)])),
+      paragraph(field("Availability", [text(document.availability)])),
       paragraph([text(literal("External panel-mounted component, hand-wired to the PCB. No PCB footprint or package model applies. Consult the manufacturer drawing for panel cutout and terminal orientation."))]),
     ];
   }
   const modelName = String(footprint.modelPath).split("/").at(-1);
   if (modelName === undefined) throw new Error("Published model path has no basename");
-  const document = record.reference.document;
   const descriptor = encodeComponentReferencesDescriptor(createComponentReferencesDescriptor({
     document: {
       label: document.label,
@@ -190,7 +197,14 @@ function componentReferencesSection(record: PublicRecord): RootContent[] {
     },
   }));
   return [
+    ...headingBlocks,
     component("ComponentReferences", { descriptor }),
+    paragraph([strong(literal("Selected document:")), space(), link(document.url, document.label), space(), text(literal("—")), space(), text(document.documentTitle)]),
+    paragraph(field("Selected source ID", [code(document.sourceId)])),
+    paragraph(field("Authority", [text(document.authorityClass)])),
+    paragraph(field("Availability", [text(document.availability)])),
+    paragraph(field("Package footprint", [code(footprint.footprintName)])),
+    paragraph([text(literal("This geometry represents a shared footprint package and may not exactly match the manufacturer part."))]),
   ];
 }
 
@@ -271,25 +285,25 @@ function identitySection(record: PublicRecord): RootContent[] {
 
   return [
     heading(2, literal("Identity")),
-    bulletList([
-      field("Record ID", [code(identity.recordId)]),
-      field("Record kind", [text(literal(identity.kind))]),
-      field("Manufacturer part number", [code(identity.mpn)]),
-      field("Manufacturer", [text(identity.manufacturer)]),
-      field("Function", [text(identity.function)]),
-      field("LCSC ID", [identity.lcsc ? code(identity.lcsc) : text(literal("Not assigned; order by exact manufacturer part number"))]),
-      field("Package", [code(identity.packageName)]),
-      field("Inventory line", [code(identity.lineId)]),
+    table([literal("Field"), literal("Recorded value")], [
+      metadataRow("Record ID", [code(identity.recordId)]),
+      metadataRow("Record kind", [text(literal(identity.kind))]),
+      metadataRow("Manufacturer part number", [code(identity.mpn)]),
+      metadataRow("Manufacturer", [text(identity.manufacturer)]),
+      metadataRow("Function", [text(identity.function)]),
+      metadataRow("LCSC ID", [identity.lcsc ? code(identity.lcsc) : text(literal("Not assigned; order by exact manufacturer part number"))]),
+      metadataRow("Package", [code(identity.packageName)]),
+      metadataRow("Inventory line", [code(identity.lineId)]),
       // This record's route may be its LCSC code rather than its part number,
       // so the alternate terms must appear in the rendered page or nobody can
       // search their way here by the other name.
-      ...(aliases.length === 0 ? [] : [field("Also known as", termList(aliases))]),
-      ...(ownerSkill === null ? [] : [field("Owner skill", [code(ownerSkill)])]),
-      field("Fit", [text(fitLabel(identity.dnp))]),
-      field("Identity state", [text(identity.identityState)]),
-      field("Source state", [text(identity.sourceState)]),
-      field("Coverage", [text(openDomainSummary(record.coverage))]),
+      ...(aliases.length === 0 ? [] : [metadataRow("Also known as", termList(aliases))]),
+      ...(ownerSkill === null ? [] : [metadataRow("Owner skill", [code(ownerSkill)])]),
     ]),
+    paragraph(field("Fit", [text(fitLabel(identity.dnp))])),
+    paragraph(field("Identity state", [text(identity.identityState)])),
+    paragraph(field("Source state", [text(identity.sourceState)])),
+    paragraph(field("Coverage", [text(openDomainSummary(record.coverage))])),
   ];
 }
 
@@ -359,10 +373,7 @@ function coverageEntry(
   const blocks: RootContent[] = [
     heading(3, entry.domain),
     evidenceAnchor(entry.anchor),
-    bulletList([
-      field("Coverage ID", [code(entry.coverageId)]),
-      field("Status", [text(literal(entry.status))]),
-    ]),
+    paragraph([...field("Coverage ID", [code(entry.coverageId)]), space(), text(literal("·")), space(), ...field("Status", [text(literal(entry.status))])]),
     paragraph([strong(literal("Reason:")), space(), text(entry.reason)]),
   ];
 
@@ -426,7 +437,7 @@ function coverageEntry(
  * Grouping by class puts them under separate headings with separate
  * explanations, so the distinction survives skimming.
  */
-function factsSection(record: PublicRecord, index: RecordIndex): RootContent[] {
+function factsSection(record: PublicRecord): RootContent[] {
   const head = [
     heading(2, literal("Facts")),
     paragraph([
@@ -448,7 +459,7 @@ function factsSection(record: PublicRecord, index: RecordIndex): RootContent[] {
   return [
     ...head,
     ...orderedFactClasses(record.facts).flatMap((factClass) =>
-      factClassBlock(factClass, record, index),
+      factClassBlock(factClass, record),
     ),
   ];
 }
@@ -456,7 +467,6 @@ function factsSection(record: PublicRecord, index: RecordIndex): RootContent[] {
 function factClassBlock(
   factClass: SafeText,
   record: PublicRecord,
-  index: RecordIndex,
 ): RootContent[] {
   const facts = record.facts.filter((fact) => fact.factClass === factClass);
   const gloss = FACT_CLASS_GLOSS[factClass];
@@ -464,32 +474,19 @@ function factClassBlock(
   return [
     heading(3, factClass),
     ...(gloss === undefined ? [] : [paragraph([text(literal(gloss))])]),
-    scrollableTable(
-      "facts",
-      [
-        literal("Fact"),
-        literal("Value"),
-        literal("Unit"),
-        literal("Conditions"),
-        literal("Verdict"),
-        literal("Provenance"),
-        literal("Evidence"),
-      ],
-      facts.map((fact) => factRow(fact, record, index)),
-    ),
+    ...facts.map((fact) => factBlock(fact, record)),
   ];
 }
 
-function factRow(fact: PublicFact, record: PublicRecord, index: RecordIndex): TableRow {
-  return [
-    [inlineEvidenceAnchor(fact.anchor), code(fact.factId)],
-    valueCell(fact),
-    [code(fact.unit)],
-    [text(fact.conditions)],
-    [text(fact.verdict)],
-    [text(fact.provenance)],
-    evidenceCell(fact, record),
-  ];
+function factBlock(fact: PublicFact, record: PublicRecord): RootContent {
+  return containerComponent("EvidenceFact", {}, [
+    evidenceAnchor(fact.anchor),
+    paragraph(field("Fact", [code(fact.factId)])),
+    paragraph([...field("Value", valueCell(fact)), space(), text(literal("·")), space(), ...field("Unit", [code(fact.unit)])]),
+    paragraph(field("Conditions", [text(fact.conditions)])),
+    paragraph([...field("Verdict", [text(fact.verdict)]), space(), text(literal("·")), space(), ...field("Provenance", [text(fact.provenance)])]),
+    paragraph(field("Evidence", evidenceCell(fact, record))),
+  ]);
 }
 
 /**
@@ -583,31 +580,15 @@ function calculationSection(record: PublicRecord, index: RecordIndex): RootConte
         ),
       ),
     ]),
-    scrollableTable(
-      "calculation-dependencies",
-      [literal("Fact"), literal("Expression"), literal("Depends on")],
-      calculated.map((fact) => [
-        [routeCodeLink(samePage(fact.anchor), fact.factId)],
-        fact.expression === "" ? [text(literal("not recorded"))] : [code(fact.expression)],
-        dependencyCell(fact, record, index),
-      ]),
-    ),
+    ...calculated.flatMap((fact) => [
+      paragraph(field("Fact", [routeCodeLink(samePage(fact.anchor), fact.factId)])),
+      paragraph(field("Expression", fact.expression === "" ? [text(literal("not recorded"))] : [code(fact.expression)])),
+      paragraph([strong(literal("Depends on:"))]),
+      ...(fact.dependsOn.length === 0
+        ? [paragraph([text(literal("nothing recorded"))])]
+        : [bulletList(fact.dependsOn.map((id) => factReference(id, record, index)))]),
+    ]),
   ];
-}
-
-function dependencyCell(
-  fact: PublicFact,
-  record: PublicRecord,
-  index: RecordIndex,
-): PhrasingContent[] {
-  if (fact.dependsOn.length === 0) return [text(literal("nothing recorded"))];
-
-  const cell: PhrasingContent[] = [];
-  for (const [position, dependencyId] of fact.dependsOn.entries()) {
-    if (position > 0) cell.push(text(literal(",")), space());
-    cell.push(...factReference(dependencyId, record, index));
-  }
-  return cell;
 }
 
 /**
@@ -883,29 +864,23 @@ function sourceSection(record: PublicRecord): RootContent[] {
 }
 
 function sourceEntry(source: PublicSource): RootContent[] {
-  const details: PhrasingContent[][] = [
-    field("Source ID", [code(source.sourceId)]),
-    field("Document number", [text(source.documentNumber)]),
-    field("Revision", [text(source.revision)]),
-    field("Document date", [text(source.documentDate)]),
-    field("Retrieved", [text(source.retrievalDate)]),
-    field("Authority", [text(source.authorityClass)]),
-    field("Locator", [text(source.locator)]),
-    field("Printed page", [text(source.printedPageLabel)]),
-    // Availability sits immediately before the link it qualifies. Twelve of the
-    // corpus's sources publish a perfectly well-formed URL and are still
-    // recorded as unretrievable; separating the two invites a reader to follow
-    // the link and assume the document backs the facts citing it.
-    field("Availability", [text(source.availability)]),
+  return [
+    heading(3, source.documentTitle),
+    evidenceAnchor(source.anchor),
+    paragraph([...field("Source ID", [code(source.sourceId)]), space(), text(literal("·")), space(), ...field("Authority", [text(source.authorityClass)])]),
+    table([literal("Field"), literal("Recorded value")], [
+      metadataRow("Document number", [text(source.documentNumber)]),
+      metadataRow("Revision", [text(source.revision)]),
+      metadataRow("Document date", [text(source.documentDate)]),
+      metadataRow("Retrieved", [text(source.retrievalDate)]),
+      metadataRow("Printed page", [text(source.printedPageLabel)]),
+    ]),
+    paragraph(field("Locator", [text(source.locator)])),
+    paragraph(field("Availability", [text(source.availability)])),
+    paragraph(field("Document URL", source.url === null
+      ? [text(literal("no link is published for this source"))]
+      : [link(source.url, safeText(source.url, { field: "source url" }))])),
   ];
-
-  details.push(
-    source.url === null
-      ? field("Document URL", [text(literal("no link is published for this source"))])
-      : field("Document URL", [link(source.url, safeText(source.url, { field: "source url" }))]),
-  );
-
-  return [heading(3, source.documentTitle), evidenceAnchor(source.anchor), bulletList(details)];
 }
 
 /**
@@ -1056,6 +1031,10 @@ function agentResourceSection(record: PublicRecord): RootContent[] {
 
 function field(label: string, value: readonly PhrasingContent[]): PhrasingContent[] {
   return [strong(literal(`${label}:`)), space(), ...value];
+}
+
+function metadataRow(label: string, value: readonly PhrasingContent[]): TableRow {
+  return [[text(literal(label))], value];
 }
 
 /** Exact terms, comma-separated, each rendered as the identifier it is. */

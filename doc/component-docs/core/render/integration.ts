@@ -260,12 +260,9 @@ function ruleSection(rule: PublicIntegrationRule, index: RecordIndex): RootConte
     ...(gloss === undefined
       ? []
       : [paragraph([strong(literal("What this rule asks:")), space(), text(literal(gloss))])]),
-    bulletList([
-      // `text`, not `code`: a domain is a phrase the evidence chose, not an
-      // identifier. See MONOSPACE_IS_FOR_IDENTIFIERS below.
-      field("Domain", [text(rule.domain)]),
-      field("Verdict", [text(rule.verdict)]),
-    ]),
+    // Domain is a phrase from evidence, not a code-shaped identifier.
+    paragraph(field("Domain", [text(rule.domain)])),
+    paragraph(field("Verdict", [text(rule.verdict)])),
     // Immediately after the verdict and before any evidence. A reader who takes
     // one line from this section must take this one.
     paragraph([strong(literal("This rule refuses to conclude:")), space(), text(rule.refusal)]),
@@ -380,10 +377,8 @@ function calculationBlock(
   const blocks: RootContent[] = [
     heading(4, calculation.calculationId),
     evidenceAnchor(calculation.anchor),
-    bulletList([
-      field("Expression", [code(calculation.expression)]),
-      field("Result", [code(calculation.resultKey)]),
-    ]),
+    paragraph(field("Expression", [code(calculation.expression)])),
+    paragraph(field("Result", [code(calculation.resultKey)])),
     paragraph([strong(literal("Conditions:")), space(), text(calculation.conditions)]),
   ];
 

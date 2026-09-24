@@ -79,12 +79,12 @@ describe("catalog", () => {
 
   it("publishes the identity payload the bill of materials needs", () => {
     for (const label of [
-      "**Record ID:**",
-      "**Manufacturer:**",
-      "**Function:**",
-      "**Orderable ID:**",
-      "**Package:**",
-      "**Inventory line:**",
+      "| Record ID",
+      "| Manufacturer",
+      "| Function",
+      "| Orderable ID",
+      "| Package",
+      "| Inventory line",
       "**Placements:**",
       "**Fit:**",
       "**Identity state:**",
@@ -101,8 +101,8 @@ describe("catalog", () => {
     // Several real records are routed by LCSC code rather than part number, so
     // the alias has to be in the rendered page — search indexes the page, not
     // the view model.
-    assert.ok(catalogPage.includes("**Also known as:** `FX8860`"));
-    assert.ok(driverPage.includes("**Also known as:** `FX8860`"));
+    assert.match(catalogPage, /\| Also known as\s*\| `FX8860`/u);
+    assert.match(driverPage, /\| Also known as\s*\| `FX8860`/u);
     // Terms already shown as identity fields are not repeated.
     assert.ok(!catalogPage.includes("`FX8860MP-13`, `FX8860`"));
     // A record with no extra aliases gets no empty row.
@@ -255,11 +255,8 @@ describe("record page — structure", () => {
 });
 
 describe("record page — evidence semantics", () => {
-  it("keeps value, unit, conditions, verdict and provenance as separate columns", () => {
-    assert.match(
-      driverPage,
-      /\| Fact +\| Value +\| Unit +\| Conditions +\| Verdict +\| Provenance +\| Evidence +\|/u,
-    );
+  it("keeps value, unit, conditions, verdict and provenance as labeled fields", () => {
+    assert.match(driverPage, /<EvidenceFact>[\s\S]*?\*\*Value:\*\*[\s\S]*?\*\*Unit:\*\*[\s\S]*?\*\*Conditions:\*\*[\s\S]*?\*\*Verdict:\*\*[\s\S]*?\*\*Provenance:\*\*[\s\S]*?\*\*Evidence:\*\*/u);
     assert.ok(driverPage.includes("PASS - primary-source confirmed"));
     assert.ok(driverPage.includes("CONFIRMED - distributor identity only"));
     assert.ok(driverPage.includes("NEEDS BENCH"));
@@ -292,7 +289,7 @@ describe("record page — evidence semantics", () => {
   });
 
   it("renders a plain number as a number", () => {
-    assert.match(driverPage, /\| 42 +\| `V` +\|/u);
+    assert.match(driverPage, /\*\*Value:\*\* 42 · \*\*Unit:\*\* `V`/u);
   });
 
   it("links a calculated fact to inputs on another record and names that part", () => {
