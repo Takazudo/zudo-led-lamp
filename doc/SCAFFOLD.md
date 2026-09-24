@@ -80,3 +80,12 @@ authored links corrected in the previous refresh remain intact.
 
 `check:anchors` now prevents this class of defect from passing local validation
 or deployment CI. No local package patch or anchor allowlist was needed.
+
+## Mobile Appearance Escape remains upstream
+
+In 5.27.0, pressing Escape in the mobile drawer's Appearance menu closes both
+menu and drawer, preventing focus restoration to the Appearance trigger.
+[zudo-doc issue 4393](https://github.com/zudolab/zudo-doc/issues/4393) tracks the
+nested Escape handling defect. Theme selection and System persistence work;
+this does not affect the repaired TOC anchors. Keep the package implementation
+until the upstream fix is released.
