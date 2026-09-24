@@ -99,9 +99,11 @@ async function main() {
       `${slug} dialog shells must cover both preview kinds`,
     );
     for (const tag of dialogs) {
-      const labelId = readAttribute(tag, "aria-labelledby");
-      assert.match(section, new RegExp(`\\bid=(?:"${labelId}"|'${labelId}'|${labelId})(?:\\s|>)`, "u"), `${slug} dialog label must resolve`);
+      const label = decodeHtml(readAttribute(tag, "aria-label"));
+      assert.match(label, /^(?:Footprint preview for|Interactive 3D view of) /u, `${slug} dialog needs a media-specific accessible name`);
+      assert.doesNotMatch(tag, /\baria-labelledby=/u, `${slug} dialog must not refer to a visible title`);
     }
+    assert.doesNotMatch(section, /zld-preview-dialog__title/u, `${slug} enlarged media must not include a visible title`);
     assert.match(
       section,
       /Interactive inspection requires JavaScript and WebGL\. The package identity remains available in this page\./u,
