@@ -121,6 +121,10 @@ jobs:
         working-directory: doc
         run: pnpm check:images
 
+      - name: Documentation anchor targets resolve
+        working-directory: doc
+        run: pnpm check:anchors
+
       - name: Built component references are complete and minimal
         working-directory: doc
         run: pnpm check:built-component-references

@@ -35,9 +35,10 @@
     "setup:doc-skill:claude": "bash scripts/setup-doc-skill.sh --target claude",
     "setup:doc-skill:codex": "bash scripts/setup-doc-skill.sh --target codex",
     "setup:doc-skill:both": "bash scripts/setup-doc-skill.sh --target both",
-    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm check:mermaid && pnpm build && pnpm check:images && pnpm check:built-component-references && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill",
+    "b4push": "pnpm check && pnpm test:components && pnpm check:footprint-previews && pnpm check:models && pnpm check:mermaid && pnpm build && pnpm check:images && pnpm check:anchors && pnpm check:built-component-references && pnpm check:components && pnpm scan:artifacts && pnpm scan:doc-skill",
     "check:links": "node scripts/check-links.js",
-    "check:images": "zudo-doc check images"
+    "check:images": "zudo-doc check images",
+    "check:anchors": "node scripts/check-links.js --strict-anchors"
   },
   "dependencies": {
     "@takazudo/zdtp": "0.8.2",

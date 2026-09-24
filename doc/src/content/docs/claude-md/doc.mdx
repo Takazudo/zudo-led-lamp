@@ -30,6 +30,7 @@ Documentation site built with [zudo-doc](https://github.com/zudolab/zudo-doc) �
 - `pnpm build` — regenerates public model previews and component docs, then static HTML export to `dist/`
 - `pnpm check` — TypeScript type checking (covers `component-docs/` too)
 - `pnpm check:images` — validate local image/media references after building
+- `pnpm check:anchors` — fail on invalid source and built HTML anchors after building
 - `pnpm check:links` — scaffold link diagnostics; strict flags are available via `--help`
 - `pnpm preview` — serve the built `dist/`
 - `pnpm generate:components` — project `.claude/skills/**` evidence into `src/content/docs/components/`
@@ -37,7 +38,7 @@ Documentation site built with [zudo-doc](https://github.com/zudolab/zudo-doc) �
 - `pnpm test:components` — the generator's own test suite
 - `pnpm generate:footprint-previews` / `pnpm check:footprint-previews` — regenerate with the pinned KiCad container / verify committed SVG previews without Docker
 - `pnpm generate:models` / `pnpm check:models` — copy the reviewed selected WRL files into public preview assets / verify their bytes
-- `pnpm b4push` — `check` + `test:components` + footprint/model checks + `build` + image/media validation + `check:components` + both artifact scans; it is the local validation gate, not a deploy command
+- `pnpm b4push` — `check` + `test:components` + footprint/model checks + `build` + image/media and anchor validation + `check:components` + both artifact scans; it is the local validation gate, not a deploy command
 
 ## Key Directories
 
@@ -108,7 +109,7 @@ Admonitions (above), tabbed content (`<Tabs>` / `<TabItem>`, `<CodeGroup>`), and
 
 ## Scaffold defaults and project extensions
 
-The site follows create-zudo-doc 5.26.5 defaults, including the stock theme pack.
+The site follows create-zudo-doc 5.27.0 defaults, including the stock theme pack.
 See `SCAFFOLD.md` for the feature inventory, retained extensions, and sync procedure.
 
 - **search** — package-owned full-text search and generated `search-index.json`
