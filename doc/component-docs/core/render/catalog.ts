@@ -34,6 +34,7 @@ import {
   space,
   strong,
   text,
+  table,
   type TableRow,
 } from "../mdx.ts";
 import { anchor } from "../ids.ts";
@@ -182,23 +183,18 @@ function entry(record: PublicRecord): RootContent[] {
   const ownerSkill = ownerSkillOf(record);
   const aliases = aliasTerms(record);
 
-  const details: readonly PhrasingContent[][] = [
-    field("Record ID", [code(identity.recordId)]),
-    field("Kind", kindValue(record)),
-    field("Manufacturer", [text(identity.manufacturer)]),
-    field("Function", [text(identity.function)]),
-    field("Orderable ID", [code(identity.lcsc)]),
-    field("Package", [code(identity.packageName)]),
-    field("Inventory line", [code(identity.lineId)]),
+  const details: readonly TableRow[] = [
+    metadataRow("Record ID", [code(identity.recordId)]),
+    metadataRow("Kind", kindValue(record)),
+    metadataRow("Manufacturer", [text(identity.manufacturer)]),
+    metadataRow("Function", [text(identity.function)]),
+    metadataRow("Orderable ID", [code(identity.lcsc)]),
+    metadataRow("Package", [code(identity.packageName)]),
+    metadataRow("Inventory line", [code(identity.lineId)]),
     // Several records are routed by LCSC code rather than part number, so the
     // alternate terms have to be ON the page for anyone to find them by search.
-    ...(aliases.length === 0 ? [] : [field("Also known as", termList(aliases))]),
-    ...(ownerSkill === null ? [] : [field("Owner skill", [code(ownerSkill)])]),
-    field("Placements", [text(placementSummary(identity.placements))]),
-    field("Fit", [text(fitLabel(identity.dnp))]),
-    field("Identity state", [text(identity.identityState)]),
-    field("Source state", [text(identity.sourceState)]),
-    field("Open coverage domains", [text(openDomainSummary(record.coverage))]),
+    ...(aliases.length === 0 ? [] : [metadataRow("Also known as", termList(aliases))]),
+    ...(ownerSkill === null ? [] : [metadataRow("Owner skill", [code(ownerSkill)])]),
   ];
 
   const agentResource = agentResourceDestination(record);
@@ -222,7 +218,16 @@ function entry(record: PublicRecord): RootContent[] {
     );
   }
 
-  return [heading(3, identity.mpn), bulletList(details), paragraph(links)];
+  return [
+    heading(3, identity.mpn),
+    table([literal("Field"), literal("Recorded value")], details),
+    paragraph(field("Placements", [text(placementSummary(identity.placements))])),
+    paragraph(field("Fit", [text(fitLabel(identity.dnp))])),
+    paragraph(field("Identity state", [text(identity.identityState)])),
+    paragraph(field("Source state", [text(identity.sourceState)])),
+    paragraph(field("Open coverage domains", [text(openDomainSummary(record.coverage))])),
+    paragraph(links),
+  ];
 }
 
 /**
@@ -268,6 +273,10 @@ function kindValue(record: PublicRecord): PhrasingContent[] {
  */
 function field(label: string, value: readonly PhrasingContent[]): PhrasingContent[] {
   return [strong(literal(`${label}:`)), space(), ...value];
+}
+
+function metadataRow(label: string, value: readonly PhrasingContent[]): TableRow {
+  return [[text(literal(label))], value];
 }
 
 /** Exact terms, comma-separated, each rendered as the identifier it is. */

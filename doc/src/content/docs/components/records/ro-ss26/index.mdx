@@ -17,22 +17,44 @@ This is a subordinate record. It is a component in its own right, with its own o
 
 ## Identity
 
-- **Record ID:** `rec-ro-ss26`
-- **Record kind:** subordinate
-- **Manufacturer part number:** `SS26`
-- **Manufacturer:** R+O
-- **Function:** 60 V Schottky catch diode
-- **LCSC ID:** `C7420363`
-- **Package:** `SMA_L4.3-W2.6-LS5.0-FD`
-- **Inventory line:** `line-c7420363`
-- **Also known as:** `AL8860 freewheel diode`
-- **Owner skill:** `component-al8860mp-13`
-- **Fit:** Fitted
-- **Identity state:** UNRESOLVED
-- **Source state:** SOURCE UNAVAILABLE
-- **Coverage:** 2 open of 2 published
+| Field                    | Recorded value            |
+| ------------------------ | ------------------------- |
+| Record ID                | `rec-ro-ss26`             |
+| Record kind              | subordinate               |
+| Manufacturer part number | `SS26`                    |
+| Manufacturer             | R+O                       |
+| Function                 | 60 V Schottky catch diode |
+| LCSC ID                  | `C7420363`                |
+| Package                  | `SMA_L4.3-W2.6-LS5.0-FD`  |
+| Inventory line           | `line-c7420363`           |
+| Also known as            | `AL8860 freewheel diode`  |
+| Owner skill              | `component-al8860mp-13`   |
+
+**Fit:** Fitted
+
+**Identity state:** UNRESOLVED
+
+**Source state:** SOURCE UNAVAILABLE
+
+**Coverage:** 2 open of 2 published
+
+## Documents and package
+
+<EvidenceAnchor id="component-references-heading" />
 
 <ComponentReferences descriptor="7b2276657273696f6e223a312c22646f63756d656e74223a7b226c6162656c223a2244617461736865657420504446222c227469746c65223a225353323220746872752053533232302053757266616365204d6f756e74205363686f74746b79204261727269657220526563746966696572222c22617574686f72697479223a224d414e5546414354555245525f4d4952524f52222c22617661696c6162696c697479223a22415641494c41424c45222c2275726c223a2268747470733a2f2f6461746173686565742e6c6373632e636f6d2f6461746173686565742f7064662f63623932633630643164346236656537666663303938383361363934613864652e7064663f70726f64756374436f64653d4337343230333633227d2c22666f6f747072696e74223a7b226e616d65223a22534d415f4c342e332d57322e362d4c53352e302d4644222c22617373657455726c223a222f6173736574732f636f6d706f6e656e742d70726576696577732f666f6f747072696e74732f534d415f4c342e332d57322e362d4c53352e302d46442e737667227d2c226d6f64656c44657363726970746f72223a2237623232373636353732373336393666366532323361333132633232373036313633366236313637363534393634323233613232353334643431356634633334326533333264353733323265333632643463353333353265333032643436343432323263323237303631363336623631363736353463363136323635366332323361323235333464343135663463333432653333326435373332326533363264346335333335326533303264343634343232326332323664366636343635366335353732366332323361323232663631373337333635373437333266363336663664373036663665363536653734326437303732363537363639363537373733326636643666363436353663373332663533346434313566346333343265333332643537333232653336326434633533333532653330326434363434326537373732366332323263323236663636363637333635373432323361376232323738323233613330326332323739323233613330326332323761323233613330376432633232373236663734363137343639366636653232336137623232373832323361333032633232373932323361333032633232376132323361333133383330376432633232373336333631366336353232336137623232373832323361333132633232373932323361333132633232376132323361333137643764227d" />
+
+**Selected document:** [Datasheet PDF](https://datasheet.lcsc.com/datasheet/pdf/cb92c60d1d4b6ee7ffc09883a694a8de.pdf?productCode=C7420363) — SS22 thru SS220 Surface Mount Schottky Barrier Rectifier
+
+**Selected source ID:** `src-ro-ss26-mirror`
+
+**Authority:** MANUFACTURER\_MIRROR
+
+**Availability:** AVAILABLE
+
+**Package footprint:** `SMA_L4.3-W2.6-LS5.0-FD`
+
+This geometry represents a shared footprint package and may not exactly match the manufacturer part.
 
 ## Placements
 
@@ -50,8 +72,7 @@ Coverage is stated one domain at a time and is never rolled up. A domain marked 
 
 <EvidenceAnchor id="cov-ss26-electrical" />
 
-- **Coverage ID:** `cov-ss26-electrical`
-- **Status:** OPEN
+**Coverage ID:** `cov-ss26-electrical` · **Status:** OPEN
 
 **Reason:** fact-ss26-polarity through fact-ss26-current-margin. Domain remains open because retained evidence is unavailable, lower-authority, or UNSOURCED. A direct primary-retrieval attempt on 2026-08-02 (src-ss26-primary-attempt) identified the exact R+O manufacturer (Zhuhai Hongjiacheng Technology Co., Ltd.) and reached its official site, but no SS26-specific datasheet could be located there (dynamic product listing, not independently indexed); no other vendor's SS26 datasheet may substitute for this exact part.
 
@@ -90,8 +111,7 @@ Coverage is stated one domain at a time and is never rolled up. A domain marked 
 
 <EvidenceAnchor id="cov-ss26-open" />
 
-- **Coverage ID:** `cov-ss26-open`
-- **Status:** OPEN
+**Coverage ID:** `cov-ss26-open` · **Status:** OPEN
 
 **Reason:** Mirror thermal data is typical and the generated source does not bound SW overshoot, diode duty cycle, or junction temperature.
 
@@ -107,71 +127,239 @@ Each fact keeps its value, its unit, the conditions it holds under, where it cam
 
 A never-exceed limit. Reaching it may damage the part; it is not an operating target and there is no margin implied by it.
 
-<EvidenceTable label="facts">
-  | Fact                                                                         | Value | Unit | Conditions                                       | Verdict   | Provenance | Evidence                                                                               |
-  | ---------------------------------------------------------------------------- | ----- | ---- | ------------------------------------------------ | --------- | ---------- | -------------------------------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-ss26-reverse-voltage" />`fact-ss26-reverse-voltage` | 60    | `V`  | repetitive peak reverse and DC blocking, TA=25 C | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRRM and VDC](#src-ro-ss26-mirror) |
-  | <EvidenceAnchor id="fact-ss26-rms-voltage" />`fact-ss26-rms-voltage`         | 42    | `V`  | maximum RMS voltage                              | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRMS](#src-ro-ss26-mirror)         |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-reverse-voltage" />
+
+  **Fact:** `fact-ss26-reverse-voltage`
+
+  **Value:** 60 · **Unit:** `V`
+
+  **Conditions:** repetitive peak reverse and DC blocking, TA=25 C
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRRM and VDC](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-rms-voltage" />
+
+  **Fact:** `fact-ss26-rms-voltage`
+
+  **Value:** 42 · **Unit:** `V`
+
+  **Conditions:** maximum RMS voltage
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Maximum Ratings table row SS26 VRMS](#src-ro-ss26-mirror)
+</EvidenceFact>
 
 ### GUARANTEED\_ELECTRICAL
 
 A parameter the manufacturer guarantees over the stated conditions, usually with minimum, typical and maximum values.
 
-<EvidenceTable label="facts">
-  | Fact                                                                         | Value | Unit | Conditions                                    | Verdict     | Provenance | Evidence                                                                                 |
-  | ---------------------------------------------------------------------------- | ----- | ---- | --------------------------------------------- | ----------- | ---------- | ---------------------------------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-ss26-forward-voltage" />`fact-ss26-forward-voltage` | 0.7   | `V`  | maximum instantaneous VF at IF=2.0 A, TA=25 C | UNSOURCED   | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row SS26 VF](#src-ro-ss26-mirror)  |
-  | <EvidenceAnchor id="fact-ss26-leakage-25c" />`fact-ss26-leakage-25c`         | 0.5   | `mA` | VR=60 V DC blocking, TA=25 C                  | UNSOURCED   | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row IR1 SS26](#src-ro-ss26-mirror) |
-  | <EvidenceAnchor id="fact-ss26-leakage-100c" />`fact-ss26-leakage-100c`       | 50    | `mA` | VR=60 V DC blocking, TA=100 C                 | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Electrical Characteristics table row IR2 SS26](#src-ro-ss26-mirror) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-forward-voltage" />
+
+  **Fact:** `fact-ss26-forward-voltage`
+
+  **Value:** 0.7 · **Unit:** `V`
+
+  **Conditions:** maximum instantaneous VF at IF=2.0 A, TA=25 C
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Electrical Characteristics table row SS26 VF](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-leakage-25c" />
+
+  **Fact:** `fact-ss26-leakage-25c`
+
+  **Value:** 0.5 · **Unit:** `mA`
+
+  **Conditions:** VR=60 V DC blocking, TA=25 C
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Electrical Characteristics table row IR1 SS26](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-leakage-100c" />
+
+  **Fact:** `fact-ss26-leakage-100c`
+
+  **Value:** 50 · **Unit:** `mA`
+
+  **Conditions:** VR=60 V DC blocking, TA=100 C
+
+  **Verdict:** NEEDS BENCH · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Electrical Characteristics table row IR2 SS26](#src-ro-ss26-mirror)
+</EvidenceFact>
 
 ### TRANSIENT
 
 Behaviour during a short event — startup, a switching edge, a fault or a surge.
 
-<EvidenceTable label="facts">
-  | Fact                                                                     | Value | Unit | Conditions                   | Verdict   | Provenance | Evidence                                                                               |
-  | ------------------------------------------------------------------------ | ----- | ---- | ---------------------------- | --------- | ---------- | -------------------------------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-ss26-surge-current" />`fact-ss26-surge-current` | 50    | `A`  | single 8.3 ms half-sine wave | UNSOURCED | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row IFSM and Figure 2](#src-ro-ss26-mirror) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-surge-current" />
+
+  **Fact:** `fact-ss26-surge-current`
+
+  **Value:** 50 · **Unit:** `A`
+
+  **Conditions:** single 8.3 ms half-sine wave
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Maximum Ratings table row IFSM and Figure 2](#src-ro-ss26-mirror)
+</EvidenceFact>
 
 ### THERMAL\_SOA
 
 Thermal and safe-operating-area behaviour: how much the part may dissipate, and under what mounting and ambient conditions.
 
-<EvidenceTable label="facts">
-  | Fact                                                                         | Value                                                              | Unit   | Conditions                                                    | Verdict     | Provenance | Evidence                                                                                                          |
-  | ---------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------ | ------------------------------------------------------------- | ----------- | ---------- | ----------------------------------------------------------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-ss26-average-current" />`fact-ss26-average-current` | 2                                                                  | `A`    | 60 Hz sinewave resistive load, lead-temperature curve applies | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table row IF(AV) and Figure 1 derating curve](#src-ro-ss26-mirror)           |
-  | <EvidenceAnchor id="fact-ss26-thermal" />`fact-ss26-thermal`                 | RthetaJA 80 C/W typical; RthetaJL 20 C/W typical; TJ -55 to +150 C | `NONE` | datasheet mounting conditions not fully specified             | NEEDS BENCH | UNVERIFIED | [src-ro-ss26-mirror: Maximum Ratings table rows thermal resistance and junction temperature](#src-ro-ss26-mirror) |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-average-current" />
+
+  **Fact:** `fact-ss26-average-current`
+
+  **Value:** 2 · **Unit:** `A`
+
+  **Conditions:** 60 Hz sinewave resistive load, lead-temperature curve applies
+
+  **Verdict:** NEEDS BENCH · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Maximum Ratings table row IF(AV) and Figure 1 derating curve](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-thermal" />
+
+  **Fact:** `fact-ss26-thermal`
+
+  **Value:** RthetaJA 80 C/W typical; RthetaJL 20 C/W typical; TJ -55 to +150 C · **Unit:** `NONE`
+
+  **Conditions:** datasheet mounting conditions not fully specified
+
+  **Verdict:** NEEDS BENCH · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Maximum Ratings table rows thermal resistance and junction temperature](#src-ro-ss26-mirror)
+</EvidenceFact>
 
 ### PROJECT\_STATE
 
 A value this project recorded about how the part is used here — a chosen operating point, a net assignment, or a derived figure. Not a manufacturer specification.
 
-<EvidenceTable label="facts">
-  | Fact                                                                       | Value                                                    | Unit   | Conditions                                                                                        | Verdict        | Provenance     | Evidence                                                                                                                     |
-  | -------------------------------------------------------------------------- | -------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------- | -------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-  | <EvidenceAnchor id="fact-ss26-manufacturer" />`fact-ss26-manufacturer`     | R+O                                                      | `NONE` | inventory brand claim for exact C7420363                                                          | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: title block and Maximum Ratings table row SS26](#src-ro-ss26-mirror)                                    |
-  | <EvidenceAnchor id="fact-ss26-polarity" />`fact-ss26-polarity`             | cathode band denotes cathode; opposite terminal is anode | `NONE` | SMA package                                                                                       | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: Mechanical Data row Polarity and function Figure](#src-ro-ss26-mirror)                                  |
-  | <EvidenceAnchor id="fact-ss26-package" />`fact-ss26-package`               | SMA DO-214AC, cathode band orientation                   | `NONE` | surface-mount package                                                                             | UNSOURCED      | UNVERIFIED     | [src-ro-ss26-mirror: Package Outline Dimensions table and Figure suggested pad layout](#src-ro-ss26-mirror)                  |
-  | <EvidenceAnchor id="fact-ss26-project-nets" />`fact-ss26-project-nets`     | 15                                                       | `V`    | nominal V15 net label; D11.1 anode=LED\_N and D11.2 cathode=V15; switching overshoot not bounded  | NOT APPLICABLE | PROJECT-CHOICE | [src-ss26-generator: Header polarity statement, COMPONENTS table row D11, and NETS rows LED\_N and V15](#src-ss26-generator) |
-  | <EvidenceAnchor id="fact-ss26-voltage-margin" />`fact-ss26-voltage-margin` | 45                                                       | `V`    | mirror 60 V rating minus nominal V15 only; switch overshoot and source transient unresolved       | NEEDS BENCH    | CALCULATED     | [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-reverse-voltage minus fact-ss26-project-nets             |
-  | <EvidenceAnchor id="fact-ss26-current-margin" />`fact-ss26-current-margin` | 1.3696969696969696                                       | `A`    | mirror 2 A average rating minus calculated AL8860 peak; thermal waveform applicability unresolved | NEEDS BENCH    | CALCULATED     | [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-average-current minus fact-al8860-peak-current           |
-</EvidenceTable>
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-manufacturer" />
+
+  **Fact:** `fact-ss26-manufacturer`
+
+  **Value:** R+O · **Unit:** `NONE`
+
+  **Conditions:** inventory brand claim for exact C7420363
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: title block and Maximum Ratings table row SS26](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-polarity" />
+
+  **Fact:** `fact-ss26-polarity`
+
+  **Value:** cathode band denotes cathode; opposite terminal is anode · **Unit:** `NONE`
+
+  **Conditions:** SMA package
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Mechanical Data row Polarity and function Figure](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-package" />
+
+  **Fact:** `fact-ss26-package`
+
+  **Value:** SMA DO-214AC, cathode band orientation · **Unit:** `NONE`
+
+  **Conditions:** surface-mount package
+
+  **Verdict:** UNSOURCED · **Provenance:** UNVERIFIED
+
+  **Evidence:** [src-ro-ss26-mirror: Package Outline Dimensions table and Figure suggested pad layout](#src-ro-ss26-mirror)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-project-nets" />
+
+  **Fact:** `fact-ss26-project-nets`
+
+  **Value:** 15 · **Unit:** `V`
+
+  **Conditions:** nominal V15 net label; D11.1 anode=LED\_N and D11.2 cathode=V15; switching overshoot not bounded
+
+  **Verdict:** NOT APPLICABLE · **Provenance:** PROJECT-CHOICE
+
+  **Evidence:** [src-ss26-generator: Header polarity statement, COMPONENTS table row D11, and NETS rows LED\_N and V15](#src-ss26-generator)
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-voltage-margin" />
+
+  **Fact:** `fact-ss26-voltage-margin`
+
+  **Value:** 45 · **Unit:** `V`
+
+  **Conditions:** mirror 60 V rating minus nominal V15 only; switch overshoot and source transient unresolved
+
+  **Verdict:** NEEDS BENCH · **Provenance:** CALCULATED
+
+  **Evidence:** [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-reverse-voltage minus fact-ss26-project-nets
+</EvidenceFact>
+
+<EvidenceFact>
+  <EvidenceAnchor id="fact-ss26-current-margin" />
+
+  **Fact:** `fact-ss26-current-margin`
+
+  **Value:** 1.3696969696969696 · **Unit:** `A`
+
+  **Conditions:** mirror 2 A average rating minus calculated AL8860 peak; thermal waveform applicability unresolved
+
+  **Verdict:** NEEDS BENCH · **Provenance:** CALCULATED
+
+  **Evidence:** [`src-ro-ss26-mirror`](#src-ro-ss26-mirror) — CALCULATED: fact-ss26-average-current minus fact-al8860-peak-current
+</EvidenceFact>
 
 ## Calculation dependencies
 
 These values were derived from other recorded facts rather than read from a document. The expression and every input are published so the number can be recomputed instead of trusted. A derived value is never stronger than the weakest fact it depends on.
 
-<EvidenceTable label="calculation-dependencies">
-  | Fact                                                    | Expression                                             | Depends on                                                                                                                                                             |
-  | ------------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [`fact-ss26-voltage-margin`](#fact-ss26-voltage-margin) | `fact_ss26_reverse_voltage - fact_ss26_project_nets`   | [`fact-ss26-reverse-voltage`](#fact-ss26-reverse-voltage), [`fact-ss26-project-nets`](#fact-ss26-project-nets)                                                         |
-  | [`fact-ss26-current-margin`](#fact-ss26-current-margin) | `fact_ss26_average_current - fact_al8860_peak_current` | [`fact-ss26-average-current`](#fact-ss26-average-current), [`fact-al8860-peak-current`](/docs/components/records/al8860mp-13/#fact-al8860-peak-current) on AL8860MP-13 |
-</EvidenceTable>
+**Fact:** [`fact-ss26-voltage-margin`](#fact-ss26-voltage-margin)
+
+**Expression:** `fact_ss26_reverse_voltage - fact_ss26_project_nets`
+
+**Depends on:**
+
+- [`fact-ss26-reverse-voltage`](#fact-ss26-reverse-voltage)
+- [`fact-ss26-project-nets`](#fact-ss26-project-nets)
+
+**Fact:** [`fact-ss26-current-margin`](#fact-ss26-current-margin)
+
+**Expression:** `fact_ss26_average_current - fact_al8860_peak_current`
+
+**Depends on:**
+
+- [`fact-ss26-average-current`](#fact-ss26-average-current)
+- [`fact-al8860-peak-current`](/docs/components/records/al8860mp-13/#fact-al8860-peak-current) on AL8860MP-13
 
 ## Pin maps
 
@@ -246,46 +434,61 @@ Every document cited above, with its identification, when it was retrieved, and 
 
 <EvidenceAnchor id="src-ro-ss26-mirror" />
 
-- **Source ID:** `src-ro-ss26-mirror`
-- **Document number:** SS22-SS220
-- **Revision:** header Rev.1.0; footer Rev.2.0
-- **Document date:** not stated
-- **Retrieved:** 2026-08-02
-- **Authority:** MANUFACTURER\_MIRROR
-- **Locator:** Maximum Ratings table SS26 column; Electrical Characteristics table SS26 column; Figure 1-4 curves; package table
-- **Printed page:** 1 of 3
-- **Availability:** AVAILABLE
-- **Document URL:** [https://datasheet.lcsc.com/datasheet/pdf/cb92c60d1d4b6ee7ffc09883a694a8de.pdf?productCode=C7420363](https://datasheet.lcsc.com/datasheet/pdf/cb92c60d1d4b6ee7ffc09883a694a8de.pdf?productCode=C7420363)
+**Source ID:** `src-ro-ss26-mirror` · **Authority:** MANUFACTURER\_MIRROR
+
+| Field           | Recorded value                 |
+| --------------- | ------------------------------ |
+| Document number | SS22-SS220                     |
+| Revision        | header Rev.1.0; footer Rev.2.0 |
+| Document date   | not stated                     |
+| Retrieved       | 2026-08-02                     |
+| Printed page    | 1 of 3                         |
+
+**Locator:** Maximum Ratings table SS26 column; Electrical Characteristics table SS26 column; Figure 1-4 curves; package table
+
+**Availability:** AVAILABLE
+
+**Document URL:** [https://datasheet.lcsc.com/datasheet/pdf/cb92c60d1d4b6ee7ffc09883a694a8de.pdf?productCode=C7420363](https://datasheet.lcsc.com/datasheet/pdf/cb92c60d1d4b6ee7ffc09883a694a8de.pdf?productCode=C7420363)
 
 ### Board L generated schematic specification
 
 <EvidenceAnchor id="src-ss26-generator" />
 
-- **Source ID:** `src-ss26-generator`
-- **Document number:** scripts/schgen/board\_l\_spec.py
-- **Revision:** 410bc1a342286dd6c205d6dcec0f248b8a963987
-- **Document date:** 2026-08-02
-- **Retrieved:** 2026-08-02
-- **Authority:** PROJECT\_GENERATOR
-- **Locator:** Header polarity statement, COMPONENTS table row D11, and NETS rows V15 and LED\_N
-- **Printed page:** source file
-- **Availability:** AVAILABLE
-- **Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py)
+**Source ID:** `src-ss26-generator` · **Authority:** PROJECT\_GENERATOR
+
+| Field           | Recorded value                           |
+| --------------- | ---------------------------------------- |
+| Document number | scripts/schgen/board\_l\_spec.py         |
+| Revision        | 410bc1a342286dd6c205d6dcec0f248b8a963987 |
+| Document date   | 2026-08-02                               |
+| Retrieved       | 2026-08-02                               |
+| Printed page    | source file                              |
+
+**Locator:** Header polarity statement, COMPONENTS table row D11, and NETS rows V15 and LED\_N
+
+**Availability:** AVAILABLE
+
+**Document URL:** [https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board\_l\_spec.py](https://raw.githubusercontent.com/Takazudo/zudo-led-lamp/410bc1a342286dd6c205d6dcec0f248b8a963987/scripts/schgen/board_l_spec.py)
 
 ### SS26 Schottky Barrier Rectifier
 
 <EvidenceAnchor id="src-ss26-primary-attempt" />
 
-- **Source ID:** `src-ss26-primary-attempt`
-- **Document number:** not stated
-- **Revision:** not stated
-- **Document date:** not stated
-- **Retrieved:** 2026-08-02
-- **Authority:** MANUFACTURER\_PRIMARY
-- **Locator:** Site title block and Schottky-diode product category page, attempted directly from the manufacturer's own site for issue #45 primary-only trust recovery
-- **Printed page:** 1
-- **Availability:** SOURCE UNAVAILABLE
-- **Document URL:** [http://www.ichjc.com/productDetail.html?type1=%E4%BA%8C%E6%9E%81%E7%AE%A1\&type2=%E8%82%96%E7%89%B9%E5%9F%BA%E4%BA%8C%E6%9E%81%E7%AE%A1](http://www.ichjc.com/productDetail.html?type1=%E4%BA%8C%E6%9E%81%E7%AE%A1\&type2=%E8%82%96%E7%89%B9%E5%9F%BA%E4%BA%8C%E6%9E%81%E7%AE%A1)
+**Source ID:** `src-ss26-primary-attempt` · **Authority:** MANUFACTURER\_PRIMARY
+
+| Field           | Recorded value |
+| --------------- | -------------- |
+| Document number | not stated     |
+| Revision        | not stated     |
+| Document date   | not stated     |
+| Retrieved       | 2026-08-02     |
+| Printed page    | 1              |
+
+**Locator:** Site title block and Schottky-diode product category page, attempted directly from the manufacturer's own site for issue #45 primary-only trust recovery
+
+**Availability:** SOURCE UNAVAILABLE
+
+**Document URL:** [http://www.ichjc.com/productDetail.html?type1=%E4%BA%8C%E6%9E%81%E7%AE%A1\&type2=%E8%82%96%E7%89%B9%E5%9F%BA%E4%BA%8C%E6%9E%81%E7%AE%A1](http://www.ichjc.com/productDetail.html?type1=%E4%BA%8C%E6%9E%81%E7%AE%A1\&type2=%E8%82%96%E7%89%B9%E5%9F%BA%E4%BA%8C%E6%9E%81%E7%AE%A1)
 
 ## Legend
 
