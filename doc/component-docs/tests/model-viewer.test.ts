@@ -15,7 +15,7 @@ import {
   MODEL_ASSET_BASE,
   type ModelViewerDescriptor,
 } from "../core/model-descriptor.ts";
-import { applyModelTransform, createOnDemandInvalidator } from "../../src/component-model-viewer/viewer-runtime.ts";
+import { applyModelTransform, createOnDemandInvalidator, modelFitDistance } from "../../src/component-model-viewer/viewer-runtime.ts";
 import { setViewerState } from "../../src/component-model-viewer/viewer-state.ts";
 
 const descriptor: ModelViewerDescriptor = {
@@ -83,6 +83,15 @@ describe("model asset publication", () => {
 });
 
 describe("viewer lifecycle helpers", () => {
+  it("fits the sphere against horizontal FOV on portrait viewports", () => {
+    const wide = modelFitDistance(1, 35, 16 / 9);
+    const square = modelFitDistance(1, 35, 1);
+    const portrait = modelFitDistance(1, 35, 390 / 844);
+    assert.ok(portrait > square);
+    assert.equal(wide, square);
+    const horizontalHalfFov = Math.atan(Math.tan(35 * Math.PI / 360) * 390 / 844);
+    assert.ok(Math.sin(horizontalHalfFov) * portrait >= 1.25 - 1e-12);
+  });
   it("applies offset, degree rotations, and scale without losing non-zero axes", () => {
     const object = new Object3D();
     applyModelTransform(object, descriptor.offset, descriptor.rotation, descriptor.scale);
