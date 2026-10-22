@@ -1,0 +1,1 @@
+(fp_lib_table (version 7) (lib (name "husb-candidate") (type "KiCad") (uri "${KIPRJMOD}/husb-candidate.pretty") (options "") (descr "Isolated reviewed source candidates")) (lib (name "zudo-led-lamp") (type "KiCad") (uri "${KIPRJMOD}/inherited.pretty") (options "") (descr "Exact original copies; geometry not requalified")))

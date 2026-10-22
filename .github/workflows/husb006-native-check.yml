@@ -1,0 +1,49 @@
+name: HUSB006 isolated native verification
+on:
+  push:
+    branches: [codex/husb006-native-verification]
+    paths: ['verification/husb006/**', '.github/workflows/husb006-native-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: husb006-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/codex/husb006-native-verification'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /verification/husb006/
+            /.github/workflows/husb006-native-check.yml
+      - name: Initial failure receipt
+        timeout-minutes: 1
+        run: |
+          mkdir upload-safe
+          printf '%s\n' '{"status":"SETUP_INCOMPLETE","native_run":false}' > upload-safe/host.json
+      - name: Source tests and publication manifest
+        timeout-minutes: 2
+        run: |
+          python3 -B -c "import sys; sys.path.insert(0,'verification/husb006'); from run_hosted import manifest_check; manifest_check()"
+          python3 -B -m unittest discover -s verification/husb006 -p test_hosted.py -v
+          cd verification/husb006/source/candidates/husb238/u1-integration
+          python3 -B -m unittest test_integration test_native_comparator -v
+      - name: Serial bounded native verification
+        timeout-minutes: 16
+        run: python3 -B verification/husb006/run_hosted.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        timeout-minutes: 2
+        with:
+          name: husb006-native-${{ github.sha }}-${{ github.run_attempt }}
+          path: upload-safe/
+          retention-days: 7
+          if-no-files-found: error

@@ -1,0 +1,15 @@
+{
+  "shared-p-u1-candidate.kicad_sch": "78e1e7bf2fc7cf39c79c34f2da4a6dba0417e249f7d5105a52d8901ed7a01a5f",
+  "fp-lib-table": "49f80530b912af4ece4eff916980daad8cb80822568e98a8474364e0712c1247",
+  "sym-lib-table": "ba5cf2229209d0142658c2c4a6cc7d23f37f5ef5a9a057d78455a5005348bb00",
+  "land-outline-overlay.svg": "63c3df4f867683cb2c790155b04e9d9d31a03239edcc050fd055744e33477204",
+  "husb-candidate.pretty/HUSB238_DFN10_3x3_EP1.7x2.4_PASTE_PROPOSAL.kicad_mod": "5ebb99cc45a255cd8375058d33374d4d516089266477ceedae80a459499d7a4d",
+  "husb-candidate.pretty/RBLEED_1210W2F2201T5E.kicad_mod": "97fd19fb6df15226c514d913a56a02849870b1ec18db64475dda6dbb834dc866",
+  "build.py": "f3342447c6bcc819342d17affe2c2b57a7a435c1e5823cb82fea6a2cead0578a",
+  "husb-candidate.pretty/TPS259474_RPW0010A_TI_EXAMPLE.kicad_mod": "34829b3e76be96fd64d32183960f256fd5003061c82686430a26e641e0e5cbbf",
+  "husb-candidate.pretty/SMMBT3904LT1G_CASE318_ONSEMI_EXAMPLE.kicad_mod": "7a5decb28e1bf2630668ee494c68cfc43ae291d65068de1a1117be87346f6063",
+  "inherited.pretty/C0603.kicad_mod": "7906b32d683ca5f0fe3ec26dbae726a88e1ba98c1ceac52ba0f2c7f69534dbb4",
+  "inherited.pretty/HDR-TH_6P-P2.54-V-M.kicad_mod": "dd769a497fa033a6e22bb281aeee6475cd71b0aad12203ff448172cce7d7511e",
+  "inherited.pretty/R0603.kicad_mod": "3eae896b8822c03975f32ad2ef62f7d2ec9842ed97a85d8476e03dcc16f638f1",
+  "inherited.pretty/USB-C-SMD_10P-P1.00-L6.8-W8.9.kicad_mod": "80b78fc9ecf2042ecc1d9193ed8b92de0f5565af213af7943c18c00c6939425d"
+}

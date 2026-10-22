@@ -1,0 +1,228 @@
+{
+  "status": "UNQUALIFIED_PROVISIONAL_SOURCE",
+  "components": {
+    "U1": {
+      "symbol": "HUSB238_006DD",
+      "value": "HUSB238_006DD - DRAFT LAND / NOT RELEASED",
+      "jlc_id": "C55013903",
+      "footprint": "husb-candidate:HUSB238_DFN10_3x3_EP1.7x2.4_PASTE_PROPOSAL"
+    },
+    "C1": {
+      "symbol": "CL10A105KB8NNNC",
+      "value": "1uF/50V - EFFECTIVE C OPEN",
+      "jlc_id": "C15849",
+      "footprint": "zudo-led-lamp:C0603"
+    },
+    "RVSET": {
+      "symbol": "R_CANDIDATE",
+      "value": "14k 1% / 0603WAF1402T5E",
+      "jlc_id": "C22803",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RISET": {
+      "symbol": "R_CANDIDATE",
+      "value": "22.6k 1% / 0603WAF2262T5E",
+      "jlc_id": "C22959",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "JOUT1": {
+      "symbol": "PZ254V-11-06P",
+      "value": "SHARED OUTPUT - UNQUALIFIED",
+      "jlc_id": "C492405",
+      "footprint": "zudo-led-lamp:HDR-TH_6P-P2.54-V-M"
+    },
+    "U2": {
+      "symbol": "TPS259474LRPWR",
+      "value": "TPS259474LRPWR - TI LAND CANDIDATE / NOT RELEASED",
+      "jlc_id": "C2864845",
+      "footprint": "husb-candidate:TPS259474_RPW0010A_TI_EXAMPLE"
+    },
+    "QINH": {
+      "symbol": "SMMBT3904LT1G",
+      "value": "SMMBT3904LT1G / onsemi",
+      "jlc_id": "C84555",
+      "footprint": "husb-candidate:SMMBT3904LT1G_CASE318_ONSEMI_EXAMPLE"
+    },
+    "RG": {
+      "symbol": "R_CANDIDATE",
+      "value": "100000ohm 1% >=0.1W / RT0603BRD07100KL",
+      "jlc_id": "C122538",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RB": {
+      "symbol": "R_CANDIDATE",
+      "value": "100000ohm 1% >=0.1W / RT0603BRD07100KL",
+      "jlc_id": "C122538",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RBE": {
+      "symbol": "R_CANDIDATE",
+      "value": "1000000ohm 1% >=0.1W / RC0603FR-071ML",
+      "jlc_id": "C105578",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RUVH": {
+      "symbol": "R_CANDIDATE",
+      "value": "97600ohm 0.1% >=0.1W / RT0603BRD0797K6L",
+      "jlc_id": "C861608",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RUVL": {
+      "symbol": "R_CANDIDATE",
+      "value": "10000ohm 0.1% >=0.1W / RT0603BRD0710KL",
+      "jlc_id": "C95204",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "ROVH": {
+      "symbol": "R_CANDIDATE",
+      "value": "133000ohm 0.1% >=0.1W / RT0603BRD07133KL",
+      "jlc_id": "C861111",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "ROVL": {
+      "symbol": "R_CANDIDATE",
+      "value": "10000ohm 0.1% >=0.1W / RT0603BRD0710KL",
+      "jlc_id": "C95204",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RILM": {
+      "symbol": "R_CANDIDATE",
+      "value": "1270ohm 1% >=0.1W / RC0603FR-071K27L",
+      "jlc_id": "C245930",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RSLEW": {
+      "symbol": "R_CANDIDATE",
+      "value": "100ohm 1% >=0.1W / 0603WAF1000T5E",
+      "jlc_id": "C22775",
+      "footprint": "zudo-led-lamp:R0603"
+    },
+    "RBLEED": {
+      "symbol": "R_CANDIDATE",
+      "value": "2200ohm 1% >=0.5W / 1210W2F2201T5E",
+      "jlc_id": "C422361",
+      "footprint": "husb-candidate:RBLEED_1210W2F2201T5E"
+    },
+    "CSLEW": {
+      "symbol": "C_CANDIDATE",
+      "value": "22nF 50V 5% C0G / GRM21B5C1H223JA01L - PROVISIONAL",
+      "jlc_id": "C77069",
+      "footprint": ""
+    },
+    "COUT": {
+      "symbol": "CL10A105KB8NNNC",
+      "value": "1uF/50V - EFFECTIVE C OPEN",
+      "jlc_id": "C15849",
+      "footprint": "zudo-led-lamp:C0603"
+    },
+    "J1": {
+      "symbol": "TYPE-C-31-M-17",
+      "value": "TYPE-C-31-M-17",
+      "jlc_id": "C283540",
+      "footprint": "zudo-led-lamp:USB-C-SMD_10P-P1.00-L6.8-W8.9"
+    }
+  },
+  "nets": {
+    "RAW_USB_VBUS": [
+      "U1.1",
+      "C1.1",
+      "U2.5",
+      "RG.1",
+      "RUVH.1",
+      "ROVH.1",
+      "J1.2",
+      "J1.5"
+    ],
+    "USB_D_PLUS_PORT_UNMAPPED": [
+      "U1.2"
+    ],
+    "USB_D_MINUS_PORT_UNMAPPED": [
+      "U1.3"
+    ],
+    "VSET": [
+      "U1.8",
+      "RVSET.1"
+    ],
+    "ISET": [
+      "U1.9",
+      "RISET.1"
+    ],
+    "GND": [
+      "U1.11",
+      "C1.2",
+      "RVSET.2",
+      "RISET.2",
+      "JOUT1.5",
+      "JOUT1.6",
+      "U2.4",
+      "U2.8",
+      "QINH.2",
+      "RBE.2",
+      "RUVL.2",
+      "ROVL.2",
+      "RILM.2",
+      "CSLEW.2",
+      "COUT.2",
+      "RBLEED.2",
+      "J1.0",
+      "J1.1",
+      "J1.6"
+    ],
+    "CONTRACT_GATE_N": [
+      "U1.10",
+      "RG.2",
+      "RB.1"
+    ],
+    "INHIBIT_BASE": [
+      "RB.2",
+      "RBE.1",
+      "QINH.1"
+    ],
+    "EN_UVLO": [
+      "U2.1",
+      "QINH.3",
+      "RUVH.2",
+      "RUVL.1"
+    ],
+    "OVLO": [
+      "U2.2",
+      "ROVH.2",
+      "ROVL.1"
+    ],
+    "ILM": [
+      "U2.9",
+      "RILM.1"
+    ],
+    "DVDT": [
+      "U2.7",
+      "RSLEW.1"
+    ],
+    "DVDT_CAP": [
+      "RSLEW.2",
+      "CSLEW.1"
+    ],
+    "SWITCHED_OUTPUT": [
+      "U2.6",
+      "COUT.1",
+      "RBLEED.1",
+      "JOUT1.1",
+      "JOUT1.2"
+    ],
+    "USB_CC1": [
+      "U1.4",
+      "J1.3"
+    ],
+    "USB_CC2": [
+      "U1.5",
+      "J1.4"
+    ]
+  },
+  "no_connect": [
+    "U1.6",
+    "U1.7",
+    "JOUT1.3",
+    "JOUT1.4",
+    "U2.3",
+    "U2.10"
+  ]
+}
