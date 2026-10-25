@@ -12,3 +12,7 @@ Docs: https://zudo-led-lamp.takazudomodular.com/
 - `boards/swd-adapter/` — KiCad project: ST-LINK/V2 20-pin to Board L 1x5 SWD adapter
 - `enclosure/` — parametric starburst enclosure generator and [print/assembly guide](enclosure/README.md)
 - `symbols/`, `footprints/` — shared KiCad symbol/footprint/3D libraries for all projects (see `footprints/CLAUDE.md`)
+
+## Component selection
+
+Read the [draft selection and socket comparison guidance](doc/src/content/docs/architecture/component-selection-guidelines.mdx) before proposing parts. Exact evidence ownership remains in the component-spec-audit inventory.
