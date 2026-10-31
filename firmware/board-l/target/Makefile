@@ -10,10 +10,12 @@ V72 := ../src
 ARCH := -mcpu=cortex-m0plus -mthumb
 CFLAGS := $(ARCH) -std=c11 -Os -g -Wall -Wextra -Werror -pedantic -ffreestanding \
           -ffunction-sections -fdata-sections
-LDFLAGS := $(ARCH) -nostdlib -nostartfiles -T stm32g031f8_flash.ld -Wl,--gc-sections \
+LDFLAGS := $(ARCH) --specs=nano.specs --specs=nosys.specs -nostartfiles -T stm32g031f8_flash.ld -Wl,--gc-sections \
            -Wl,-Map=$(BUILD)/board-l-skeleton.map -Wl,--print-memory-usage
-SRCS := startup_stm32g031.c main.c clock.c board_ctrl.c
-OBJS := $(SRCS:%.c=$(BUILD)/%.o)
+SRCS := startup_stm32g031.c main.c clock.c board_ctrl.c lamp_target.c
+# V72 units linked into the image (unchanged sources).
+V72_LINKED := lamp_app.c lamp_control.c noise_stage.c thermal_gain.c normalized_transfer.c ctrl_timer_map.c
+OBJS := $(SRCS:%.c=$(BUILD)/%.o) $(V72_LINKED:%.c=$(BUILD)/v72/%.o)
 
 # Portable V72 units: compiled for the target to check they build. Not linked.
 V72_SRCS := $(filter-out $(V72)/test_input_app.c,$(wildcard $(V72)/*.c))
@@ -26,7 +28,7 @@ HOST_TEST_SRCS := test_input_app.c input_composition.c acquisition_registers.c \
   ctrl_timer_map.c adc_channel_config.c sample_adapter.c input_conversion.c thermal_gain.c \
   board_binding.c adc_preparation.c lamp_app.c lamp_control.c noise_stage.c normalized_transfer.c
 
-.PHONY: all toolchain-check v72-objects host-test verify-regs clean
+.PHONY: all toolchain-check v72-objects host-test target-host-test verify-regs clean
 all: toolchain-check $(BUILD)/board-l-skeleton.elf
 
 toolchain-check:
@@ -34,10 +36,10 @@ toolchain-check:
 	  echo "arm-none-eabi-gcc $$v != pinned $(TOOLCHAIN_VERSION) (set ALLOW_TOOLCHAIN=1 to override)"; exit 1; fi
 
 $(BUILD)/%.o: %.c | $(BUILD)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(V72) -c $< -o $@
 
-$(BUILD)/board-l-skeleton.elf: $(OBJS) stm32g031f8_flash.ld
-	$(CC) $(LDFLAGS) $(OBJS) -lgcc -o $@
+$(BUILD)/board-l-skeleton.elf: $(OBJS) stm32g031f8_flash.ld | $(BUILD)/v72
+	$(CC) $(LDFLAGS) $(OBJS) -Wl,--start-group -lc_nano -lgcc -Wl,--end-group -o $@
 	$(SIZE) $@
 
 v72-objects: toolchain-check $(V72_OBJS)
@@ -48,6 +50,12 @@ $(BUILD)/v72/%.o: $(V72)/%.c | $(BUILD)/v72
 host-test: | $(BUILD)
 	cd $(V72) && cc -std=c11 -O0 -g -Wall -Wextra -Werror -pedantic -I . $(HOST_TEST_SRCS) -o $(CURDIR)/$(BUILD)/host-test
 	$(BUILD)/host-test
+
+# Host tests of the off-by-default lamp_app <-> lamp_target wiring (fake CTRL port).
+TARGET_TEST_SRCS := test/test_lamp_target.c lamp_target.c $(V72_LINKED:%=$(V72)/%)
+target-host-test: | $(BUILD)
+	cc -std=c11 -O0 -g -Wall -Wextra -Werror -pedantic -I . -I $(V72) $(TARGET_TEST_SRCS) -o $(BUILD)/target-host-test
+	$(BUILD)/target-host-test
 
 # Cross-check stm32g031_regs.h against ST/ARM headers fetched outside the repo.
 verify-regs:

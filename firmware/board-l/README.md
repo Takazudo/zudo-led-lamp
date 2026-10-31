@@ -36,8 +36,10 @@ permission.
   All 33 non-test units also cross-compile for Cortex-M0+ (`make -C target v72-objects`).
 
 A minimal target skeleton is in [`target/`](target/README.md): vector table, linker script,
-clock, safe CTRL init order, `main` and a Makefile. It builds but has never been flashed or
-run, and it keeps the lamp OFF.
+clock, safe CTRL init order, `main` and a Makefile. Since phase 4, `main` runs the V72
+`lamp_app` through the off-by-default adapter `target/lamp_target.c`, with host tests. No
+sample source exists yet, so it keeps the lamp OFF. It builds but has never been flashed or
+run.
 
 ## Missing for a target build
 
