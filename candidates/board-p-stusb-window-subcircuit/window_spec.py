@@ -9,7 +9,7 @@ the HUSB238 GATE is replaced by the STUSB4500 VBUS_EN_SNK open drain, RMH2 is 18
 # ref: (MPN, value, LCSC, role). LCSC codes are the V196 BOM-TRIAL values unless noted.
 COMPONENTS = {
     'U2':    ('TPS259474LRPWR', 'eFuse, latch-off', 'C2864845', 'sink switch with UVLO/OVLO/ILM'),
-    'UMON':  ('TPS3701DDCR', 'window monitor', 'C132027', 'INA undervoltage reject (INB unused)'),
+    'UMON':  ('TPS3701DDCT', 'window monitor', 'C132027', 'INA undervoltage reject (INB unused)'),
     'QINH':  ('SMMBT3904LT1G', 'NPN', 'C84555', 'holds EN low while VBUS_EN_SNK is released'),
     'DIN':   ('SMAJ20A', 'TVS 20 V', 'C571370', 'input TVS on RAW_VBUS (V196 open item)'),
     'CMON':  ('CC0603KRX7R9BB104', '100nF/50V', 'C14663', 'UMON VDD decoupling'),

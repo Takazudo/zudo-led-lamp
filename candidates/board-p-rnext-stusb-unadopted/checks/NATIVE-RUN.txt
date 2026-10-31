@@ -1,0 +1,7 @@
+kicad-cli 10.0.6 image kicad/kicad@sha256:18693567392b80da435f9fa952ce3a3e534c66eb5a6033f5b9c80aa3b19dd3ec, serialized with flock /tmp/kicad-native.lock
+sch erc --severity-all --exit-code-violations: exit 5 (0 errors; 54 footprint_link_issues + 13 pin_to_pin warnings)
+sch export netlist: exit 0
+verify_netlist: PASS: 53 nets, 203 nodes (36 expected nets + 17 unconnected)
+input sha256:
+f0ffa9c2cbbc20a57137050d673f25e81ffac38ad6695716bdf034c0315609c0  candidates/board-p-rnext-stusb-unadopted/board-p-rnext.kicad_sch
+de28953f87d30a39a07b32a57cefef9a2dc3321502226e72e2d1025a1de11acc  candidates/board-p-rnext-stusb-unadopted/libraries/rnext.kicad_sym

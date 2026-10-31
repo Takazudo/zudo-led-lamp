@@ -1,6 +1,6 @@
 # LED Board P r-next voltage window: standalone sub-circuit (UNADOPTED)
 
-**State:** UNADOPTED desk source. No schematic sheet, PCB, simulation or measurement exists.
+**State:** UNADOPTED desk source. **Integrated in [`../board-p-rnext-stusb-unadopted/`](../board-p-rnext-stusb-unadopted/README.md) without QINH/RG/RB/RBE and without the SMAJ20A** (see that README: Q1 is the contract gate there, an RG pull-up on the VBEN node would bias Q1's gate, and input surge belongs to the common front end). No schematic sheet, PCB, simulation or measurement exists.
 It is not validated and must not feed any fabrication output.
 It waits for the PD worker's common STUSB4500 block (`/mnt/project-files/manager/common-controller-block.md`, not yet published). Once that exists, it becomes one sheet of the LED Board P r-next candidate.
 
