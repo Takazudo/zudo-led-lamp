@@ -6911,13 +6911,13 @@
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Value" "PogoPad_1x8_Debug"
+		(property "Value" "TestPad_2x4_Debug"
 			(at 317.5 195.58 0)
 			(effects
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-pd:PogoPad_1x08_P2.54mm"
+		(property "Footprint" "rnext-mfr:TestPadArray_2x4_P1.5_D1.0_J3"
 			(at 317.5 190.5 0)
 			(effects
 				(font (size 1.27 1.27))

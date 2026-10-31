@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/tmp/w/candidates/board-p-rnext-stusb-unadopted/board-p-rnext.kicad_sch")
-		(date "2026-10-31T17:15:25")
+		(date "2026-10-31T17:36:42")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -1095,11 +1095,11 @@
 		)
 		(comp
 			(ref "J3")
-			(value "PogoPad_1x8_Debug")
-			(footprint "zudo-pd:PogoPad_1x08_P2.54mm")
+			(value "TestPad_2x4_Debug")
+			(footprint "rnext-mfr:TestPadArray_2x4_P1.5_D1.0_J3")
 			(fields
 				(field
-					(name "Footprint") "zudo-pd:PogoPad_1x08_P2.54mm")
+					(name "Footprint") "rnext-mfr:TestPadArray_2x4_P1.5_D1.0_J3")
 				(field
 					(name "Datasheet")
 				)

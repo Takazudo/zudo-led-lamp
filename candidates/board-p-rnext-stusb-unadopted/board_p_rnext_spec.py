@@ -24,6 +24,10 @@ Integration changes against the standalone window sub-circuit
   example lands (footprints/rnext-mfr.pretty, tools/draft_lands.py) because the zudo-pd lands
   differ from the TI/Diodes drawings (checks/land-check.json). Values, LCSC codes and nets
   stay identical to r3; this is fed back to the PD worker as a common-block land finding.
+- LED per-product population: J3 (debug access, no orderable part) uses a 2 x 4 bare test-pad
+  array at 1.5 mm pitch (rnext-mfr:TestPadArray_2x4_P1.5_D1.0_J3) instead of the 1 x 8 2.54 mm
+  edge-clip pogo row. Same eight nets and pin numbers; J2 (NVM I2C edge-clip row) is unchanged
+  so the programming jig contact pattern stays the same.
 
 Per-product parameter pair (PDO2 current and U4 current limit move together)
 - OPTION 'I1A5' (default, pending user): NVM I_SNK_PDO2 = 0101b (1.50 A); RILM 3.32 k,
@@ -97,7 +101,7 @@ COMPONENTS = {
     'R21': ('0603WAF0000T5E', '0R', 'C21189', 'zudo-pd:R0603', False, (266.7, 190.5)),
     'JOUT1': ('PZ254V-11-06P', '2.54mm 1x6 male', 'C492405', 'zudo-led-lamp:HDR-TH_6P-P2.54-V-M', False, (317.5, 88.9)),
     'J2': ('Conn_1x04', 'PogoPad_1x4_NVM_I2C', '', 'zudo-pd:PogoPad_1x04_P2.54mm', False, (317.5, 139.7)),
-    'J3': ('Conn_1x08', 'PogoPad_1x8_Debug', '', 'zudo-pd:PogoPad_1x08_P2.54mm', False, (317.5, 190.5)),
+    'J3': ('Conn_1x08', 'TestPad_2x4_Debug', '', 'rnext-mfr:TestPadArray_2x4_P1.5_D1.0_J3', False, (317.5, 190.5)),
     # ---- LED voltage window (../board-p-stusb-window-subcircuit, renumbered) ----
     'U4': ('TPS259474LRPWR', 'TPS259474LRPWR', 'C2864845', 'husb-candidate:TPS259474_RPW0010A_TI_EXAMPLE', False, (419.1, 63.5)),
     'U5': ('TPS3701DDCT', 'TPS3701DDCT', 'C132027', 'monitor-candidate:TPS3701_DDC0006A_DRAFT', False, (419.1, 139.7)),

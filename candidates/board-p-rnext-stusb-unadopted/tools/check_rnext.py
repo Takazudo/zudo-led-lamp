@@ -21,10 +21,16 @@ WINDOW_REFS = {'U4', 'U5', 'C40', 'C41', 'C42', '#FLG01', '#FLG02'} | {f'R{n}' f
 ALLOWED_COMPONENT_DIFF = {'JOUT1': 'footprint nickname zudo-led-lamp (LED part, same name)',
                           'U3': 'manufacturer DBV0006A land', 'D5': 'manufacturer DRV0006A land',
                           'D8': 'manufacturer SOD123 land'}
+# LED per-product population: footprint and value label may differ, symbol/LCSC/nets may not.
+ALLOWED_VALUE_AND_FOOTPRINT_DIFF = {'J3': '2 x 4 1.5 mm debug test-pad array replaces the 1 x 8 2.54 mm pogo row'}
 errors = []
 for ref, comp in r3['COMPONENTS'].items():
     if ref not in rn['COMPONENTS']:
         errors.append(f'{ref}: dropped from block')
+    elif ref in ALLOWED_VALUE_AND_FOOTPRINT_DIFF:
+        a, b = rn['COMPONENTS'][ref], comp
+        if (a[0], a[2]) + a[4:] != (b[0], b[2]) + b[4:]:
+            errors.append(f'{ref}: changed beyond its value/footprint fields')
     elif ref in ALLOWED_COMPONENT_DIFF:
         a, b = rn['COMPONENTS'][ref], comp
         if a[:3] + a[4:] != b[:3] + b[4:]:
