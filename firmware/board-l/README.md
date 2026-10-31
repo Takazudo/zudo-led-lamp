@@ -7,6 +7,11 @@ lamp controller: 64 files in `src/`. They are imported for review and continuati
 - No production parameters are chosen in them.
 - Provenance is in [`PROVENANCE.md`](PROVENANCE.md).
 
+A separate, earlier bring-up firmware by the owner (2026-10-06, PlatformIO/CMSIS, not V72)
+is kept unchanged in [`../board-l-bringup-mac-20261006/`](../board-l-bringup-mac-20261006/PROVENANCE.md).
+Its reconciliation table against this firmware is there. It has no duty ceiling, so do not
+use it at full knob on RS1 = 200 mΩ boards.
+
 Do not edit files in `src/` in place as a "fix". Changes start a new reviewed revision on
 top of this import. Physical programming of the delivered Board Ls is a separate
 permission.

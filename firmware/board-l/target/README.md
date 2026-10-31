@@ -45,7 +45,7 @@ All of these are build-only; nothing ran on a target.
 | Check | Result |
 | --- | --- |
 | `make` with arm-none-eabi-gcc 13.2.1 (Ubuntu 24.04 package `gcc-arm-none-eabi` 15:13.2.rel1-2) | PASS, `-Werror -pedantic`: text 7208 B, bss 392 B (V72 `lamp_app` linked, newlib-nano for `memcpy`/`memset` only) |
-| `make target-host-test` | **PASS**, 2704 checks. Mutation runs (no force-off; apply before init) fail as expected |
+| `make target-host-test` | **PASS**, 2704 checks. Settle time follows `LAMP_RAMP_INCREMENT`. Mutation runs (no force-off; apply before init) fail as expected |
 | `make v72-objects`: all 33 V72 `.c` files except `test_input_app.c`, cross-compiled for Cortex-M0+ | PASS, 33/33 (not linked) |
 | `make host-test`: V72 host test with gcc 13.3.0 | **PASS 44**, exit 0 |
 | `make verify-regs` against ST `cmsis_device_g0` + `stm32g0xx_hal_driver` + ARM CMSIS_5 | PASS; a negative test (PLLON bit altered) fails as expected |

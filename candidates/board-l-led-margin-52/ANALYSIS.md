@@ -24,6 +24,13 @@ PA6 (TIM3_CH1) → R20 10 k → CTRL, with R21 33 k and C21 100 nF to GND.
   a 50 % duty, rail 3.33 V, R20 −1 %, R21 +1 % and C21 −10 % (C21's tolerance is assumed).
   It is about 2 % of the 2.2 V dimming span.
 - So the AL8860 sees a DC level plus a small 20 kHz ripple. It does not see on/off PWM.
+- This is the design intent, not only an inference. The owner's 2026-10-06 bring-up firmware
+  (`firmware/board-l-bringup-mac-20261006/`, `main.c` 5a152126…) drives exactly this:
+  TIM3_CH1 at 20 kHz into the RC filter, floor 0.41 V, full 2.53 V.
+  - That firmware has **no duty ceiling**. On an RS1 = 200 mΩ board at full knob, it
+    produces the worst-case peaks in §3: 88.6 mA, or 96.9 mA at h = 30 %.
+  - Do not run it at full knob on 200 mΩ boards. Its existing `.pio` build output is no
+    evidence that any board was flashed.
 - **Peak current = mean × (1 + VSENSE_HYS)**, where the mean is set by VSENSE × (CTRL
   fraction) / RS.
 
@@ -86,6 +93,8 @@ The model reproduces the retained figures: 0.6303 A total peak and 88.19 mA hot 
 - **Thermal derating:** the LED derating (graph-read) limits the 250 mΩ worst case
   (79.1 mA) to TS ≲ 76 °C. Firmware thermal derating must act before that, and the
   correlation between the NTC (RT1) and TS is unmeasured.
+  The bring-up firmware's derate (NTC code 104, ≈65 °C, to hard off at 69, ≈80 °C) only
+  meets this if the NTC reads TS within a few kelvin, which is unmeasured.
 - **Pulsed rating:** no pulsed-current rating exists in the retained LED spec, so issue
   #52 option 3 closes negatively.
 - **Sourcing:** the RLP25FEER250 orderable/LCSC binding and its exact-value evidence are

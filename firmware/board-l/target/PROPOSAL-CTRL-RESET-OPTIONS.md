@@ -7,6 +7,9 @@ The values below are derived from:
 - the Board L circuit (`scripts/schgen/board_l_spec.py`);
 - AL8860 DS39014 Rev 8-2 (hash-matched to the retained copy);
 - ST's official public code and data, pinned in `SOURCES.md`.
+- the owner's 2026-10-06 bring-up firmware (`../../board-l-bringup-mac-20261006/`,
+  imported unchanged). It sets the same 20 kHz carrier, PWM mode 1 polarity and 16.2 % floor
+  independently. Its reconciliation table is in that directory's `PROVENANCE.md`.
 
 RM0444, the STM32G031 datasheet and the errata sheet are **not retained**: st.com was
 unreachable, and this was not bypassed. Every item that depends on them is marked
@@ -35,7 +38,8 @@ cut-off. Worst-case CTRL ripple at 50 % duty scales as 1/f:
 | 64 kHz | 15 mV | 1000 steps |
 
 20 kHz is the lowest carrier above the audio band. It keeps fine resolution for slow fades,
-and it matches the documented Board L architecture.
+and it matches the documented Board L architecture. The owner's bring-up firmware
+uses the same value.
 
 The DS's "PWM < 500 Hz" guidance is for direct CTRL PWM dimming, which this circuit does
 not do.
@@ -73,6 +77,14 @@ current, which is unpublished. Any reset therefore turns the light off without f
    become counted resets (already implemented in `startup_stm32g031.c`).
 6. **Clock failure:** stay OFF (implemented).
 
+**Departures from the bring-up firmware.** That firmware has no watchdog, no BOR
+setting and no option-byte handling. It also has no duty ceiling, and PDOK/ATT are read
+but do not gate the output. Everything in this section is therefore an addition, not a
+carry-over. Two things are kept from it:
+
+- its ≈2.5 s ramp, now `LAMP_RAMP_INCREMENT` 26;
+- its rule that PA6 stays Hi-Z until TIM3 is running at 0 %.
+
 ## 3. Option bytes for #46
 
 Field names and encodings are from ST `stm32g031xx.h` and `stm32g0xx_hal_flash.h`.
@@ -106,7 +118,13 @@ A blank device's empty-check boot behaviour, and when the option load takes effe
 - **RS1 for #52:** 250 mΩ, 20 % less light, guaranteed margin; or keep 200 mΩ with the
   typical-only 83 % firmware ceiling.
 - **Production RDP level:** 0 or 1.
-- **Product feel:** ramp time (proposed 1 s), the brightness floor, and animation depth.
+- **Product feel:** the ramp time (proposed ≈2.5 s, following the bring-up), gamma 2.2 as
+  the V72 default (bring-up and `board-l.mdx` precedent), the brightness floor, and the
+  animation depth.
+- **PDOK/ATT gating:** whether a missing PD contract blocks or derates the output. The
+  bring-up only reports these signals.
+- **Bring-up image on 200 mΩ boards:** it has no ceiling. Whether it may be used at all
+  before RS1 changes is a user decision; it needs a firmware-side cap first.
 - **Explicit permission** to program any Board L, including writing option bytes.
 
 Everything else above is derived. It still needs DS/RM confirmation where marked, and the

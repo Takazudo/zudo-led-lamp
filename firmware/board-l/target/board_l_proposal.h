@@ -13,8 +13,9 @@
  * TYPICAL CTRL transfer, not a guarantee). With RS1 = 250 mOhm fitted, use 3200. */
 #define CTRL_FULL_CCR_RS200 2656u
 #define CTRL_FULL_CCR_RS250 3200u
-/* 1 kHz tick: zero to full in about 1 s. */
-#define LAMP_RAMP_INCREMENT 66u
+/* 1 kHz tick: zero to full in about 2.5 s (65536 / 26 = 2521 ticks), the ramp time of
+ * the owner's 2026-10-06 bring-up firmware (../../board-l-bringup-mac-20261006). */
+#define LAMP_RAMP_INCREMENT 26u
 
 static inline struct board_l_config board_l_proposed_config(uint32_t full_ccr)
 {

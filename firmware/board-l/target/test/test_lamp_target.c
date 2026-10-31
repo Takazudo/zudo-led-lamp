@@ -27,6 +27,8 @@ static enum board_l_result fake_read(void *ctx, struct lamp_samples *out)
 }
 static const struct ctrl_port port = {fake_force_off, fake_init_zero, fake_write};
 static const struct lamp_config policy = {LAMP_RAMP_INCREMENT, LAMP_RECOVERY_LATCH};
+/* Full ramp plus margin, so tests follow LAMP_RAMP_INCREMENT. */
+#define SETTLE_TICKS (LAMP_FULL / LAMP_RAMP_INCREMENT + 200u)
 static int failures, checks;
 #define CHECK(c) do { checks++; if (!(c)) { failures++; printf("FAIL %s:%d %s\n", __FILE__, __LINE__, #c); } } while (0)
 
@@ -84,7 +86,7 @@ static void running(struct rig *r, uint32_t full)
     rig_init(r, 1, full);
     (void)lamp_app_initialize(&r->app, &r->io, &r->cfg);
     good(LAMP_FULL);
-    ticks(r, 1200, 0);
+    ticks(r, SETTLE_TICKS, 0);
     CHECK(light());
 }
 
@@ -97,7 +99,7 @@ static void test_knob_zero_off(void)
     CHECK(!light());
     ticks(&r, 50, 1);
     good(LAMP_FULL / 2);                           /* knob zero is not a latch */
-    ticks(&r, 1200, 0);
+    ticks(&r, SETTLE_TICKS, 0);
     CHECK(light());
 }
 
@@ -117,7 +119,7 @@ static void test_thermal_invalid_off(void)
     good(LAMP_FULL);
     ticks(&r, 200, 1);
     CHECK(lamp_app_initialize(&r.app, &r.io, &r.cfg).status == LAMP_APP_CORE_OFF);
-    ticks(&r, 1200, 0);
+    ticks(&r, SETTLE_TICKS, 0);
     CHECK(light());                                /* explicit re-init recovers */
 }
 
@@ -149,7 +151,7 @@ static void test_ceiling(void)
     running(&r, CTRL_FULL_CCR_RS200);
     CHECK(hw.max_ccr == CTRL_FULL_CCR_RS200);
     good(1);
-    ticks(&r, 1200, 0);
+    ticks(&r, SETTLE_TICKS, 0);
     CHECK(light() && hw.ccr == CTRL_MIN_CCR);      /* lowest positive -> floor */
 }
 
