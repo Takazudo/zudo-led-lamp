@@ -14,3 +14,4 @@ one line and the commits touch the same line.
 | Change (`--skip` name) | What | Decision it waits on |
 | --- | --- | --- |
 | `rmh2-187k` | RMH2 value: 180k → 187k 0.1 % (RT0603BRD07187KL). Same land and same footprint ID. LCSC is left empty because no code is verified | O3 and the RAW ≥ 14.0 V LED-first scope |
+| `cout-datasheet` | Adds the COUT `Datasheet` property to the PCB footprint, copied from the schematic URL. This clears the one V198 field-parity notice | None; this is a field sync |

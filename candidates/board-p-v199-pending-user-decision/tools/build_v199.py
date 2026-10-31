@@ -72,8 +72,26 @@ def rmh2_187k(f):
         "rmh2-candidate:RMH2_RT0603BRD07180KL_YAGEO_REFLOW_CANDIDATE,PENDING USER DECISION (O3); LCSC UNBOUND")
 
 
+# --- change 2: COUT Datasheet field sync (the one V198 parity notice) ------
+COUT_DS = "https://product.samsungsem.com/mlcc/CL31B475KBHNNN.do"
+
+
+def cout_datasheet(f):
+    pcb = f["pcb"]
+    start = pcb.index('(footprint "cout-candidate:')
+    end = pcb.index('(footprint "', start + 10)
+    blk = pcb[start:end]
+    if '(property "Datasheet"' in blk:
+        raise SystemExit("COUT already has a Datasheet property")
+    blk = sub1(blk, '(fp_text reference "COUT"',
+               f'(property "Datasheet" "{COUT_DS}" (at 0 0 -90) (layer "F.Fab") (hide yes) '
+               f'(effects (font (size 1 1) (thickness .15))) (uuid "{uid("COUT/Datasheet")}")) '
+               '(fp_text reference "COUT"', "COUT datasheet")
+    f["pcb"] = pcb[:start] + blk + pcb[end:]
+
 CHANGES = [
     ("rmh2-187k", rmh2_187k),
+    ("cout-datasheet", cout_datasheet),
 ]
 
 
