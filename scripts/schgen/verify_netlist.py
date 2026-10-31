@@ -26,6 +26,8 @@ for net in find_all(nets_node, 'net'):
 
 # KiCad's PCB netlist intentionally omits off-board assembly components.
 externals = set() if "--assembly" in sys.argv else set(getattr(spec, 'EXTERNAL_COMPONENTS', {}))
+# '#'-prefixed refs (e.g. #FLG PWR_FLAG) are virtual ERC symbols; KiCad never exports them.
+externals |= {ref for ref in spec.COMPONENTS if ref.startswith('#')}
 expected = {name: {node for node in nodes if node.split('.')[0] not in externals}
             for name, nodes in spec.NETS.items()}
 expected = {name: nodes for name, nodes in expected.items() if nodes}
