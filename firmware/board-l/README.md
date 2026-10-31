@@ -1,0 +1,55 @@
+# Board L firmware source (V72 import) — NOT a firmware build
+
+This directory holds the **unchanged** V72 portable C sources for the Board L STM32G031F8P6
+lamp controller: 64 files in `src/`. They are imported for review and continuation.
+
+- They have **never been linked for the target, flashed, or run on hardware.**
+- No production parameters are chosen in them.
+- Provenance is in [`PROVENANCE.md`](PROVENANCE.md).
+
+Do not edit files in `src/` in place as a "fix". Changes start a new reviewed revision on
+top of this import. Physical programming of the delivered Board Ls is a separate
+permission.
+
+## What is here
+
+| Area | Files | Role |
+| --- | --- | --- |
+| Lamp control core | `lamp_control.*`, `lamp_app.*` | State machine: RESET_OFF → WAIT_VALID → RAMP/READY. Every invalid, stale, thermal-denied or unconfigured input forces command 0. LATCH/AUTO recovery modes |
+| Knob input | `sample_adapter.*` (V72 change), `input_conversion.*`, `normalized_transfer.*` | Endpoint/inversion/clamp calibration structure; mandatory `knob_window` 1..32 moving mean |
+| Thermal | `thermal_gain.*` | Integer gain on the command; invalid thermal input stops light immediately |
+| ADC acquisition | `acquisition_*`, `adc_*`, `discontinuous_acquisition.*`, `completed_frame_bridge.*`, `stm32g031_adc_transport.*` | Abstract frame/ownership contracts; STM32G031 transport is marked "source candidate only, never executed" |
+| PWM / CTRL output | `tim3_*`, `ctrl_timer_map.*`, `output_composition.*`, `host_timer_output.*` | TIM3 CCR1 write seam; `tim3_fixed_volatile.c` is target-only MMIO (0x40000434) and has never been linked |
+| Board binding | `board_binding.*`, `board_l_io.h` | Project connectivity map, not a verified peripheral mapping |
+| Noise / animation | `noise_stage.*` | Random modulation stage |
+| Host test | `test_input_app.c` | Only `main()` in the tree; host-only |
+
+## Recorded status (from the packet, not re-run here)
+
+- Host test, host-attempt4: **PASS 44**, exit 0, `target_execution: false`
+  (`provenance/host-attempt4-result.json`). Compiled with `cc -std=c11 -O0 -Wall -Wextra
+  -Werror -pedantic` (sanitized command in `provenance/`).
+- Cortex-M0+ **object-only** compile of 4 changed units (`sample_adapter`,
+  `board_binding`, `input_composition`, `output_composition`), exit 0
+  (`provenance/m0plus-object-attempt1-result.json`). No link, no run.
+- Re-running either in this repository: **NOT RUN.** No build system exists yet, and no
+  Arm toolchain is pinned here.
+
+## Missing for a target build
+
+| Missing | Why it matters |
+| --- | --- |
+| Startup code and vector table (`Reset_Handler`, default handlers) | Nothing executes on the MCU without it |
+| Linker script for STM32G031F8 (64 KB flash / 8 KB SRAM) | Required to link |
+| `main()` / scheduler / tick source for the target | Only the host test has a `main` |
+| Clock tree configuration (64 MHz intent) | Timer, ADC and PWM timing depend on it |
+| GPIO configuration, including the ordered safe init: CTRL pin defined low → TIM3 configured at 0 % → enable → ramp | Hardware CTRL pull-down stays the primary OFF guarantee; firmware must not glitch it |
+| PA5/PA7 as analog/unused (#145 B-plan); PA15 never an output (shares a pin with SWCLK/BOOT0) | Board P V196/V198 leaves JOUT1.3/.4 NC |
+| ADC peripheral bring-up and the chosen ADC cadence | `stm32g031_adc_transport.c` is unexecuted |
+| Chosen `knob_window`, ramp increment and response budget | No production values are selected (V71/V72) |
+| NTC (NCP18XH103) code-to-temperature table and derating/shutdown thresholds | `thermal_gain` is only the hook |
+| Calibration storage and procedure (knob endpoints) | Not defined |
+| Fault policy: BOR level, watchdog, reset-cause handling, sensor-fault reinit conditions | Only latch semantics exist |
+| Option bytes / boot mode (`nBOOT_SEL`, #46) | Determines whether the programmed image boots |
+| Build system (Makefile/CMake), pinned arm-none-eabi toolchain, CI host-test job | Reproducibility |
+| #52 peak-current mitigation, if any | A duty ceiling helps only if CTRL is effectively analog; this needs a Board L CTRL analysis first |

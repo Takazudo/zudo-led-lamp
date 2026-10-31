@@ -12,7 +12,7 @@ SHA256 `e85faff85af2128f0fdc4cfefcc5703e4d1d798d1e10388aa79b47d1f33c2e47`), at
 `packets/v72-codex-knob-averaging-20261025/source/` (64 files, about 2,760 lines of C).
 Earlier states are in V68 (input/app composition), V70 (disabled ADC operation config)
 and V71 (latched policy / response budget), each with its failure history kept.
-Not imported into this repository yet. Import is a separate step.
+Imported unchanged into [`firmware/board-l/src/`](../firmware/board-l/README.md) on 2026-10-31.
 
 ## Modules present
 
