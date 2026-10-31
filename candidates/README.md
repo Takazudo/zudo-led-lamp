@@ -9,6 +9,7 @@ generated from it without a separate explicit approval.
 | Directory | Candidate | State |
 | --- | --- | --- |
 | [`board-p-v196-unadopted/`](board-p-v196-unadopted/PROVENANCE.md) | HUSB238_006DD 15 V-only shared Board P, V196 routed PCB | UNADOPTED; native DRC exit 5 (22 known findings), not DRC PASS |
+| [`FIRMWARE-V72-INVENTORY.md`](FIRMWARE-V72-INVENTORY.md) | Board L V72 portable C firmware (not imported) | Inventory only; not target-linked or flashed |
 
 The KiCad project directories sit two levels below the repository root on purpose:
 their library footprints resolve 3D models via
