@@ -346,5 +346,13 @@
   "ripple_pp_20kHz": 0.04671717171717172,
   "duty_ceiling": 0.7662607550253685,
   "nominal_light_fraction": 0.7457272327934737
+ },
+ "ctrl_ceiling_rs200_hys30_rb2": {
+  "k_max_typ": 0.7818450847794738,
+  "vctrl_max": 1.9312541260900986,
+  "vth_worst_high": 2.567404580152672,
+  "ripple_pp_20kHz": 0.04671717171717172,
+  "duty_ceiling": 0.7522204100669072,
+  "nominal_light_fraction": 0.7295645101087335
  }
 }

@@ -62,4 +62,7 @@ def ctrl_ceiling(hys=HYS_TYP, rb_dev=RB_TOL):
 rows = [rs_case(rs, h, d) for rs in (0.200, 0.220, 0.240, 0.250, 0.270)
         for h in (0.20, 0.25, 0.30) for d in (RB_TOL, RB_TOL + RB_TCR * RS_DT)]
 print(json.dumps({"rs_options": rows, "ctrl_ceiling_rs200": ctrl_ceiling(),
-                  "ctrl_ceiling_rs200_hys30": ctrl_ceiling(hys=0.30)}, indent=1))
+                  "ctrl_ceiling_rs200_hys30": ctrl_ceiling(hys=0.30),
+                  # Firmware default CTRL_FULL_CCR: h = 30 % with ballast +-2 % (1 % + TCR).
+                  "ctrl_ceiling_rs200_hys30_rb2": ctrl_ceiling(hys=0.30, rb_dev=RB_TOL + RB_TCR * RS_DT)},
+                 indent=1))

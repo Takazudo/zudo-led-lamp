@@ -80,7 +80,9 @@ The model reproduces the retained figures: 0.6303 A total peak and 88.19 mA hot 
 **Firmware ceiling with RS1 = 200 mΩ** (typical transfer, bounded by I/I_FS = V/2.5 with
 +5 % accuracy):
 
-- Reaching 81 mA needs duty ≤ **83.1 %** at h = 20 %, or ≤ 76.6 % at h = 30 %.
+- Reaching 81 mA needs duty ≤ **83.1 %** at h = 20 % (ballast ±1 %), ≤ 76.6 % at h = 30 % (±1 %),
+  or ≤ **75.2 %** at h = 30 % with ballast ±2 % (`ctrl_ceiling_rs200_hys30_rb2`). The last
+  one is the firmware default, `CTRL_FULL_CCR` 2407.
 - That costs about 18–25 % of the light at nominal, which is no better than the RS1 change.
 - None of it is guaranteed. A stuck-high PA6, a corrupted image or a firmware bug removes it.
 
