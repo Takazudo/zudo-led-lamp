@@ -12,8 +12,11 @@ RESET keep-out (requirement R1.1): U1's courtyard is widened by RESET_STRAP_MM o
 to reserve a pin-6-to-GND strap zone that no other courtyard may cover (proposed size).
 Margins below have no manufacturer or measured source; they are *proposed* study inputs.
 
-Usage: python3 tools/placement_study.py > checks/placement-study.json
+Usage: python3 tools/placement_study.py [--height H] > checks/placement-study.json
+--height grows the outline in +Y only (away from the USB edge); fixed items keep their
+coordinates. It is a what-if for a mechanical delta, not an adopted outline.
 """
+import argparse
 import json
 import math
 import re
@@ -198,6 +201,10 @@ def ordered_reference(board):
 
 
 def main():
+    global H
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--height", type=float, default=40.0)
+    H = parser.parse_args().height
     spec = runpy.run_path(str(CAND / "board_p_rnext_spec.py"))
     table = lib_table()
     board = sexp(BOARD.read_text())
@@ -260,6 +267,8 @@ def main():
             "F_only_margin_0": pack(parts, ["F"], 0.0),
             "F_only_margin_0p5_proposed": pack(parts, ["F"], 0.5),
             "F_then_B_margin_0p5_proposed": pack(parts, ["F", "B"], 0.5),
+            "F_only_margin_1p0_proposed": pack(parts, ["F"], 1.0),
+            "F_then_B_margin_1p0_proposed": pack(parts, ["F", "B"], 1.0),
         },
     }
     for p in out["packing"].values():

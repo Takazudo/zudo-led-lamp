@@ -20,7 +20,10 @@
 | `footprints/rnext-mfr.pretty/`, `tools/draft_lands.py` | Three drafted lands for U3, D5 and D8, following the manufacturer land drawings |
 | `tools/land_check.py` → `checks/land-check.json` | Pad count, size, pitch and span of 9 lands, compared against transcribed manufacturer drawings (tolerance 0.011 mm) |
 | `owner-bundles/component-rnext-*`, `tools/build_owner_bundles.py`, `tools/validate_owner_bundles.py` | Owner bundles for the 9 new parts, and their validator |
-| `tools/placement_study.py` → `checks/placement-study.json` | Courtyard-area and packing study for 27 × 40 mm (no routing) |
+| `tools/placement_study.py` → `checks/placement-study.json` (+ `-27x44`, `-27x50` what-ifs) | Courtyard-area and packing study (no routing) |
+| `tools/bulk_study.py` → `checks/bulk-study.json` | LED-variant C3 need: USB PD sink-bulk rules, U2 dV/dt inrush, L7 node model vs C and OVP divider |
+| `tools/assembly_cost.py` → `checks/assembly-cost.json` | JLCPCB public list-price fixed-fee delta, double-sided vs single-sided |
+| `tools/outline_room.py` → `checks/outline-room.json` | Room around the outline at Board P level in the current enclosure stack |
 
 Regenerate from the LED repo root:
 
@@ -46,6 +49,7 @@ The only changes are:
 1. JOUT1.1/.2 move from `VBUS_OUT` to `LED_OUT`, the window output.
 2. JOUT1 keeps the LED footprint nickname for the same PZ254V-11-06P (C492405) part.
 3. Window parts U4, U5, C40–C42 and R30–R39 are added, plus two virtual ERC power flags.
+4. LED per-product population: J3 (debug access, no orderable part) changes value label and footprint to a 2 × 4 test-pad array; symbol, pins and nets are unchanged. U3, D5 and D8 change footprint only (next sections).
 
 JOUT1 pins 3 ATT, 4 PDOK and 5/6 GND are unchanged, so the 2 assembled Board Ls mate unchanged.
 
@@ -138,32 +142,76 @@ The U3, D5, D8 and Q5 deviations are in zudo-pd's shared library and should go b
   - `tools/validate_owner_bundles.py` runs `validate_bundle()` and checks SKILL.md frontmatter and global ID uniqueness against `.claude/skills`.
   - It also checks pin-map parity against `libraries/rnext.kicad_sym` pins and the pads of the spec's footprint, and confirms that project-source sha256 values match the current files. Result: 9/9 PASS.
 
-## Placement on 27 × 40 mm: fits single-sided only with courtyards touching (78 % utilisation, 5× the ordered board); routable fit needs back-side passives
+## Freeing area on 27 × 40 mm: J3 shrunk (done); C3 stays; the rest needs a user decision (+10 mm outline recommended over back-side assembly)
 
-`checks/placement-study.json` holds the inputs and the packed positions. This is a rectangle-packing desk study, not a layout.
+### (a) C3 is sized by the L7 surge model, not by the LED; MLCCs give no reliable area gain, so C3 stays
 
-- **Fixed items, from the ordered `boards/board-p/board-p.kicad_pcb`:**
-  - Outline 27 × 40 mm.
-  - Three M3 holes, using the courtyard bounding box.
-  - JOUT1 at (12.9, 37.7).
-  - J1 USB-C at (13.506, 5.0). J1 is held fixed as an assumption for the enclosure opening.
-- **RESET keep-out (R1.1):** U1's courtyard is widened by 1.0 mm to reserve the pin-6 GND strap. Both that value and the 0.3 mm edge keep-in are *proposed*.
+`checks/bulk-study.json` uses the USB PD R3.2 V1.2 (Aug 2026) spec retrieved from usb.org (zip sha256 `ccdb5b0f…`, PDF `1a041ab1…`), its cSnkBulkPd ECN, TI TPS1663 and zudo-pd's L7 charge model.
 
-| Quantity | mm² |
-| --- | --- |
-| Board | 1080.0 |
-| Usable per side after edge, holes, J1 and JOUT1 | 778.7 |
-| Movable courtyard sum, r-next (52 parts) | 607.2 (window 67.6, C3 100 µF can 95.7, pogo pads J2 + J3 117.9) |
-| Movable courtyard sum, ordered Board P (23 parts, routed 2-layer) | 121.0 (15.5 % of usable) |
-| Single-side / double-side courtyard utilisation, r-next | 78.0 % / 39.0 % |
+- **USB PD:** cSnkBulkPd is 100 µF max after negotiation (Table 4.7, p83). More is allowed only behind VBUS surge current limiting (§4.2.2, p62). vSrcSlewPos is 30 mV/µs, sized on "3 A and 100 µF Sink bulk".
+  - With U2 fully on, C3 at 120 µF max draws 3.6 A during the 5 → 15 V transition, below the 4.185 A I(OL) minimum. cSnkBulk at attach is "See [USB3]", which is not retained (gap).
+- **Attach inrush through U2's dV/dt** (C5 100 nF, TPS1663 Eq. 1–2): 58 mA into 120 µF.
+- **LED load:** Board L draws about 0.5 A behind Q1 and U4. The load sets no requirement on VBUS_P.
+- **What sizes C3:** the L7 surge charge, 179.8 µC (TYP I(SCP)). For the 24.65 V node target, which is PD's 100 µF / 30 mΩ design row:
 
-| Packing scenario | Result |
-| --- | --- |
-| Front only, courtyards abutting | 52/52 placed, no room for routing |
-| Front only, 0.5 mm routing margin (*proposed*) | 40/52 placed; 11 resistors and C41 do not fit |
-| Front first, then back, 0.5 mm margin | 52/52 placed; back side holds R18–R28 and C41 |
+| OVP divider (R24/R25) | Trip | C_eff needed (MLCC, ESR 5 mΩ proposed) | C13585 10 µF/50 V 1206 parts at 30–70 % bias retention (unsourced) | Courtyard vs C3 95.7 mm² |
+| --- | --- | --- | --- | --- |
+| 174k/10k (common, fitted) | 21.60–22.57 V | 88.4 µF | 33–15 | 497–226 mm² |
+| 133k/10k (LED-only, not adopted) | 16.78–17.54 V; 0.53 V above the 16.25 V highest legitimate 15 V level (vSrcNew + vSrcValid) | 25.5 µF | 10–5 | 151–75 mm² |
 
-Reading: the area is available only with back-side passives or a smaller C3 / pogo footprint. The only in-repo calibration point is the ordered board at 15.5 %. Routability at 78 % single-sided is not established.
+- **Decision: C3 is kept.**
+  - The 133k retune is still worth offering to PD for L7. With C3 at its 80 µF minimum and an ESR of 0.5 Ω, the TYP-model node is 24.6 V (+3.4 V), against 29.6 V (−1.6 V) today.
+  - It changes common-block protection behavior: a factory-image 20 V contract would brown out the STUSB4500. It is therefore not implemented. Status: user decision + PD review.
+
+### (b) J3 debug row replaced by a 2 × 4 test-pad array (implemented); J2 NVM edge-clip row unchanged
+
+- J3 carries CC1DB, CC2DB, VREG_2V7, VBUS_IN, GND, ATT, PDOK and VBEN. It is debug access only.
+- The NVM jig contacts J2 (SCL, SDA, GND, NC) with the 2.54 mm edge clip. J2 is unchanged, so the jig is unaffected.
+- New land `rnext-mfr:TestPadArray_2x4_P1.5_D1.0_J3`: 1.0 mm bare pads, 1.5 mm pitch, courtyard 6.0 × 3.0 = 18.0 mm², against 77.0 mm² for the old row (−59 mm²). Pitch and pad size are *proposed* hand-probe values.
+- **Pad order limits slip shorts:**
+  - VBUS_IN is at a corner. Its only orthogonal neighbours are GND and VBEN.
+  - The LV pins VREG_2V7 and ATT are at the far end.
+- **Not chosen:** a Tag-Connect-style cable footprint for J2 would change the programming jig. No Tag-Connect primary was retrieved.
+
+### (c) Back-side passives force Standard PCBA plus a panel: +28 to +120 USD fixed fees per order
+
+`checks/assembly-cost.json` uses JLCPCB public pages only, retrieved 2026-10-31; the price page says "Last updated on Oct 22, 2026".
+
+- Economic PCBA is single-sided only. Double-sided needs Standard PCBA, whose single-board minimum is 70 × 70 mm, so a 27 × 40 mm board needs a panel.
+- **Fixed fees for 1–29 boards and 30 part types:**
+  - Standard double-sided: 129.86 USD (setup 51.12 + stencil 16.42 + 2 fixtures 16.42 + feeder 1.53 per type).
+  - Economic single-sided: 9.71 USD + 3.07 USD per Extended type.
+  - Delta: 120.15 / 74.10 / 28.05 USD with 0 / 15 / 30 Extended types.
+- **Gaps:** panel fabrication cost and each part's Basic/Extended class. No quote was requested.
+
+### (d) The outline can grow about 30 mm in +Y in the enclosure stack; ±X are blocked
+
+`checks/outline-room.json` screens Board P's level against the Board L bottom bodies, Board L-only spacers, floor windows and the shell radius, all taken from `enclosure/generate.py` and the Board L PCB.
+
+| Direction | Room | Limit |
+| --- | --- | --- |
+| +Y (away from USB) | ≥ 30 mm | Search limit; Board L ends 20 mm past the current edge, and nothing is underneath |
+| +X | 0.5 mm | RV1 wheel finger window (floor) and the RV1 body |
+| −X | 4.5 mm | SW2 body; the board already overlaps 2.6 mm of SW2's floor window |
+
+- C3's 8.3 mm height fits the 11 mm board gap. No Board L bottom body is over Board P except the J2 mate.
+- Growth is a mechanical delta (R3.5): `enclosure/generate.py` asserts the 27 × 40 mm outline, and the fit print would need regeneration.
+
+### Placement after (b): front-only at a 0.5 mm margin still leaves 4 resistors; 27 × 44 fits at 0.5 mm, 27 × 50 at 1.0 mm
+
+| Outline | Usable / side | Movable courtyard | Utilisation | Front only, 0.5 mm | Front only, 1.0 mm | Front + back, 1.0 mm |
+| --- | --- | --- | --- | --- | --- | --- |
+| 27 × 40 | 778.7 mm² | 548.2 mm² | 70.4 % | 48/52 (R25–R28 left) | 32/52 | 52/52, 20 passives on the back |
+| 27 × 44 | 884.3 mm² | 548.2 mm² | 62.0 % | 52/52 | 40/52 | 52/52, 12 on the back |
+| 27 × 50 | 1042.8 mm² | 548.2 mm² | 52.6 % | 52/52 | 52/52 | — |
+
+- **Calibration:** the ordered, routed Board P is at 15.5 %. The margins are *proposed*, and the greedy packer is not a router.
+- **Study inputs:** J1, JOUT1 and the three holes are fixed. U1 carries a 1.0 mm RESET strap keep-out (R1.1), and the edge keep-in is 0.3 mm (both *proposed*).
+
+**Recommendation (user decision):** grow the outline by +10 mm in +Y to 27 × 50 mm.
+- It keeps single-sided Economic assembly with no fee change, and every part fits front-only at a 1.0 mm margin.
+- JOUT1, J1 and the holes stay in place.
+- The alternative is back-side passives on 27 × 40, which adds 28–120 USD per order plus a panel and depends on the Basic/Extended mix.
 
 ## Open items
 
@@ -171,11 +219,12 @@ Reading: the area is available only with back-side passives or a smaller C3 / po
 | --- | --- |
 | PDO2 1.5 A + 3.32 k vs 3 A + 1.27 k | user decision |
 | L7: VBUS_P ≤ 28 V not guaranteed (TVS2200 margin 0 / −0.35 V); affects U1 VDD and U4 IN | technical uncertainty (PD-owned, blocking) |
-| LED-only lower front-end OVP | user decision + PD arithmetic |
+| LED-only 133k/10k front-end OVP: L7 TYP-model margin +3.4 V at 0.5 Ω ESR; changes factory-image 20 V behaviour | user decision + PD review |
 | LCSC codes for RT0603BRD07187KL and 0603WAF3321T5E; distributor identity pages for TPS259474LRPWR (C2864845) and TPS3701DDCT (C132027) | access/evidence gap |
 | Adopting the 9 candidate bundles into `.claude/skills` and the inventory requires adopting r-next into a canonical board spec | user decision |
 | Q5 BSS138 PD land vs Diodes drawing (X1 not interpreted); feed U3/D5/D8/Q5 land deltas to PD's shared library | technical uncertainty (PD-owned library) |
-| Back-side passives vs a smaller bulk cap or pogo-pad footprint to make 27 × 40 mm routable; C3 8.3 mm can height in the enclosure stack | user decision + technical uncertainty |
+| Outline 27 × 50 mm (recommended, enclosure regeneration) vs back-side passives on 27 × 40 mm (+28–120 USD per order + panel) | user decision |
+| cSnkBulk at attach ([USB3] not retained); MLCC DC-bias retention; JLC Basic/Extended class and panel cost | access/evidence gap |
 | Routing, DRC, RESET strap geometry (R1.1) and silk audit | technical uncertainty (layout not started) |
 | Q1 SOA, STUSB VBUS sense behind the eFuse (PD findings 3 and 9); window DVDT 165 ms ramp vs AP63203 startup | technical uncertainty |
 | Contract loss while VBUS stays at 15 V: covered only by VBEN release | residual (architectural) |
