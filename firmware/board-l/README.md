@@ -32,18 +32,24 @@ permission.
 - Cortex-M0+ **object-only** compile of 4 changed units (`sample_adapter`,
   `board_binding`, `input_composition`, `output_composition`), exit 0
   (`provenance/m0plus-object-attempt1-result.json`). No link, no run.
-- Re-running either in this repository: **NOT RUN.** No build system exists yet, and no
-  Arm toolchain is pinned here.
+- Re-run on 2026-10-31 with `make -C target host-test` (gcc 13.3.0): **PASS 44**, exit 0.
+  All 33 non-test units also cross-compile for Cortex-M0+ (`make -C target v72-objects`).
+
+A minimal target skeleton is in [`target/`](target/README.md): vector table, linker script,
+clock, safe CTRL init order, `main` and a Makefile. It builds but has never been flashed or
+run, and it keeps the lamp OFF.
 
 ## Missing for a target build
 
+Rows marked *(skeleton)* have a first build-only version in `target/`; none is verified on hardware.
+
 | Missing | Why it matters |
 | --- | --- |
-| Startup code and vector table (`Reset_Handler`, default handlers) | Nothing executes on the MCU without it |
-| Linker script for STM32G031F8 (64 KB flash / 8 KB SRAM) | Required to link |
-| `main()` / scheduler / tick source for the target | Only the host test has a `main` |
-| Clock tree configuration (64 MHz intent) | Timer, ADC and PWM timing depend on it |
-| GPIO configuration, including the ordered safe init: CTRL pin defined low → TIM3 configured at 0 % → enable → ramp | Hardware CTRL pull-down stays the primary OFF guarantee; firmware must not glitch it |
+| *(skeleton)* Startup code and vector table (`Reset_Handler`, default handlers) | Nothing executes on the MCU without it |
+| *(skeleton)* Linker script for STM32G031F8 (64 KB flash / 8 KB SRAM) | Required to link |
+| *(skeleton)* `main()` / scheduler / tick source for the target | Only the host test has a `main` |
+| *(skeleton)* Clock tree configuration (64 MHz intent) | Timer, ADC and PWM timing depend on it |
+| *(skeleton)* GPIO configuration, including the ordered safe init: CTRL pin defined low → TIM3 configured at 0 % → enable → ramp | Hardware CTRL pull-down stays the primary OFF guarantee; firmware must not glitch it |
 | PA5/PA7 as analog/unused (#145 B-plan); PA15 never an output (shares a pin with SWCLK/BOOT0) | Board P V196/V198 leaves JOUT1.3/.4 NC |
 | ADC peripheral bring-up and the chosen ADC cadence | `stm32g031_adc_transport.c` is unexecuted |
 | Chosen `knob_window`, ramp increment and response budget | No production values are selected (V71/V72) |
@@ -51,5 +57,5 @@ permission.
 | Calibration storage and procedure (knob endpoints) | Not defined |
 | Fault policy: BOR level, watchdog, reset-cause handling, sensor-fault reinit conditions | Only latch semantics exist |
 | Option bytes / boot mode (`nBOOT_SEL`, #46) | Determines whether the programmed image boots |
-| Build system (Makefile/CMake), pinned arm-none-eabi toolchain, CI host-test job | Reproducibility |
+| *(skeleton)* Build system (Makefile/CMake), pinned arm-none-eabi toolchain, CI host-test job | Reproducibility |
 | #52 peak-current mitigation, if any | A duty ceiling helps only if CTRL is effectively analog; this needs a Board L CTRL analysis first |
