@@ -54,7 +54,16 @@ SECTIONS
     _ebss = .;
   } > RAM
 
-  ASSERT(_ebss + _min_stack <= _estack, "RAM overflow: less than 1 KB left for the stack")
+  /* Reset-cause latch record: never loaded or zeroed, survives non-power resets. */
+  .noinit (NOLOAD) :
+  {
+    . = ALIGN(4);
+    *(.noinit .noinit.*)
+    . = ALIGN(4);
+    _enoinit = .;
+  } > RAM
+
+  ASSERT(_enoinit + _min_stack <= _estack, "RAM overflow: less than 1 KB left for the stack")
 
   /DISCARD/ : { *(.ARM.attributes.discard) }
 }

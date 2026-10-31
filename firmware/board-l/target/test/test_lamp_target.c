@@ -41,7 +41,7 @@ static void good(uint32_t knob)
 struct rig { struct lamp_target t; struct lamp_app app; struct lamp_app_io io; struct board_l_config cfg; };
 static void rig_init(struct rig *r, int with_samples, uint32_t full_ccr)
 {
-    struct sample_port sp = {0, fake_read};
+    struct sample_port sp = {0, fake_read, NULL};
     hw = (__typeof__(hw)){0};
     *r = (struct rig){0};
     CHECK(lamp_target_bind(&r->t, &port, with_samples ? &sp : NULL));
@@ -59,7 +59,7 @@ static void ticks(struct rig *r, int n, int expect_light_never)
 static void test_startup_off(void)
 {
     struct rig r;
-    rig_init(&r, 1, CTRL_FULL_CCR_RS200);
+    rig_init(&r, 1, CTRL_FULL_CCR);
     CHECK(hw.pin == PIN_GPIO_LOW);                 /* bind forces OFF */
     good(LAMP_FULL);
     ticks(&r, 5, 1);                               /* not initialized: stays OFF */
@@ -71,12 +71,12 @@ static void test_startup_off(void)
     CHECK(rep.status != LAMP_APP_CORE_OFF && !light());
     ticks(&r, 5, 1);
     struct rig r2;
-    rig_init(&r2, 1, CTRL_FULL_CCR_RS200);
+    rig_init(&r2, 1, CTRL_FULL_CCR);
     rep = lamp_app_initialize(&r2.app, &r2.io, &r2.cfg);
     CHECK(rep.status == LAMP_APP_CORE_OFF && !light() && hw.inits == 1 && hw.period == CTRL_PERIOD_TICKS);
     /* No sample source at all (current target build): never lights. */
     struct rig r3;
-    rig_init(&r3, 0, CTRL_FULL_CCR_RS200);
+    rig_init(&r3, 0, CTRL_FULL_CCR);
     (void)lamp_app_initialize(&r3.app, &r3.io, &r3.cfg);
     ticks(&r3, 2000, 1);
 }
@@ -93,7 +93,7 @@ static void running(struct rig *r, uint32_t full)
 static void test_knob_zero_off(void)
 {
     struct rig r;
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     good(0);
     ticks(&r, 1, 0);
     CHECK(!light());
@@ -106,13 +106,13 @@ static void test_knob_zero_off(void)
 static void test_thermal_invalid_off(void)
 {
     struct rig r;
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     g_s.thermal_valid = false;
     ticks(&r, 1, 0);
     CHECK(!light());
     good(LAMP_FULL);                               /* latched until re-initialize */
     ticks(&r, 200, 1);
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     g_s.thermal_allows_light = false;
     ticks(&r, 1, 0);
     CHECK(!light());
@@ -126,21 +126,21 @@ static void test_thermal_invalid_off(void)
 static void test_fault_off(void)
 {
     struct rig r;
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     g_read_result = BOARD_L_IO_ERROR;              /* adapter fault */
     ticks(&r, 1, 0);
     CHECK(!light());
     g_read_result = BOARD_L_OK;
     ticks(&r, 200, 1);
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     g_s.fresh = false;                             /* stale sample */
     ticks(&r, 1, 0);
     CHECK(!light());
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     g_s.knob = LAMP_FULL + 1;                      /* out-of-range input */
     ticks(&r, 1, 0);
     CHECK(!light());
-    running(&r, CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
     r.io.force_off(r.io.context);                  /* fault-handler style OFF */
     CHECK(!light() && hw.pin == PIN_GPIO_LOW);
 }
@@ -148,8 +148,8 @@ static void test_fault_off(void)
 static void test_ceiling(void)
 {
     struct rig r;
-    running(&r, CTRL_FULL_CCR_RS200);
-    CHECK(hw.max_ccr == CTRL_FULL_CCR_RS200);
+    running(&r, CTRL_FULL_CCR);
+    CHECK(hw.max_ccr == CTRL_FULL_CCR);
     good(1);
     ticks(&r, SETTLE_TICKS, 0);
     CHECK(light() && hw.ccr == CTRL_MIN_CCR);      /* lowest positive -> floor */
@@ -158,19 +158,37 @@ static void test_ceiling(void)
 static void test_adapter_direct(void)
 {
     struct rig r;
-    rig_init(&r, 1, CTRL_FULL_CCR_RS200);
+    rig_init(&r, 1, CTRL_FULL_CCR);
     CHECK(r.io.apply_command(r.io.context, LAMP_FULL) == BOARD_L_UNCONFIGURED && !light());
     CHECK(r.io.initialize_off(r.io.context, NULL) == BOARD_L_UNCONFIGURED && !light());
     CHECK(r.io.initialize_off(r.io.context, &r.cfg) == BOARD_L_OK && !light());
     CHECK(r.io.apply_command(r.io.context, LAMP_FULL + 1) == BOARD_L_IO_ERROR && hw.pin == PIN_GPIO_LOW);
     uint32_t inits = hw.inits;
     CHECK(r.io.apply_command(r.io.context, LAMP_FULL) == BOARD_L_OK);
-    CHECK(hw.inits == inits + 1 && hw.ccr == CTRL_FULL_CCR_RS200); /* re-handover at 0 % first */
+    CHECK(hw.inits == inits + 1 && hw.ccr == CTRL_FULL_CCR); /* re-handover at 0 % first */
     CHECK(r.io.apply_command(r.io.context, 0) == BOARD_L_OK && !light());
+}
+
+static void test_default_ceiling_and_graded_off(void)
+{
+    struct rig r;
+    /* The single ceiling constant: default protects an unchanged RS1 = 200 mOhm board. */
+#ifndef BOARD_L_TEST_CEILING_OVERRIDE
+    CHECK(CTRL_FULL_CCR == 2452u);
+#endif
+    CHECK((uint64_t)CTRL_FULL_CCR * 10000u / CTRL_PERIOD_TICKS <= 7663u || CTRL_FULL_CCR != 2452u);
+    /* Graded (thermal gain) path with no graded reader: UNCONFIGURED, never lights. */
+    rig_init(&r, 1, CTRL_FULL_CCR);
+    struct lamp_app_gain_path gain = lamp_target_gain_path();
+    struct lamp_app_report rep = lamp_app_initialize_with_thermal_gain(&r.app, &r.io, &r.cfg, NULL, &gain);
+    CHECK(rep.status == LAMP_APP_CORE_OFF && !light());
+    good(LAMP_FULL);
+    ticks(&r, SETTLE_TICKS, 1);
 }
 
 int main(void)
 {
+    test_default_ceiling_and_graded_off();
     test_adapter_direct();
     test_startup_off();
     test_knob_zero_off();

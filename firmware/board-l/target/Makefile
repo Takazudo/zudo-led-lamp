@@ -12,9 +12,11 @@ CFLAGS := $(ARCH) -std=c11 -Os -g -Wall -Wextra -Werror -pedantic -ffreestanding
           -ffunction-sections -fdata-sections
 LDFLAGS := $(ARCH) --specs=nano.specs --specs=nosys.specs -nostartfiles -T stm32g031f8_flash.ld -Wl,--gc-sections \
            -Wl,-Map=$(BUILD)/board-l-skeleton.map -Wl,--print-memory-usage
-SRCS := startup_stm32g031.c main.c clock.c board_ctrl.c lamp_target.c
+SRCS := startup_stm32g031.c main.c clock.c board_ctrl.c lamp_target.c board_policy.c board_samples.c \
+        board_iwdg.c board_adc.c
 # V72 units linked into the image (unchanged sources).
-V72_LINKED := lamp_app.c lamp_control.c noise_stage.c thermal_gain.c normalized_transfer.c ctrl_timer_map.c
+V72_LINKED := lamp_app.c lamp_control.c noise_stage.c thermal_gain.c normalized_transfer.c ctrl_timer_map.c \
+              sample_adapter.c input_conversion.c
 OBJS := $(SRCS:%.c=$(BUILD)/%.o) $(V72_LINKED:%.c=$(BUILD)/v72/%.o)
 
 # Portable V72 units: compiled for the target to check they build. Not linked.
@@ -51,11 +53,15 @@ host-test: | $(BUILD)
 	cd $(V72) && cc -std=c11 -O0 -g -Wall -Wextra -Werror -pedantic -I . $(HOST_TEST_SRCS) -o $(CURDIR)/$(BUILD)/host-test
 	$(BUILD)/host-test
 
-# Host tests of the off-by-default lamp_app <-> lamp_target wiring (fake CTRL port).
-TARGET_TEST_SRCS := test/test_lamp_target.c lamp_target.c $(V72_LINKED:%=$(V72)/%)
+# Host tests of every OFF path: lamp_target wiring (fake CTRL port), boot policy
+# (reset latch, option bytes, clock) and the ADC sample source through V72.
+TARGET_TEST_COMMON := lamp_target.c board_policy.c board_samples.c $(V72_LINKED:%=$(V72)/%)
+TARGET_TESTS := test_lamp_target test_board_policy test_board_samples
+HOST_CC := cc -std=c11 -O0 -g -Wall -Wextra -Werror -pedantic -I . -I $(V72)
 target-host-test: | $(BUILD)
-	cc -std=c11 -O0 -g -Wall -Wextra -Werror -pedantic -I . -I $(V72) $(TARGET_TEST_SRCS) -o $(BUILD)/target-host-test
-	$(BUILD)/target-host-test
+	@set -e; for t in $(TARGET_TESTS); do \
+	  $(HOST_CC) $(HOST_DEFS) test/$$t.c $(TARGET_TEST_COMMON) -lm -o $(BUILD)/$$t; \
+	  $(BUILD)/$$t; done
 
 # Cross-check stm32g031_regs.h against ST/ARM headers fetched outside the repo.
 verify-regs:

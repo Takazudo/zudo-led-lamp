@@ -42,9 +42,10 @@ permission.
 
 A minimal target skeleton is in [`target/`](target/README.md): vector table, linker script,
 clock, safe CTRL init order, `main` and a Makefile. Since phase 4, `main` runs the V72
-`lamp_app` through the off-by-default adapter `target/lamp_target.c`, with host tests. No
-sample source exists yet, so it keeps the lamp OFF. It builds but has never been flashed or
-run.
+`lamp_app` through the off-by-default adapter `target/lamp_target.c`, with host tests.
+Since phase 5 the ADC sample source, IWDG, reset-cause latch and BOR option gate are in place
+too. It builds but has never been flashed or run. Before any bench session, see
+[`BEFORE-PROGRAMMING-CHECKLIST.md`](BEFORE-PROGRAMMING-CHECKLIST.md).
 
 ## Missing for a target build
 
@@ -58,11 +59,11 @@ Rows marked *(skeleton)* have a first build-only version in `target/`; none is v
 | *(skeleton)* Clock tree configuration (64 MHz intent) | Timer, ADC and PWM timing depend on it |
 | *(skeleton)* GPIO configuration, including the ordered safe init: CTRL pin defined low → TIM3 configured at 0 % → enable → ramp | Hardware CTRL pull-down stays the primary OFF guarantee; firmware must not glitch it |
 | PA5/PA7 as analog/unused (#145 B-plan); PA15 never an output (shares a pin with SWCLK/BOOT0) | Board P V196/V198 leaves JOUT1.3/.4 NC |
-| ADC peripheral bring-up and the chosen ADC cadence | `stm32g031_adc_transport.c` is unexecuted |
-| Chosen `knob_window`, ramp increment and response budget | No production values are selected (V71/V72) |
-| NTC (NCP18XH103) code-to-temperature table and derating/shutdown thresholds | `thermal_gain` is only the hook |
+| *(skeleton)* ADC peripheral bring-up and the chosen ADC cadence | `target/board_adc.c` is one scan per 1 kHz tick into V72 `sample_adapter`. It is unexecuted. V72 `stm32g031_adc_transport.c` is not used |
+| *(proposed)* Chosen `knob_window`, ramp increment and response budget | Proposed: window 8, about 2.5 s ramp, max age 2 ticks. Not approved |
+| *(proposed)* NTC (NCP18XH103) code-to-temperature table and derating/shutdown thresholds | `target/board_samples.c`: codes 104 → 69, open ≥ 3500. The NTC-to-TS correlation is unmeasured |
 | Calibration storage and procedure (knob endpoints) | Not defined |
-| Fault policy: BOR level, watchdog, reset-cause handling, sensor-fault reinit conditions | Only latch semantics exist |
-| Option bytes / boot mode (`nBOOT_SEL`, #46) | Determines whether the programmed image boots |
+| *(skeleton)* Fault policy: BOR level, watchdog, reset-cause handling, sensor-fault reinit conditions | `target/board_policy.c`, `board_iwdg.c`: IWDG about 100 ms, a 3-reset latch, a BOR option gate. A sensor fault latches until reset |
+| Option bytes / boot mode (`nBOOT_SEL`, #46) | Determines whether the programmed image boots. The firmware only reads them. Writing them is a bench step: `BEFORE-PROGRAMMING-CHECKLIST.md` |
 | *(skeleton)* Build system (Makefile/CMake), pinned arm-none-eabi toolchain, CI host-test job | Reproducibility |
-| #52 peak-current mitigation, if any | A duty ceiling helps only if CTRL is effectively analog; this needs a Board L CTRL analysis first |
+| *(proposed)* #52 peak-current mitigation | CTRL is filtered-analog. Single `CTRL_FULL_CCR`, default 2452 (76.6 %) for RS1 = 200 mΩ; the RS1 = 250 mΩ change is recommended |

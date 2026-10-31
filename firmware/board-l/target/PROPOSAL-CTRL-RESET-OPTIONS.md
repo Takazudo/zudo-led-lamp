@@ -13,8 +13,10 @@ The values below are derived from:
 
 RM0444, the STM32G031 datasheet and the errata sheet are **not retained**: st.com was
 unreachable, and this was not bypassed. Every item that depends on them is marked
-**[DS/RM]**. The PWM values are already in `board_l_proposal.h`. The watchdog, BOR and
-option-byte items are **not implemented** yet.
+**[DS/RM]**. The PWM values are already in `board_l_proposal.h`. Since phase 5 the watchdog, reset-cause latch and BOR option-byte gate are
+**implemented and host-tested**: `board_iwdg.c`, `board_policy.c` and `main.c`. The firmware
+only **reads** option bytes; it never writes them. Writing them is a bench step in
+`../BEFORE-PROGRAMMING-CHECKLIST.md`, and it needs permission.
 
 ## 1. CTRL PWM: 20 kHz, active-high, zero = hard OFF
 
@@ -25,7 +27,7 @@ option-byte items are **not implemented** yet.
 | Carrier | **20 kHz**: PSC 0, ARR 3199 (`CTRL_PERIOD_TICKS` 3200 at 64 MHz) | See the trade-off below |
 | OFF | Command 0 gives CCR 0. `lamp_app` then calls `force_off`, which puts PA6 in GPIO output-low | Does not rely on the typical 0.2 V VEN(OFF) threshold |
 | Floor | CCR 518 (16.2 %): 0.41 V nominal, about 5 % of I_NOM (typical) | DS recommended analog range is 5–100 % |
-| Ceiling | CCR 2656 (83 %) while RS1 = 200 mΩ; CCR 3200 (100 %) once RS1 = 250 mΩ is fitted | `candidates/board-l-led-margin-52/ANALYSIS.md`. The ceiling uses the typical transfer only |
+| Ceiling | One compile-time constant, `CTRL_FULL_CCR`. Default **2452 (76.6 %)**, which keeps an unchanged RS1 = 200 mΩ board ≤ 81 mA in the h = 30 % / ballast ±2 % case. Use 3200 only after RS1 = 250 mΩ is measured | `candidates/board-l-led-margin-52/` (`ctrl_ceiling_rs200_hys30`). Typical transfer only. Replaces the phase 4 value of 2656, which covered only h = 20 % |
 | Clock dependency | The lamp is **not started** unless the 64 MHz PLL locked | On the HSI fallback, ARR 3199 would give 5 kHz and about 4× the ripple |
 
 **Carrier trade-off.** CTRL is filtered-analog: 7.67 kΩ with 100 nF gives a 207 Hz
@@ -68,13 +70,19 @@ current, which is unpublished. Any reset therefore turns the light off without f
    - after **3 consecutive** IWDG/WWDG/software/lockup resets without a power-on reset
      (PWRRSTF), stay OFF and never initialize the output until power is cycled.
    This adds a reset-level latch on top of `lamp_app`'s existing LATCH policy for sensors.
+   - Implemented: a pin-only or option-load reset is neutral.
+   - A corrupt record after an abnormal reset counts as one earlier abnormal reset.
+   - A deliberate refusal (latch or options) parks OFF while refreshing the IWDG.
+   - An unexpected failure halts without a refresh, so the reset is counted.
 4. **BOR:** BOR_EN = 1 at the highest level, 4 (BORF "around 2.8 V", BORR "around 2.9 V",
    per the ST HAL comments).
    - This is the highest level below the 3.27 V rail minimum, so a sagging rail gives a
      safe reset before the ADC/NTC readings become meaningless.
    - The exact thresholds and hysteresis are **[DS]**.
+   - Implemented as a gate: the firmware refuses light unless FLASH_OPTR shows
+     BOR_EN = 1 and both level fields = 3.
 5. **Faults:** HardFault and unhandled IRQs force CTRL low and spin. With the IWDG, they
-   become counted resets (already implemented in `startup_stm32g031.c`).
+   become counted resets (implemented in `startup_stm32g031.c` + `board_policy.c`).
 6. **Clock failure:** stay OFF (implemented).
 
 **Departures from the bring-up firmware.** That firmware has no watchdog, no BOR
@@ -116,7 +124,7 @@ A blank device's empty-check boot behaviour, and when the option load takes effe
 ## 4. What truly needs the user
 
 - **RS1 for #52:** 250 mΩ, 20 % less light, guaranteed margin; or keep 200 mΩ with the
-  typical-only 83 % firmware ceiling.
+  typical-only 76.6 % firmware ceiling (`CTRL_FULL_CCR` 2452, the default).
 - **Production RDP level:** 0 or 1.
 - **Product feel:** the ramp time (proposed ≈2.5 s, following the bring-up), gamma 2.2 as
   the V72 default (bring-up and `board-l.mdx` precedent), the brightness floor, and the

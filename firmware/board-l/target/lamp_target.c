@@ -26,6 +26,18 @@ static enum board_l_result target_read(void *ctx, struct lamp_samples *out)
     return t->samples.read(t->samples.context, out);
 }
 
+static enum board_l_result target_read_graded(void *ctx, struct lamp_samples *out, struct thermal_gain *g)
+{
+    struct lamp_target *t = ctx;
+    if (out)
+        *out = (struct lamp_samples){0};
+    if (g)
+        *g = (struct thermal_gain){0};
+    if (!t || !out || !g || !t->samples.read_graded)
+        return BOARD_L_UNCONFIGURED;
+    return t->samples.read_graded(t->samples.context, out, g);
+}
+
 static void target_force_off(void *ctx)
 {
     struct lamp_target *t = ctx;
@@ -81,4 +93,9 @@ bool lamp_target_bind(struct lamp_target *t, const struct ctrl_port *port, const
 struct lamp_app_io lamp_target_io(struct lamp_target *t)
 {
     return (struct lamp_app_io){t, target_initialize_off, target_read, target_apply, target_force_off};
+}
+
+struct lamp_app_gain_path lamp_target_gain_path(void)
+{
+    return (struct lamp_app_gain_path){true, target_read_graded};
 }

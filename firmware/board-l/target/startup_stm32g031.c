@@ -106,8 +106,8 @@ void Reset_Handler(void)
         board_ctrl_force_off();
 }
 
-/* Unexpected interrupts and faults: force CTRL low and stop. No reset policy is
- * chosen yet (BOR/watchdog/reset-cause handling is open). */
+/* Unexpected interrupts and faults: force CTRL low and stop without refreshing the
+ * IWDG, so the watchdog resets the MCU and main.c's reset-cause latch counts it. */
 void Default_Handler(void)
 {
     for (;;)
