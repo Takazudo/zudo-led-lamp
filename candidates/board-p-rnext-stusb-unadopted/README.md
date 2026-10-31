@@ -1,8 +1,8 @@
 # LED Board P r-next: common STUSB4500 block + LED voltage window (UNADOPTED schematic draft)
 
 **State:** UNADOPTED, unvalidated schematic draft.
-- No PCB, no footprint review, no NVM written, nothing ordered.
-- It is not inventory-bound: the new parts have no owner bundles in this repo.
+- No PCB layout, no routing, no DRC, no NVM written, nothing ordered.
+- It is not inventory-bound. The nine new parts have candidate-local owner bundles in `owner-bundles/`, outside `.claude/skills/` and the inventory, so they are not published.
 - Nothing here may feed a fabrication output.
 
 ## Contents
@@ -16,6 +16,11 @@
 | `inputs/board_p_r3_spec-3ac13d4.py.txt` | Read-only copy of the zudo-pd common-block reference implementation (zudo-pd `3ac13d46`, sha256 `14349f5b…`) |
 | `tools/check_rnext.py` → `checks/rnext-check.json` | Checks that the block matches r3, plus window arithmetic for both options |
 | `checks/` | Native KiCad 10.0.6 ERC and netlist results (see below) |
+| `fp-lib-table`, `footprints/zudo-pd.pretty/` | Footprint libraries. The 16 zudo-pd footprints are copied unchanged from zudo-pd `3ac13d46` (`footprints/ZUDO-PD-3ac13d46.sha256`) |
+| `footprints/rnext-mfr.pretty/`, `tools/draft_lands.py` | Three drafted lands for U3, D5 and D8, following the manufacturer land drawings |
+| `tools/land_check.py` → `checks/land-check.json` | Pad count, size, pitch and span of 9 lands, compared against transcribed manufacturer drawings (tolerance 0.011 mm) |
+| `owner-bundles/component-rnext-*`, `tools/build_owner_bundles.py`, `tools/validate_owner_bundles.py` | Owner bundles for the 9 new parts, and their validator |
+| `tools/placement_study.py` → `checks/placement-study.json` | Courtyard-area and packing study for 27 × 40 mm (no routing) |
 
 Regenerate from the LED repo root:
 
@@ -52,7 +57,7 @@ The window is `../board-p-stusb-window-subcircuit` renumbered. U4 is a TPS259474
 | --- | --- |
 | Monitor U5 INA falling (OFF guaranteed) | ≤ 12.755 V; +0.155 V margin over the 12.6 V reject level |
 | Monitor rising (needed for ON) | ≤ 13.999 V |
-| U4 UV rising (no QINH leakage now) | 12.412–13.496 V |
+| U4 UV rising (no QINH leakage now) | 12.412–13.496 V; 12.383–13.526 V with U5 OUTA leakage (TPS3701 ID(leak) max 300 nA into EN/UVLO). Still below the 13.999 V monitor ON level |
 | U4 OV rising / falling minimum | 16.485–17.948 V / 14.992 V |
 
 Two changes from the standalone sub-circuit:
@@ -92,18 +97,73 @@ The rest of the NVM text image follows common block §6.2:
 
 Nothing is programmed. The byte map and write sequence are DS12499 gaps (common block §7).
 
-## Native checks: netlist matches the spec; ERC not clean (see checks/)
+## Native checks: netlist matches the spec; footprint-link warnings gone, 13 pin-type warnings remain
 
 The checks ran in KiCad 10.0.6 (`kicad/kicad@sha256:18693567…`), serialized with `flock /tmp/kicad-native.lock`. Details are in `checks/NATIVE-RUN.txt`, `checks/erc.json` and `checks/board-p-rnext.net`.
 
 | Check | Result |
 | --- | --- |
 | Netlist export → `verify_netlist.py` | **PASS**: 36 expected nets + 17 single-pin NC nets, 203 nodes, exact match to the spec |
-| ERC errors | **0**. The first run had 2 `power_pin_not_driven` errors (U4 IN, U4 GND). Two stock PWR_FLAGs (#FLG01 on GND, #FLG02 on VBUS_OUT) resolved them |
-| ERC warnings | **67**, exit 5 because `--exit-code-violations` counts warnings. 54 `footprint_link_issues`: footprints are names only. 13 `pin_to_pin` on D5 (TVS2200) and JOUT1, whose library pins are "unspecified" type. The PD r3 draft run on a scratch copy shows the same class (33 pin_to_pin) |
+| ERC errors | **0**. Two stock PWR_FLAGs (#FLG01 on GND, #FLG02 on VBUS_OUT) drive the U4 power pins |
+| ERC warnings | **13**, exit 5 because `--exit-code-violations` counts warnings. The 54 `footprint_link_issues` of phase 9 are gone: every footprint resolves through `fp-lib-table`. 13 `pin_to_pin` remain on D5 (TVS2200) and JOUT1, whose library pins are "unspecified" type |
 | Not a PASS | ERC is not clean. Nothing here is a DRC, a layout or a validation |
 
-`verify_netlist.py` now skips `#`-prefixed virtual refs, which KiCad never exports. Canonical boards are unaffected.
+## Footprints: 5 lands match the manufacturer drawings; U3, D5 and D8 now use drafted manufacturer lands; Q5 still differs
+
+`checks/land-check.json` compares pad geometry against land drawings transcribed from the re-fetched primary PDFs. The page locators are recorded in `tools/land_check.py`.
+
+| Ref | Part | PD land vs manufacturer drawing | Selected land |
+| --- | --- | --- | --- |
+| U4, U5, U2, Q3 | TPS259474L, TPS3701, TPS16630, CSD18543Q3A | MATCH | PD / V196 land |
+| Q1 | DMP3036SFG | MATCH. Pads 5–8 overlap pad 9 on the same net | PD land |
+| U3 | LM74700 DBV0006A | DIFF: 0.53 × 1.07 mm pads, 2.3 mm row span; TI shows 0.6 × 1.1 mm, 2.6 mm | `rnext-mfr` draft, MATCH |
+| D5 | TVS2200 DRV0006A | DIFF: pad width 0.4 mm; TI shows 0.3 mm | `rnext-mfr` draft, MATCH |
+| D8 | BZT52C11 SOD-123 | DIFF: 0.95 × 1.15 mm, outer 4.33 mm; Diodes shows 0.9 × 0.95 mm, outer 4.05 mm | `rnext-mfr` draft, MATCH |
+| Q5 | BSS138 SOT-23 | DIFF: 0.8 × 1.0 mm, 2.3 mm row span; Diodes shows C 2.0 / Y 0.9 mm. The X1 1.35 mm dimension was not interpreted | PD land, unchanged; no draft |
+
+The U3, D5, D8 and Q5 deviations are in zudo-pd's shared library and should go back to the PD worker. Draft courtyards are the land extent + 0.25 mm. That margin is a proposed value, not a manufacturer one.
+
+## Owner bundles: 9 candidate bundles pass the repo's own bundle validator
+
+`owner-bundles/component-rnext-*` use the repository's 8-file bundle schema. They live outside `.claude/skills/` because the strict validator requires skill directories to match inventory lines exactly, and the inventory is generated from the canonical board specs. Adoption under `references/new-component-workflow.md` would move them there.
+
+- **Reused from PD (7 parts: DMP3036, TPS16630, LM74700, TVS2200, CSD18543Q3A, BSS138, BZT52C11):**
+  - PD's MANUFACTURER_PRIMARY and DISTRIBUTOR_IDENTITY sources and facts are cited by URL and sha256 (`imported_from` = PD bundle/record @3ac13d46).
+  - Each primary PDF was re-fetched on 2026-10-31. Every hash equals PD's record (`led_refetch`).
+- **New records (TPS259474LRPWR, TPS3701DDCT):**
+  - Primary facts come from TI SLVSFC9C and the TPS3701 datasheet, both fetched in phase 8. They cover the variant, pinout, ratings, thresholds, ILM points and OUTA leakage.
+  - The LCSC identity has no distributor page and stays UNSOURCED, with OPEN coverage.
+- **Every bundle:**
+  - The LED role and land are recorded as PROJECT-CHOICE facts with NEEDS BENCH status, and the LED application domain is OPEN.
+  - `tools/validate_owner_bundles.py` runs `validate_bundle()` and checks SKILL.md frontmatter and global ID uniqueness against `.claude/skills`.
+  - It also checks pin-map parity against `libraries/rnext.kicad_sym` pins and the pads of the spec's footprint, and confirms that project-source sha256 values match the current files. Result: 9/9 PASS.
+
+## Placement on 27 × 40 mm: fits single-sided only with courtyards touching (78 % utilisation, 5× the ordered board); routable fit needs back-side passives
+
+`checks/placement-study.json` holds the inputs and the packed positions. This is a rectangle-packing desk study, not a layout.
+
+- **Fixed items, from the ordered `boards/board-p/board-p.kicad_pcb`:**
+  - Outline 27 × 40 mm.
+  - Three M3 holes, using the courtyard bounding box.
+  - JOUT1 at (12.9, 37.7).
+  - J1 USB-C at (13.506, 5.0). J1 is held fixed as an assumption for the enclosure opening.
+- **RESET keep-out (R1.1):** U1's courtyard is widened by 1.0 mm to reserve the pin-6 GND strap. Both that value and the 0.3 mm edge keep-in are *proposed*.
+
+| Quantity | mm² |
+| --- | --- |
+| Board | 1080.0 |
+| Usable per side after edge, holes, J1 and JOUT1 | 778.7 |
+| Movable courtyard sum, r-next (52 parts) | 607.2 (window 67.6, C3 100 µF can 95.7, pogo pads J2 + J3 117.9) |
+| Movable courtyard sum, ordered Board P (23 parts, routed 2-layer) | 121.0 (15.5 % of usable) |
+| Single-side / double-side courtyard utilisation, r-next | 78.0 % / 39.0 % |
+
+| Packing scenario | Result |
+| --- | --- |
+| Front only, courtyards abutting | 52/52 placed, no room for routing |
+| Front only, 0.5 mm routing margin (*proposed*) | 40/52 placed; 11 resistors and C41 do not fit |
+| Front first, then back, 0.5 mm margin | 52/52 placed; back side holds R18–R28 and C41 |
+
+Reading: the area is available only with back-side passives or a smaller C3 / pogo footprint. The only in-repo calibration point is the ordered board at 15.5 %. Routability at 78 % single-sided is not established.
 
 ## Open items
 
@@ -112,8 +172,10 @@ The checks ran in KiCad 10.0.6 (`kicad/kicad@sha256:18693567…`), serialized wi
 | PDO2 1.5 A + 3.32 k vs 3 A + 1.27 k | user decision |
 | L7: VBUS_P ≤ 28 V not guaranteed (TVS2200 margin 0 / −0.35 V); affects U1 VDD and U4 IN | technical uncertainty (PD-owned, blocking) |
 | LED-only lower front-end OVP | user decision + PD arithmetic |
-| LCSC codes for RT0603BRD07187KL and 0603WAF3321T5E; owner bundles for TPS259474L, TPS3701, DMP3036, TPS16630, LM74700, TVS2200, CSD18543Q3A, BSS138, BZT52C11 in this repo | access/evidence gap |
-| Footprints: names only, from zudo-pd and V196 candidate libraries; nothing imported or reviewed. ERC reports these as footprint-link warnings | evidence gap (PCB step) |
-| 27 × 40 mm outline fit of the added front end + window; RESET keep-out (R1.1); silk audit | technical uncertainty (layout not started) |
+| LCSC codes for RT0603BRD07187KL and 0603WAF3321T5E; distributor identity pages for TPS259474LRPWR (C2864845) and TPS3701DDCT (C132027) | access/evidence gap |
+| Adopting the 9 candidate bundles into `.claude/skills` and the inventory requires adopting r-next into a canonical board spec | user decision |
+| Q5 BSS138 PD land vs Diodes drawing (X1 not interpreted); feed U3/D5/D8/Q5 land deltas to PD's shared library | technical uncertainty (PD-owned library) |
+| Back-side passives vs a smaller bulk cap or pogo-pad footprint to make 27 × 40 mm routable; C3 8.3 mm can height in the enclosure stack | user decision + technical uncertainty |
+| Routing, DRC, RESET strap geometry (R1.1) and silk audit | technical uncertainty (layout not started) |
 | Q1 SOA, STUSB VBUS sense behind the eFuse (PD findings 3 and 9); window DVDT 165 ms ramp vs AP63203 startup | technical uncertainty |
 | Contract loss while VBUS stays at 15 V: covered only by VBEN release | residual (architectural) |
