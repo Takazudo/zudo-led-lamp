@@ -89,9 +89,32 @@ def cout_datasheet(f):
                '(fp_text reference "COUT"', "COUT datasheet")
     f["pcb"] = pcb[:start] + blk + pcb[end:]
 
+
+# --- change 3: J1 GND hole-side land trim, 0.025 mm ------------------------
+# Shorten A1/B12 and B1/A12 only at the end facing the 0.65 mm NPTH locating
+# holes: length 1.15 -> 1.125, centre moved 0.0125 mm away from the hole. The
+# outer end, the width and the rest of J1 stay as printed. Nominal hole-to-land
+# distance goes from 0.1751 to 0.2001 mm.
+J1_MOD = "libraries/trial.pretty/USB4105_V106_TRIAL_UNASSIGNED.kicad_mod"
+
+
+def j1_gnd_trim(f):
+    pcb = f["pcb"]
+    for pad, x in (("A1/B12", "-3.2"), ("B1/A12", "3.2")):
+        pcb = sub1(pcb, f'(pad "{pad}" smd rect (at {x} -7.355 180) (size 0.6 1.15)',
+                   f'(pad "{pad}" smd rect (at {x} -7.3675 180) (size 0.6 1.125)', f"J1 {pad} pcb")
+    f["pcb"] = pcb
+    mod = f["libs"].get(J1_MOD) or (V198 / J1_MOD).read_bytes().decode("utf-8")
+    for pad, x in (("A1/B12", "-3.2"), ("B1/A12", "3.2")):
+        mod = sub1(mod, f'(pad "{pad}" smd rect (at {x} -7.355) (size 0.6 1.15)',
+                   f'(pad "{pad}" smd rect (at {x} -7.3675) (size 0.6 1.125)', f"J1 {pad} lib")
+    f["libs"][J1_MOD] = mod
+
+
 CHANGES = [
     ("rmh2-187k", rmh2_187k),
     ("cout-datasheet", cout_datasheet),
+    ("j1-gnd-trim", j1_gnd_trim),
 ]
 
 
