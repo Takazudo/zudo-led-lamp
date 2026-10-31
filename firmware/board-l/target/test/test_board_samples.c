@@ -170,6 +170,34 @@ static void test_derate(void)
     CHECK(light() && hw.ccr < cool);
 }
 
+static void test_knob_window(void)
+{
+    /* KNOB_WINDOW really averages KNOB_WINDOW samples at one sample per tick. */
+    struct board_samples s;
+    static const struct raw_source src = {NULL, fake_convert, fake_now};
+    struct lamp_samples out;
+    struct thermal_gain g;
+    uint32_t lo = 1000u, hi = 3000u, final_hi, prev = 0;
+    CHECK(SAMPLE_MAX_AGE_TICKS + 1u >= KNOB_WINDOW);
+    adc = (__typeof__(adc)){lo, NTC_25C, false, false, 100, 0, 0};
+    CHECK(board_samples_init(&s, &src) == BOARD_L_OK);
+    for (int i = 0; i < 40; i++) { adc.t++; CHECK(board_samples_read_graded(&s, &out, &g) == BOARD_L_OK); }
+    CHECK(s.adapter.knob_count == KNOB_WINDOW);
+    {
+        struct knob_calibration cal = {true, KNOB_ADC_MAX, KNOB_OFF_CODE, KNOB_FULL_CODE};
+        CHECK(knob_request(hi, &cal, &final_hi));
+    }
+    adc.knob = hi;
+    for (unsigned k = 1; k <= KNOB_WINDOW; k++) {
+        adc.t++;
+        CHECK(board_samples_read_graded(&s, &out, &g) == BOARD_L_OK && out.knob_valid);
+        CHECK(out.knob > prev);                       /* moves every tick ... */
+        if (k < KNOB_WINDOW) CHECK(out.knob < final_hi); /* ... settles only at the window */
+        prev = out.knob;
+    }
+    CHECK(out.knob == final_hi);
+}
+
 static void test_init_refusals(void)
 {
     struct board_samples s;
@@ -187,6 +215,7 @@ int main(void)
     test_sensor_faults();
     test_ntc_thermal_gate();
     test_derate();
+    test_knob_window();
     test_init_refusals();
     printf("%s %d checks, %d failures (ADC sample source through V72 to CTRL)\n",
            failures ? "FAIL" : "PASS", checks, failures);

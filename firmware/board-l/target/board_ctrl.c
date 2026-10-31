@@ -1,4 +1,5 @@
 #include "board_ctrl.h"
+#include "board_l_proposal.h"
 #include "stm32g031_regs.h"
 
 #define CTRL_PIN 6u
@@ -57,8 +58,14 @@ void board_ctrl_pwm_init_zero(uint32_t period_ticks)
 }
 
 /* Preloaded compare write; takes effect at the next update event. Only
- * lamp_target.c calls this, after its own mapping and initialization checks. */
+ * lamp_target.c calls this, after its own mapping and initialization checks.
+ * A value above the compile-time CTRL_FULL_CCR is refused by forcing OFF, which is
+ * stricter than clamping: it can only come from corruption or a bypassing caller. */
 void board_ctrl_write_ccr(uint32_t ccr)
 {
+    if (!ctrl_ccr_within_ceiling(ccr)) {
+        board_ctrl_force_off();
+        return;
+    }
     TIM3_CCR1 = ccr;
 }

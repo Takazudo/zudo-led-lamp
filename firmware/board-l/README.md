@@ -60,10 +60,10 @@ Rows marked *(skeleton)* have a first build-only version in `target/`; none is v
 | *(skeleton)* GPIO configuration, including the ordered safe init: CTRL pin defined low → TIM3 configured at 0 % → enable → ramp | Hardware CTRL pull-down stays the primary OFF guarantee; firmware must not glitch it |
 | PA5/PA7 as analog/unused (#145 B-plan); PA15 never an output (shares a pin with SWCLK/BOOT0) | Board P V196/V198 leaves JOUT1.3/.4 NC |
 | *(skeleton)* ADC peripheral bring-up and the chosen ADC cadence | `target/board_adc.c` is one scan per 1 kHz tick into V72 `sample_adapter`. It is unexecuted. V72 `stm32g031_adc_transport.c` is not used |
-| *(proposed)* Chosen `knob_window`, ramp increment and response budget | Proposed: window 8, about 2.5 s ramp, max age 2 ticks. Not approved |
+| *(proposed)* Chosen `knob_window`, ramp increment and response budget | Proposed: window 8 (max age 7 ticks, so all 8 samples count), about 2.5 s ramp. Not approved |
 | *(proposed)* NTC (NCP18XH103) code-to-temperature table and derating/shutdown thresholds | `target/board_samples.c`: codes 104 → 69, open ≥ 3500. The NTC-to-TS correlation is unmeasured |
 | Calibration storage and procedure (knob endpoints) | Not defined |
 | *(skeleton)* Fault policy: BOR level, watchdog, reset-cause handling, sensor-fault reinit conditions | `target/board_policy.c`, `board_iwdg.c`: IWDG about 100 ms, a 3-reset latch, a BOR option gate. A sensor fault latches until reset |
 | Option bytes / boot mode (`nBOOT_SEL`, #46) | Determines whether the programmed image boots. The firmware only reads them. Writing them is a bench step: `BEFORE-PROGRAMMING-CHECKLIST.md` |
 | *(skeleton)* Build system (Makefile/CMake), pinned arm-none-eabi toolchain, CI host-test job | Reproducibility |
-| *(proposed)* #52 peak-current mitigation | CTRL is filtered-analog. Single `CTRL_FULL_CCR`, default 2452 (76.6 %) for RS1 = 200 mΩ; the RS1 = 250 mΩ change is recommended |
+| *(proposed)* #52 peak-current mitigation | CTRL is filtered-analog. Single `CTRL_FULL_CCR`, default 2407 (75.2 %) for RS1 = 200 mΩ; the RS1 = 250 mΩ change is recommended |

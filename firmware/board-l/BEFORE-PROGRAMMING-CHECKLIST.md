@@ -19,9 +19,22 @@ Pin and net names are from `scripts/schgen/board_l_spec.py`. Firmware values are
   3.3 V ([SWD adapter](../../doc/src/content/docs/architecture/swd-adapter.mdx)).
 - V3P3 comes from U4 (AP63203), which runs from V15. So programming needs V15 present.
   V15 also powers U2 (AL8860) and the LED array.
-- What keeps the LEDs off during programming:
-  - a blank or halted MCU leaves PA6 undriven;
-  - R21 (33 kΩ) then holds CTRL low.
+- What keeps the LEDs off during programming is **UNKNOWN** for a blank MCU.
+  - R21 (33 kΩ) holds CTRL low only while PA6 is not driven.
+  - A blank STM32G0 can boot its ST system bootloader through the flash empty check. If that
+    bootloader enables SPI1 on PA4–PA7, PA6 becomes MISO and could drive CTRL toward
+    2.53 V, which is full current.
+  - On this board PA4 (NSS) sits at about 0.30 V, a logic low, through the NTC divider, so
+    the SPI slave could stay selected.
+  - The bootloader's pin use is documented in ST AN2606, which is **not retained** (st.com
+    could not be fetched). The reset-state GPIO mode is in RM0444, also not retained.
+  - **Treat the first power-up of a blank MCU as possibly driving CTRL high.** Section 2 is
+    written for that case.
+- At full CTRL on an RS1 = 200 mΩ board, the #52 worst-case hot branch is 88.6–96.9 mA, which
+  can exceed the 90 mA LED absolute maximum. Check 1.1 therefore comes first.
+- A halted core in a **development** build keeps TIM3 running at its last duty (at most the
+  ceiling) while the IWDG is frozen and nothing supervises temperature. Keep debug halts short
+  while the LEDs are lit.
 - Back-feeding V3P3 from a bench supply with V15 absent has **not been evaluated**. Do not
   use it as a "safe" programming mode without a separate review.
 
@@ -30,7 +43,7 @@ Pin and net names are from `scripts/schgen/board_l_spec.py`. Firmware values are
 | # | Check | Expect | Why |
 | --- | --- | --- | --- |
 | 1.1 | Read the RS1 value **by 4-wire (Kelvin) resistance** across the RS1 pads. The marking code is not in the retained evidence, so do not rely on it | 200 mΩ ±1 % as built (RLP25FEER200), or 250 mΩ if reworked (RLP25FEER250) | Selects the duty ceiling, below |
-| 1.2 | Confirm the firmware ceiling matches 1.1 | 200 mΩ requires `CTRL_FULL_CCR` 2452, the default. 3200 is allowed **only** if 1.1 measured 250 mΩ and the owner approved it | #52: the default keeps the hot branch ≤ 81 mA at h = 30 % (typical CTRL transfer only) |
+| 1.2 | Confirm the firmware ceiling matches 1.1 | 200 mΩ requires `CTRL_FULL_CCR` 2407, the default. 3200 is allowed **only** if 1.1 measured 250 mΩ and the owner approved it | #52: the default keeps the hot branch ≤ 81 mA at h = 30 % and ballast ±2 % (typical CTRL transfer only) |
 | 1.3 | Resistance TP1 (CTRL) to GND | About 33 kΩ (R21), possibly lower through R20 into the unpowered PA6 | The pull-down that holds CTRL OFF is present |
 | 1.4 | R20 10 kΩ, R21 33 kΩ, C21 present (visual, plus 1.3) | Fitted | The CTRL filter and OFF path |
 | 1.5 | V15 to GND, V3P3 to GND | No short | First power |
@@ -39,14 +52,31 @@ Pin and net names are from `scripts/schgen/board_l_spec.py`. Firmware values are
 
 ## 2. First energizing, MCU blank or not yet programmed (only with permission)
 
-Use a current-limited source if one is available. Measure each point within seconds of SW2
-ON.
+Assume the blank MCU may drive CTRL high (section 0). Before SW2 ON:
+
+- **1.1 must be done.** RS1 measured as 200 mΩ means the worst case can exceed the LED
+  absolute maximum, so keep the exposure short by procedure.
+- **Limit the source:**
+  - if the owner's fixture allows a current-limited bench source in place of Board P
+    (VBUS_L on J2.1/J2.2, GND on J2.5/J2.6), set a limit well below the full-load input
+    current;
+  - no such fixture is defined in this repository, so this choice belongs to the owner.
+- **Optional mitigation:** hold NRST low (J3.3 to GND, or the probe's connect-under-reset)
+  while switching on. Whether the pins are then high-impedance is **[RM]**, and whether the
+  bootloader runs before a debugger halt is **[AN2606]**, so this mitigates without proving
+  anything.
+- **Watch TP1 on a scope or meter** that is already connected at SW2 ON. Decide within
+  **1 s**.
+- **Abort:** if TP1 > 0.2 V, any LED lights or the RS1 drop rises, set SW2 OFF at once and
+  record it. Do not program that board until the cause is understood.
+
+Then measure:
 
 | # | Point | Expect | Stop if |
 | --- | --- | --- | --- |
 | 2.1 | V15 (C10) | Within the rail's input range | Out of range |
 | 2.2 | V3P3 (C16/C17) | About 3.3 V | Outside 3.27–3.33 V. That is the analysis range, so outside it the CTRL numbers no longer hold |
-| 2.3 | TP1 (CTRL) | About 0 V | **> 0.2 V**, the typical AL8860 off threshold, which is not guaranteed |
+| 2.3 | TP1 (CTRL), measured first, within 1 s | About 0 V | **> 0.2 V**, the typical AL8860 off threshold, which is not guaranteed: SW2 OFF immediately |
 | 2.4 | RS1 drop (V15 − SET) | About 0 mV, no LED current | Any visible light, or a measurable drop |
 | 2.5 | NTC_SENSE (C24) | About 0.30 V at 25 °C (board-l.mdx) | Near 0 V (short) or near 3.3 V (open) |
 | 2.6 | BRIGHT_ADC (C22) across the knob range | Follows the knob, 0 to about 3.2 V (R22 loads the wiper) | Stuck |
@@ -101,9 +131,9 @@ Production builds do not freeze the IWDG under the debugger.
 | 5.1 | TP1 at power-on, before the ramp | About 0 V | > 0.2 V |
 | 5.2 | TP1, knob at minimum | 0 V (hard OFF) | — |
 | 5.3 | TP1, knob just above the off band | About 0.41 V (CCR 518, the 5 % floor) | — |
-| 5.4 | TP1, knob at maximum | About 1.94 V (2452/3200 × 3.3 V × 33/43). The ramp to it takes about 2.5 s | > 2.0 V with the default ceiling |
-| 5.5 | RS1 drop at maximum → total mean current | About 78 mV / 200 mΩ ≈ 388 mA (typical) | > 81 mV (0.776 × the 104 mV VSENSE maximum) |
-| 5.6 | Each ballast R30–R37 (33 Ω) drop → branch mean | About 1.6 V (≈ 48 mA) | Any branch > 81 mA **mean**. Peak needs 5.7 |
+| 5.4 | TP1, knob at maximum | About 1.90 V (2407/3200 × 3.3 V × 33/43). The ramp to it takes about 2.5 s | > 1.95 V with the default ceiling |
+| 5.5 | RS1 drop at maximum → total mean current | About 76 mV / 200 mΩ ≈ 381 mA (typical) | > 80 mV (0.762 × the 104 mV VSENSE maximum) |
+| 5.6 | Each ballast R30–R37 (33 Ω) drop → branch mean | About 1.57 V (≈ 48 mA) | Any branch > 81 mA **mean**. Peak needs 5.7 |
 | 5.7 | Coil/LED_N current ripple at minimum and maximum V15 (scope) | Gives the real h, the unpublished VSENSE_HYS | Peak = mean × (1 + h) > 81 mA on the hottest branch |
 | 5.8 | Pulse-skip sweep near the floor (LED_N on a scope) | The burst rate | Bursts < ~300 Hz: raise `CTRL_MIN_CCR` (board-l.mdx Gate 4) |
 | 5.9 | NTC_SENSE against a thermocouple at the hottest LED solder point | The NTC-to-TS correlation | Derate (code 104) must begin before TS ≈ 76 °C at 250 mΩ, and earlier at 200 mΩ |
@@ -117,8 +147,9 @@ All of these are debugger-observable. Each must end with TP1 at about 0 V.
 | 6.1 | Knob to minimum | OFF; light returns when the knob is raised |
 | 6.2 | Open the NTC, e.g. lift RT1 or disconnect it only if a fixture allows | OFF, latched until a reset. **Do not rework the board just for this test without approval** |
 | 6.3 | Halt in the debugger, development build | Record TP1. TIM3 is not frozen by this firmware, so CTRL keeps its last duty while halted. The IWDG is frozen in development builds only |
-| 6.4 | Three software resets (SYSRESETREQ) in a row without a power cycle | OFF after the third (`g_reset_record.count` = 3); a pin reset keeps it OFF |
-| 6.5 | Power cycle after 6.4 | Light allowed again (count 0) |
+| 6.4 | Three software resets (SYSRESETREQ), each within 10 s of the previous boot | OFF after the third (`g_reset_record.count` = 3); a pin reset keeps it OFF |
+| 6.5 | After 6.4, leave it parked ≥ 10 s, then power cycle | Light allowed again (count 0). A power cycle within 10 s may keep the latch while SRAM is retained (duration [DS]): record which happened |
+| 6.5a | Software resets spaced > 10 s apart in normal operation | Never latches (the count is consecutive) |
 | 6.6 | Stop refreshing the IWDG, e.g. hold a breakpoint in a production build | A reset in about 100 ms. The LSI tolerance is [DS] |
 
 Close by recording which rows ran, which did not, and why.

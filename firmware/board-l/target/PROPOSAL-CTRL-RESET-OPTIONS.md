@@ -27,7 +27,7 @@ only **reads** option bytes; it never writes them. Writing them is a bench step 
 | Carrier | **20 kHz**: PSC 0, ARR 3199 (`CTRL_PERIOD_TICKS` 3200 at 64 MHz) | See the trade-off below |
 | OFF | Command 0 gives CCR 0. `lamp_app` then calls `force_off`, which puts PA6 in GPIO output-low | Does not rely on the typical 0.2 V VEN(OFF) threshold |
 | Floor | CCR 518 (16.2 %): 0.41 V nominal, about 5 % of I_NOM (typical) | DS recommended analog range is 5–100 % |
-| Ceiling | One compile-time constant, `CTRL_FULL_CCR`. Default **2452 (76.6 %)**, which keeps an unchanged RS1 = 200 mΩ board ≤ 81 mA in the h = 30 % / ballast ±2 % case. Use 3200 only after RS1 = 250 mΩ is measured | `candidates/board-l-led-margin-52/` (`ctrl_ceiling_rs200_hys30`). Typical transfer only. Replaces the phase 4 value of 2656, which covered only h = 20 % |
+| Ceiling | One compile-time constant, `CTRL_FULL_CCR`. Default **2407 (75.2 %)**, which keeps an unchanged RS1 = 200 mΩ board ≤ 81 mA in the h = 30 % / ballast ±2 % case. Use 3200 only after RS1 = 250 mΩ is measured | `candidates/board-l-led-margin-52/` (`ctrl_ceiling_rs200_hys30_rb2`). Typical transfer only. Replaces the phase 4 value 2656 (h = 20 %) and the phase 5 value 2452, which was computed with ballast ±1 % although it was documented as ±2 %. At 2452 with ±2 %, the hot branch reaches 82.3 mA |
 | Clock dependency | The lamp is **not started** unless the 64 MHz PLL locked | On the HSI fallback, ARR 3199 would give 5 kHz and about 4× the ripple |
 
 **Carrier trade-off.** CTRL is filtered-analog: 7.67 kΩ with 100 nF gives a 207 Hz
@@ -67,13 +67,31 @@ current, which is unpublished. Any reset therefore turns the light off without f
 3. **Reset cause.** At boot:
    - read RCC_CSR, then clear the flags with RMVF;
    - keep a `.noinit` RAM counter with a magic word;
-   - after **3 consecutive** IWDG/WWDG/software/lockup resets without a power-on reset
-     (PWRRSTF), stay OFF and never initialize the output until power is cycled.
+   - after **3 consecutive** abnormal resets, stay OFF and never initialize the output
+     until power is cycled.
    This adds a reset-level latch on top of `lamp_app`'s existing LATCH policy for sensors.
-   - Implemented: a pin-only or option-load reset is neutral.
-   - A corrupt record after an abnormal reset counts as one earlier abnormal reset.
-   - A deliberate refusal (latch or options) parks OFF while refreshing the IWDG.
-   - An unexpected failure halts without a refresh, so the reset is counted.
+
+   **Implemented (phase 6)** in `board_policy.c`, host-tested.
+
+   | Event | Effect on the count |
+   | --- | --- |
+   | IWDG, WWDG, software or low-power reset | +1 |
+   | PWRRSTF (G0: POR/PDR **or BOR**) with the SRAM record intact and no healthy run before it | +1. A supply-dip or BOR reset loop, such as a sag on every ramp, must not escape the latch |
+   | PWRRSTF after a healthy run, or with the record lost | Cleared: a power cycle |
+   | Pin-only or option-load reset | Unchanged |
+   | **Healthy run:** `RESET_HEALTHY_TICKS` = 10 s of main-loop ticks in normal operation | Cleared, so the count means *consecutive* failures |
+   | 10 s **parked** (latched or refused) | Count kept, but the run is marked long, so the next power cycle clears it |
+   | Corrupt record after a non-power reset | Rebuilt as one earlier abnormal reset |
+
+   - 10 s exceeds the 2.5 s ramp, so a sag-on-ramp loop counts.
+   - **Trade-off:** a user who switches the lamp on and off three times within 10 s each,
+     with SRAM retained, latches it. It then clears after 10 s on (parked) and a power
+     cycle, or after a power-off long enough to lose SRAM.
+   - How long SRAM survives without power is **[DS]**, unknown. That makes "a power cycle"
+     a behavioural definition, not an electrical one.
+   - The check order puts the latch first: a latched board parks OFF (`boot_action_for`),
+     even with a clock failure. A deliberate refusal parks OFF while refreshing the IWDG.
+   - A clock failure alone halts without a refresh, so the retry is a counted reset.
 4. **BOR:** BOR_EN = 1 at the highest level, 4 (BORF "around 2.8 V", BORR "around 2.9 V",
    per the ST HAL comments).
    - This is the highest level below the 3.27 V rail minimum, so a sagging rail gives a
@@ -124,7 +142,7 @@ A blank device's empty-check boot behaviour, and when the option load takes effe
 ## 4. What truly needs the user
 
 - **RS1 for #52:** 250 mΩ, 20 % less light, guaranteed margin; or keep 200 mΩ with the
-  typical-only 76.6 % firmware ceiling (`CTRL_FULL_CCR` 2452, the default).
+  typical-only 75.2 % firmware ceiling (`CTRL_FULL_CCR` 2407, the default).
 - **Production RDP level:** 0 or 1.
 - **Product feel:** the ramp time (proposed ≈2.5 s, following the bring-up), gamma 2.2 as
   the V72 default (bring-up and `board-l.mdx` precedent), the brightness floor, and the

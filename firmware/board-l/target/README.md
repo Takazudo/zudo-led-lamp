@@ -24,15 +24,15 @@ There is no flash target.
 | `stm32g031f8_flash.ld` | 64 KB flash at 0x08000000 and 8 KB RAM at 0x20000000, plus a 1 KB minimum stack check |
 | `clock.c` | HSI16 → PLL (M 2, N 16, R 2) = 64 MHz with flash latency 2 WS. It stays on HSI if voltage range 1 is not confirmed or any ready-wait times out |
 | `board_ctrl.c` | Safe CTRL (PA6) order and force-off path; see below |
-| `main.c` | Force off → read and clear RCC_CSR, read FLASH_OPTR → start IWDG → clock → `boot_decide`. A clock failure halts without a watchdog refresh, so the IWDG resets and the reset is counted; a latch or option refusal parks OFF. Then SysTick → ADC → `board_samples` → `lamp_app_initialize_with_thermal_gain` (TIM3 at 0 %) → `lamp_app_tick` on each 1 kHz tick, with the IWDG refreshed in the main loop only |
-| `board_policy.c/.h` | Portable. Reset-cause classification and the `.noinit` latch record (3 abnormal resets without a power-on reset → OFF). The option-byte gate refuses light unless BOR_EN = 1 and both BOR levels = 3. Boot decision |
-| `board_samples.c/.h` | Portable. One ADC pair per tick → V72 `sample_adapter` (graded): age ≤ 2 ticks, knob window 8, endpoints 91..4000 (placeholders). NTC: open (≥ 3500) is unknown, ≤ 69 denies light, 104 → 69 linear gain |
+| `main.c` | Force off → read and clear RCC_CSR, read FLASH_OPTR → start IWDG → clock → `boot_decide`. `boot_action_for` checks the latch first, so a latched board parks OFF. A clock failure alone halts without a watchdog refresh, so the IWDG resets and the reset is counted. An option refusal parks OFF. Then SysTick → ADC → `board_samples` → `lamp_app_initialize_with_thermal_gain` (TIM3 at 0 %) → `lamp_app_tick` on each 1 kHz tick, with the IWDG refreshed in the main loop only. After 10 s of healthy run the reset count is cleared. `board_ctrl_write_ccr` forces OFF on any value above the compile-time `CTRL_FULL_CCR` |
+| `board_policy.c/.h` | Portable. Reset-cause classification and the `.noinit` latch record: 3 *consecutive* abnormal resets → OFF. A BOR/dip reset with no healthy run in between counts; a 10 s healthy run clears the count. The option-byte gate refuses light unless BOR_EN = 1 and both BOR levels = 3. Boot decision |
+| `board_samples.c/.h` | Portable. One ADC pair per tick → V72 `sample_adapter` (graded): knob window 8 with max age 7 ticks, so the mean really spans 8 samples (a host test checks it); endpoints 91..4000 (placeholders). NTC: open (≥ 3500) is unknown, ≤ 69 denies light, 104 → 69 linear gain |
 | `board_iwdg.c/.h` | IWDG /32, reload 99 (about 100 ms at the typical LSI). The debugger freeze applies unless `BOARD_L_PRODUCTION` is defined |
 | `board_adc.c/.h` | ADC1: PCLK/2, calibration, 160.5-cycle sampling, one software scan IN0 → IN4 with bounded waits. Any timeout or overrun fails the frame, which latches OFF |
 | `lamp_target.c/.h` | `lamp_app_io` adapter. No output before a valid config; any refused config or mapping forces OFF. Zero → CCR 0 + GPIO-low. Positive → V72 `ctrl_timer_map` into [floor, ceiling], re-running the 0 % handover after an OFF |
-| `board_l_proposal.h` | PROPOSED 20 kHz period, floor CCR, the **single** ceiling `CTRL_FULL_CCR` (default 2452 = 76.6 %, which protects an unchanged RS1 = 200 mΩ board; override `-DCTRL_FULL_CCR=3200` only after a measured 250 mΩ), ramp, latch count, IWDG and BOR fields |
+| `board_l_proposal.h` | PROPOSED 20 kHz period, floor CCR, the **single** ceiling `CTRL_FULL_CCR` (default 2407 = 75.2 %, which protects an unchanged RS1 = 200 mΩ board; override `-DCTRL_FULL_CCR=3200` only after a measured 250 mΩ), ramp, latch count, IWDG and BOR fields |
 | `test/test_lamp_target.c` | Host tests: startup OFF, knob zero → OFF, thermal invalid → OFF (latched), faults → OFF, ceiling enforced, default ceiling value, graded path without a reader → OFF |
-| `test/test_board_policy.c` | Host tests: reset classification, latch after 3, pin resets do not clear it, power-on clears it, corrupt record, BOR disabled or wrong level → OFF, clock failure → OFF |
+| `test/test_board_policy.c` | Host tests: reset classification; latch after 3; pin and quick power resets do not clear it; a long-parked run followed by a power cycle clears it; healthy runs make it consecutive; a BOR/dip loop latches; normal power cycles do not count; corrupt record; latch-before-clock order; BOR disabled or wrong level → OFF; clock failure → halt |
 | `test/test_board_samples.c` | Host tests through the whole chain to a fake CTRL port. Covers: ramp to the ceiling; knob off band → OFF (not latched); NTC open, out of range, critical or shorted → OFF (latched); ADC failure, not-ok, knob out of range, stale or clock rollback → OFF (latched); bad sensor from the first sample; monotonic derate; init refusals |
 | `stm32g031_regs.h` | Minimal register map; every value comes from ST/ARM headers (see `SOURCES.md`) |
 | `verify/` | `make verify-regs` (static asserts against the ST/ARM headers) and `check_vectors.py` (vector order against ST's startup file) |
@@ -49,14 +49,14 @@ There is no flash target.
 PA5/PA7 are never touched, so they keep their reset state. PA13/PA14 (SWD) and PA15 are
 never touched either.
 
-## Checks run on 2026-10-31 (updated in phase 5)
+## Checks run on 2026-10-31 (updated in phase 6)
 
 All of these are build-only; nothing ran on a target.
 
 | Check | Result |
 | --- | --- |
-| `make` with arm-none-eabi-gcc 13.2.1 (Ubuntu 24.04 package `gcc-arm-none-eabi` 15:13.2.rel1-2) | PASS, `-Werror -pedantic`: text 10624 B, bss + .noinit 980 B (V72 `lamp_app`, `sample_adapter` and `input_conversion` linked; newlib-nano for `memcpy`/`memset` only) |
-| `make target-host-test` | **PASS**: 5428 (lamp_target) + 36 (boot policy) + 70985 (sample chain) checks. Mutation runs fail as expected: no force-off, apply before init, thermal gate always open, open NTC known, ignore ADC not-ok, unity gain, no latch, no BOR refusal, power-on not clearing, pin reset counting, no clock refusal, graded unity, ceiling 3200 |
+| `make` with arm-none-eabi-gcc 13.2.1 (Ubuntu 24.04 package `gcc-arm-none-eabi` 15:13.2.rel1-2) | PASS, `-Werror -pedantic`: text 10904 B, bss + .noinit 984 B (V72 `lamp_app`, `sample_adapter` and `input_conversion` linked; newlib-nano for `memcpy`/`memset` only) |
+| `make target-host-test` | **PASS**: 5430 (lamp_target) + 106 (boot policy) + 71053 (sample chain) checks. Mutation runs fail as expected: no force-off, apply before init, thermal gate always open, open NTC known, ignore ADC not-ok, unity gain, no latch, no BOR refusal, pin reset counting, no clock refusal, graded unity, ceiling 3200; phase 6: max age 2 (window 3), no healthy-run clear, power reset always clearing, parked run clearing, long run never marked, clock before latch, no register ceiling check |
 | `make v72-objects`: all 33 V72 `.c` files except `test_input_app.c`, cross-compiled for Cortex-M0+ | PASS, 33/33 (not linked) |
 | `make host-test`: V72 host test with gcc 13.3.0 | **PASS 44**, exit 0 |
 | `make verify-regs` against ST `cmsis_device_g0` + `stm32g0xx_hal_driver` + ARM CMSIS_5 | PASS. Now also covers IWDG, RCC_CSR, FLASH_OPTR (including the HAL `OB_BOR_LEVEL_*_3` and `OB_RESET_MODE_INPUT_OUTPUT` encodings), ADC1 and DBG. A negative test (PLLON bit altered) fails as expected |

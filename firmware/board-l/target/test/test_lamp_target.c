@@ -174,9 +174,12 @@ static void test_default_ceiling_and_graded_off(void)
     struct rig r;
     /* The single ceiling constant: default protects an unchanged RS1 = 200 mOhm board. */
 #ifndef BOARD_L_TEST_CEILING_OVERRIDE
-    CHECK(CTRL_FULL_CCR == 2452u);
+    CHECK(CTRL_FULL_CCR == 2407u);
 #endif
-    CHECK((uint64_t)CTRL_FULL_CCR * 10000u / CTRL_PERIOD_TICKS <= 7663u || CTRL_FULL_CCR != 2452u);
+    CHECK((uint64_t)CTRL_FULL_CCR * 10000u / CTRL_PERIOD_TICKS <= 7522u || CTRL_FULL_CCR != 2407u);
+    /* Register-write check (board_ctrl_write_ccr) against the compile-time ceiling. */
+    CHECK(ctrl_ccr_within_ceiling(0u) && ctrl_ccr_within_ceiling(CTRL_FULL_CCR));
+    CHECK(!ctrl_ccr_within_ceiling(CTRL_FULL_CCR + 1u) && !ctrl_ccr_within_ceiling(UINT32_MAX));
     /* Graded (thermal gain) path with no graded reader: UNCONFIGURED, never lights. */
     rig_init(&r, 1, CTRL_FULL_CCR);
     struct lamp_app_gain_path gain = lamp_target_gain_path();

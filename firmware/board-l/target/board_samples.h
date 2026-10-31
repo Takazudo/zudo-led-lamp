@@ -16,7 +16,11 @@
 #define KNOB_OFF_CODE 91u
 #define KNOB_FULL_CODE 4000u
 #define KNOB_WINDOW 8u
-#define SAMPLE_MAX_AGE_TICKS 2u
+/* V72 sample_adapter evicts history older than max_age, and this target takes one
+ * sample per tick, so max_age must span the window (ages 0..KNOB_WINDOW-1) for the
+ * mean to really cover KNOB_WINDOW samples. 7 ms is still fresh for a knob/NTC. */
+#define SAMPLE_MAX_AGE_TICKS (KNOB_WINDOW - 1u)
+_Static_assert(KNOB_WINDOW >= 1u && KNOB_WINDOW <= KNOB_AVERAGE_MAX_WINDOW, "knob window range");
 
 /* One completed knob/NTC conversion pair. ok=false means the converter failed. */
 struct raw_pair { uint32_t knob, ntc; bool ok; };

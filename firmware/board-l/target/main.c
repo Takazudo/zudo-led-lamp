@@ -70,12 +70,17 @@ static void halt_off(void)
         board_ctrl_force_off();
 }
 
-/* Deliberate refusal (latch, option bytes): stable OFF, diagnostics readable. */
+/* Deliberate refusal (latch, option bytes): stable OFF, diagnostics readable. The
+ * uptime still marks a long run, so a later power cycle can clear a latch. */
 static void park_off(void)
 {
+    uint32_t start;
+    (void)systick_start(clock_hclk_hz(g_clock_result));
+    start = g_ticks;
     for (;;) {
         board_ctrl_force_off();
         board_iwdg_refresh();
+        reset_record_note_uptime(&g_reset_record, g_ticks - start, false);
     }
 }
 
@@ -102,10 +107,16 @@ int main(void)
     g_clock_result = clock_init_64mhz();             /* 4. 64 MHz or refuse          */
     d = boot_decide(&g_reset_record, g_reset_csr, g_optr, g_clock_result == CLOCK_PLL_64MHZ);
     g_boot_decision = d;
-    if (d.refusals & BOOT_REFUSE_CLOCK)
+    switch (boot_action_for(&d)) {                   /*    latch first: parks OFF     */
+    case BOOT_RUN:
+        break;
+    case BOOT_HALT_OFF:                              /*    clock: counted-reset retry */
         halt_off();
-    if (!d.allow_light)
+        break;
+    default:
         park_off();
+        break;
+    }
     if (!systick_start(clock_hclk_hz(g_clock_result)))
         halt_off();
     if (!board_adc_init(delay_ms))                   /* 5. sample source             */
@@ -120,13 +131,14 @@ int main(void)
     if (g_last_report.status != LAMP_APP_CORE_OFF)          /* initialized, OFF */
         halt_off();
 
-    uint32_t seen = g_ticks;
+    uint32_t seen = g_ticks, start = g_ticks;
     for (;;) {
         __asm volatile("wfi");
         if (g_ticks != seen) {
             seen = g_ticks;
             g_last_report = lamp_app_tick(&g_app, &policy); /* 6. every tick re-applies */
             board_iwdg_refresh();                           /*    main loop only         */
+            reset_record_note_uptime(&g_reset_record, seen - start, true); /* consecutive */
         }
     }
 }
