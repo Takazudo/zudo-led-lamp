@@ -4803,7 +4803,7 @@
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-pd:WSON-6_L2.0-W2.0-P0.65-BL-EP"
+		(property "Footprint" "rnext-mfr:WSON-6_DRV0006A_TI-EXAMPLE"
 			(at 203.2 38.1 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -4989,7 +4989,7 @@
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-pd:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"
+		(property "Footprint" "rnext-mfr:SOT-23-6_DBV0006A_TI-EXAMPLE"
 			(at 241.3 266.7 0)
 			(effects
 				(font (size 1.27 1.27))
@@ -6105,7 +6105,7 @@
 				(font (size 1.27 1.27))
 			)
 		)
-		(property "Footprint" "zudo-pd:SOD-123_L2.8-W1.8-LS3.7-RD"
+		(property "Footprint" "rnext-mfr:SOD-123_DIODES-SUGGESTED"
 			(at 279.4 76.2 0)
 			(effects
 				(font (size 1.27 1.27))

@@ -18,12 +18,18 @@ fw = importlib.util.module_from_spec(s)
 s.loader.exec_module(fw)
 
 WINDOW_REFS = {'U4', 'U5', 'C40', 'C41', 'C42', '#FLG01', '#FLG02'} | {f'R{n}' for n in range(30, 40)}
-ALLOWED_COMPONENT_DIFF = {'JOUT1': 'footprint nickname zudo-led-lamp (LED part, same name)'}
+ALLOWED_COMPONENT_DIFF = {'JOUT1': 'footprint nickname zudo-led-lamp (LED part, same name)',
+                          'U3': 'manufacturer DBV0006A land', 'D5': 'manufacturer DRV0006A land',
+                          'D8': 'manufacturer SOD123 land'}
 errors = []
 for ref, comp in r3['COMPONENTS'].items():
     if ref not in rn['COMPONENTS']:
         errors.append(f'{ref}: dropped from block')
-    elif rn['COMPONENTS'][ref] != comp and ref not in ALLOWED_COMPONENT_DIFF:
+    elif ref in ALLOWED_COMPONENT_DIFF:
+        a, b = rn['COMPONENTS'][ref], comp
+        if a[:3] + a[4:] != b[:3] + b[4:]:
+            errors.append(f'{ref}: changed beyond its footprint field')
+    elif rn['COMPONENTS'][ref] != comp:
         errors.append(f'{ref}: changed from r3')
 extra = set(rn['COMPONENTS']) - set(r3['COMPONENTS'])
 if extra - WINDOW_REFS:
@@ -50,11 +56,16 @@ def ohms(ref):
     return float(v.rstrip('kM')) * {'k': 1e3, 'M': 1e6}.get(v[-1], 1)
 
 
+U5_OUTA_LEAK_MAX_A = 300e-9
 cases = {}
 for name, e in fw.LEVELS.items():
     cases[name] = {
         'monitor_INA': fw.monitor(ohms('R35') + ohms('R36'), ohms('R37'), e),
         'efuse_UV_no_QINH': fw.efuse(ohms('R31'), ohms('R32'), fw.EFUSE_UV_RISE, fw.EFUSE_UV_FALL, e),
+        # U5 OUTA is open-drain on the EN/UVLO node; TPS3701 datasheet ID(leak) max 300 nA
+        # (fact-tps3701-out-leak) flows into the same node when OUTA is released.
+        'efuse_UV_with_U5_OUTA_leak': fw.efuse(ohms('R31'), ohms('R32'), fw.EFUSE_UV_RISE, fw.EFUSE_UV_FALL, e,
+                                               U5_OUTA_LEAK_MAX_A),
         'efuse_OV': fw.efuse(ohms('R33'), ohms('R34'), fw.EFUSE_OV_RISE, fw.EFUSE_OV_FALL, e),
     }
 l2 = cases['L2_plus_endurance_0p5pct']
@@ -68,6 +79,8 @@ out = {
         'reject_12v6_margin_v': round(l2['monitor_INA']['reject_margin_v'], 3),
         'on_needs_vbus_out_at_least_v': round(l2['monitor_INA']['rise'][1], 3),
         'efuse_uv_rise_band_v': [round(x, 3) for x in l2['efuse_UV_no_QINH']['rise']],
+        'efuse_uv_rise_band_with_u5_leak_v': [round(x, 3) for x in l2['efuse_UV_with_U5_OUTA_leak']['rise']],
+        'efuse_uv_fall_band_with_u5_leak_v': [round(x, 3) for x in l2['efuse_UV_with_U5_OUTA_leak']['fall']],
         'ov_rise_band_v': [round(x, 3) for x in l2['efuse_OV']['rise']],
         'ov_fall_min_v': round(l2['efuse_OV']['fall'][0], 3),
     },

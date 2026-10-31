@@ -20,6 +20,10 @@ Integration changes against the standalone window sub-circuit
   TVS2200 + LM74700 + TPS16630 front end (PD gate L7). U4 IN (28 V abs max) and U5 VDD
   sit on VBUS_OUT, which follows the protected node VBUS_P through Q1, so they share
   the STUSB4500 VDD L7 status (OPEN in the PD worker's analysis).
+- Footprints of U3 (LM74700), D5 (TVS2200) and D8 (BZT52C11) use drafted manufacturer
+  example lands (footprints/rnext-mfr.pretty, tools/draft_lands.py) because the zudo-pd lands
+  differ from the TI/Diodes drawings (checks/land-check.json). Values, LCSC codes and nets
+  stay identical to r3; this is fed back to the PD worker as a common-block land finding.
 
 Per-product parameter pair (PDO2 current and U4 current limit move together)
 - OPTION 'I1A5' (default, pending user): NVM I_SNK_PDO2 = 0101b (1.50 A); RILM 3.32 k,
@@ -58,9 +62,9 @@ COMPONENTS = {
     'J1': ('TYPE-C-31-M-17', 'TYPE-C-31-M-17', 'C283540', 'zudo-pd:USB-C-SMD_10P-P1.00-L6.8-W8.9', False, (63.5, 88.9)),
     'U1': ('STUSB4500QTR', 'STUSB4500QTR', 'C2678061', 'zudo-pd:QFN-24_L4.0-W4.0-P0.50-BL-EP2.8', False, (152.4, 88.9)),
     'Q1': ('DMP3036SFG-7', 'DMP3036SFG-7', 'C461081', 'zudo-pd:PowerDI3333-8_DMP3036SFG', False, (241.3, 50.8)),
-    'D5': ('TVS2200DRVR', 'TVS2200DRVR', 'C523793', 'zudo-pd:WSON-6_L2.0-W2.0-P0.65-BL-EP', False, (203.2, 38.1)),
+    'D5': ('TVS2200DRVR', 'TVS2200DRVR', 'C523793', 'rnext-mfr:WSON-6_DRV0006A_TI-EXAMPLE', False, (203.2, 38.1)),
     'U2': ('TPS16630PWPR', 'TPS16630PWPR', 'C1849461', 'zudo-pd:HTSSOP-20_PWP0020T_P0.65_EP2.96_TI-DRAFT', False, (114.3, 38.1)),
-    'U3': ('LM74700QDBVRQ1', 'LM74700QDBVRQ1', 'C2941042', 'zudo-pd:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL', False, (241.3, 266.7)),
+    'U3': ('LM74700QDBVRQ1', 'LM74700QDBVRQ1', 'C2941042', 'rnext-mfr:SOT-23-6_DBV0006A_TI-EXAMPLE', False, (241.3, 266.7)),
     'C37': ('CL10A105KB8NNNC', '1uF/50V', 'C15849', 'zudo-pd:C0603', False, (190.5, 266.7)),
     'C3': ('RVT1H101M0810', '100uF 50V', 'C970687', 'zudo-pd:CAP-SMD_BD8.0-L8.3-W8.3-LS9.0-FD', False, (266.7, 241.3)),
     'Q3': ('CSD18543Q3A', 'CSD18543Q3A', 'C840100', 'zudo-pd:VSON-8_L3.3-W3.3-P0.65_CSD18543Q3A', False, (63.5, 38.1)),
@@ -79,7 +83,7 @@ COMPONENTS = {
     'C35': ('CC0603KRX7R9BB104', '100nF/50V', 'C14663', 'zudo-pd:C0603', False, (190.5, 165.1)),
     'R11': ('0603WAF1503T5E', '150k', 'C22807', 'zudo-pd:R0603', False, (38.1, 190.5)),
     'R12': ('0603WAF4701T5E', '4.7k', 'C23162', 'zudo-pd:R0603', False, (76.2, 190.5)),
-    'D8': ('BZT52C11-7-F_C92321', 'BZT52C11-7-F', 'C92321', 'zudo-pd:SOD-123_L2.8-W1.8-LS3.7-RD', False, (279.4, 76.2)),
+    'D8': ('BZT52C11-7-F_C92321', 'BZT52C11-7-F', 'C92321', 'rnext-mfr:SOD-123_DIODES-SUGGESTED', False, (279.4, 76.2)),
     'R13': ('0603WAF4700T5E', '470R', 'C23179', 'zudo-pd:R0603', False, (114.3, 190.5)),
     'R14': ('0603WAF4700T5E', '470R', 'C23179', 'zudo-pd:R0603', False, (152.4, 190.5)),
     'R28': ('0603WAF4700T5E', '470R', 'C23179', 'zudo-pd:R0603', False, (152.4, 266.7)),

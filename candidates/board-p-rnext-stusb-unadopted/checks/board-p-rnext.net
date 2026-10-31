@@ -1,8 +1,8 @@
 (export
 	(version "E")
 	(design
-		(source "/tmp/w/board-p-rnext.kicad_sch")
-		(date "2026-10-31T17:01:46")
+		(source "/tmp/w/candidates/board-p-rnext-stusb-unadopted/board-p-rnext.kicad_sch")
+		(date "2026-10-31T17:15:25")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -725,12 +725,12 @@
 		(comp
 			(ref "D5")
 			(value "TVS2200DRVR")
-			(footprint "zudo-pd:WSON-6_L2.0-W2.0-P0.65-BL-EP")
+			(footprint "rnext-mfr:WSON-6_DRV0006A_TI-EXAMPLE")
 			(fields
 				(field
 					(name "LCSC") "C523793")
 				(field
-					(name "Footprint") "zudo-pd:WSON-6_L2.0-W2.0-P0.65-BL-EP")
+					(name "Footprint") "rnext-mfr:WSON-6_DRV0006A_TI-EXAMPLE")
 				(field
 					(name "Datasheet")
 				)
@@ -914,12 +914,12 @@
 		(comp
 			(ref "D8")
 			(value "BZT52C11-7-F")
-			(footprint "zudo-pd:SOD-123_L2.8-W1.8-LS3.7-RD")
+			(footprint "rnext-mfr:SOD-123_DIODES-SUGGESTED")
 			(fields
 				(field
 					(name "LCSC") "C92321")
 				(field
-					(name "Footprint") "zudo-pd:SOD-123_L2.8-W1.8-LS3.7-RD")
+					(name "Footprint") "rnext-mfr:SOD-123_DIODES-SUGGESTED")
 				(field
 					(name "Datasheet")
 				)
@@ -3098,12 +3098,12 @@
 		(comp
 			(ref "U3")
 			(value "LM74700QDBVRQ1")
-			(footprint "zudo-pd:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+			(footprint "rnext-mfr:SOT-23-6_DBV0006A_TI-EXAMPLE")
 			(fields
 				(field
 					(name "LCSC") "C2941042")
 				(field
-					(name "Footprint") "zudo-pd:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+					(name "Footprint") "rnext-mfr:SOT-23-6_DBV0006A_TI-EXAMPLE")
 				(field
 					(name "Datasheet")
 				)
