@@ -38,8 +38,19 @@ no internal bias specified; ST's application figure uses a 10 kOhm pull-down.
 | J2.4 | RESET on a bare pogo pad; #143 notes silk mislabelled "NC" | ESD/miswire exposure |
 | DRC | clean | clearance rules do not catch contamination paths |
 
-Main also carries a latent BOM defect: main's `boards/board-p/board-p.kicad_pcb` R19 LCSC
-property is C25803 (100 kOhm) while the generator and the ordered source say C21189 (0 Ohm).
+**Erratum (phase 8, replaces an earlier claim):** this section first called R19 a latent BOM
+defect. That was wrong. In `boards/board-p/board-p.kicad_pcb` the schematic-derived `LCSC`
+property of R19 is C21189 (0 Ohm), matching the generator. Only the second, imported
+`LCSC Part` field carries the stale generic-footprint value C25803. The same holds for 10
+other Board P footprints (C2, C35, R12-R18, R20) and 20 Board L footprints. This is the
+documented condition in `manufacturing/README.md` ("Traceability and coordinates"): the export
+script rewrites both fields from the generator identity, and the 2026-09-19 release records
+exactly these 11 + 20 corrections in `checks/export-validation.json`. The ordered BOM is correct.
+
+The active board files are not edited for this. `manufacturing/jlcpcb/2026-09-19/manifest.json`
+pins their SHA-256 (`source_hashes`), so any edit makes `verify-jlcpcb.py` report "source
+changed since export" for the historical release. Normalize the `LCSC Part` fields in the next
+board revision, not in the ordered source.
 
 ## Ranked candidate causes
 
