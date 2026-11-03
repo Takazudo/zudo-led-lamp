@@ -26,9 +26,9 @@ Pin and net names are from `scripts/schgen/board_l_spec.py`. Firmware values are
   brown-out, a fault or a corrupted image. Check 2.3 still measures TP1 on every board.
 - **Correction (2026-11-04 review, R5).** An earlier version of this checklist said a
   blank STM32G0 bootloader might enable SPI1 on PA4–PA7 and drive CTRL through PA6 (MISO).
-  That hypothesis is **withdrawn**. It came from other STM32 families. For the exact
-  STM32G03xxx/G04xxx bootloader, AN2606 lists USART1, USART2, I2C1 and I2C2 only, with no
-  SPI. PA4 (NTC_SENSE, about 0.30 V) is therefore not an SPI chip select either.
+  That hypothesis is **withdrawn**. For the exact STM32G03xxx/G04xxx bootloader, AN2606
+  Rev 71 Table 106 lists USART1, USART2, I2C1 and I2C2 only, with no SPI (verified from a
+  text extraction, section 0.1). PA4 (NTC_SENSE, about 0.30 V) is therefore not an SPI chip select either.
 
 ### 0.1 CTRL (PA6) state from reset to firmware start
 
@@ -36,22 +36,40 @@ Sources (exact part STM32G031F8P6, `component-stm32g031f8p6`):
 
 | Ref | Document | Locator | Retention in this repo |
 | --- | --- | --- | --- |
-| [AN2606] | ST AN2606 *Introduction to system memory boot mode on STM32 MCUs*, **Rev 71** (cover dated November 2026) | §47 STM32G03xxx/G04xxx, Table 106 "STM32G03xxx/G04xxx configuration in system memory boot mode", pp. 256–257 | **Bytes not retained.** The 2026-11-04 review fetched Rev 71 from `https://www.st.com.cn/resource/en/application_note/an2606-introduction-to-system-memory-boot-mode-on-stm32-mcus-stmicroelectronics.pdf` with SHA256 `dd8e48f0ae32ae3fb168d9d8da72092714289b9e410d2fcb5964b10dfc86396a` and read Table 106. On 2026-11-04 this session could not download the bytes (st.com: empty reply from the cloud container, HTTP 403 from the local proxy). A text reader confirmed only the cover (Rev 71) and the table-of-contents line "Table 106 … 256"; it did not reach the table body. The interface list below is therefore the review's reading, not re-hashed here |
-| [RM0444] | ST RM0444 *STM32G0x1 reference manual*, **Rev 6** (December 2024) | GPIOA_MODER, pp. 238–239: reset value 0xEBFFFFFF; MODE6 (bits 13:12) = 11, Analog mode | **Bytes not retained** (`src-c529334-rm` stays SOURCE UNAVAILABLE). Read by the 2026-11-04 review from the owner's copy. Corroborated by ST's CMSIS-SVD `STM32G031.svd` v1.6 (Apache-2.0, mirrored at `modm-io/cmsis-svd-stm32@e79021ac`, file SHA256 `382bc7d42fae87578b64db7a07afe69a9d07319389a9d4250699e19144d31329`): `GPIOA.MODER resetValue 0xEBFFFFFF`. The SVD is a manufacturer register description, not the RM |
+| [AN2606] | ST AN2606 *Introduction to system memory boot mode on STM32 MCUs*, **Rev 71** (page footer "November 2026 AN2606 Rev 71 1/584") | §47 STM32G03xxx/STM32G04xxx: §47.1 Table 106 "STM32G03xxx/G04xxx configuration in system memory boot mode", pp. 256–257; §47.3 Table 107 bootloader versions, p. 258 | **Text extraction only, not the PDF bytes.** Verified directly against a plain-text extraction of the PDF uploaded by the owner on 2026-11-03: `an2606-rev71-extracted.txt`, 918,954 bytes, SHA256 `b1598663b4da310e2479efd1b9e55640f8eedb662c343e79a6bb46e0845a7947` as received. The extraction is not retained in this repository and its hash is not a PDF hash. The 2026-11-04 review's PDF of the same revision, fetched from `https://www.st.com.cn/resource/en/application_note/an2606-introduction-to-system-memory-boot-mode-on-stm32-mcus-stmicroelectronics.pdf`, had SHA256 `dd8e48f0ae32ae3fb168d9d8da72092714289b9e410d2fcb5964b10dfc86396a`; those PDF bytes were not re-downloaded here (st.com refused both the cloud container and the local proxy) |
+| [RM0444] | ST RM0444 *STM32G0x1 advanced Arm-based 32-bit MCUs*, **Rev 6** (cover "December 2024"; revision history 09-Dec-2024; PDF CreationDate 2024-12-09) | §7.5.1 GPIO port mode register (GPIOx_MODER), pp. 238–239: "Reset value: 0xEBFF FFFF (port A)"; MODE6[1:0] at bits 13:12; "11: Analog mode (reset state)" | **PDF bytes read** (not compared with a hash published by ST). Uploaded by the owner on 2026-11-03 as `rm0444.pdf.zip` (7,125,914 bytes, SHA256 `a5b2bd9bb005664046b41ce64203e284cb45568b3119a8729259a63994f3892f`), containing `rm0444-stm32g0x1-advanced-armbased-32bit-mcus-stmicroelectronics.pdf` (17,180,597 bytes, 1384 pages, SHA256 `0b9146260790b48735631e7735c60c42b900415c7b519ee7623c10e3d96faec3`). The PDF is not stored in this repository. Also consistent with ST's CMSIS-SVD `STM32G031.svd` v1.6 (`modm-io/cmsis-svd-stm32@e79021ac`, SHA256 `382bc7d42fae87578b64db7a07afe69a9d07319389a9d4250699e19144d31329`): `GPIOA.MODER resetValue 0xEBFFFFFF` |
 
-To close the retention gap, place both PDFs in the owner skill sources with their real
-SHA256. Do not copy the review's hash into `sources.json` as if this repository had
-verified it.
+Evidence status: the RM0444 rows rest on the original PDF bytes (hash above). The AN2606
+rows rest on a text extraction of Rev 71, not on PDF bytes. The component owner record
+`src-c529334-rm` in `.claude/skills/component-stm32g031f8p6/sources.json` still reads
+SOURCE UNAVAILABLE; updating it is a separate component-spec-audit change and is not
+claimed here.
 
 | Phase | PA6 state | Who holds CTRL | Basis |
 | --- | --- | --- | --- |
 | V3P3 rising, before POR release | Not specified here | R21 to GND, C21 | No register is valid yet. [DS] power-on behaviour is not retained: **unverified** |
 | NRST held low (pin reset, debugger connect-under-reset) | Reset state: MODE6 = 11, Analog. Output driver and input buffer off | R21 | [RM0444] GPIOA_MODER reset value |
-| Reset released, **blank flash** (empty check selects system memory) | Bootloader runs. It configures only its own USART1/2 and I2C1/2 pins. PA6 is not a bootloader pin, so it stays in its reset state | R21 | [AN2606] Table 106 (interface list per the review). The bootloader **version** on each part is unmeasured; read it with the probe |
+| Reset released, **blank flash** (empty check selects system memory, Pattern 11) | Bootloader runs. Table 106 lists only RCC (HSI), RAM, system memory, IWDG, USART1, USART2, I2C1 and I2C2; no SPI. PA6 is not a bootloader pin, so it stays in its reset state | R21 | [AN2606] Table 106 |
 | Reset released, **target image**, first instructions of `Reset_Handler` | Analog until `board_ctrl_force_off()` sets PA6 to push-pull output low; this runs before RAM init (`target/startup_stm32g031.c`) | R21, then PA6 low | Source code |
 | `main()` until the ramp | PA6 output low; handed to TIM3_CH1 (AF1) only after CCR = 0 is loaded (`target/board_ctrl.c`) | PA6 low, then TIM3 at CCR 0 | Source code; host tests in `target/test/` |
 | Option bytes **unprogrammed** with a target image | Firmware refuses light (BOR gate, section 3.5), so PA6 stays low | PA6 low | Source code and `boot policy` host test |
 | Debugger halt, development build | TIM3 keeps its last CCR (at most `CTRL_FULL_CCR`) | TIM3 | Source code (section 6.3) |
+
+Bootloader pins on this TSSOP20 part, from Table 106 and its note ("On SO8, WLCSP18,
+TSSOP20, and UFQFN28 packages USART1 PA9/PA10 IOs are remapped on PA11/PA12"), checked
+against `pinmap-c529334` and `scripts/schgen/board_l_spec.py`:
+
+| Bootloader signal | Pin (TSSOP20 pad) | Board L net | Effect on CTRL |
+| --- | --- | --- | --- |
+| USART1_TX / RX | PA11 / PA12 (16 / 17), remapped | Unused, no-connect | None |
+| USART2_TX / RX | PA2 / PA3 (9 / 10) | UART_TX / UART_RX, J4 pads | None. Alternate push-pull with pull-up |
+| I2C1_SCL / SDA | PB6 (20, shared bond) / PB7 (1, shared bond) | Unused, no-connect | None |
+| I2C2_SCL / SDA | PB10 / PB11 | Not bonded on TSSOP20 (absent from `pinmap-c529334`) | None |
+| — | PA6 (13) | PWM_DIM → R20 → CTRL | Not configured by the bootloader |
+
+Table 107 notes that bootloader V5.2 can stay in the USART2 detection loop if PA3 is held
+low. On Board L, PA3 is the J4 UART_RX pad with the bootloader's own pull-up; this
+affects only bootloader detection, not CTRL. Record the version read in sheet B3.
 
 What this table does **not** cover, and what must be measured instead (sheet B in
 [BENCH-TEST-SHEETS.md](BENCH-TEST-SHEETS.md)):
