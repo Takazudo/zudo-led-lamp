@@ -34,6 +34,14 @@ Accepted residuals and mandatory steps (they are not passes):
   (72.5 / 79.1 mA) are sensitivity cases, not measured values or guaranteed limits. Do not
   rework RS1 or move to 3200 as an assumed next step.
 
+Enclosure fit in CAD (2026-11-03, P15P): `enclosure/generate.py` at `cfc8cb4`, run in an isolated
+copy with `boards/board-p/board-p.kicad_pcb` replaced by the zudo-pd P15 r1 PCB (sha256 `97acc5f4…`)
+and its 3D models, KiCad 10.0.6 pinned image, exit 0. All generator assertions and `check_stack` pass,
+every printed part clears every P15 and Board L STEP body (0.0 mm³), and the USB corridor is open.
+Tracked enclosure outputs were not regenerated. Nominal datums only; print and seating fit are unmeasured.
+The order decision packet is zudo-pd `manufacturing/p15-order-decision-packet.md`
+(branch `claude/project-thread-kwgtww`). For LED, 2 P15 are new and the 2 Board Ls are reused.
+
 These are **not** blockers for the current path: the PDO2 1.5 A vs 3 A question (settled:
 3 A), the 27 × 44 / 27 × 50 outline question, and the old Board P #144 diagnosis. They
 belong to the future candidates below.
