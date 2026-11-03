@@ -7,6 +7,8 @@ A spec module defines:
   COMPONENTS    -- {ref: (lib_symbol, value, lcsc, footprint, dnp, (x, y))}
   NETS          -- {net_name: ['REF.PIN', ...]}
   NO_CONNECT    -- ['REF.PIN', ...]
+  LIB_PATH      -- optional symbol library path relative to repo root, for an
+                   isolated candidate library (default symbols/zudo-led-lamp.kicad_sym)
 
 Every connected pin gets a global label at its endpoint (no wires); floating
 pins get no_connect markers. Connectivity is verified separately by
@@ -122,7 +124,7 @@ def abs_pin_positions(spec, pin_cache, ref):
 
 
 def generate(spec):
-    lib = Library()
+    lib = Library(os.path.join(PROJ, spec.LIB_PATH) if hasattr(spec, 'LIB_PATH') else LIB_PATH)
     pin_cache = {}
     for ref, comp in spec.COMPONENTS.items():
         if comp[0] not in pin_cache:
