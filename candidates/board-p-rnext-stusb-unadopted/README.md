@@ -1,6 +1,11 @@
 # LED Board P r-next: common STUSB4500 block + LED voltage window (UNADOPTED schematic draft)
 
-**State:** UNADOPTED, unvalidated schematic draft.
+**State:** FUTURE CANDIDATE, deferred by the owner on 2026-11-03. The current LED path
+is zudo-pd P15 r1 with the two existing Board Ls ([candidates index](../README.md#current-path-p15-r1--the-two-existing-board-ls)).
+The PDO2 1.5 A / 3 A option, the RILM pairing and the 27 × 44 / 27 × 50 outline below are
+questions for this candidate only; they do not block the current path.
+
+UNADOPTED, unvalidated schematic draft.
 - No PCB layout, no routing, no DRC, no NVM written, nothing ordered.
 - It is not inventory-bound. The nine new parts have candidate-local owner bundles in `owner-bundles/`, outside `.claude/skills/` and the inventory, so they are not published.
 - Nothing here may feed a fabrication output.

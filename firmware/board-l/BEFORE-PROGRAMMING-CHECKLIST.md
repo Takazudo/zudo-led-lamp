@@ -4,7 +4,8 @@
 permission. Programming a Board L, including its option bytes, needs the owner's explicit
 permission. Energizing a Board L needs the same.
 
-Record every reading with the board serial, date, instrument and firmware commit.
+Record every reading with the board serial, date, instrument and firmware commit, on the
+matching sheet in [BENCH-TEST-SHEETS.md](BENCH-TEST-SHEETS.md).
 
 A reading outside its expectation is a **stop** condition: power down, record it, and do
 not continue.
@@ -19,17 +20,48 @@ Pin and net names are from `scripts/schgen/board_l_spec.py`. Firmware values are
   3.3 V ([SWD adapter](../../doc/src/content/docs/architecture/swd-adapter.mdx)).
 - V3P3 comes from U4 (AP63203), which runs from V15. So programming needs V15 present.
   V15 also powers U2 (AL8860) and the LED array.
-- What keeps the LEDs off during programming is **UNKNOWN** for a blank MCU.
-  - R21 (33 kΩ) holds CTRL low only while PA6 is not driven.
-  - A blank STM32G0 can boot its ST system bootloader through the flash empty check. If that
-    bootloader enables SPI1 on PA4–PA7, PA6 becomes MISO and could drive CTRL toward
-    2.53 V, which is full current.
-  - On this board PA4 (NSS) sits at about 0.30 V, a logic low, through the NTC divider, so
-    the SPI slave could stay selected.
-  - The bootloader's pin use is documented in ST AN2606, which is **not retained** (st.com
-    could not be fetched). The reset-state GPIO mode is in RM0444, also not retained.
-  - **Treat the first power-up of a blank MCU as possibly driving CTRL high.** Section 2 is
-    written for that case.
+- What holds CTRL low on a blank or unprogrammed MCU is **R21 (33 kΩ) with PA6 in its
+  reset state**. Section 0.1 gives the state table and the sources. This is a datasheet
+  check, not a measurement: it does not prove that CTRL never glitches during supply ramp,
+  brown-out, a fault or a corrupted image. Check 2.3 still measures TP1 on every board.
+- **Correction (2026-11-04 review, R5).** An earlier version of this checklist said a
+  blank STM32G0 bootloader might enable SPI1 on PA4–PA7 and drive CTRL through PA6 (MISO).
+  That hypothesis is **withdrawn**. It came from other STM32 families. For the exact
+  STM32G03xxx/G04xxx bootloader, AN2606 lists USART1, USART2, I2C1 and I2C2 only, with no
+  SPI. PA4 (NTC_SENSE, about 0.30 V) is therefore not an SPI chip select either.
+
+### 0.1 CTRL (PA6) state from reset to firmware start
+
+Sources (exact part STM32G031F8P6, `component-stm32g031f8p6`):
+
+| Ref | Document | Locator | Retention in this repo |
+| --- | --- | --- | --- |
+| [AN2606] | ST AN2606 *Introduction to system memory boot mode on STM32 MCUs*, **Rev 71** (cover dated November 2026) | §47 STM32G03xxx/G04xxx, Table 106 "STM32G03xxx/G04xxx configuration in system memory boot mode", pp. 256–257 | **Bytes not retained.** The 2026-11-04 review fetched Rev 71 from `https://www.st.com.cn/resource/en/application_note/an2606-introduction-to-system-memory-boot-mode-on-stm32-mcus-stmicroelectronics.pdf` with SHA256 `dd8e48f0ae32ae3fb168d9d8da72092714289b9e410d2fcb5964b10dfc86396a` and read Table 106. On 2026-11-04 this session could not download the bytes (st.com: empty reply from the cloud container, HTTP 403 from the local proxy). A text reader confirmed only the cover (Rev 71) and the table-of-contents line "Table 106 … 256"; it did not reach the table body. The interface list below is therefore the review's reading, not re-hashed here |
+| [RM0444] | ST RM0444 *STM32G0x1 reference manual*, **Rev 6** (December 2024) | GPIOA_MODER, pp. 238–239: reset value 0xEBFFFFFF; MODE6 (bits 13:12) = 11, Analog mode | **Bytes not retained** (`src-c529334-rm` stays SOURCE UNAVAILABLE). Read by the 2026-11-04 review from the owner's copy. Corroborated by ST's CMSIS-SVD `STM32G031.svd` v1.6 (Apache-2.0, mirrored at `modm-io/cmsis-svd-stm32@e79021ac`, file SHA256 `382bc7d42fae87578b64db7a07afe69a9d07319389a9d4250699e19144d31329`): `GPIOA.MODER resetValue 0xEBFFFFFF`. The SVD is a manufacturer register description, not the RM |
+
+To close the retention gap, place both PDFs in the owner skill sources with their real
+SHA256. Do not copy the review's hash into `sources.json` as if this repository had
+verified it.
+
+| Phase | PA6 state | Who holds CTRL | Basis |
+| --- | --- | --- | --- |
+| V3P3 rising, before POR release | Not specified here | R21 to GND, C21 | No register is valid yet. [DS] power-on behaviour is not retained: **unverified** |
+| NRST held low (pin reset, debugger connect-under-reset) | Reset state: MODE6 = 11, Analog. Output driver and input buffer off | R21 | [RM0444] GPIOA_MODER reset value |
+| Reset released, **blank flash** (empty check selects system memory) | Bootloader runs. It configures only its own USART1/2 and I2C1/2 pins. PA6 is not a bootloader pin, so it stays in its reset state | R21 | [AN2606] Table 106 (interface list per the review). The bootloader **version** on each part is unmeasured; read it with the probe |
+| Reset released, **target image**, first instructions of `Reset_Handler` | Analog until `board_ctrl_force_off()` sets PA6 to push-pull output low; this runs before RAM init (`target/startup_stm32g031.c`) | R21, then PA6 low | Source code |
+| `main()` until the ramp | PA6 output low; handed to TIM3_CH1 (AF1) only after CCR = 0 is loaded (`target/board_ctrl.c`) | PA6 low, then TIM3 at CCR 0 | Source code; host tests in `target/test/` |
+| Option bytes **unprogrammed** with a target image | Firmware refuses light (BOR gate, section 3.5), so PA6 stays low | PA6 low | Source code and `boot policy` host test |
+| Debugger halt, development build | TIM3 keeps its last CCR (at most `CTRL_FULL_CCR`) | TIM3 | Source code (section 6.3) |
+
+What this table does **not** cover, and what must be measured instead (sheet B in
+[BENCH-TEST-SHEETS.md](BENCH-TEST-SHEETS.md)):
+
+- The CTRL waveform during V3P3 ramp and brown-out.
+- The bootloader version and its behaviour on these two parts.
+- A corrupted or foreign image already in flash. The two Board Ls are believed blank
+  (owner answer 2026-10-31), but their factory state is not recorded.
+- Treat the first power-up as **not yet measured**, not as known safe. Section 2 keeps the
+  current limit, the TP1 watch and the abort rule.
 - At full CTRL on an RS1 = 200 mΩ board, the #52 worst-case hot branch is 88.6–96.9 mA, which
   can exceed the 90 mA LED absolute maximum. Check 1.1 therefore comes first.
 - A halted core in a **development** build keeps TIM3 running at its last duty (at most the
@@ -52,7 +84,7 @@ Pin and net names are from `scripts/schgen/board_l_spec.py`. Firmware values are
 
 ## 2. First energizing, MCU blank or not yet programmed (only with permission)
 
-Assume the blank MCU may drive CTRL high (section 0). Before SW2 ON:
+The datasheet state is CTRL low (section 0.1), but it is not yet measured. Before SW2 ON:
 
 - **1.1 must be done.** RS1 measured as 200 mΩ means the worst case can exceed the LED
   absolute maximum, so keep the exposure short by procedure.
@@ -61,10 +93,15 @@ Assume the blank MCU may drive CTRL high (section 0). Before SW2 ON:
     (VBUS_L on J2.1/J2.2, GND on J2.5/J2.6), set a limit well below the full-load input
     current;
   - no such fixture is defined in this repository, so this choice belongs to the owner.
+  - when Board P is used instead, it is a zudo-pd P15 r1 whose NVM has passed
+    P15-NVM-4/5 on a 5 V-only source and P15-NVM-6 with no load, **before** it mates with
+    Board L ([current path](../../candidates/README.md#current-path-p15-r1--the-two-existing-board-ls)).
+    P15 has no hardware voltage window and no current limit toward Board L, so the first
+    energizing of each Board L should still use the current-limited bench source.
 - **Optional mitigation:** hold NRST low (J3.3 to GND, or the probe's connect-under-reset)
-  while switching on. Whether the pins are then high-impedance is **[RM]**, and whether the
-  bootloader runs before a debugger halt is **[AN2606]**, so this mitigates without proving
-  anything.
+  while switching on. Per [RM0444], PA6 is then in Analog mode and R21 holds CTRL. The
+  bootloader cannot run while NRST is held. This removes the bootloader phase from the
+  first observation; it does not cover the supply ramp before POR.
 - **Watch TP1 on a scope or meter** that is already connected at SW2 ON. Decide within
   **1 s**.
 - **Abort:** if TP1 > 0.2 V, any LED lights or the RS1 drop rises, set SW2 OFF at once and
