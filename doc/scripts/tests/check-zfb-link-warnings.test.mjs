@@ -95,3 +95,35 @@ test("usage error without a readable log", () => {
   const result = spawnSync("bash", [script, "/nonexistent/build.log"], { encoding: "utf8" });
   assert.equal(result.status, 2);
 });
+
+const HIST = [
+  "zfb warn: ZB006 plugin-host:stdout: doc-history-server: content-dir resolved to /repo/doc/src/content/docs",
+  "zfb warn: ZB006 plugin-host:stdout: Processing default: 57 files in /repo/doc/src/content/docs",
+  "zfb warn: ZB006 plugin-host:stdout: Generated 57 history files in 2.2s",
+];
+
+test("accepts the three doc-history progress messages in the zfb 5 ZB006 and 2.x shapes", () => {
+  const r = run([
+    `zfb warn: ZB001 ${GEN}: broken link: #a`,
+    ...HIST,
+    "zfb warn: [plugin-host stdout] Generated 57 history files in 2.2s",
+    BUILT,
+  ]);
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /suppressed\s+4 doc-history progress/);
+});
+
+test("rejects other ZB006 plugin output, including the INIT_CWD fallback on stderr", () => {
+  const base = [`zfb warn: ZB001 ${GEN}: broken link: #a`, BUILT];
+  for (const extra of [
+    'zfb warn: ZB006 plugin-host:stderr: doc-history-server: INIT_CWD candidate "/repo/src/content/docs" does not exist; falling back to process.cwd()',
+    "zfb warn: ZB006 plugin-host:stderr: Generated 57 history files in 2.2s",
+    "zfb warn: ZB006 plugin-host:stdout: Generated many history files",
+    "zfb warn: ZB006 plugin-host:stdout: Processing default: 57 files in /repo/doc/src/content/other",
+    "zfb warn: ZB006 /repo/doc/src/content/docs/architecture/board-l.mdx: broken link: #missing",
+    "zfb warn: Generated 57 history files in 2.2s",
+  ]) {
+    const r = run([...base, extra]);
+    assert.equal(r.code, 1, `${extra}\n${r.out}`);
+  }
+});
