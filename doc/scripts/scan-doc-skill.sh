@@ -19,7 +19,7 @@ set -euo pipefail
 # it survives worktree removal), and what needs scanning is the content of the
 # checkout being tested.
 
-DOC_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+DOC_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 real_home_state() {
   # Listing, not content: enough to prove nothing was created, removed or
@@ -74,5 +74,5 @@ cp "$SKILL_DIR/SKILL.md" "$CORPUS/SKILL.md"
 cp -r "$DOC_ROOT/src/content/docs" "$CORPUS/docs"
 
 echo "== scanning the isolated corpus =="
-node --experimental-strip-types "$DOC_ROOT/component-docs/cli/scan-artifacts.ts" \
-  --agent-skill "$CORPUS"
+"$DOC_ROOT/node_modules/.bin/zudo-circuit-doc" scan \
+  --config "$DOC_ROOT/../circuit.config.ts" --agent-skill "$CORPUS"

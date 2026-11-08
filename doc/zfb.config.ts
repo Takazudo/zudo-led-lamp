@@ -1,9 +1,16 @@
 import { defineConfig } from "zfb/config";
 import { zudoDoc } from "@takazudo/zudo-doc/config";
 
+// zfb.config.ts is evaluated with esbuild --platform=neutral: keep it free of
+// node:* imports and never import the root circuit.config.ts.
 export default defineConfig(
   zudoDoc({
     siteName: "zudo-led-lamp",
+    // The component-preview asset URLs are root-absolute; keep the default explicit.
+    base: "/",
+    // Keep the Classic look this site has always used; zudo-doc 9 defaults to Graphite.
+    themePack: "default",
+    themePacks: ["default"],
     githubUrl: "https://github.com/Takazudo/zudo-led-lamp",
     // siteUrl host MUST match the wrangler.toml custom-domain route.
     siteUrl: "https://zudo-led-lamp.takazudomodular.com",
@@ -26,8 +33,8 @@ export default defineConfig(
       docHistory: true,
       viewSourceLink: false,
     },
-    // Registers the MDX components generated component pages reference,
-    // without editing the package-owned route stub under pages/.
+    // Registers @takazudo/zudo-circuit-doc's MDX components (EvidenceAnchor,
+    // EvidenceTable, ComponentReferences, ...) that generated pages reference.
     chromeBindingsModule: "./src/chrome-bindings.tsx",
     // Publish the REPO-ROOT .claude, not doc/.claude. The component-audit
     // skills that document this circuit live at the repo root; doc/.claude
