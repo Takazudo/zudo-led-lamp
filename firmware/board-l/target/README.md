@@ -30,12 +30,40 @@ There is no flash target.
 | `board_iwdg.c/.h` | IWDG /32, reload 99 (about 100 ms at the typical LSI). The debugger freeze applies unless `BOARD_L_PRODUCTION` is defined |
 | `board_adc.c/.h` | ADC1: PCLK/2, calibration, 160.5-cycle sampling, one software scan IN0 → IN4 with bounded waits. Any timeout or overrun fails the frame, which latches OFF |
 | `lamp_target.c/.h` | `lamp_app_io` adapter. No output before a valid config; any refused config or mapping forces OFF. Zero → CCR 0 + GPIO-low. Positive → V72 `ctrl_timer_map` into [floor, ceiling], re-running the 0 % handover after an OFF |
-| `board_l_proposal.h` | PROPOSED 20 kHz period, floor CCR, the **single** ceiling `CTRL_FULL_CCR` (default 2407 = 75.2 %, which protects an unchanged RS1 = 200 mΩ board; override `-DCTRL_FULL_CCR=3200` only after a measured 250 mΩ), ramp, latch count, IWDG and BOR fields |
+| `board_l_proposal.h` | PROPOSED 20 kHz period, floor CCR, the **single** ceiling `CTRL_FULL_CCR` (default 2407 = 75.2 %, which protects the adopted RS1 = 200 mΩ board; the 250 mΩ / 3200 alternative is not selected, and the Makefile refuses any other effective value unless `ACCEPT_NONDEFAULT_CAP=1`), ramp, latch count, IWDG and BOR fields |
 | `test/test_lamp_target.c` | Host tests: startup OFF, knob zero → OFF, thermal invalid → OFF (latched), faults → OFF, ceiling enforced, default ceiling value, graded path without a reader → OFF |
 | `test/test_board_policy.c` | Host tests: reset classification; latch after 3; pin and quick power resets do not clear it; a long-parked run followed by a power cycle clears it; healthy runs make it consecutive; a BOR/dip loop latches; normal power cycles do not count; corrupt record; latch-before-clock order; BOR disabled or wrong level → OFF; clock failure → halt |
 | `test/test_board_samples.c` | Host tests through the whole chain to a fake CTRL port. Covers: ramp to the ceiling; knob off band → OFF (not latched); NTC open, out of range, critical or shorted → OFF (latched); ADC failure, not-ok, knob out of range, stale or clock rollback → OFF (latched); bad sensor from the first sample; monotonic derate; init refusals |
 | `stm32g031_regs.h` | Minimal register map; every value comes from ST/ARM headers (see `SOURCES.md`) |
-| `verify/` | `make verify-regs` (static asserts against the ST/ARM headers) and `check_vectors.py` (vector order against ST's startup file) |
+| `verify/` | `make verify-regs` (static asserts against the ST/ARM headers) and `check_vectors.py` (vector order against ST's startup file); `check_incremental.sh` (`make check-incremental`, below) |
+| `tools/build_receipt.py` | Writes `build/board-l-skeleton.receipt.json` after every link |
+| `OPEN-PRODUCT-DECISIONS.md` | Noise, gamma, latch and tuning choices still open, with options and recommendations |
+
+## Building and the build receipt
+
+```sh
+make                      # toolchain-check, cap-check, image, receipt
+make BOARD_DEFS=-DBOARD_L_PRODUCTION   # any compile-time option goes through BOARD_DEFS
+make check-incremental    # stale-build proof on a scratch copy (also in CI)
+```
+
+- Every object has a `-MMD` dependency file, so a target or V72 header edit rebuilds exactly
+  the objects that include it.
+- `build/config.stamp` holds the compiler identity, `CFLAGS` (including `BOARD_DEFS`) and
+  `LDFLAGS`. It is rewritten only when they change, and every object and the link depend on
+  it, so switching options always rebuilds everything and an unchanged build stays a no-op.
+  Before this (main at `f47fe47`), a header edit or a `-D` override left the old ELF in
+  place with `make` exiting 0.
+- `cap-check` preprocesses `CTRL_FULL_CCR` with the real flags and stops on anything other
+  than the adopted 2407.
+- `build/board-l-skeleton.receipt.json` is labelled **UNFLASHED BENCH CANDIDATE**. It
+  records the git revision and dirty state (repository and `firmware/`), the toolchain
+  version against the 13.2.1 pin, the options and profile (`default-rs1-200mohm` or
+  `custom`), the effective CTRL ceiling, the ELF/map hashes and a path-independent loadable
+  image hash, memory usage, and the SHA-256 of every source and header the objects used.
+  It is a build record, not a release, validation or programming approval.
+- The ELF and map embed the build directory in debug data, so compare the receipt's
+  `loadable_image_sha256` across checkouts.
 
 ## Safe output order (PA6 → R20 10k → CTRL, R21 33k + C21 100 nF to GND)
 
@@ -49,13 +77,15 @@ There is no flash target.
 PA5/PA7 are never touched, so they keep their reset state. PA13/PA14 (SWD) and PA15 are
 never touched either.
 
-## Checks run on 2026-10-31 (updated in phase 6)
+## Checks run on 2026-10-31 (updated in phase 6; build rows re-run 2026-11-08)
 
 All of these are build-only; nothing ran on a target.
 
 | Check | Result |
 | --- | --- |
 | `make` with arm-none-eabi-gcc 13.2.1 (Ubuntu 24.04 package `gcc-arm-none-eabi` 15:13.2.rel1-2) | PASS, `-Werror -pedantic`: text 10904 B, bss + .noinit 984 B (V72 `lamp_app`, `sample_adapter` and `input_conversion` linked; newlib-nano for `memcpy`/`memset` only) |
+| 2026-11-08: `make` after the build-identity change | PASS: ELF SHA-256 `69ab838c…71bd5`, byte-identical to the main `f47fe47` build in the same directory; loadable image `421e5b6d…2a9e`; flash 10904 B, RAM 984 B. `make -j8` gives the same ELF |
+| 2026-11-08: `make check-incremental` | PASS: clean 17 objects; no-op rebuild compiles and links nothing; `board_l_proposal.h` touch rebuilds its 4 dependents; V72 `lamp_app.h` touch rebuilds 6; a header ceiling change is refused, then rebuilt with `ACCEPT_NONDEFAULT_CAP=1` and shown in the receipt; `BOARD_DEFS` switch and switch back rebuild all 17 and restore the default ELF; `-DCTRL_FULL_CCR=3200` refused; incremental ELF equals a clean rebuild |
 | `make target-host-test` | **PASS**: 5430 (lamp_target) + 106 (boot policy) + 71053 (sample chain) checks. Mutation runs fail as expected: no force-off, apply before init, thermal gate always open, open NTC known, ignore ADC not-ok, unity gain, no latch, no BOR refusal, pin reset counting, no clock refusal, graded unity, ceiling 3200; phase 6: max age 2 (window 3), no healthy-run clear, power reset always clearing, parked run clearing, long run never marked, clock before latch, no register ceiling check |
 | `make v72-objects`: all 33 V72 `.c` files except `test_input_app.c`, cross-compiled for Cortex-M0+ | PASS, 33/33 (not linked) |
 | `make host-test`: V72 host test with gcc 13.3.0 | **PASS 44**, exit 0 |
@@ -75,8 +105,13 @@ All of these are build-only; nothing ran on a target.
 - **Calibration:** knob endpoints (91..4000 are bring-up placeholders) and the NTC-to-LED-TS
   correlation. Calibration storage is not defined.
 - **Product choices:** gamma/transfer (none is applied; V72 has no default), noise and
-  animation, ceiling 3200 after an RS1 change, and production RDP.
+  animation (NULL), latch and tuning values, and production RDP. Options and
+  recommendations: [`OPEN-PRODUCT-DECISIONS.md`](OPEN-PRODUCT-DECISIONS.md).
 - **Latches:** any sensor fault latches OFF until a reset (V72 rule). Three abnormal resets
   latch until a power cycle. The policy is proposed and needs the owner's approval.
 - **Bench:** no CTRL glitch at reset and handover (scope), and the measured h for #52.
-- **CI:** a host-test job.
+
+CI (`.github/workflows/firmware-host-tests.yml`) runs `host-test` and `target-host-test` on
+the host compiler, and a build-only `target-build` job with the Ubuntu 24.04
+`gcc-arm-none-eabi` 13.2.1 package: `make`, `v72-objects` and `check-incremental`. It
+never flashes or runs an image.
