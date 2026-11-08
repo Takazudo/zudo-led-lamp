@@ -50,8 +50,9 @@ make check-incremental    # stale-build proof on a scratch copy (also in CI)
 - Every object has a `-MMD` dependency file, so a target or V72 header edit rebuilds exactly
   the objects that include it.
 - `build/config.stamp` holds the compiler identity, `CFLAGS` (including `BOARD_DEFS`) and
-  `LDFLAGS`. It is rewritten only when they change, and every object and the link depend on
-  it, so switching options always rebuilds everything and an unchanged build stays a no-op.
+  `LDFLAGS`. It is rewritten only when they change, and every object and the link depend on it
+  and on the Makefile, so switching options or editing the Makefile rebuilds everything, and
+  an unchanged build stays a no-op.
   Before this (main at `f47fe47`), a header edit or a `-D` override left the old ELF in
   place with `make` exiting 0.
 - `cap-check` preprocesses `CTRL_FULL_CCR` with the real flags and stops on anything other
@@ -85,7 +86,7 @@ All of these are build-only; nothing ran on a target.
 | --- | --- |
 | `make` with arm-none-eabi-gcc 13.2.1 (Ubuntu 24.04 package `gcc-arm-none-eabi` 15:13.2.rel1-2) | PASS, `-Werror -pedantic`: text 10904 B, bss + .noinit 984 B (V72 `lamp_app`, `sample_adapter` and `input_conversion` linked; newlib-nano for `memcpy`/`memset` only) |
 | 2026-11-08: `make` after the build-identity change | PASS: ELF SHA-256 `69ab838c…71bd5`, byte-identical to the main `f47fe47` build in the same directory; loadable image `421e5b6d…2a9e`; flash 10904 B, RAM 984 B. `make -j8` gives the same ELF |
-| 2026-11-08: `make check-incremental` | PASS: clean 17 objects; no-op rebuild compiles and links nothing; `board_l_proposal.h` touch rebuilds its 4 dependents; V72 `lamp_app.h` touch rebuilds 6; a header ceiling change is refused, then rebuilt with `ACCEPT_NONDEFAULT_CAP=1` and shown in the receipt; `BOARD_DEFS` switch and switch back rebuild all 17 and restore the default ELF; `-DCTRL_FULL_CCR=3200` refused; incremental ELF equals a clean rebuild |
+| 2026-11-08: `make check-incremental` | PASS: clean 17 objects; no-op rebuild compiles and links nothing; `board_l_proposal.h` touch rebuilds its 4 dependents; a Makefile touch rebuilds all 17; V72 `lamp_app.h` touch rebuilds 6; a header ceiling change is refused, then rebuilt with `ACCEPT_NONDEFAULT_CAP=1` and shown in the receipt; `BOARD_DEFS` switch and switch back rebuild all 17 and restore the default ELF; `-DCTRL_FULL_CCR=3200` refused; incremental ELF equals a clean rebuild |
 | `make target-host-test` | **PASS**: 5430 (lamp_target) + 106 (boot policy) + 71053 (sample chain) checks. Mutation runs fail as expected: no force-off, apply before init, thermal gate always open, open NTC known, ignore ADC not-ok, unity gain, no latch, no BOR refusal, pin reset counting, no clock refusal, graded unity, ceiling 3200; phase 6: max age 2 (window 3), no healthy-run clear, power reset always clearing, parked run clearing, long run never marked, clock before latch, no register ceiling check |
 | `make v72-objects`: all 33 V72 `.c` files except `test_input_app.c`, cross-compiled for Cortex-M0+ | PASS, 33/33 (not linked) |
 | `make host-test`: V72 host test with gcc 13.3.0 | **PASS 44**, exit 0 |

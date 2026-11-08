@@ -44,6 +44,12 @@ users=$(grep -l 'board_l_proposal.h' build/*.d build/v72/*.d | wc -l)
 [ "$(elf_hash)" = "$h0" ] || fail "unchanged header content changed the ELF"
 pass "target header touch: rebuilt exactly its $n dependents, ELF unchanged"
 
+touch Makefile
+mk
+[ "$(compiled "$scratch/log")" -eq 17 ] || fail "Makefile change did not rebuild all 17 objects"
+[ "$(elf_hash)" = "$h0" ] || fail "unchanged Makefile content changed the ELF"
+pass "Makefile touch: all 17 rebuilt, ELF unchanged"
+
 touch ../src/lamp_app.h
 mk
 n=$(compiled "$scratch/log")

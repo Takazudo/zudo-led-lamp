@@ -2,7 +2,7 @@
 # Toolchain: Ubuntu 24.04 package gcc-arm-none-eabi 15:13.2.rel1-2 (arm-none-eabi-gcc 13.2.1).
 # Every image is an UNFLASHED bench candidate; build/board-l-skeleton.receipt.json records
 # its identity. Incremental builds track headers (-MMD) and the build configuration
-# (build/config.stamp), so a header edit or an option change always rebuilds.
+# (build/config.stamp) and this Makefile, so a header, option or Makefile change always rebuilds.
 CROSS ?= arm-none-eabi-
 CC := $(CROSS)gcc
 SIZE := $(CROSS)size
@@ -68,10 +68,10 @@ $(BUILD)/config.stamp: FORCE cap-check | $(BUILD)
 	@printf '%s\n' '$(BUILD_CONFIG)' | cmp -s - $@ || { printf '%s\n' '$(BUILD_CONFIG)' > $@; \
 	  echo "build configuration changed: rebuilding"; }
 
-$(BUILD)/%.o: %.c $(BUILD)/config.stamp | $(BUILD)
+$(BUILD)/%.o: %.c $(BUILD)/config.stamp Makefile | $(BUILD)
 	$(CC) $(CFLAGS) $(DEPFLAGS) -I$(V72) -c $< -o $@
 
-$(ELF): $(OBJS) stm32g031f8_flash.ld $(BUILD)/config.stamp | $(BUILD)/v72
+$(ELF): $(OBJS) stm32g031f8_flash.ld $(BUILD)/config.stamp Makefile | $(BUILD)/v72
 	$(CC) $(LDFLAGS) $(OBJS) -Wl,--start-group -lc_nano -lgcc -Wl,--end-group -o $@
 	$(SIZE) $@
 
@@ -84,7 +84,7 @@ $(RECEIPT): $(ELF) tools/build_receipt.py
 	  --deps $(OBJS:.o=.d) --output $@
 
 v72-objects: $(V72_OBJS)
-$(BUILD)/v72/%.o: $(V72)/%.c $(BUILD)/config.stamp | $(BUILD)/v72
+$(BUILD)/v72/%.o: $(V72)/%.c $(BUILD)/config.stamp Makefile | $(BUILD)/v72
 	$(CC) $(CFLAGS) $(DEPFLAGS) -I$(V72) -c $< -o $@
 
 -include $(wildcard $(BUILD)/*.d $(BUILD)/v72/*.d)
