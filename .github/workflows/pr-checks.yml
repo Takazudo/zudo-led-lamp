@@ -129,6 +129,10 @@ jobs:
         working-directory: doc
         run: pnpm check
 
+      - name: zudo-wind audit
+        working-directory: doc
+        run: pnpm check:wind
+
       - name: Host script tests
         working-directory: doc
         run: pnpm test:scripts

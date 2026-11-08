@@ -20,8 +20,9 @@ step() { printf '\n== %s ==\n' "$1"; }
 step "evidence validator, unit tests and forward tests"
 pnpm circuit:project-check
 
-step "host type check"
+step "host type check and zudo-wind audit"
 pnpm --dir doc check
+pnpm --dir doc check:wind
 
 step "host script tests"
 pnpm --dir doc test:scripts

@@ -18,7 +18,7 @@ Run from `doc/` (each wraps the root config) or use the root scripts noted.
 - `pnpm dev:network` — same, but zfb binds `--host 0.0.0.0`; the doc-history server stays loopback-only and LAN clients reach it through zfb's `/doc-history/*` dev proxy
 - **Trusted networks only:** this also serves your git doc-history — including UNPUBLISHED local commits — to anyone on the LAN via the `/doc-history/*` proxy
 - `pnpm build` — the root build: enclosure viewer bundle, public models, component pages, then the zfb static export to `dist/` (`pnpm build:site` runs only the zfb step)
-- `pnpm check` — zfb/TypeScript type checking of the host
+- `pnpm check` — zfb/TypeScript type checking of the host; `pnpm check:wind` — `zfb wind audit --fail-on error`
 - `pnpm test:scripts` — tests for this host's own scripts (the zfb link-warning gate)
 - `pnpm generate:components` / `pnpm check:components` — write / read-only check the generated pages and `circuit/generated/preflight.json` (`zudo-circuit-doc generate` / `check`; `check` also runs the validator and the model/footprint checks)
 - `pnpm generate:footprint-previews` / `pnpm check:footprint-previews` — regenerate with the pinned KiCad 9.0.9 container / verify committed SVG previews without Docker

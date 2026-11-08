@@ -17,6 +17,7 @@
     "build:site": "zfb build",
     "preview": "zfb preview",
     "check": "zfb check",
+    "check:wind": "zfb wind audit --project-root . --fail-on error",
     "generate:enclosure-viewer": "node enclosure-viewer/build.mjs",
     "check:enclosure-viewer": "node enclosure-viewer/check-geometry.mjs",
     "generate:components": "zudo-circuit-doc generate --config ../circuit.config.ts",
