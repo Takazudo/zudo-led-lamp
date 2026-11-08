@@ -108,7 +108,7 @@ copies byte-identical (`cmp -s`). Part identity then comes only from the schemat
 `scripts/schgen/schgen_core.py` emits per instance from the spec's LCSC column.
 
 **Editing a footprint means regenerating its preview.**
-`doc/component-docs/footprint-previews/check.ts` verifies a per-package
+`pnpm --dir doc check:footprint-previews` (zudo-circuit-doc `footprints check`) verifies a per-package
 `canonicalInputSha256` over the footprint bytes, so any `.kicad_mod` change must be
 followed by `pnpm --dir doc generate:footprint-previews`, which renders through the
 digest-pinned KiCad 9.0.9 container. That path is working — the container is cached and
