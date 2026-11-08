@@ -33,8 +33,9 @@ set -euo pipefail
 # 1. A same-page `#fragment` reported against a file in the generated tree.
 #
 # 2. The three progress messages printed by `doc-history-server` through the
-#    plugin host: resolved content directory, processing count, and generated
-#    history count/timing. zfb labels all plugin stdout as warnings even though
+#    plugin host (`[plugin-host stdout] ` on zfb 2.x, `ZB006 plugin-host:stdout: `
+#    on zfb 5): resolved content directory, processing count, and generated
+#    history count/timing. Plugin stderr is never suppressed. zfb labels all plugin stdout as warnings even though
 #    these lines are informational. Match only those complete message shapes;
 #    any other plugin stdout remains unexpected and fails this gate.
 #
@@ -114,9 +115,13 @@ awk -v known="$KNOWN" -v known_plugin_info="$KNOWN_PLUGIN_INFO" \
     at_prefix = index(line, prefix)
     if (at_prefix == 0) next
     rest = substr(line, at_prefix + length(prefix))
-    # zfb >= 5 diagnostic code; accepted only in front of a broken-link report.
+    # zfb >= 5 diagnostic codes: ZB001 only in front of a broken-link report,
+    # ZB006 only in front of plugin-host stdout (checked against the exact
+    # doc-history progress messages below). Plugin stderr is never accepted.
     coded = 0
+    plugin_stdout = 0
     if (match(rest, /^ZB001 /)) { rest = substr(rest, RLENGTH + 1); coded = 1 }
+    else if (match(rest, /^ZB006 plugin-host:stdout: /)) { rest = substr(rest, RLENGTH + 1); plugin_stdout = 1 }
     at = index(rest, sep)
     if (at > 0) {
       path = substr(rest, 1, at - 1)
@@ -129,10 +134,17 @@ awk -v known="$KNOWN" -v known_plugin_info="$KNOWN_PLUGIN_INFO" \
 
     if (coded) { print line > unexpected; next }
 
+    # zfb 2.x labelled plugin stdout `[plugin-host stdout] `; zfb 5 uses the
+    # ZB006 code stripped above. Either way only these three messages pass.
+    msg = rest
+    if (!plugin_stdout) {
+      if (index(msg, "[plugin-host stdout] ") != 1) { print line > unexpected; next }
+      msg = substr(msg, length("[plugin-host stdout] ") + 1)
+    }
     plugin_info = \
-      rest ~ /^\[plugin-host stdout\] doc-history-server: content-dir resolved to \/.*\/src\/content\/docs$/ || \
-      rest ~ /^\[plugin-host stdout\] Processing default: [0-9]+ files in \/.*\/src\/content\/docs$/ || \
-      rest ~ /^\[plugin-host stdout\] Generated [0-9]+ history files in [0-9]+([.][0-9]+)?s$/
+      msg ~ /^doc-history-server: content-dir resolved to \/.*\/src\/content\/docs$/ || \
+      msg ~ /^Processing default: [0-9]+ files in \/.*\/src\/content\/docs$/ || \
+      msg ~ /^Generated [0-9]+ history files in [0-9]+([.][0-9]+)?s$/
     if (plugin_info) {
       print line > known_plugin_info
       next
@@ -176,7 +188,7 @@ fi
 echo "link check: no zfb warning outside the known-false generated-anchor class"
 echo "  suppressed  $known_count same-page fragment warning(s) in $GENERATED_TREE"
 echo "              (false by construction — zfb resolves fragments against heading"
-echo "               anchors only; assertLinkIntegrity proves these fatally on the"
+echo "               anchors only; the package link-integrity check proves these on the"
 echo "               view model. The count tracks markup choices, not link health.)"
 echo "  suppressed  $known_plugin_info_count doc-history progress warning(s)"
 echo "              (informational plugin stdout that zfb labels as warnings; only"
