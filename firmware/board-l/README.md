@@ -1,9 +1,10 @@
-# Board L firmware source (V72 import) — NOT a firmware build
+# Board L firmware source (V72 import) and build-only target skeleton
 
 This directory holds the **unchanged** V72 portable C sources for the Board L STM32G031F8P6
 lamp controller: 64 files in `src/`. They are imported for review and continuation.
 
-- They have **never been linked for the target, flashed, or run on hardware.**
+- `src/` itself is not a target build. Eight of its units are linked, unchanged, into the
+  build-only image in [`target/`](target/README.md); none has been **flashed or run on hardware.**
 - No production parameters are chosen in them.
 - Provenance is in [`PROVENANCE.md`](PROVENANCE.md).
 
@@ -65,5 +66,5 @@ Rows marked *(skeleton)* have a first build-only version in `target/`; none is v
 | Calibration storage and procedure (knob endpoints) | Not defined |
 | *(skeleton)* Fault policy: BOR level, watchdog, reset-cause handling, sensor-fault reinit conditions | `target/board_policy.c`, `board_iwdg.c`: IWDG about 100 ms, a 3-reset latch, a BOR option gate. A sensor fault latches until reset |
 | Option bytes / boot mode (`nBOOT_SEL`, #46) | Determines whether the programmed image boots. The firmware only reads them. Writing them is a bench step: `BEFORE-PROGRAMMING-CHECKLIST.md` |
-| *(skeleton)* Build system (Makefile/CMake), pinned arm-none-eabi toolchain, CI host-test job | Reproducibility |
+| *(skeleton)* Build system (Makefile with header and configuration tracking, build receipt), pinned arm-none-eabi-gcc 13.2.1, CI host tests and a build-only target job | Reproducibility. Each image is an unflashed bench candidate identified by `target/build/board-l-skeleton.receipt.json` |
 | *(proposed)* #52 peak-current mitigation | CTRL is filtered-analog. Single `CTRL_FULL_CCR`, default 2407 (75.2 %) for RS1 = 200 mΩ; the RS1 = 250 mΩ change is recommended |

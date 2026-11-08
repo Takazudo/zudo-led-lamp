@@ -177,6 +177,11 @@ Record:
 - the `CTRL_FULL_CCR` value used, which must agree with check 1.2;
 - whether `BOARD_L_PRODUCTION` was defined.
 
+`make` writes all of these to `build/board-l-skeleton.receipt.json`. Keep that file with the
+session record. Stop if its `source.firmware_dirty` is true, `toolchain.matches_pin` is
+false, or `ctrl_ceiling.adopted_default` is false on an RS1 = 200 mΩ board. Build from a
+clean `make clean && make`, not from a reused build directory.
+
 Production builds do not freeze the IWDG under the debugger.
 
 ## 5. First run with the image (only with permission). Measure, do not tune

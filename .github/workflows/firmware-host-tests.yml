@@ -1,6 +1,6 @@
-# Board L firmware host tests: the V72 portable C host test and the target-skeleton
-# host tests (boot policy, off-by-default contract, ADC sample path). Host compiler
-# only; no ARM toolchain, no hardware.
+# Board L firmware checks: the V72 portable C host test, the target-skeleton host tests
+# (boot policy, off-by-default contract, ADC sample path), and a build-only target image
+# with the pinned arm-none-eabi-gcc 13.2.1. Nothing is flashed or run on hardware.
 
 name: Firmware host tests
 
@@ -31,3 +31,23 @@ jobs:
         run: cc --version
       - name: V72 and target host tests
         run: make -C firmware/board-l/target host-test target-host-test
+
+  # Ubuntu 24.04's gcc-arm-none-eabi 15:13.2.rel1-2 is the pinned 13.2.1 in the Makefile.
+  target-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - name: Install pinned arm-none-eabi toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc-arm-none-eabi libnewlib-arm-none-eabi
+          arm-none-eabi-gcc --version
+      - name: Target image (build only) and receipt
+        run: |
+          make -C firmware/board-l/target
+          cat firmware/board-l/target/build/board-l-skeleton.receipt.json
+      - name: All V72 units cross-compile
+        run: make -C firmware/board-l/target v72-objects
+      - name: Incremental and configuration-switch rebuilds
+        run: make -C firmware/board-l/target check-incremental
