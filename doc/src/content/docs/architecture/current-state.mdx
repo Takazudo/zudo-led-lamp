@@ -47,7 +47,7 @@ not a pass.
 | # | Action | Procedure | Evidence to record |
 | --- | --- | --- | --- |
 | 1 | Order 2 × P15 r1 (zudo-pd owns the files) | [zudo-pd P15 order handoff](https://github.com/Takazudo/zudo-pd/blob/main/manufacturing/p15-order-handoff.md) | Order date and number, D5/D9 preview check |
-| 2 | Incoming P15 inspection and per-unit NVM acceptance before any Board L connection | [zudo-pd P15-NVM-1–7](https://github.com/Takazudo/zudo-pd/blob/main/doc/src/content/docs/architecture/board-p15-programming.md) | Power-cycle readback hash, 15 V contract on a 20 V-capable source with no load |
+| 2 | Incoming P15 inspection and per-unit NVM acceptance before any Board L connection | [zudo-pd P15-NVM-1–7](https://github.com/Takazudo/zudo-pd/blob/main/doc/src/content/docs/architecture/board-p15-programming.md) | Power-cycle readback hash, 15 V contract on a 20 V-capable source with no load, and VBUS_OUT measured off during the 5 V attach phase (the POWER_ONLY_ABOVE_5V bit position is third-party and an ST draft note marks it reserved) |
 | 3 | Board L identity and unpowered checks, first energizing on a current-limited source | [Before-programming checklist](https://github.com/Takazudo/zudo-led-lamp/blob/main/firmware/board-l/BEFORE-PROGRAMMING-CHECKLIST.md) §0–2 | Board identity, RS1 marking, rail readings |
 | 4 | Option-byte readback, image identity against the receipt, firmware readback | Checklist §3–4; [bench sheet O](https://github.com/Takazudo/zudo-led-lamp/blob/main/firmware/board-l/BENCH-TEST-SHEETS.md) | Option bytes before any write; receipt hash equals the readback |
 | 5 | Startup/CTRL measurement, knob calibration, LED current, thermal and NTC correlation | Checklist §5–6; bench sheets B, K, C, N, T | Each sheet row with the board identity |
