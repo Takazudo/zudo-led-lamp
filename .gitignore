@@ -20,3 +20,9 @@ __pycache__/
 
 # PlatformIO build output
 .pio/
+
+# Workspace dependencies (root pnpm workspace)
+node_modules/
+
+# zudo-circuit-doc online source cache (evidence.sourceCache)
+tmp/sources/
