@@ -71,7 +71,7 @@
       "record_id": "rec-c13564",
       "domain": "firmware-conversion-and-thresholds",
       "status": "OPEN",
-      "reason": "conversion algorithm, ADC configuration and thresholds are absent",
+      "reason": "The unflashed target implements ADC acquisition and proposed raw-code thermal gating and derating in firmware/board-l/target/board_adc.c and board_samples.c/.h. Exact-part R-T/tolerance evidence, installed thermal correlation and threshold calibration remain unverified; the proposed codes are not a guaranteed temperature conversion or measured acceptance.",
       "fact_ids": [],
       "blocking_fact_ids": []
     }

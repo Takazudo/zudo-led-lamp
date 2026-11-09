@@ -46,7 +46,7 @@
       "record_id": "rec-c529334",
       "domain": "firmware-pin-mux-clock-and-timer-state",
       "status": "OPEN",
-      "reason": "fact-c529334-mux lists only candidates; firmware is absent",
+      "reason": "fact-c529334-mux remains UNSOURCED candidate mapping. The unflashed target in firmware/board-l/target implements pin-mux, clock and timer setup; source-code configuration does not establish programmed state, applicable-device errata acceptance or measured behavior.",
       "fact_ids": [
         "fact-c529334-mux"
       ],
@@ -72,7 +72,7 @@
       "record_id": "rec-c529334",
       "domain": "debug-low-power-and-bench-state",
       "status": "OPEN",
-      "reason": "fact-c529334-debug: DBG settings and measured behavior are absent",
+      "reason": "fact-c529334-debug remains UNSOURCED. firmware/board-l/target/board_iwdg.c configures IWDG freeze during a debugger halt for development builds; this does not establish installed DBG_STOP/DBG_STANDBY state, debug low-power retention or measured behavior.",
       "fact_ids": [
         "fact-c529334-debug"
       ],
