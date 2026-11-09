@@ -24,7 +24,9 @@ not guaranteed limits.
 | Date, operator | |
 | Firmware git commit, `make` size output, ELF SHA256 | |
 | `CTRL_FULL_CCR` built / `BOARD_L_PRODUCTION` defined? | 2407 / |
-| RS1 by 4-wire measurement (checklist 1.1) | |
+| RS1 measured resistance (mΩ), four-wire Kelvin across pads (checklist 1.1) | |
+| RS1 instrument identity and measurement date (board identity above) | |
+| RS1 measurement executed? | NOT EXECUTED |
 | Source: current-limited bench supply (limit) or P15 | |
 | Instruments (scope, DMM, thermocouple) and probe points | |
 | Ambient temperature | |
@@ -68,6 +70,25 @@ Address FLASH_OPTR = 0x40022020. Write only with explicit permission.
 
 Stop if RDP reads anything other than 0xAA before a write, or if any readback differs
 from the target. Never write RDP Level 2.
+
+## Sheet F: firmware image identity (checklist section 4)
+
+Keep option-byte readbacks separately in sheet O. Use raw binary bytes matching
+`objcopy -O binary` from the retained ELF, not the receipt file or whole ELF hash.
+Readback requires separate authorization; this blank record grants none.
+
+| Field | Value |
+| --- | --- |
+| Retained build receipt artifact | |
+| Retained ELF artifact and ELF SHA256 | |
+| Expected `artifacts.loadable_image_sha256` | |
+| Expected `artifacts.loadable_image_bytes` | |
+| ELF/linker-confirmed load start (current layout: `0x08000000`) | |
+| Address range: start inclusive, end exclusive (start + expected bytes) | |
+| Actual raw flash-image readback artifact | |
+| Actual readback byte length and SHA256 | |
+| Comparison outcome (length, range, representation and hash) | |
+| Executed? | NOT EXECUTED |
 
 ## Sheet K: knob (BRIGHT_ADC on PA0)
 
