@@ -1,4 +1,89 @@
-# JLCPCB order files
+# LED P15 r1 prototype-order handoff
+
+Reviewed 2026-11-09 at lamp main `5726c8e6e89b5a03ba149c234cccda2f9afab6c8`.
+Order **two assembled P15 r1 modules**, reuse both existing Board Ls, and order **zero new Board Ls and zero Board Bs**.
+P15 remains 27 × 40 mm with the adopted 15 V / 3 A NVM image; keep Board L RS1 = 200 mΩ and `CTRL_FULL_CCR` = 2407.
+
+The manufacturing owner is zudo-pd. Its [order-day handoff](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/p15-order-handoff.md)
+and [decision packet](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/p15-order-decision-packet.md) are pinned to inspected commit
+`44fd3ba810aad627fd461b90093a3482707b44da`, on zudo-pd main. External [PR #234](https://github.com/Takazudo/zudo-pd/pull/234)
+is merged; these documents are no longer pending that integration. This does not advance our
+[consumer source pin](../boards/p15-r1-reference.json). No owner fabrication files are copied here.
+
+## Exact P15 order inputs
+
+Use only `board-p15/` in the owner’s fixed `manufacturing/releases/corner-support-review/` package.
+Its manifest base is `3b9821b48cf4c77e8512ce653cada3db962d2c88`; the document revision above and
+this frozen manufacturing base have different roles. Neither repository’s `boards/board-p/` is P15.
+
+| File at the inspected owner revision | Role | Observed SHA-256 |
+| --- | --- | --- |
+| [board-p15-gerbers.zip](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/releases/corner-support-review/board-p15/board-p15-gerbers.zip) | PCB upload | `e68a133e2a3fa610758ed0e183fb9c4e77e4a4bfff7a9a6bac5cd1ab7f8c14ae` |
+| [bom.csv](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/releases/corner-support-review/board-p15/bom.csv) | Assembly selection upload | `23d6e2902307ce3920c405abe3296600610bcd5b54f0cca67ee0a8291ecfd59f` |
+| [cpl.csv](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/releases/corner-support-review/board-p15/cpl.csv) | Placement upload | `a9116d1b9f1d7f092531173a7c8f4d49f4a4c282b9a88f449a89b0da3e030ce6` |
+| [excluded.csv](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/releases/corner-support-review/board-p15/excluded.csv) | Supporting exclusions; do not upload | `16d6146bd3ca6f3fbca8adbc4ddcddb176659dcd5d016a27a699b41467e9f616` |
+
+The four Git blobs were independently hashed on 2026-11-09 and matched the supplied frozen hashes.
+Recheck the downloaded bytes before any upload; a missing file or mismatch blocks order-file acceptance.
+Do not repair the frozen package, refresh its locks or regenerate outputs.
+
+```sh
+# From the lamp checkout, with an explicit read-only owner checkout:
+python3 scripts/checks/verify-p15-reference.py --pd-repo /workspace/zudo-pd-readonly --pd-rev 8af9e5569c2534c03ce132515d1ec11f4c3f83d3
+# Independently hash each frozen order input directly from the inspected Git revision:
+for file in board-p15-gerbers.zip bom.csv cpl.csv excluded.csv; do
+  git -C /workspace/zudo-pd-readonly show 44fd3ba810aad627fd461b90093a3482707b44da:manufacturing/releases/corner-support-review/board-p15/"$file" | sha256sum
+done
+```
+
+## Owner checkout checks remain open
+
+Before ordering, inspect the supplier placement preview against the owner’s
+[exact placement maps](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/manufacturing/readiness/p15-first-placement-orientation.json):
+
+- D5, Littelfuse SMAJ16A / C74561: cathode stripe on pad 1, VBUS_IN, smaller X.
+- D9, Diodes BZT52C18-7-F / C192739: cathode band on pad 1, VDD_LOC, smaller X.
+- Check every other polarized placement and IC/connector pin 1 against the owner package and exact pin maps.
+  Local geometry and CPL agreement do not prove the supplier’s library placement. Stop on a reversal;
+  the owner handoff describes correcting supplier-preview rotation without editing the frozen files.
+
+These are owner preview criteria, not new primary-source clearance. D5’s `fact-c74561-polarity`
+(`src-c74561-primary`, manufacturer-authored mirror, package/pad drawing) remains **UNSOURCED**
+under the owner’s evidence contract because the primary binary is unavailable. D9’s
+`fact-c192739-polarity` (`src-c192739-primary`, DS18004 Rev. 38-2 page 1 polarity row) is
+primary-source confirmed; neither establishes assembled orientation.
+
+Recheck exact BOM stock, assembly-service eligibility (including through-hole parts), quantity and
+complete cost on the order day: PCB, parts, assembly, shipping and tax/duty. The owner’s dated
+2026-11-03 and 2026-11-09 catalog snapshots establish observations only for their recorded dates.
+Historical assembly estimates are not current quotes. Current checkout availability and total cost are **UNKNOWN**.
+Record the preview approval, quote details and eventual order identity separately.
+
+## Evidence and later gates
+
+| Stage | Observed state | Remaining action |
+| --- | --- | --- |
+| Consumer source identity | MATCH at owner record `8af9e5569c2534c03ce132515d1ec11f4c3f83d3`; adoption commit `4a0741fabf8d2332848a3740708aab26b8504133` exists | Byte identity only; consumer pin unchanged |
+| Four order-file identities | MATCH at owner commit `44fd3ba810aad627fd461b90093a3482707b44da` | Recheck downloaded files before upload |
+| Full historical 151-file replay | NOT RUN: original local-only STEP absent | Requires matching frozen source tree and original `populated-stack.step`, 158,591,651 bytes, SHA-256 `b2d5d8da200c4f4e989e33d4190912054475fb17d601f2f76c0b347ab3508167`; never regenerate a substitute |
+| Supplier preview / stock / eligibility / total cost | NOT RUN / UNKNOWN | Owner checkout checks above |
+| P15 order / receipt | NOT ORDERED / NOT RECEIVED | Owner actions; no supplier interaction performed here |
+| Programming / measurement | NOT RUN / NOT RUN | Equipped owner bench, after arrival |
+
+Follow the owner’s [arrival and P15-NVM-1–7 procedure](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/doc/src/content/docs/architecture/board-p15-programming.md)
+for each unit before any Board L connection, then the lamp’s
+[before-programming checklist](../firmware/board-l/BEFORE-PROGRAMMING-CHECKLIST.md) and
+[bench sheets](../firmware/board-l/BENCH-TEST-SHEETS.md).
+[Current state](../doc/src/content/docs/architecture/current-state.mdx) retains the later sequence and open decisions.
+Physical fit, programming, energization and measurements remain unperformed on this path.
+Issues #34, #35 and #52 remain open; matching mirrors do not recover manufacturer-primary provenance.
+P15 R2.3/R2.4/R2.6 remain FAIL and R2.5 UNKNOWN. Prototype residual acceptance is not qualification.
+
+## Historical 2026-09-19 JLCPCB order files
+
+The remainder of this page describes the historical LED Board P, Board L and SWD-adapter release.
+It is not the new P15 order package or a request to reorder those boards.
+
 
 The `jlcpcb/2026-09-19/` release requests JLCPCB soldering for every intended
 fitted component, including Board L J3 and SWD-adapter J1/J2. These three

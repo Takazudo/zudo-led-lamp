@@ -10,7 +10,7 @@ generated from it without a separate explicit approval.
 
 **Decision 2026-11-03 (owner):** the LED lamp's current Board P is the zudo-pd
 **P15 r1**, shared with the 15 V zudo-pd product, mated with the **two existing Board Ls**
-from the 2026-09-19 order. LED-first. Nothing in this path is built, programmed or
+from the 2026-09-19 order. LED-first. The Board Ls already exist; P15 is not ordered, programmed or
 measured yet.
 
 | Item | Current value | Where it lives |
@@ -39,8 +39,9 @@ copy with `boards/board-p/board-p.kicad_pcb` replaced by the zudo-pd P15 r1 PCB 
 and its 3D models, KiCad 10.0.6 pinned image, exit 0. All generator assertions and `check_stack` pass,
 every printed part clears every P15 and Board L STEP body (0.0 mm³), and the USB corridor is open.
 Tracked enclosure outputs were not regenerated. Nominal datums only; print and seating fit are unmeasured.
-The order decision packet is zudo-pd `manufacturing/p15-order-decision-packet.md`
-(branch `claude/project-thread-kwgtww`). For LED, 2 P15 are new and the 2 Board Ls are reused.
+Use the [LED prototype-order handoff](../manufacturing/README.md) for the pinned owner decision packet,
+exact three upload files, supporting exclusions and remaining checkout checks. For LED, 2 P15 are new,
+the 2 Board Ls are reused, and no new Board B is ordered.
 
 These are **not** blockers for the current path: the PDO2 1.5 A vs 3 A question (settled:
 3 A), the 27 × 44 / 27 × 50 outline question, and the old Board P #144 diagnosis. They
