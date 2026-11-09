@@ -110,8 +110,7 @@ jobs:
         with:
           # zudo-doc 9 and zudo-circuit-doc 0.3 require Node 24 (>=24 <25).
           node-version: 24
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
+          # gh-actions-wisdom rule 5: package-manager caching is disabled (#73).
 
       # `pnpm build` runs `zudo-circuit-doc generate` first, which shells out to
       # the component-spec validator and the generator specs (python3). Pinned to the same 3.12 as
@@ -292,13 +291,14 @@ jobs:
             echo "::notice::Preview deploy skipped — CLOUDFLARE_API_TOKEN is not set yet. See doc/src/content/docs/how-to/ci-cloudflare-setup.mdx."
           fi
 
-      - name: Write dist/.assetsignore
-        if: steps.readiness.outputs.ready == 'true'
+      - name: Validate adapter asset exclusions
         working-directory: doc
-        # The adapter already writes this at build time; this defensive
-        # rewrite guarantees the deploy excludes the worker bundle files
-        # even if a future adapter version stops emitting it. Never committed.
-        run: printf '%s\n' '_worker.js' '_zfb_inner.mjs' > dist/.assetsignore
+        # Preserve every adapter-generated exclusion, including JS/Wasm sidecars.
+        # Missing baseline exclusions are a build failure, not a reason to replace it.
+        run: |
+          test -s dist/.assetsignore
+          grep -Fxq '_worker.js' dist/.assetsignore
+          grep -Fxq '_zfb_inner.mjs' dist/.assetsignore
 
       - name: Deploy PR preview to Cloudflare Workers
         id: cf-deploy

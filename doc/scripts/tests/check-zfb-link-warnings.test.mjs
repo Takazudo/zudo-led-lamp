@@ -127,3 +127,21 @@ test("rejects other ZB006 plugin output, including the INIT_CWD fallback on stde
     assert.equal(r.code, 1, `${extra}\n${r.out}`);
   }
 });
+
+
+test("generated-path payloads cannot disguise unknown diagnostics or plugin output", () => {
+  for (const prefix of [
+    "ZB999 ",
+    "ZB006 plugin-host:stderr: ",
+    "ZB006 plugin-host:stdout: ",
+    "[plugin-host stdout] ",
+  ]) {
+    const disguised = `zfb warn: ${prefix}${GEN}: broken link: #missing`;
+    // Reject even alongside a genuine warning: liveness alone is insufficient.
+    for (const lines of [[disguised, BUILT], [`zfb warn: ZB001 ${GEN}: broken link: #a`, disguised, BUILT]]) {
+      const r = run(lines);
+      assert.equal(r.code, 1, `${disguised}\n${r.out}`);
+      assert.match(r.out, /outside the known-false class/);
+    }
+  }
+});

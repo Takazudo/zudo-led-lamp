@@ -123,7 +123,9 @@ awk -v known="$KNOWN" -v known_plugin_info="$KNOWN_PLUGIN_INFO" \
     if (match(rest, /^ZB001 /)) { rest = substr(rest, RLENGTH + 1); coded = 1 }
     else if (match(rest, /^ZB006 plugin-host:stdout: /)) { rest = substr(rest, RLENGTH + 1); plugin_stdout = 1 }
     at = index(rest, sep)
-    if (at > 0) {
+    # Only a legacy absolute path or the stripped ZB001 shape is a link
+    # diagnostic. Never interpret plugin payloads or unknown codes as paths.
+    if (!plugin_stdout && substr(rest, 1, 1) == "/" && at > 0) {
       path = substr(rest, 1, at - 1)
       target = substr(rest, at + length(sep))
       if (index(path, tree) > 0 && substr(target, 1, 1) == "#") {
