@@ -4,9 +4,11 @@ description: What the LED lamp's current build path is, which artifacts exist at
 sidebar_position: 2
 ---
 
-Evidence reviewed on **2026-11-08**, against main `f47fe4706d0e0ca4eb8759fdb402fcd712d2141f` plus the integration
-branch `claude/project-thread-bgdr5q` (tracker [zudo-pd#228](https://github.com/Takazudo/zudo-pd/issues/228), LED
-[#149](https://github.com/Takazudo/zudo-led-lamp/issues/149)). This page owns the LED lamp's current status. A
+Order handoff reviewed on **2026-11-09**, against lamp main `5726c8e6e89b5a03ba149c234cccda2f9afab6c8`.
+Lamp [PR #150](https://github.com/Takazudo/zudo-led-lamp/pull/150) and tracker
+[#149](https://github.com/Takazudo/zudo-led-lamp/issues/149) are complete. External
+[zudo-pd PR #234](https://github.com/Takazudo/zudo-pd/pull/234) is now merged; the owner handoff was inspected
+at `44fd3ba810aad627fd461b90093a3482707b44da` on zudo-pd main. This page owns the LED lamp's current status. A
 software check, CAD result, order plan, received board and bench measurement establish different things; nothing on
 the current path has been programmed, energized or measured.
 
@@ -46,8 +48,8 @@ not a pass.
 
 | # | Action | Procedure | Evidence to record |
 | --- | --- | --- | --- |
-| 1 | Order 2 × P15 r1 (zudo-pd owns the files) | [zudo-pd P15 order handoff](https://github.com/Takazudo/zudo-pd/blob/main/manufacturing/p15-order-handoff.md) | Order date and number, D5/D9 preview check |
-| 2 | Incoming P15 inspection and per-unit NVM acceptance before any Board L connection | [zudo-pd P15-NVM-1–7](https://github.com/Takazudo/zudo-pd/blob/main/doc/src/content/docs/architecture/board-p15-programming.md) | Power-cycle readback hash, 15 V contract on a 20 V-capable source with no load, and VBUS_OUT measured off during the 5 V attach phase (the POWER_ONLY_ABOVE_5V bit position is third-party and an ST draft note marks it reserved) |
+| 1 | Complete owner checkout checks, then order 2 × P15 r1 (zudo-pd owns the files) | [LED prototype-order handoff](https://github.com/Takazudo/zudo-led-lamp/blob/main/manufacturing/README.md) | Downloaded hashes, all polarized placements including D5/D9, stock, assembly eligibility, total cost; eventual order date and number |
+| 2 | Incoming P15 inspection and per-unit NVM acceptance before any Board L connection | [zudo-pd P15-NVM-1–7](https://github.com/Takazudo/zudo-pd/blob/44fd3ba810aad627fd461b90093a3482707b44da/doc/src/content/docs/architecture/board-p15-programming.md) | Power-cycle readback hash, 15 V contract on a 20 V-capable source with no load, and VBUS_OUT measured off during the 5 V attach phase (the POWER_ONLY_ABOVE_5V bit position is third-party and an ST draft note marks it reserved) |
 | 3 | Board L identity and unpowered checks, first energizing on a current-limited source | [Before-programming checklist](https://github.com/Takazudo/zudo-led-lamp/blob/main/firmware/board-l/BEFORE-PROGRAMMING-CHECKLIST.md) §0–2 | Board identity, RS1 four-wire (Kelvin) measured resistance with instrument/date, rail readings |
 | 4 | Option-byte readback, image identity against the receipt, firmware readback | Checklist §3–4; [bench sheet O](https://github.com/Takazudo/zudo-led-lamp/blob/main/firmware/board-l/BENCH-TEST-SHEETS.md) | Save receipt and ELF identity; record option-byte readbacks separately. Raw flash-image readback must match `artifacts.loadable_image_sha256` over exactly `artifacts.loadable_image_bytes` at the ELF-confirmed load range (current FLASH origin `0x08000000`); see checklist §4 and bench sheet F |
 | 5 | Startup/CTRL measurement, knob calibration, LED current, thermal and NTC correlation | Checklist §5–6; bench sheets B, K, C, N, T | Each sheet row with the board identity |
@@ -63,4 +65,8 @@ The existing Board Ls are not yet inspected or cleared to mate. Physical holds [
 [#35](https://github.com/Takazudo/zudo-led-lamp/issues/35) and [#52](https://github.com/Takazudo/zudo-led-lamp/issues/52)
 remain open. [#145](https://github.com/Takazudo/zudo-led-lamp/issues/145) (HUSB238) is an unadopted future alternative.
 
-The next cloud action is the integration PR review tracked on [zudo-pd#228](https://github.com/Takazudo/zudo-pd/issues/228).
+The [prototype-order handoff](https://github.com/Takazudo/zudo-led-lamp/blob/main/manufacturing/README.md)
+separates verified source and four-file identity from full historical replay (**NOT RUN**, original STEP absent).
+Supplier preview and order-day stock, assembly eligibility and total cost remain unresolved owner actions.
+Cloud preparation does not mean ordered or qualified. [zudo-pd#228](https://github.com/Takazudo/zudo-pd/issues/228)
+remains the external coordination record; it is not a prerequisite to use the inspected immutable owner handoff.
