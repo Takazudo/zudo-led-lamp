@@ -45,8 +45,24 @@ jobs:
           arm-none-eabi-gcc --version
       - name: Target image (build only) and receipt
         run: |
+          make -C firmware/board-l/target clean
           make -C firmware/board-l/target
           cat firmware/board-l/target/build/board-l-skeleton.receipt.json
+      - name: Independently verify raw image identity against receipt
+        working-directory: firmware/board-l/target
+        run: |
+          arm-none-eabi-objcopy -O binary build/board-l-skeleton.elf build/identity-check.bin
+          python3 - <<'PYTHON'
+          import hashlib
+          import json
+          from pathlib import Path
+          image = Path("build/identity-check.bin").read_bytes()
+          expected = json.loads(Path("build/board-l-skeleton.receipt.json").read_text())["artifacts"]
+          digest = hashlib.sha256(image).hexdigest()
+          if len(image) != expected["loadable_image_bytes"] or digest != expected["loadable_image_sha256"]:
+              raise SystemExit("FAIL: raw binary differs from receipt hash/length")
+          print(f"PASS: raw binary {len(image)} bytes, SHA256 {digest}")
+          PYTHON
       - name: All V72 units cross-compile
         run: make -C firmware/board-l/target v72-objects
       - name: Incremental and configuration-switch rebuilds
