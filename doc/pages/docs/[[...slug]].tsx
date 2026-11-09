@@ -1,7 +1,5 @@
-/** @jsxRuntime automatic */
-/** @jsxImportSource preact */
 // Locked manifest (#2653 Decision 4): a SELF-CONTAINED doc-route stub retained
-// for explicit host route ownership. zfb 2.13.1 also serves injected dynamic
+// for explicit host route ownership. zfb also serves package-injected dynamic
 // routes in dev. This stub reconstructs the doc route from scratch using ONLY the
 // sanctioned package entrypoints — no `pages/lib`, no `@/config`:
 //   1. the `virtual:zudo-doc-route-context` virtual module (serializable
@@ -21,28 +19,20 @@
 // "@takazudo/zudo-doc/doc-history" and merge it over chromeBindings in
 // createChrome's hostBindings (second) argument —
 // DocHistory's chrome-derive default is a no-op stub (unlike
-// DesignTokenPanelBootstrap, which the package auto-defaults), so without
+// DesignTokenPanelBootstrap server boundary, which the package auto-defaults), so without
 // that patch the doc-history button never hydrates on this route.
 
-import type { JSX } from "preact";
+import type { JSX } from "@takazudo/zfb/zudo-react/jsx-runtime";
 import { routeContext } from "virtual:zudo-doc-route-context";
 import {
   createRouteContext,
   type RouteContextPayload,
 } from "@takazudo/zudo-doc/route-context";
 import { createChrome } from "@takazudo/zudo-doc/chrome";
-import { DocHistory } from "@takazudo/zudo-doc/doc-history";
+import { DocHistoryBoundary as DocHistory } from "@takazudo/zudo-doc/doc-history-area";
 import { defineChromeBindings } from "@takazudo/zudo-doc/chrome-bindings";
 import { chromeBindings } from "virtual:zudo-doc-chrome-bindings";
-
-import { FootprintPreviewIsland } from "../../src/component-preview/footprint-preview-island";
-import { PackageModelViewerIsland } from "../../src/component-model-viewer/package-model-viewer-island";
-
-// zfb's island scanner follows this route's static import graph, not the
-// virtual chrome-binding re-export. Keeping the real client component reachable
-// here registers the island rendered by generated record MDX.
-void FootprintPreviewIsland;
-void PackageModelViewerIsland;
+import "../lib/_circuit-doc-islands";
 
 const ctx = routeContext as unknown as RouteContextPayload;
 const routeCtx = createRouteContext(ctx);

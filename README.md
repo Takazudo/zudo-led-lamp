@@ -12,6 +12,8 @@ Board Ls, decided 2026-11-03. Nothing on it is built, programmed or measured yet
 exact revisions and hashes, and the
 [before-programming checklist](firmware/board-l/BEFORE-PROGRAMMING-CHECKLIST.md) before any
 power-on. `boards/board-p/` remains the as-ordered 2026-09-19 Board P reference.
+The [current state and completion page](doc/src/content/docs/architecture/current-state.mdx)
+lists what is ordered, programmed and measured, and the owner actions in order.
 
 ## Repo layout
 

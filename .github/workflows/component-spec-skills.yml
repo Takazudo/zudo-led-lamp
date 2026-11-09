@@ -76,3 +76,7 @@ jobs:
         run: python3 scripts/schgen/verify_power_switch.py
       - name: Verify SWD adapter numeric orientation
         run: python3 scripts/schgen/verify_swd_adapter.py
+      - name: P15 consumer reference (local side; the zudo-pd side needs an explicit zudo-pd checkout)
+        run: |
+          python3 scripts/checks/verify-p15-reference.py --local-only
+          python3 -m unittest discover -s scripts/checks -p 'test_*.py'

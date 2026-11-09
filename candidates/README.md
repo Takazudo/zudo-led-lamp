@@ -15,7 +15,7 @@ measured yet.
 
 | Item | Current value | Where it lives |
 | --- | --- | --- |
-| Board P | zudo-pd `boards/board-p15/` r1, 27 × 40 mm, same outline, holes and JOUT1 as the ordered LED Board P | zudo-pd commit `4a0741fabf8d2332848a3740708aab26b8504133` (branch `claude/project-thread-l2opxj`) |
+| Board P | zudo-pd `boards/board-p15/` r1, 27 × 40 mm, same outline, holes and JOUT1 as the ordered LED Board P | Adopted at zudo-pd commit `4a0741fabf8d2332848a3740708aab26b8504133` (now on zudo-pd `main`). Consumer reference: [`boards/p15-r1-reference.json`](../boards/p15-r1-reference.json), checked by `python3 scripts/checks/verify-p15-reference.py --pd-repo <zudo-pd checkout>` (byte identity only) |
 | NVM image | `boards/board-p15/nvm/stusb4500-15v.bin`: 2 PDOs, PDO1 5 V / 1.5 A, PDO2 15 V / **3 A**, POWER_ONLY_ABOVE_5V = 1. Same image for LED and zudo-pd | SHA256 `76622e14862e53cf318b24eb662f7dc9f34d48134867cf954b30c195c26e8eeb` at that commit. Desk image: never written or read back |
 | Board L | The two existing boards, unchanged: RS1 = 200 mΩ as built, MCU believed blank | `boards/board-l/`, `manufacturing/jlcpcb/2026-09-19/` |
 | Firmware | `firmware/board-l/target/` with `CTRL_FULL_CCR` = 2407 (the 200 mΩ ceiling) | Not flashed. See [`firmware/board-l/BEFORE-PROGRAMMING-CHECKLIST.md`](../firmware/board-l/BEFORE-PROGRAMMING-CHECKLIST.md) |

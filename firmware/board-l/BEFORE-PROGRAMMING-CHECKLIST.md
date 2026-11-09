@@ -92,7 +92,7 @@ What this table does **not** cover, and what must be measured instead (sheet B i
 
 | # | Check | Expect | Why |
 | --- | --- | --- | --- |
-| 1.1 | Read the RS1 value **by 4-wire (Kelvin) resistance** across the RS1 pads. The marking code is not in the retained evidence, so do not rely on it | 200 mΩ ±1 % as built (RLP25FEER200), or 250 mΩ if reworked (RLP25FEER250) | Selects the duty ceiling, below |
+| 1.1 | Read the RS1 value **by 4-wire (Kelvin) resistance** across the RS1 pads. The marking code is not in the retained evidence, so do not rely on it or a photograph. Record board identity, instrument/date and measured resistance in the bench header | 200 mΩ ±1 % as built (RLP25FEER200), or 250 mΩ if reworked (RLP25FEER250) | Selects the duty ceiling, below |
 | 1.2 | Confirm the firmware ceiling matches 1.1 | 200 mΩ requires `CTRL_FULL_CCR` 2407, the default. 3200 is allowed **only** if 1.1 measured 250 mΩ and the owner approved it | #52: the default keeps the hot branch ≤ 81 mA at h = 30 % and ballast ±2 % (typical CTRL transfer only) |
 | 1.3 | Resistance TP1 (CTRL) to GND | About 33 kΩ (R21), possibly lower through R20 into the unpowered PA6 | The pull-down that holds CTRL OFF is present |
 | 1.4 | R20 10 kΩ, R21 33 kΩ, C21 present (visual, plus 1.3) | Fitted | The CTRL filter and OFF path |
@@ -176,6 +176,30 @@ Record:
 - the SHA256 of `build/board-l-skeleton.elf`;
 - the `CTRL_FULL_CCR` value used, which must agree with check 1.2;
 - whether `BOARD_L_PRODUCTION` was defined.
+
+`make` writes all of these to `build/board-l-skeleton.receipt.json`. Keep that file with the
+session record. Stop if source revision/dirty-state identity is unavailable,
+`source.firmware_dirty` is true, `toolchain.matches_pin` is
+false, or `ctrl_ceiling.adopted_default` is false on an RS1 = 200 mΩ board. Build from a
+clean `make clean && make`, not from a reused build directory.
+
+For a separately authorized firmware readback, retain the receipt and the exact ELF
+and its SHA256. Compare the **raw binary flash image**, in the same representation as
+`objcopy -O binary` used by `target/tools/build_receipt.py`, with
+`artifacts.loadable_image_sha256`. Read exactly `artifacts.loadable_image_bytes` bytes.
+Confirm the start address from that ELF's load addresses and linker inputs:
+`target/stm32g031f8_flash.ld` currently places FLASH at `0x08000000`, including the
+flash load image for `.data`. Record the range as start-inclusive/end-exclusive:
+`[0x08000000, 0x08000000 + artifacts.loadable_image_bytes)` for this layout.
+Stop if the ELF/layout does not support that range; do not assume the address for a
+different image. Preserve binary padding/gaps exactly as represented by objcopy.
+
+Record expected hash/length/range and the actual readback artifact, byte length,
+SHA256 and comparison outcome in bench sheet F. Option-byte readbacks belong
+separately in sheet O. The receipt-file hash and whole ELF-file hash are **not**
+raw-flash comparison hashes; an arbitrarily sized full-flash dump is not the image.
+This defines identity evidence only: no programming or readback is authorized here,
+and physical results remain NOT EXECUTED until separately performed.
 
 Production builds do not freeze the IWDG under the debugger.
 

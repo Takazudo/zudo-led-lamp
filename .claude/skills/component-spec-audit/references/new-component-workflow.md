@@ -80,7 +80,8 @@ make the workflow progress; stop and obtain the missing design or review decisio
 
 1. Explicitly add the record to `recordIds`, every public source to `sourceIds`, and
    every approved outbound source URL to `linkableSourceIds` in
-   `doc/component-docs/adapters/circuit/selection.ts`. Add exactly one audited
+   `circuit/publication/selection.json` (schema: zudo-circuit-doc
+   `reference/schemas`). Add exactly one audited
    document source plus its truthful `documentKind` (`datasheet`, `specification`, or
    `drawing`). Inspect the retrieved content: a product page or HTML denial is not a
    datasheet because its URL ends in `.pdf`.
@@ -91,20 +92,18 @@ make the workflow progress; stop and obtain the missing design or review decisio
    tmp/pdfs/<source>.pdf <URL>` followed by `head -c 5 tmp/pdfs/<source>.pdf` and a
    PDF viewer/text extractor. This is dated human verification, not a build-time live
    URL check: re-audit on a changed URL/content or scheduled source refresh, then
-   update `CIRCUIT_DOCUMENT_VERIFICATION` (including `checkedOn`) and the selection.
+   update `circuit/records/document-verification.json` (including `checkedOn`), a
+   project-owned record the runtime does not read, and the selection.
 2. Select the footprint and model preview through the record pin map and canonical
    footprint/model pair; do not rely on discovery or a default selection.
 
 3. Update every deliberately reviewed count/shape lock that the changed selection
-   reaches: `selection.ts` `expect`, `adapters/circuit/references.ts`,
-   `adapters/circuit/model-assets.ts`, `footprint-previews/generate.ts`, and
-   `footprint-previews/check.ts`. Update the matching explicit assertions in
-   `component-docs/tests/references.test.ts`, `footprint-previews.test.ts`,
-   `model-viewer.test.ts`, and the applicable corpus/pipeline/publication tests. Keep
+   reaches: the selection's `expect` block (records, sources, integration rules,
+   packages), the `scan` floors and `browserSmoke` representatives in
+   `circuit.config.ts`, and `circuit/policy.json` when a project gate changes. Keep
    these locks explicit and reviewed; do not weaken them into inferred counts.
-   Refresh current corpus/preview statements in `doc/component-docs/ARCHITECTURE.md`
-   when their asserted values change. Leave dated historical verification narratives
-   alone unless this change actually repeats and re-verifies that stated baseline.
+   Leave dated historical verification narratives alone unless this change actually
+   repeats and re-verifies that stated baseline.
 
 ## 5. Regenerate, review, and commit
 
@@ -126,21 +125,20 @@ make the workflow progress; stop and obtain the missing design or review decisio
    PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s .claude/skills/component-spec-audit/scripts -p 'test_*.py'
    PYTHONDONTWRITEBYTECODE=1 python3 .claude/skills/circuit-spec-integration/scripts/check_forward_tests.py
    pnpm --dir doc check
-   pnpm --dir doc test:components
    pnpm --dir doc check:components
    ```
 
-3. Run `pnpm --dir doc b4push` before delivery. It builds the current site before
+3. Run `pnpm b4push` from the repository root before delivery. It builds the current site before
    running the built-reference, artifact, and isolated doc-skill scans, so those gates
    never inspect missing or stale `doc/dist` output. Commit reviewed generated
-   component MDX, `component-docs/preflight.json`, footprint previews, public WRL
+   component MDX, `circuit/generated/preflight.json`, footprint previews, public WRL
    previews, and every changed generator-owned `doc/src/content/docs/claude*`
    projection with their authored source changes; never hand-edit generated files.
    Inspect them with:
 
    ```sh
-   git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews
-   git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews
+   git add --intent-to-add -A -- doc/src/content/docs circuit/generated/preflight.json doc/public/assets/component-previews
+   git diff --exit-code -- doc/src/content/docs circuit/generated/preflight.json doc/public/assets/component-previews
    ```
 
 4. Check the new `/docs/components/records/<slug>/` route itself in the built output

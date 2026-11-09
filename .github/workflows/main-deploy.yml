@@ -5,7 +5,7 @@
 # assets.
 #
 # Every gate before the deploy is credential-free and mandatory: type check,
-# component generator tests, build, generated-doc drift, component projection
+# host script tests, build, generated-doc drift, component projection
 # drift, denied-value scan over the built bytes. A missing deployment
 # credential skips the deploy, never a gate.
 #
@@ -35,6 +35,17 @@ on:
       - main
     paths:
       - "doc/**"
+      # Root workspace: circuit.config.ts, publication/policy data, the
+      # zudo-circuit-doc dependency and its lockfile.
+      - "circuit/**"
+      - "circuit.config.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      # The led-generator-v1 inventory provider runs the three generator specs
+      # and checks their symbols against the project library.
+      - "scripts/schgen/**"
+      - "symbols/**"
       # The enclosure preview verifies these CAD inputs against its manifest.
       - "enclosure/**"
       - "boards/**/*.kicad_pcb"
@@ -69,23 +80,24 @@ jobs:
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+        # Untagged pnpm/action-setup commit after v4.4.0 ("run the action on
+        # Node.js 24", 2026-03-13); no v4* tag points at it (#72).
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
         with:
           dest: ~/setup-pnpm-${{ github.job }}
-          # The pnpm version comes from `packageManager` in doc/package.json —
-          # there is no package.json at the repo root, which is where this
-          # action looks by default.
-          package_json_file: doc/package.json
+          # The pnpm version comes from `packageManager` in the root
+          # package.json, which owns the workspace and its lockfile.
+          package_json_file: package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: doc/pnpm-lock.yaml
+          # zudo-doc 9 and zudo-circuit-doc 0.3 require Node 24 (>=24 <25).
+          node-version: 24
+          # gh-actions-wisdom rule 5: package-manager caching is disabled (#73).
 
-      # `pnpm build` runs `generate:components` first, which shells out to the
-      # component-spec validator (python3). Pinned to the same 3.12 as
+      # `pnpm build` runs `zudo-circuit-doc generate` first, which shells out to
+      # the component-spec validator and the generator specs (python3). Pinned to the same 3.12 as
       # component-spec-skills.yml so the two never disagree, rather than
       # relying on whatever the runner image happens to ship.
       - name: Setup Python
@@ -94,27 +106,33 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        working-directory: doc
         run: pnpm install --frozen-lockfile
 
       - name: Type check
         working-directory: doc
         run: pnpm check
 
+      - name: zudo-wind audit
+        working-directory: doc
+        run: pnpm check:wind
+
+      - name: Host script tests
+        working-directory: doc
+        run: pnpm test:scripts
+
+      - name: Enclosure viewer geometry
+        working-directory: doc
+        run: pnpm check:enclosure-viewer
+
       - name: Published package models are safe and up to date
         working-directory: doc
         run: pnpm check:models
-
-      - name: Component generator tests
-        working-directory: doc
-        run: pnpm test:components
 
       - name: Footprint previews are current and safe
         working-directory: doc
         run: pnpm check:footprint-previews
 
       - name: Build site
-        working-directory: doc
         run: pnpm build
 
       - name: Local image and media references resolve
@@ -129,6 +147,10 @@ jobs:
         working-directory: doc
         run: pnpm check:built-component-references
 
+      - name: Mermaid diagrams parse
+        working-directory: doc
+        run: pnpm check:mermaid
+
       - name: Package model viewer browser smoke
         working-directory: doc
         run: pnpm test:model-viewer:browser
@@ -137,14 +159,14 @@ jobs:
       # to what was committed, so a direct push carrying stale generated pages
       # deployed a rebuilt site while the repository kept claiming otherwise.
       # Every committed generated file is covered — claude*/ from the
-      # claude-resources generator, components/ and preflight.json from
-      # `generate:components`, which `pnpm build` runs first. See pr-checks.yml
+      # claude-resources generator, components/ and circuit/generated/preflight.json
+      # from `zudo-circuit-doc generate`, which `pnpm build` runs first. See pr-checks.yml
       # for why `--intent-to-add` and the explicit preflight.json path are both
       # required rather than tidy.
       - name: Generated output is committed and up to date
         run: |
-          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews/models
-          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews/models
+          git add --intent-to-add -A -- doc/src/content/docs circuit/generated/preflight.json doc/public/assets/component-previews/models
+          git diff --exit-code -- doc/src/content/docs circuit/generated/preflight.json doc/public/assets/component-previews/models
 
       # The second generation run: build wrote the tree, this re-projects from
       # the evidence and proves the result byte-identical.
@@ -180,13 +202,14 @@ jobs:
             echo "::notice::Deploy skipped — CLOUDFLARE_API_TOKEN is not set yet. See doc/src/content/docs/how-to/ci-cloudflare-setup.mdx."
           fi
 
-      - name: Write dist/.assetsignore
-        if: steps.readiness.outputs.ready == 'true'
+      - name: Validate adapter asset exclusions
         working-directory: doc
-        # The adapter already writes this at build time; this defensive
-        # rewrite guarantees the deploy excludes the worker bundle files
-        # even if a future adapter version stops emitting it. Never committed.
-        run: printf '%s\n' '_worker.js' '_zfb_inner.mjs' > dist/.assetsignore
+        # Preserve every adapter-generated exclusion, including JS/Wasm sidecars.
+        # Missing baseline exclusions are a build failure, not a reason to replace it.
+        run: |
+          test -s dist/.assetsignore
+          grep -Fxq '_worker.js' dist/.assetsignore
+          grep -Fxq '_zfb_inner.mjs' dist/.assetsignore
 
       - name: Deploy to Cloudflare Workers (production)
         if: steps.readiness.outputs.ready == 'true'

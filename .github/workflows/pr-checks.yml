@@ -3,7 +3,7 @@
 # Triggered on PRs targeting `main` or any `base/**` worktree base branch (so
 # topic PRs that target a base branch also get a preview), when the PR touches
 # doc/, the repo-root Claude resources the site publishes, or this workflow.
-# Pipeline: type check -> component generator tests -> build -> link check ->
+# Pipeline: type check -> host script tests -> build -> link check ->
 # generated-docs drift check -> component projection drift check -> denied-value
 # scans over the built bytes and the docs-to-agent corpus -> deploy preview
 # (wrangler versions upload --preview-alias) -> route smoke test -> sticky PR
@@ -12,9 +12,8 @@
 # Everything up to and including the scans is CREDENTIAL-FREE and mandatory,
 # and it is `pnpm b4push` plus two steps b4push cannot express as one command:
 # the generated-output drift check (it needs a clean git index, not a script)
-# and the link check (it needs the build's captured log). Both have a two-line
-# local equivalent in doc/component-docs/ARCHITECTURE.md §10. Only the last
-# three steps need Cloudflare secrets.
+# and the link check (it needs the build's captured log). circuit/scripts/run-b4push.sh
+# runs both locally. Only the last three steps need Cloudflare secrets.
 #
 # Secret gating: same readiness-step pattern as main-deploy.yml — the
 # `secrets` context is not available in job-level `if:` expressions. Until
@@ -35,6 +34,17 @@ on:
       - "base/**"
     paths:
       - "doc/**"
+      # Root workspace: circuit.config.ts, publication/policy data, the
+      # zudo-circuit-doc dependency and its lockfile.
+      - "circuit/**"
+      - "circuit.config.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      # The led-generator-v1 inventory provider runs the three generator specs
+      # and checks their symbols against the project library.
+      - "scripts/schgen/**"
+      - "symbols/**"
       # The enclosure preview verifies these CAD inputs against its manifest.
       - "enclosure/**"
       - "boards/**/*.kicad_pcb"
@@ -86,23 +96,24 @@ jobs:
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+        # Untagged pnpm/action-setup commit after v4.4.0 ("run the action on
+        # Node.js 24", 2026-03-13); no v4* tag points at it (#72).
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
         with:
           dest: ~/setup-pnpm-${{ github.job }}
-          # The pnpm version comes from `packageManager` in doc/package.json —
-          # there is no package.json at the repo root, which is where this
-          # action looks by default.
-          package_json_file: doc/package.json
+          # The pnpm version comes from `packageManager` in the root
+          # package.json, which owns the workspace and its lockfile.
+          package_json_file: package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: doc/pnpm-lock.yaml
+          # zudo-doc 9 and zudo-circuit-doc 0.3 require Node 24 (>=24 <25).
+          node-version: 24
+          # gh-actions-wisdom rule 5: package-manager caching is disabled (#73).
 
-      # `pnpm build` runs `generate:components` first, which shells out to the
-      # component-spec validator (python3). Pinned to the same 3.12 as
+      # `pnpm build` runs `zudo-circuit-doc generate` first, which shells out to
+      # the component-spec validator and the generator specs (python3). Pinned to the same 3.12 as
       # component-spec-skills.yml so the two never disagree, rather than
       # relying on whatever the runner image happens to ship.
       - name: Setup Python
@@ -111,24 +122,27 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        working-directory: doc
         run: pnpm install --frozen-lockfile
 
       - name: Type check
         working-directory: doc
         run: pnpm check
 
+      - name: zudo-wind audit
+        working-directory: doc
+        run: pnpm check:wind
+
+      - name: Host script tests
+        working-directory: doc
+        run: pnpm test:scripts
+
+      - name: Enclosure viewer geometry
+        working-directory: doc
+        run: pnpm check:enclosure-viewer
+
       - name: Published package models are safe and up to date
         working-directory: doc
         run: pnpm check:models
-
-      # The component-docs generator's own suites: publication matrix, branded
-      # types, adapter joins, renderers, denied-field canaries. They run before
-      # the build because a matrix regression is easier to read as a failing
-      # assertion than as a diff in generated MDX.
-      - name: Component generator tests
-        working-directory: doc
-        run: pnpm test:components
 
       - name: Footprint previews are current and safe
         working-directory: doc
@@ -139,7 +153,6 @@ jobs:
       # 2500 false lines is exactly what a real one hides in. On failure the
       # whole log is printed, so nothing is lost when it matters.
       - name: Build site
-        working-directory: doc
         run: |
           BUILD_LOG="$RUNNER_TEMP/$BUILD_LOG_NAME"
           if pnpm build >"$BUILD_LOG" 2>&1; then
@@ -147,7 +160,7 @@ jobs:
           else
             status=$?
           fi
-          grep -v '^zfb warn: ' "$BUILD_LOG" || true
+          grep -v 'zfb warn: ' "$BUILD_LOG" || true
           if [ "$status" -ne 0 ]; then
             echo "::group::full build log"
             cat "$BUILD_LOG"
@@ -167,6 +180,10 @@ jobs:
         working-directory: doc
         run: pnpm check:built-component-references
 
+      - name: Mermaid diagrams parse
+        working-directory: doc
+        run: pnpm check:mermaid
+
       - name: Package model viewer browser smoke
         working-directory: doc
         run: pnpm test:model-viewer:browser
@@ -184,8 +201,8 @@ jobs:
       # So `failOnBroken: true` would fail every build on false positives, and
       # ignoring the log would mean a genuinely broken HAND-AUTHORED link never
       # surfaces. Neither is acceptable, and the count is not a gate either:
-      # `assertLinkIntegrity` runs on the VIEW MODEL and is already fatal in the
-      # pipeline regardless of emitted markup, which is why wrapping the
+      # the package's link-integrity assertion runs on the VIEW MODEL and is
+      # already fatal in generation regardless of emitted markup, which is why wrapping the
       # evidence tables in a component dropped the count 4324 -> 2536 with no
       # change in link health. The number tracks presentation, not link health.
       #
@@ -194,18 +211,20 @@ jobs:
       # doc-history progress-message shapes that zfb labels as warnings. It
       # fails on everything else, including a warning whose shape it does not
       # recognise, so a zfb or plugin-output change turns CI red instead of
-      # silently disarming the gate. Proven both ways locally: a real broken
+      # silently disarming the gate. ANSI codes and a moved `zfb warn:` prefix
+      # are tolerated, and a log with no recognised generated-anchor warning
+      # fails (#127; doc/scripts/tests/check-zfb-link-warnings.test.mjs). Proven both ways locally: a real broken
       # link in a hand-authored page leaves `pnpm build` at exit 0 and makes
       # this step exit 1.
       - name: Hand-authored links resolve
         working-directory: doc
-        run: bash component-docs/scripts/check-zfb-link-warnings.sh "$RUNNER_TEMP/$BUILD_LOG_NAME"
+        run: bash scripts/check-zfb-link-warnings.sh "$RUNNER_TEMP/$BUILD_LOG_NAME"
 
       # THE drift authority for every committed generated file. The
       # claude-resources generator rewrites doc/src/content/docs/claude*/ on
-      # every build, and `pnpm build` runs `generate:components` first, which
-      # rewrites doc/src/content/docs/components/ AND
-      # doc/component-docs/preflight.json. A source edit under .claude/skills/,
+      # every build, and `pnpm build` runs `zudo-circuit-doc generate` first,
+      # which rewrites doc/src/content/docs/components/ AND
+      # circuit/generated/preflight.json. A source edit under .claude/skills/,
       # a CLAUDE.md, or the generator itself that lands without a rebuild leaves
       # the committed output stale; this fails the PR instead. Same contract as
       # the boards regen-idempotency check in component-spec-skills.yml.
@@ -222,8 +241,8 @@ jobs:
       #                      a stale committed copy is invisible downstream.
       - name: Generated output is committed and up to date
         run: |
-          git add --intent-to-add -A -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews/models
-          git diff --exit-code -- doc/src/content/docs doc/component-docs/preflight.json doc/public/assets/component-previews/models
+          git add --intent-to-add -A -- doc/src/content/docs circuit/generated/preflight.json doc/public/assets/component-previews/models
+          git diff --exit-code -- doc/src/content/docs circuit/generated/preflight.json doc/public/assets/component-previews/models
 
       # The SECOND generation run, which makes this pair the two-run
       # idempotency check: `build` projected and wrote the tree, this
@@ -272,13 +291,14 @@ jobs:
             echo "::notice::Preview deploy skipped — CLOUDFLARE_API_TOKEN is not set yet. See doc/src/content/docs/how-to/ci-cloudflare-setup.mdx."
           fi
 
-      - name: Write dist/.assetsignore
-        if: steps.readiness.outputs.ready == 'true'
+      - name: Validate adapter asset exclusions
         working-directory: doc
-        # The adapter already writes this at build time; this defensive
-        # rewrite guarantees the deploy excludes the worker bundle files
-        # even if a future adapter version stops emitting it. Never committed.
-        run: printf '%s\n' '_worker.js' '_zfb_inner.mjs' > dist/.assetsignore
+        # Preserve every adapter-generated exclusion, including JS/Wasm sidecars.
+        # Missing baseline exclusions are a build failure, not a reason to replace it.
+        run: |
+          test -s dist/.assetsignore
+          grep -Fxq '_worker.js' dist/.assetsignore
+          grep -Fxq '_zfb_inner.mjs' dist/.assetsignore
 
       - name: Deploy PR preview to Cloudflare Workers
         id: cf-deploy

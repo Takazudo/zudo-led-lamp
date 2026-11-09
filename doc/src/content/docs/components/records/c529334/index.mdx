@@ -116,7 +116,7 @@ Coverage is stated one domain at a time and is never rolled up. A domain marked 
 
 **Coverage ID:** `cov-c529334-fw` · **Status:** OPEN
 
-**Reason:** fact-c529334-mux lists only candidates; firmware is absent
+**Reason:** fact-c529334-mux remains UNSOURCED candidate mapping. The unflashed target in firmware/board-l/target implements pin-mux, clock and timer setup; source-code configuration does not establish programmed state, applicable-device errata acceptance or measured behavior.
 
 **Facts in this domain:**
 
@@ -148,7 +148,7 @@ Coverage is stated one domain at a time and is never rolled up. A domain marked 
 
 **Coverage ID:** `cov-c529334-debug` · **Status:** OPEN
 
-**Reason:** fact-c529334-debug: DBG settings and measured behavior are absent
+**Reason:** fact-c529334-debug remains UNSOURCED. firmware/board-l/target/board\_iwdg.c configures IWDG freeze during a debugger halt for development builds; this does not establish installed DBG\_STOP/DBG\_STANDBY state, debug low-power retention or measured behavior.
 
 **Facts in this domain:**
 
